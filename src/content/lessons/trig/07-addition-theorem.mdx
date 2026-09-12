@@ -1,0 +1,215 @@
+---
+title: "加法定理 — 角を足すと値はどう変わるか"
+summary: "2つの角の和・差の三角関数を、単位円上の2点間の距離から導く。"
+unit: "ii-trigonometric"
+order: 7
+objectives:
+  - "加法定理を sin・cos・tan について正しく言える"
+  - "単位円上の2点間の距離から加法定理を導ける"
+  - "加法定理で知らない角の三角関数の値を求められる"
+prerequisites: ["trig/06-graphs"]
+tags: ["加法定理", "証明", "還元公式"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+2つの回転を続けて行うことを考えよう。まず少し右へ回し、そこからもう少し右へ回す。1回目と2回目を合わせた結果は、2つの角を足した1回の回転とぴったり同じ向きになる。角度はこんなに素直に足し算で合成できる。では、回転の向きを座標に変える sin や cos の値も、それぞれの回転での値を足せばよいのだろうか。角度の足し算に慣れた目には、そう見えてしまう。けれども円の上の座標は、そんなに単純には足せない。
+</Hook>
+
+<Prediction
+  question="sin(α+β) は sinα + sinβ に等しい？"
+  options={['いつでも等しい', '一般には等しくない', 'α=β のときだけ等しい']}
+  answer="一般には等しくない"
+  explanation="角の和のサインは、それぞれのサインの和にはなりません。たとえば α=β=90° とすると、左辺は sin180°=0、右辺は 1+1=2 です。同じ角を足した場合でも値は一致しません。角度は足せても、三角関数の値は足せないのです。"
+/>
+
+前のレッスンでは、$\sin\left(\theta+\dfrac{\pi}{2}\right)=\cos\theta$ のように、特別な角を足したときの値をグラフの平行移動として見た。ここでは、ずらす角を固定せず、任意の2つの角 $\alpha$ と $\beta$ に一般化する。$\sin(\alpha+\beta)$、$\cos(\alpha+\beta)$、$\tan(\alpha+\beta)$ を、$\alpha$ と $\beta$ それぞれの三角関数の値から計算する式が加法定理だ。
+
+加法定理があると、できることが一気に広がる。表にない角、たとえば $\dfrac{\pi}{12}$（$15^\circ$）の値も、$\dfrac{\pi}{3}-\dfrac{\pi}{4}$ と分ければ知っている角の値だけで求められる。まずはこの定理を、単位円の上で確かなものとして導こう。
+
+## 距離を2通りで数える
+
+まず、単位円の上に2つの角を表す点を置く。角 $\alpha$ の点を $P$、角 $\beta$ の点を $Q$ とすると、座標は単位円の定義から次のとおりになる。
+
+$$
+P(\cos\alpha,\ \sin\alpha),\qquad Q(\cos\beta,\ \sin\beta)
+$$
+
+この2点を結ぶ距離 $PQ$ を、2通りの方法で数える。1通り目は座標の差から、2通り目は図形を回転させて角の差 $\alpha-\beta$ に置き換えてから。同じ距離を2通りに表して等号で結べば、$\cos(\alpha-\beta)$ の式が現れる。
+
+<Figure caption="同じ単位円上の2点 P（角 α）と Q（角 β）。この2点を結ぶ距離 PQ を、座標の差と回転の2通りで数える">
+<UnitCircle angleDeg={120} showSin showCos label="角 α の点 P の例（120°）" />
+<UnitCircle angleDeg={30} showSin showCos label="角 β の点 Q の例（30°）" />
+</Figure>
+
+**1通り目：座標の差から数える。**
+
+<Steps>
+<Step reason="2点間の距離の2乗は、x 座標の差と y 座標の差をそれぞれ2乗して足せば求められます。三平方の定理から出る数学IIの距離の公式です。">$PQ^2=(\cos\alpha-\cos\beta)^2+(\sin\alpha-\sin\beta)^2$</Step>
+<Step reason="展開して、α の項と β の項をそれぞれまとめ直します。">$=(\cos^2\alpha+\sin^2\alpha)+(\cos^2\beta+\sin^2\beta)-2(\cos\alpha\cos\beta+\sin\alpha\sin\beta)$</Step>
+<Step reason="相互関係 sin²θ+cos²θ=1 を2か所に使うと、2乗の項が1ずつにまとまります。">$=2-2(\cos\alpha\cos\beta+\sin\alpha\sin\beta)$</Step>
+</Steps>
+
+<Why>
+ここで $\sin^2\theta+\cos^2\theta=1$ を使うのは、展開で生まれる2乗の項をすべて1にまとめ、距離を「交差して掛けた項」だけに減らすためだ。前のレッスンで導いた相互関係が、加法定理の証明の心臓部になる。
+</Why>
+
+**2通り目：回転して角の差を読む。**
+
+次に、同じ距離を角の差 $\alpha-\beta$ で表そう。図形全体を原点のまわりに $-\beta$ だけ回転させる。回転は図形を合同に移すので、2点間の距離は変わらない。回転後、点 $Q$ は角 $\beta-\beta=0$ の点、つまり $(1,0)$ に移る。点 $P$ は角 $\alpha-\beta$ の点に移る。
+
+<Steps>
+<Step reason="回転は距離を変えないので、回転後の座標で距離の2乗を計算し直しても同じ値になります。">回転後の2点は $(1,0)$ と $(\cos(\alpha-\beta),\ \sin(\alpha-\beta))$。</Step>
+<Step reason="1通り目と同じく距離の公式を使い、sin²+cos²=1 でまとめます。">$PQ^2=(\cos(\alpha-\beta)-1)^2+\sin^2(\alpha-\beta)=2-2\cos(\alpha-\beta)$</Step>
+</Steps>
+
+<Why>
+なぜ回転を持ち出すのか。回転で距離が変わらないことを使えば、点 $Q$ を $(1,0)$ へ重ねられる。すると2点の位置は「角 $\alpha-\beta$ の点」と「角 $0$ の点」だけになり、距離が $\cos(\alpha-\beta)$ という1つのコサインで書き表せる。角が2つある状態を、角の差1つに押し込むのが狙いだ。
+</Why>
+
+同じ距離 $PQ$ を2通りに表せたのだから、2つの結果は等しい。
+
+$$
+2-2(\cos\alpha\cos\beta+\sin\alpha\sin\beta)=2-2\cos(\alpha-\beta)
+$$
+
+両辺から $2$ を引いて $-2$ で割れば、角の差のコサインが得られる。次の式は、コサインどうし・サインどうしの積を足し合わせる形になっている。
+
+$$
+\cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta
+$$
+
+## 加法定理
+
+差の式ができたので、残りはそこから導ける。$\alpha+\beta$ は $\alpha-(-\beta)$ と見れば、差の式で $\beta$ を $-\beta$ に置き換えるだけでよい。
+
+<Steps>
+<Step reason="cos の差の式で β を −β に置き換えます。">$\cos(\alpha+\beta)=\cos\alpha\cos(-\beta)+\sin\alpha\sin(-\beta)$</Step>
+<Step reason="前のレッスンの負角の公式 cos(−β)=cosβ、sin(−β)=−sinβ を使います。">$=\cos\alpha\cos\beta-\sin\alpha\sin\beta$</Step>
+</Steps>
+
+サインは、余角の公式でコサインに直してから差の式に流し込む。$\sin(\alpha+\beta)$ を計算しよう。
+
+<Steps>
+<Step reason="余角の公式 sinθ=cos(π/2−θ) で sin を cos に置き換えます。">$\sin(\alpha+\beta)=\cos\left(\dfrac{\pi}{2}-(\alpha+\beta)\right)$</Step>
+<Step reason="かっこの中を (π/2−α)−β と組み直すと、いま導いた cos の差の式が使えます。">$=\cos\left(\left(\dfrac{\pi}{2}-\alpha\right)-\beta\right)$</Step>
+<Step reason="cos(A−B)=cosAcosB+sinAsinB に A=π/2−α、B=β を当てはめます。">$=\cos\left(\dfrac{\pi}{2}-\alpha\right)\cos\beta+\sin\left(\dfrac{\pi}{2}-\alpha\right)\sin\beta$</Step>
+<Step reason="余角の公式をもう一度使い、cos(π/2−α)=sinα、sin(π/2−α)=cosα と戻します。">$=\sin\alpha\cos\beta+\cos\alpha\sin\beta$</Step>
+</Steps>
+
+$\sin(\alpha-\beta)$ も同じで、$\beta$ を $-\beta$ に置き換えれば $\sin\alpha\cos\beta-\cos\alpha\sin\beta$ になる。
+
+タンジェントは、$\sin$ を $\cos$ で割った定義から作る。いま両方の式が分かっているので、あとは整理するだけだ。
+
+<Steps>
+<Step reason="tan の定義 tanθ=sinθ/cosθ に、加法定理の sin と cos を代入します。">$\tan(\alpha+\beta)=\dfrac{\sin\alpha\cos\beta+\cos\alpha\sin\beta}{\cos\alpha\cos\beta-\sin\alpha\sin\beta}$</Step>
+<Step reason="分母分子を cosαcosβ で割ると、各項が sin/cos の形に揃います。">$=\dfrac{\dfrac{\sin\alpha}{\cos\alpha}+\dfrac{\sin\beta}{\cos\beta}}{1-\dfrac{\sin\alpha}{\cos\alpha}\cdot\dfrac{\sin\beta}{\cos\beta}}$</Step>
+<Step reason="tanθ=sinθ/cosθ を戻せば、tan だけの式になります。">$=\dfrac{\tan\alpha+\tan\beta}{1-\tan\alpha\tan\beta}$</Step>
+</Steps>
+
+<Why>
+なぜ分母分子を $\cos\alpha\cos\beta$ で割るのか。$\tan$ だけの式にしたいからだ。割ると各項が $\dfrac{\sin}{\cos}=\tan$ の形になり、$\sin$ や $\cos$ の値を経由せずに $\tan$ のまま計算できる。どの式で割るかは「最終的に何を残したいか」で決まる。
+</Why>
+
+ここまでの結果を定理としてまとめよう。$\alpha+\beta$ では上段の符号を、$\alpha-\beta$ では下段の符号を選ぶ（$\cos$ と $\tan$ の $\mp$ は逆になる）。
+
+<Theorem name="加法定理">
+$$
+\sin(\alpha\pm\beta)=\sin\alpha\cos\beta\pm\cos\alpha\sin\beta
+$$
+
+サインの式は「サイン×コサイン、コサイン×サイン」と交差して掛けた2項の和・差です。
+
+$$
+\cos(\alpha\pm\beta)=\cos\alpha\cos\beta\mp\sin\alpha\sin\beta
+$$
+
+コサインの式は「コサインどうし、サインどうし」と同じ種類の積を組み合わせ、サインの項だけ符号が入れ替わります。
+
+$$
+\tan(\alpha\pm\beta)=\dfrac{\tan\alpha\pm\tan\beta}{1\mp\tan\alpha\tan\beta}
+$$
+
+タンジェントの式は、分母の符号が分子と逆になることに注意してください。
+</Theorem>
+
+<KeyPoint>
+加法定理の見分け方は「同じ種類」と「交差」。cos は cos×cos と sin×sin、sin は sin×cos と cos×sin。$\alpha+\beta$ のとき、cos の式のサインの項だけがマイナスになる。
+</KeyPoint>
+
+<Note type="warn">
+$\tan$ の式には条件が付く。$\cos\alpha\ne 0$ と $\cos\beta\ne 0$、そして分母が $0$ でないこと（$\alpha\pm\beta\ne\dfrac{\pi}{2}+n\pi$、$n$ は整数）が必要です。加法定理の $\tan$ の式は、この範囲でのみ使います。
+</Note>
+
+## 加法定理を使う
+
+<WorkedExample title="例題: 加法定理で 15° の値を求める">
+$\sin\dfrac{\pi}{12}$ の値を求めよ。
+
+<Steps>
+<Step reason="π/12 は特別角ではないが、π/3−π/4 と、知っている角の差に分けられます。">$\dfrac{\pi}{12}=\dfrac{\pi}{3}-\dfrac{\pi}{4}$</Step>
+<Step reason="差のサインの式 sin(α−β)=sinαcosβ−cosαsinβ に α=π/3、β=π/4 を当てはめます。">$\sin\dfrac{\pi}{12}=\sin\dfrac{\pi}{3}\cos\dfrac{\pi}{4}-\cos\dfrac{\pi}{3}\sin\dfrac{\pi}{4}$</Step>
+<Step reason="特別角の値 sin(π/3)=√3/2、cos(π/4)=√2/2 などを代入します。">$=\dfrac{\sqrt{3}}{2}\cdot\dfrac{\sqrt{2}}{2}-\dfrac{1}{2}\cdot\dfrac{\sqrt{2}}{2}$</Step>
+<Step reason="分母を4にそろえて1つにまとめます。">$=\dfrac{\sqrt{6}-\sqrt{2}}{4}$</Step>
+</Steps>
+
+<Answer>
+$\sin\dfrac{\pi}{12}=\dfrac{\sqrt{6}-\sqrt{2}}{4}$
+</Answer>
+</WorkedExample>
+
+<Figure caption="15°（π/12）の単位円。加法定理で求めた値は、この点の座標を読み取ったもの。角を動かして読み取り値と見比べよう">
+<UnitCircle angleDeg={15} interactive showSin showCos label="15°の単位円と sin・cos" />
+</Figure>
+
+<SelfExplanation
+  prompt="15° は特別角ではないのに、sin(π/12) の値を求められるのはなぜ？"
+  options={['π/12 を π/3 と π/4 の差に分けて加法定理を使うから', '15° は実は特別角だから', 'sin の値域が 1 以下だから']}
+  model="π/12 は π/3−π/4 と、知っている角の差で書けます。加法定理は、角の差のサインを、それぞれの角のサインとコサインの積で表す式です。だから 15° のように表にない角でも、既知の角の差に分ければ値が計算できます。"
+/>
+
+<Misconception>
+<Wrong>
+$\sin(\alpha+\beta)=\sin\alpha+\sin\beta$ である。角を足すのだから、値も足せばよい。
+</Wrong>
+<WhyWrong>
+$\alpha=\beta=\dfrac{\pi}{2}$ を代入して確かめよう。左辺は $\sin\left(\dfrac{\pi}{2}+\dfrac{\pi}{2}\right)=\sin\pi=0$。右辺は $\sin\dfrac{\pi}{2}+\sin\dfrac{\pi}{2}=1+1=2$。$0\ne 2$ なので、この等式は成り立たない。そもそも $\sin$ の値は $-1$ から $1$ までしか動かないのに、2つの値を足せば $2$ に届いてしまうことからも、おかしいと分かる。
+</WhyWrong>
+<Right>
+角の和のサインは $\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta$。それぞれの角のサインとコサインを交差して掛け合わせる。足し算で済むのは角度のほうで、三角関数の値は足せない。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）加法定理を使って、$\sin(\alpha+\beta)$ と $\cos(\alpha-\beta)$ の式を書け。
+<Reveal label="答え">
+$\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta$、$\cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta$。
+</Reveal>
+
+（2）前のレッスンで見た $\sin\left(\dfrac{\pi}{2}+\theta\right)=\cos\theta$ を、加法定理で確かめよ。
+<Reveal label="答え">
+$\sin\left(\dfrac{\pi}{2}+\theta\right)=\sin\dfrac{\pi}{2}\cos\theta+\cos\dfrac{\pi}{2}\sin\theta=1\cdot\cos\theta+0\cdot\sin\theta=\cos\theta$。
+</Reveal>
+
+（3）〔復習〕$\tan(\pi+\theta)$ を加法定理で計算し、$\tan\theta$ に等しいことを確かめよ。
+<Reveal label="答え">
+$\tan(\pi+\theta)=\dfrac{\tan\pi+\tan\theta}{1-\tan\pi\tan\theta}=\dfrac{0+\tan\theta}{1-0}=\tan\theta$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="まとめの練習（加法定理・還元）">
+（1）$\cos\dfrac{7\pi}{12}$ の値を求めよ。
+<Reveal label="解答">
+$\dfrac{7\pi}{12}=\dfrac{\pi}{3}+\dfrac{\pi}{4}$。加法定理より $\cos\dfrac{7\pi}{12}=\cos\dfrac{\pi}{3}\cos\dfrac{\pi}{4}-\sin\dfrac{\pi}{3}\sin\dfrac{\pi}{4}=\dfrac{1}{2}\cdot\dfrac{\sqrt{2}}{2}-\dfrac{\sqrt{3}}{2}\cdot\dfrac{\sqrt{2}}{2}=\dfrac{\sqrt{2}-\sqrt{6}}{4}$。
+</Reveal>
+
+（2）$\tan\dfrac{\pi}{12}$ の値を、加法定理を使って求めよ。
+<Reveal label="解答">
+$\dfrac{\pi}{12}=\dfrac{\pi}{3}-\dfrac{\pi}{4}$。加法定理より $\tan\dfrac{\pi}{12}=\dfrac{\tan(\pi/3)-\tan(\pi/4)}{1+\tan(\pi/3)\tan(\pi/4)}=\dfrac{\sqrt{3}-1}{1+\sqrt{3}}=\dfrac{(\sqrt{3}-1)^2}{(1+\sqrt{3})(\sqrt{3}-1)}=\dfrac{4-2\sqrt{3}}{2}=2-\sqrt{3}$。
+</Reveal>
+
+（3）〔復習〕単位円の対称性から $\sin(\pi-\theta)=\sin\theta$ が成り立つ。このことを加法定理で計算して確かめよ。
+<Reveal label="解答">
+$\sin(\pi-\theta)=\sin\pi\cos\theta-\cos\pi\sin\theta=0\cdot\cos\theta-(-1)\cdot\sin\theta=\sin\theta$。
+</Reveal>
+</Practice>

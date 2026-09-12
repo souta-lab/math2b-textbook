@@ -1,0 +1,169 @@
+---
+/**
+ * PascalTriangle — パスカルの三角形 (AUTHORING.md §16).
+ *
+ * A server-rendered, static SVG figure of the binomial coefficients. Row n
+ * holds C(n, 0..n), so highlighting one row connects the triangle directly to
+ * the coefficients of (a+b)^n in 二項定理. No client-side JavaScript.
+ *
+ * Usage:
+ *   <Figure caption="…">
+ *     <PascalTriangle rows={6} highlightRow={3} />
+ *   </Figure>
+ *
+ * `highlightRow` is the 0-based row n, i.e. the coefficients of (a+b)^n.
+ */
+import { formatCoefficient, formatCoefficientRow, pascalRows } from './expressions-math';
+
+interface Props {
+  /** Number of rows to draw (n = 0 … rows-1). Defaults to 6. */
+  rows?: number;
+  /** 0-based row n to emphasise, i.e. the coefficients of (a+b)^n. */
+  highlightRow?: number;
+  /** Overrides the default Japanese aria-label. */
+  label?: string;
+}
+
+const { rows = 6, highlightRow, label } = Astro.props;
+
+const count = Number.isInteger(rows) && rows > 0 ? rows : 1;
+const triangle = pascalRows(count);
+const highlighted =
+  highlightRow != null && Number.isInteger(highlightRow) && highlightRow >= 0 && highlightRow < count
+    ? highlightRow
+    : null;
+const highlightedValues = highlighted != null ? triangle[highlighted] : undefined;
+
+// Figure geometry (user units; the SVG scales responsively).
+const CELL = 46; // pitch between neighbouring cells
+const BOX = 40; // rounded square drawn inside a cell
+const GUTTER = 42; // left column holding the n = … labels
+const PAD = 14;
+const width = PAD + GUTTER + count * CELL + PAD;
+const height = PAD * 2 + count * CELL;
+const centerX = PAD + GUTTER + (count * CELL) / 2;
+
+let ariaLabel =
+  label ??
+  `パスカルの三角形。上から順に n=0 から n=${count - 1} までの段が並び、各段の数は (a+b) を n 回掛けた展開の係数を表します。`;
+if (highlighted != null && highlightedValues != null) {
+  ariaLabel += ` 上から ${highlighted + 1} 段目（n=${highlighted}）を強調し、(a+b)^${highlighted} の係数 ${formatCoefficientRow(highlightedValues)} を示しています。`;
+}
+---
+
+<figure class="viz viz-pascal" data-viz="pascal-triangle" role="img" aria-label={ariaLabel}>
+  <svg
+    class="viz-pascal__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    aria-hidden="true"
+    focusable="false"
+  >
+    {
+      triangle.map((row, n) => {
+        const rowTop = PAD + n * CELL;
+        const rowCenter = rowTop + CELL / 2;
+        const isHighlighted = n === highlighted;
+        return (
+          <>
+            <text
+              class={`v-pt-row-label${isHighlighted ? ' is-hl' : ''}`}
+              x={PAD + GUTTER - 10}
+              y={rowCenter}
+              dy="0.36em"
+              text-anchor="end"
+            >
+              n={n}
+            </text>
+            {row.map((value, k) => {
+              const cx = centerX + (k - n / 2) * CELL;
+              return (
+                <>
+                  <rect
+                    class={`v-pt-cell${isHighlighted ? ' is-hl' : ''}`}
+                    x={cx - BOX / 2}
+                    y={rowTop + (CELL - BOX) / 2}
+                    width={BOX}
+                    height={BOX}
+                    rx="8"
+                  />
+                  <text
+                    class={`v-pt-num${isHighlighted ? ' is-hl' : ''}`}
+                    x={cx}
+                    y={rowCenter}
+                    dy="0.36em"
+                    text-anchor="middle"
+                  >
+                    {formatCoefficient(value)}
+                  </text>
+                </>
+              );
+            })}
+          </>
+        );
+      })
+    }
+  </svg>
+  {
+    highlighted != null && highlightedValues != null && (
+      <p class="viz-pascal__readout" aria-hidden="true">
+        n = {highlighted} の段： (a+b)<sup>{highlighted}</sup> の係数 ＝{' '}
+        <span class="viz-pascal__readout-coeffs">{formatCoefficientRow(highlightedValues)}</span>
+      </p>
+    )
+  }
+</figure>
+
+<style is:global>
+  .viz-pascal {
+    margin: var(--sp-5) 0;
+  }
+  .viz-pascal__svg {
+    display: block;
+    width: 100%;
+    max-width: 21rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-pascal .v-pt-cell {
+    fill: var(--surface);
+    stroke: var(--rule);
+    stroke-width: 1;
+  }
+  .viz-pascal .v-pt-cell.is-hl {
+    fill: var(--shu-soft);
+    stroke: var(--shu);
+    stroke-width: 1.5;
+  }
+  .viz-pascal .v-pt-num {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-pascal .v-pt-num.is-hl {
+    fill: var(--shu);
+    font-weight: 700;
+  }
+  .viz-pascal .v-pt-row-label {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-pascal .v-pt-row-label.is-hl {
+    fill: var(--shu);
+    font-weight: 600;
+  }
+  .viz-pascal__readout {
+    margin: var(--sp-2) 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-pascal__readout-coeffs {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+</style>

@@ -1,0 +1,194 @@
+---
+title: "2倍角・半角の公式"
+summary: "加法定理から2倍角の公式を導き、半角の公式まで広げる。"
+unit: "ii-trigonometric"
+order: 8
+objectives:
+  - "加法定理から2倍角の公式を導ける"
+  - "2倍角の公式から半角の公式を導ける"
+  - "与えられた条件から2倍角・半角の値を求められる"
+prerequisites: ["trig/07-addition-theorem"]
+tags: ["2倍角", "半角", "加法定理"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+回転を2回続けて行うと、角はちょうど2倍になる。前のレッスンで導いた加法定理を使えば、2倍になった角のサインやコサインを、もとの角の値から計算できる。では逆向きに考えて、回転を半分にした角の値はどうなるだろう。$\dfrac{\pi}{4}$ の値は知っているのに、その半分の $\dfrac{\pi}{8}$ の値は表には載っていない。もとの角から半分の角へ降りていく道はあるのだろうか。
+</Hook>
+
+<Prediction
+  question="0<α<2π で α が第3象限にあるとき、sin(α/2) の符号は？"
+  options={['正', '負', '0']}
+  answer="正"
+  explanation="α が第3象限でも、半分の角 α/2 は π/2 と 3π/4 の間にあり、第2象限の角です。サインは第2象限で正になります。もとの角の象限をそのまま当てはめると間違えます。"
+/>
+
+前のレッスンで導いた加法定理は、2つの角の和・差を扱う。その式で $\beta=\alpha$ とおけば、同じ角を2つ足した「2倍角」の場合が出てくる。さらに $\cos$ の2倍角の式を $\sin^2$ や $\cos^2$ について解けば、角を半分にする「半角」の式が現れる。2倍角と半角は、別々に暗記するものではなく、1つの加法定理の裏表だ。
+
+## 2倍角の公式
+
+加法定理で $\beta=\alpha$ とおくと、同じ角を2つ足した場合の式が出る。これが2倍角の公式だ。
+
+<Steps>
+<Step reason="sin の加法定理で β を α に置き換えると、同じ項が2つ並びます。">$\sin 2\alpha=\sin\alpha\cos\alpha+\cos\alpha\sin\alpha=2\sin\alpha\cos\alpha$</Step>
+<Step reason="cos の加法定理で β=α とおきます。">$\cos 2\alpha=\cos^2\alpha-\sin^2\alpha$</Step>
+<Step reason="相互関係を逆に使って一方の2乗を消すと、cos だけ・sin だけの表し方も出ます。">$=1-2\sin^2\alpha=2\cos^2\alpha-1$</Step>
+<Step reason="tan の加法定理で β=α とおくと、分子が 2tanα、分母が 1−tan²α になります。">$\tan 2\alpha=\dfrac{2\tan\alpha}{1-\tan^2\alpha}$</Step>
+</Steps>
+
+<Theorem name="2倍角の公式">
+$$
+\sin 2\alpha=2\sin\alpha\cos\alpha
+$$
+
+$$
+\cos 2\alpha=\cos^2\alpha-\sin^2\alpha=1-2\sin^2\alpha=2\cos^2\alpha-1
+$$
+
+$$
+\tan 2\alpha=\dfrac{2\tan\alpha}{1-\tan^2\alpha}
+$$
+
+$\cos 2\alpha$ だけは3通りの顔をもつ。与えられたのが $\sin\alpha$ なら $1-2\sin^2\alpha$、$\cos\alpha$ なら $2\cos^2\alpha-1$ を選べば、平方根を経由せずに値が出ます。
+</Theorem>
+
+<Note type="warn">
+$\tan$ の2倍角の式は、$\tan\alpha$ が定義される範囲に加えて、分母 $1-\tan^2\alpha$ が $0$ でない範囲で使います。つまり $\alpha\ne\dfrac{\pi}{4}+\dfrac{n\pi}{2}$（$n$ は整数）です。
+</Note>
+
+<Why>
+2倍角の公式を別に暗記する必要はない。加法定理で $\beta=\alpha$ とおくだけの特別な場合だ。$\cos 2\alpha$ に3通りの形があるのは、$\sin^2\alpha+\cos^2\alpha=1$ で片方を消去できるから。問題文が $\sin\alpha$ を与えているなら $\cos 2\alpha=1-2\sin^2\alpha$、$\cos\alpha$ を与えているなら $2\cos^2\alpha-1$ を選ぶと、符号の迷いも平方根も避けられる。
+</Why>
+
+<Misconception>
+<Wrong>
+$\sin 2\alpha=2\sin\alpha$ である。2倍角だから、サインの値も2倍にすればよい。
+</Wrong>
+<WhyWrong>
+$\alpha=\dfrac{\pi}{2}$ を代入して確かめよう。左辺は $\sin\pi=0$、右辺は $2\sin\dfrac{\pi}{2}=2$ で等しくない。正しい式 $\sin 2\alpha=2\sin\alpha\cos\alpha$ には $\cos\alpha$ が掛かっており、この因数が抜けている。角を2倍にしても、サインの値は2倍にはならない。
+</WhyWrong>
+<Right>
+$\sin 2\alpha=2\sin\alpha\cos\alpha$。2倍角の式は加法定理で $\beta=\alpha$ とおいた結果で、$\sin\alpha$ の値だけでは決まらない。
+</Right>
+</Misconception>
+
+<WorkedExample title="例題1: 2倍角の値を求める">
+$\sin\alpha=\dfrac{3}{5}$ で、$\alpha$ が第2象限の角であるとき、$\sin 2\alpha$、$\cos 2\alpha$、$\tan 2\alpha$ の値を求めよ。
+
+<Steps>
+<Step reason="2倍角の式を使うには cosα が必要。相互関係で大きさを出し、第2象限だから負を選びます。">$\cos^2\alpha=1-\left(\dfrac{3}{5}\right)^2=\dfrac{16}{25}$。第2象限なので $\cos\alpha=-\dfrac{4}{5}$。</Step>
+<Step reason="sin2α=2sinαcosα に、分かった値をそのまま代入します。">$\sin 2\alpha=2\cdot\dfrac{3}{5}\cdot\left(-\dfrac{4}{5}\right)=-\dfrac{24}{25}$。</Step>
+<Step reason="cosα ではなく sinα が与えられているので、cos2α=1−2sin²α を選べば平方根を経由せずに済みます。">$\cos 2\alpha=1-2\left(\dfrac{3}{5}\right)^2=1-\dfrac{18}{25}=\dfrac{7}{25}$。</Step>
+<Step reason="tan2α=sin2α/cos2α に、いま求めた2つの値を代入します。">$\tan 2\alpha=\dfrac{-24/25}{7/25}=-\dfrac{24}{7}$。</Step>
+</Steps>
+
+<Answer>
+$\sin 2\alpha=-\dfrac{24}{25}$、$\cos 2\alpha=\dfrac{7}{25}$、$\tan 2\alpha=-\dfrac{24}{7}$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="sinα が与えられているとき、cos2α の3つの形のどれを選ぶと計算が楽？"
+  options={['cos2α=1−2sin²α', 'cos2α=cos²α−sin²α', 'cos2α=2cos²α−1']}
+  model="与えられた sinα をそのまま使える 1−2sin²α を選べば、cosα を求めて平方根を取る手間も、符号の判断も要りません。cos²α−sin²α や 2cos²α−1 を使って計算するには cosα が必要になります。"
+/>
+
+## 半角の公式
+
+2倍角の式は、逆に読むと角を半分にした式になる。$\cos 2\alpha=1-2\sin^2\alpha$ を $\sin^2\alpha$ について解き、文字 $\alpha$ を $\dfrac{\alpha}{2}$ に置き換えよう。
+
+<Steps>
+<Step reason="cos の2倍角 cos2α=1−2sin²α を sin²α について解きます。">$\sin^2\alpha=\dfrac{1-\cos 2\alpha}{2}$</Step>
+<Step reason="この式の α を α/2 に置き換えると、左辺が sin²(α/2)、右辺の 2α が α になります。">$\sin^2\dfrac{\alpha}{2}=\dfrac{1-\cos\alpha}{2}$</Step>
+<Step reason="cos2α=2cos²α−1 を同じ手順で cos²α について解いて置き換えます。">$\cos^2\dfrac{\alpha}{2}=\dfrac{1+\cos\alpha}{2}$</Step>
+<Step reason="tan(α/2)=sin(α/2)/cos(α/2) の分母分子に 2cos(α/2) を掛けると、2倍角の sinα と cos²(α/2) が現れます。">$\tan\dfrac{\alpha}{2}=\dfrac{\sin\alpha}{1+\cos\alpha}$</Step>
+</Steps>
+
+<Theorem name="半角の公式">
+$$
+\sin^2\dfrac{\alpha}{2}=\dfrac{1-\cos\alpha}{2},\qquad
+\cos^2\dfrac{\alpha}{2}=\dfrac{1+\cos\alpha}{2}
+$$
+
+$$
+\tan\dfrac{\alpha}{2}=\dfrac{\sin\alpha}{1+\cos\alpha}
+$$
+
+左の2つが与えるのは2乗の値。$\sin\dfrac{\alpha}{2}$ そのものを知りたいときは、平方根を取ってから象限で符号を決めます。
+</Theorem>
+
+実際に $\sin\dfrac{\alpha}{2}$ や $\cos\dfrac{\alpha}{2}$ を求める場面では、平方根の前に $\pm$ が付く。
+
+$$
+\sin\dfrac{\alpha}{2}=\pm\sqrt{\dfrac{1-\cos\alpha}{2}},\qquad
+\cos\dfrac{\alpha}{2}=\pm\sqrt{\dfrac{1+\cos\alpha}{2}}
+$$
+
+どちらの符号を選ぶかは、角の範囲を定めたうえで、$\dfrac{\alpha}{2}$ がどの象限にあるかで決まる。
+
+<Note type="warn">
+たとえば $0<\alpha<2\pi$ の範囲で $\alpha$ が第3象限にあると、$\dfrac{\pi}{2}<\dfrac{\alpha}{2}<\dfrac{3\pi}{4}$ となり、$\dfrac{\alpha}{2}$ は第2象限の角です。このとき $\sin\dfrac{\alpha}{2}$ は正、$\cos\dfrac{\alpha}{2}$ は負になります。符号の判断が要らない $\tan\dfrac{\alpha}{2}=\dfrac{\sin\alpha}{1+\cos\alpha}$ は、値の計算で使いやすい（$\cos\alpha=-1$ のときを除く）。
+</Note>
+
+<Why>
+半角の公式で符号を間違えやすいのは、式が値そのものではなく2乗の形で与えられているからだ。2乗すると正負どちらの元の値からでも同じ結果になるので、情報が1つ足りない。その不足を補うのが「$\dfrac{\alpha}{2}$ がどの象限にあるか」という条件である。範囲が指定されていない問題でも、まず $\alpha$ の範囲を2で割り、$\dfrac{\alpha}{2}$ の象限を確定させてから符号を選ぶ。
+</Why>
+
+<WorkedExample title="例題2: 半角の公式で π/8 の値を求める">
+$\sin\dfrac{\pi}{8}$ の値を求めよ。
+
+<Steps>
+<Step reason="π/8=(1/2)(π/4) なので半角の公式が使えます。π/8 は第1象限の角だから sin は正です。">$\sin^2\dfrac{\pi}{8}=\dfrac{1-\cos(\pi/4)}{2}=\dfrac{1-\sqrt{2}/2}{2}=\dfrac{2-\sqrt{2}}{4}$。</Step>
+<Step reason="π/8 が第1象限にあるので、2乗を外すときは正の平方根を選びます。">$\sin\dfrac{\pi}{8}=\sqrt{\dfrac{2-\sqrt{2}}{4}}=\dfrac{\sqrt{2-\sqrt{2}}}{2}$。</Step>
+</Steps>
+
+<Answer>
+$\sin\dfrac{\pi}{8}=\dfrac{\sqrt{2-\sqrt{2}}}{2}$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+もとの角 $\alpha$ が第3象限なら、半分にした角 $\dfrac{\alpha}{2}$ も第3象限の角である。
+</Wrong>
+<WhyWrong>
+象限は角の大きさの範囲で決まる。$0<\alpha<2\pi$ で $\alpha$ が第3象限なら $\pi<\alpha<\dfrac{3\pi}{2}$。各辺を2で割ると $\dfrac{\pi}{2}<\dfrac{\alpha}{2}<\dfrac{3\pi}{4}$ となり、$\dfrac{\alpha}{2}$ は第2象限の角になる。2で割る操作で象限は移り、もとの象限をそのまま使うことはできない。
+</WhyWrong>
+<Right>
+$\dfrac{\alpha}{2}$ の象限は、$\alpha$ の範囲を2で割って求め直す。第3象限の $\alpha$ なら $\dfrac{\alpha}{2}$ は第2象限にあり、$\sin\dfrac{\alpha}{2}$ は正、$\cos\dfrac{\alpha}{2}$ は負になる。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）2倍角の公式を、加法定理から導け。
+<Reveal label="答え">
+加法定理 $\sin(\alpha+\beta)=\sin\alpha\cos\beta+\cos\alpha\sin\beta$ で $\beta=\alpha$ とおくと、$\sin 2\alpha=\sin\alpha\cos\alpha+\cos\alpha\sin\alpha=2\sin\alpha\cos\alpha$。同じく $\cos 2\alpha=\cos^2\alpha-\sin^2\alpha$。
+</Reveal>
+
+（2）$\cos\alpha=-\dfrac{3}{5}$ で、$\alpha$ が第3象限の角であるとき、$\cos 2\alpha$ を求めよ。
+<Reveal label="答え">
+$\cos\alpha$ が与えられているので $\cos 2\alpha=2\cos^2\alpha-1$ を使う。$\cos 2\alpha=2\cdot\dfrac{9}{25}-1=\dfrac{18}{25}-1=-\dfrac{7}{25}$。
+</Reveal>
+
+（3）$0<\alpha<2\pi$ で $\alpha$ が第3象限にあるとき、$\sin\dfrac{\alpha}{2}$ の符号を答えよ。
+<Reveal label="答え">
+$\pi<\alpha<\dfrac{3\pi}{2}$ の各辺を2で割ると $\dfrac{\pi}{2}<\dfrac{\alpha}{2}<\dfrac{3\pi}{4}$。$\dfrac{\alpha}{2}$ は第2象限の角なので、$\sin\dfrac{\alpha}{2}$ は正。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="まとめの練習（2倍角・半角・加法定理）">
+（1）〔復習〕加法定理を使って $\sin\dfrac{5\pi}{12}$ の値を求めよ。
+<Reveal label="解答">
+$\dfrac{5\pi}{12}=\dfrac{\pi}{6}+\dfrac{\pi}{4}$。加法定理より $\sin\dfrac{5\pi}{12}=\sin\dfrac{\pi}{6}\cos\dfrac{\pi}{4}+\cos\dfrac{\pi}{6}\sin\dfrac{\pi}{4}=\dfrac{1}{2}\cdot\dfrac{\sqrt{2}}{2}+\dfrac{\sqrt{3}}{2}\cdot\dfrac{\sqrt{2}}{2}=\dfrac{\sqrt{2}+\sqrt{6}}{4}$。
+</Reveal>
+
+（2）$\tan\dfrac{\pi}{8}$ の値を、半角の公式を使って求めよ。
+<Reveal label="解答">
+$\tan\dfrac{\pi}{8}=\tan\left(\dfrac{1}{2}\cdot\dfrac{\pi}{4}\right)=\dfrac{\sin(\pi/4)}{1+\cos(\pi/4)}=\dfrac{\sqrt{2}/2}{1+\sqrt{2}/2}=\dfrac{\sqrt{2}}{2+\sqrt{2}}=\dfrac{\sqrt{2}(2-\sqrt{2})}{(2+\sqrt{2})(2-\sqrt{2})}=\dfrac{2\sqrt{2}-2}{2}=\sqrt{2}-1$。
+</Reveal>
+
+（3）$\sin\alpha=-\dfrac{4}{5}$ で、$\alpha$ が第3象限の角であるとき、$\sin\dfrac{\alpha}{2}$ を求めよ。
+<Reveal label="解答">
+第3象限だから $\cos\alpha=-\dfrac{3}{5}$。半角の公式より $\sin^2\dfrac{\alpha}{2}=\dfrac{1-\cos\alpha}{2}=\dfrac{1+3/5}{2}=\dfrac{4}{5}$。$\pi<\alpha<\dfrac{3\pi}{2}$ より $\dfrac{\pi}{2}<\dfrac{\alpha}{2}<\dfrac{3\pi}{4}$ で、$\dfrac{\alpha}{2}$ は第2象限。よって $\sin\dfrac{\alpha}{2}>0$ だから $\sin\dfrac{\alpha}{2}=\sqrt{\dfrac{4}{5}}=\dfrac{2\sqrt{5}}{5}$。
+</Reveal>
+</Practice>

@@ -1,0 +1,251 @@
+---
+/**
+ * DiscriminantParabola — 判別式と放物線と x 軸の共有点 (AUTHORING.md §16).
+ *
+ * A server-rendered, static SVG figure of three small parabolas sharing one
+ * x-y window: one per discriminant sign (D > 0, D = 0, D < 0). Each panel
+ * draws its parabola, the x-axis, and the intersection points, so the number
+ * of real solutions is read directly off the picture. No client-side JS.
+ *
+ * Usage:
+ *   <Figure caption="…">
+ *     <DiscriminantParabola />
+ *   </Figure>
+ *
+ * Pass `cases` (fewer or more than three) to override the defaults; all panels
+ * share the same scales so their shapes stay comparable.
+ */
+import { scaleLinear } from '../../../lib/graph';
+import { discriminant, sampleParabola } from './expressions-math';
+
+interface CaseSpec {
+  a: number;
+  b: number;
+  c: number;
+  caption: string;
+}
+
+interface Props {
+  /** Overrides the default Japanese aria-label. */
+  label?: string;
+  /** Quadratic cases to draw, one panel each. Defaults to D > 0, D = 0, D < 0. */
+  cases?: CaseSpec[];
+}
+
+const DEFAULT_CASES: CaseSpec[] = [
+  { a: 1, b: -2, c: -3, caption: '異なる2つの実数解' },
+  { a: 1, b: -2, c: 1, caption: '重解（実数解1個）' },
+  { a: 1, b: -2, c: 3, caption: '実数解なし（虚数解2個）' },
+];
+
+const { label, cases = DEFAULT_CASES } = Astro.props;
+
+const EPS = 1e-9;
+
+// Panel geometry in SVG user units; one <svg> per case, shared scales.
+const PANEL_W = 156;
+const PANEL_H = 196;
+const PAD_X = 9;
+const PAD_TOP = 10;
+const PAD_BOTTOM = 24;
+const SAMPLE_STEPS = 160;
+
+const discs = cases.map((spec) => discriminant(spec.a, spec.b, spec.c));
+
+// Shared x window: every vertex and root, padded.
+const xs: number[] = [];
+cases.forEach((spec, index) => {
+  xs.push(-spec.b / (2 * spec.a));
+  const disc = discs[index];
+  if (disc > EPS) {
+    const root = Math.sqrt(disc);
+    xs.push((-spec.b - root) / (2 * spec.a), (-spec.b + root) / (2 * spec.a));
+  }
+});
+const xPad = 1.25;
+const xMin = Math.min(...xs) - xPad;
+const xMax = Math.max(...xs) + xPad;
+
+// Shared y window: the x-axis (0) and every vertex, padded; curves are clipped.
+const ys: number[] = [0];
+cases.forEach((spec) => ys.push(spec.c - (spec.b * spec.b) / (4 * spec.a)));
+const yPad = 1.25;
+const yMin = Math.min(...ys) - yPad;
+const yMax = Math.max(...ys) + yPad;
+
+const xScale = scaleLinear({ domain: [xMin, xMax], range: [PAD_X, PANEL_W - PAD_X] });
+const yScale = scaleLinear({ domain: [yMin, yMax], range: [PANEL_H - PAD_BOTTOM, PAD_TOP] });
+const zeroY = yScale(Math.min(yMax, Math.max(yMin, 0)));
+
+const fmtNumber = (value: number): string => {
+  if (!Number.isFinite(value)) return '—';
+  if (Number.isInteger(value)) return String(value);
+  return value.toFixed(2).replace(/\.?0+$/, '');
+};
+
+const panels = cases.map((spec, index) => {
+  const disc = discs[index];
+  const isZero = Math.abs(disc) <= EPS;
+  const vertexX = -spec.b / (2 * spec.a);
+  const roots = isZero
+    ? [vertexX]
+    : disc > 0
+      ? [
+          (-spec.b - Math.sqrt(disc)) / (2 * spec.a),
+          (-spec.b + Math.sqrt(disc)) / (2 * spec.a),
+        ].sort((p, q) => p - q)
+      : [];
+  const sign = isZero ? 0 : disc > 0 ? 1 : -1;
+
+  const samples = sampleParabola(spec.a, spec.b, spec.c, xMin, xMax, SAMPLE_STEPS);
+  let path = '';
+  let penDown = false;
+  for (const point of samples) {
+    const visible = Number.isFinite(point.y) && point.y >= yMin && point.y <= yMax;
+    if (!visible) {
+      penDown = false;
+      continue;
+    }
+    path += `${penDown ? 'L' : 'M'}${xScale(point.x).toFixed(1)} ${yScale(point.y).toFixed(1)} `;
+    penDown = true;
+  }
+
+  return {
+    spec,
+    sign,
+    badge: isZero ? 'D = 0' : disc > 0 ? `D = ${fmtNumber(disc)} > 0` : `D = ${fmtNumber(disc)} < 0`,
+    path: path.trim(),
+    zeroY,
+    rootMarks: roots.map((root) => ({
+      x: xScale(root),
+      label: fmtNumber(root),
+    })),
+  };
+});
+
+const intersectionText = (sign: number): string =>
+  sign > 0
+    ? 'x 軸と2点で交わり、異なる2つの実数解をもつ'
+    : sign === 0
+      ? 'x 軸と1点で接し、重解をもつ'
+      : 'x 軸と共有点をもたず、実数解をもたない';
+
+const ariaLabel =
+  label ??
+  `判別式 D と放物線 y = ax² + bx + c と x 軸の共有点の関係。左から順に、${panels
+    .map((panel) => `${panel.badge} のとき、${intersectionText(panel.sign)}（${panel.spec.caption}）`)
+    .join('。')}。`;
+---
+
+<figure
+  class="viz viz-disc"
+  data-viz="discriminant-parabola"
+  role="img"
+  aria-label={ariaLabel}
+>
+  <div class="viz-disc__panels">
+    {
+      panels.map((panel) => (
+        <div class="viz-disc__panel">
+          <p class="viz-disc__badge" aria-hidden="true">{panel.badge}</p>
+          <svg
+            class="viz-disc__svg"
+            viewBox={`0 0 ${PANEL_W} ${PANEL_H}`}
+            aria-hidden="true"
+            focusable="false"
+          >
+            <line
+              class="v-disc-axis"
+              x1={PAD_X}
+              y1={panel.zeroY}
+              x2={PANEL_W - PAD_X}
+              y2={panel.zeroY}
+            />
+            <text class="v-disc-faint" x={PANEL_W - PAD_X} y={panel.zeroY - 5} text-anchor="end">
+              x
+            </text>
+            <path class="v-disc-curve" d={panel.path} />
+            {panel.rootMarks.map((mark) => (
+              <>
+                <circle class="v-disc-dot" cx={mark.x} cy={panel.zeroY} r="3.6" />
+                <text
+                  class="v-disc-root"
+                  x={mark.x}
+                  y={panel.zeroY + 15}
+                  text-anchor="middle"
+                >
+                  {mark.label}
+                </text>
+              </>
+            ))}
+          </svg>
+          <p class="viz-disc__caption" aria-hidden="true">{panel.spec.caption}</p>
+        </div>
+      ))
+    }
+  </div>
+</figure>
+
+<style is:global>
+  .viz-disc {
+    margin: var(--sp-5) 0;
+  }
+  .viz-disc__panels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-3);
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+  .viz-disc__panel {
+    min-width: 0;
+  }
+  .viz-disc__badge {
+    margin: 0 0 var(--sp-1);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--shu);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-disc__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .viz-disc .v-disc-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-disc .v-disc-curve {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.7;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-disc .v-disc-dot {
+    fill: var(--shu);
+    stroke: var(--surface);
+    stroke-width: 1.5;
+  }
+  .viz-disc .v-disc-root {
+    fill: var(--shu);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-disc .v-disc-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-disc__caption {
+    margin: var(--sp-1) 0 0;
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: var(--line-tight);
+    color: var(--ink-soft);
+  }
+</style>

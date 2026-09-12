@@ -1,0 +1,255 @@
+---
+title: "三角関数の合成と三角方程式・不等式"
+summary: "a sinθ + b cosθ を1つの三角関数にまとめ、方程式と不等式を解く。"
+unit: "ii-trigonometric"
+order: 9
+objectives:
+  - "a sinθ + b cosθ を R sin(θ+α) の形に合成できる"
+  - "合成を用いて三角方程式を解ける"
+  - "単位円と合成を用いて三角不等式の解の範囲を求められる"
+prerequisites: ["trig/08-double-half-angle"]
+tags: ["合成", "三角方程式", "三角不等式"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+バネにつないだおもりを、2つの向きから同時に揺らしてみる。2つの揺れは、タイミングが少しだけずれている。それでもおもりの動きを見ていると、複雑なぐちゃぐちゃにはならない。おもりはただ1つの、きれいな往復運動を続ける。2つの揺れは、まるで最初から1つだったかのようにまとまってしまう。
+</Hook>
+
+<Prediction
+  question="sinθ + cosθ の最大値は？"
+  options={['1', '√2', '2']}
+  answer="√2"
+  explanation="sinθ と cosθ が同時に 1 になる角は存在しません。和は1つの波 √2 sin(θ+π/4) にまとまり、最大値は振幅 √2 です。"
+/>
+
+前のレッスンで加法定理を学んだ。$\sin(\theta+\alpha)$ は $\sin\theta\cos\alpha+\cos\theta\sin\alpha$ に展開できる。この等式を右から左へ読むと、$\sin\theta$ と $\cos\theta$ の1次式が1つの $\sin$ にまとまる、という使い方ができる。この変形を三角関数の合成とよぶ。
+
+<Why>
+2つの波を1つにまとめるのは、波の「高さの限界」（振幅）と「山の位置」（ずれ）さえ分かれば、値域・方程式・不等式のすべてが、単位円上の1つの角の問題に置き換わるからだ。合成は式をきれいに見せるための変形ではない。注目する変数を $\theta$ からずらした角 $\theta+\alpha$ へ減らし、単位円を1回読むだけで答えに届くようにするための変形である。
+</Why>
+
+まず係数がともに $1$ の場合、つまり $\sin\theta+\cos\theta$ を考えよう。係数の組 $(1,\ 1)$ を座標平面上の点として読むのが合成の鍵だ。原点から点 $(1,\ 1)$ までの距離は $\sqrt{1^2+1^2}=\sqrt{2}$、点の向きは $\dfrac{\pi}{4}$ である。
+
+<Figure caption="係数の組 (1, 1) が指す向きは 45°（π/4）。向き α の単位ベクトルに長さ R をかけると点 (a, b) に届く">
+<UnitCircle angleDeg={45} interactive showSin showCos />
+</Figure>
+
+一般の $a$、$b$ でも、この距離と向きがそのまま振幅とずれになる。確かめるために、合成の目標となる等式を立て、右辺を加法定理で展開して係数を比べよう。
+
+$$
+a\sin\theta+b\cos\theta=R\sin(\theta+\alpha)
+$$
+
+<Steps>
+<Step reason="加法定理をそのまま当てはめて、右辺を sinθ と cosθ の1次式に開きます。">右辺を展開すると $R\sin(\theta+\alpha)=R\sin\theta\cos\alpha+R\cos\theta\sin\alpha$。</Step>
+<Step reason="θ の値によらず両辺が等しいためには、sinθ と cosθ の各係数が一致する必要があります。">両辺の係数を比べると、$a=R\cos\alpha$、$b=R\sin\alpha$。</Step>
+<Step reason="2乗して足すと R²(cos²α+sin²α) となり、相互関係 cos²α+sin²α=1 から R² だけが残ります。係数から振幅が決まります。">2式を2乗して足すと $a^2+b^2=R^2(\cos^2\alpha+\sin^2\alpha)=R^2$。よって $R=\sqrt{a^2+b^2}$。</Step>
+<Step reason="a=Rcosα、b=Rsinα を R で割ると、点 (a, b) の座標を半径 R の円の点と同じ形で読めます。ここで向き α が決まります。">$R$ で割ると $\cos\alpha=\dfrac{a}{R}$、$\sin\alpha=\dfrac{b}{R}$。この2つを満たす角 $\alpha$ が点 $(a,\ b)$ の向きである。</Step>
+</Steps>
+
+ここで使った $\cos^2\alpha+\sin^2\alpha=1$ は、前に学んだ相互関係そのものだ。このおかげで $a$ と $b$ から振幅 $R$ が計算できる。読み下すなら「$a$、$b$ が作る点の、原点からの距離が振幅、向きがずれ」ということになる。
+
+$$
+R=\sqrt{a^2+b^2},\qquad \cos\alpha=\dfrac{a}{R},\qquad \sin\alpha=\dfrac{b}{R}
+$$
+
+<Theorem name="三角関数の合成">
+$(a,\ b)\ne(0,\ 0)$ とする。点 $(a,\ b)$ の原点からの距離を $R=\sqrt{a^2+b^2}$、向きを $\alpha$ とすると、$a\sin\theta+b\cos\theta$ は振幅 $R$、ずれ $\alpha$ の1つのサインカーブ $R\sin(\theta+\alpha)$ に等しい。$\alpha$ は $\cos\alpha=\dfrac{a}{R}$、$\sin\alpha=\dfrac{b}{R}$ を満たす角として選ぶ。
+</Theorem>
+
+<Note type="tip">
+$R$ は距離だからつねに正にとる。$\alpha$ は上の2つの式を満たせばよく、$2\pi$ のずれを除いて1つに決まる。点 $(a,\ b)$ が原点にある場合（$a=b=0$）は式全体が $0$ になるので、合成は考えない。
+</Note>
+
+さっそく $\sin\theta+\cos\theta$ を合成しよう。$a=b=1$ だから $R=\sqrt{1^2+1^2}=\sqrt{2}$。また $\cos\alpha=\dfrac{1}{\sqrt{2}}$、$\sin\alpha=\dfrac{1}{\sqrt{2}}$ より $\alpha=\dfrac{\pi}{4}$。したがって
+
+$$
+\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)
+$$
+
+となる。右辺の $\sin$ は $-1$ 以上 $1$ 以下だから、この式の値は $-\sqrt{2}$ 以上 $\sqrt{2}$ 以下。よって最大値は $2$ ではなく $\sqrt{2}$ だ。最大になるのは $\sin\left(\theta+\dfrac{\pi}{4}\right)=1$ のとき、つまり $\theta=\dfrac{\pi}{4}+2n\pi$ のときである。このとき $\sin\theta$ と $\cos\theta$ はどちらも $\dfrac{\sqrt{2}}{2}$ で、最大の $1$ にはなっていない。2つの最大を同時にとれないことが、最大値が $2$ にならない理由だ。
+
+<KeyPoint>
+合成の鍵は、係数の組 $(a,\ b)$ を座標平面上の点として読むこと。原点からの距離が振幅 $R$、原点から見た向きがずれ $\alpha$ になる。
+</KeyPoint>
+
+<WorkedExample title="例題1: 合成して最大値・最小値を求める">
+$y=\sin\theta+\sqrt{3}\cos\theta$ の最大値・最小値と、それぞれを与える $\theta$ を求めよ。
+
+<Steps>
+<Step reason="係数の組 (1, √3) の原点からの距離が振幅 R になります。">$a=1$、$b=\sqrt{3}$ だから $R=\sqrt{1^2+(\sqrt{3})^2}=\sqrt{4}=2$。</Step>
+<Step reason="cosα=1/2、sinα=√3/2 を満たす角を単位円で探します。第1象限で両方が正になる角は π/3 です。">$\cos\alpha=\dfrac{1}{2}$、$\sin\alpha=\dfrac{\sqrt{3}}{2}$ より $\alpha=\dfrac{\pi}{3}$。よって $y=2\sin\left(\theta+\dfrac{\pi}{3}\right)$。</Step>
+<Step reason="sin は -1 から 1 まで動くので、2 倍した y の最大は 2 です。最大になるのは sin(θ+π/3)=1 のときです。">最大値は $2$。$\theta+\dfrac{\pi}{3}=\dfrac{\pi}{2}+2n\pi$ のときで、$\theta=\dfrac{\pi}{6}+2n\pi$。</Step>
+<Step reason="最小は sin(θ+π/3)=-1 のときです。θ+π/3=3π/2+2nπ を θ について解きます。">最小値は $-2$。$\theta+\dfrac{\pi}{3}=\dfrac{3\pi}{2}+2n\pi$ のときで、$\theta=\dfrac{7\pi}{6}+2n\pi$。</Step>
+</Steps>
+
+<Answer>
+最大値 $2$（$\theta=\dfrac{\pi}{6}+2n\pi$ のとき）、最小値 $-2$（$\theta=\dfrac{7\pi}{6}+2n\pi$ のとき）。$n$ は整数。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="sinθ+√3cosθ の振幅が 2 になるのはなぜ？"
+  options={['sin と cos の係数を足した 1+√3 が振幅だから', '係数の組 (1, √3) と原点の距離 √(1+3) が振幅だから', 'θ に π/3 を足したから']}
+  model="加法定理で展開して係数を比べると、振幅 R は a²+b²=R² を満たします。つまり R は点 (a, b) の原点からの距離です。(1, √3) なら R=√(1+3)=2 となります。"
+/>
+
+次は、合成した形を使って方程式や不等式を解く。その前に、合成を使わない基本の三角方程式を整理しておこう。
+
+<Definition term="三角方程式">
+$\sin\theta$、$\cos\theta$、$\tan\theta$ のうち少なくとも1つを含み、角 $\theta$ を求める等式を三角方程式とよぶ。角の範囲が指定されていなければ、無数にある解を周期ごとにまとめて書く。このまとめた形を一般解とよぶ。
+</Definition>
+
+解き方は、単位円上でその値をとる点を探すことに尽きる。$\sin\theta=k$ なら高さ $k$ の水平線と円の交点、$\cos\theta=k$ なら横位置 $k$ の縦線と円の交点、$\tan\theta=k$ なら原点を通る傾き $k$ の直線と円の交点を見る。1周期分の解が見つかったら、周期を足して一般解にする。
+
+<Why>
+数学Iの三角比では、角は三角形の内角だから $0^\circ$ から $180^\circ$ までしか現れなかった。三角関数では角は何周してもよく、同じ値をとる角が無数にある。だから1つの解で終わらせず、単位円上で同じ値になる点をすべて拾い、周期を足して一般解の形に書く。
+</Why>
+
+<Theorem name="三角方程式の一般解">
+$n$ を整数とし、それぞれの方程式を満たす角を1つ $\alpha$ とすると、$\sin\theta=k$ なら $\theta=\alpha+2n\pi$ または $\theta=(\pi-\alpha)+2n\pi$。$\cos\theta=k$ なら $\theta=\pm\alpha+2n\pi$。$\tan\theta=k$ なら $\theta=\alpha+n\pi$（ただし $\tan$ は $\cos\theta\ne0$ の範囲で考える）。
+</Theorem>
+
+表にまとめると次のようになる。
+
+| 方程式 | 一般解（$n$ は整数） | 単位円での見方 |
+| --- | --- | --- |
+| $\sin\theta=k$ | $\theta=\alpha+2n\pi$、$\theta=(\pi-\alpha)+2n\pi$ | 高さ $k$ の水平線との交点 |
+| $\cos\theta=k$ | $\theta=\pm\alpha+2n\pi$ | 横位置 $k$ の縦線との交点 |
+| $\tan\theta=k$ | $\theta=\alpha+n\pi$ | 傾き $k$ の直線との交点 |
+
+たとえば $\sin\theta=\dfrac{1}{2}$ なら $\alpha=\dfrac{\pi}{6}$ として、$\theta=\dfrac{\pi}{6}+2n\pi$ または $\theta=\dfrac{5\pi}{6}+2n\pi$。2つの解が対になって現れるのは、水平線と円が1周期に2回交わるからだ。
+
+$\sin$ の2次式になった方程式も、因数分解すれば基本の形に帰着する。
+
+<FadedExample title="穴埋め例: sin の2次式になる方程式">
+$2\sin^2\theta-\sin\theta-1=0$ を $0\le\theta<2\pi$ で解こう。$\sin\theta$ の2次式と見て因数分解すると、
+
+$$
+(2\sin\theta+1)(\sin\theta-1)=0
+$$
+
+となる。よって $\sin\theta=-\dfrac{1}{2}$ または $\sin\theta=1$。ここから先の解を単位円で探してみよう。
+
+<Reveal label="続きを見る">
+$\sin\theta=1$ となる点は単位円の一番上だけで、$\theta=\dfrac{\pi}{2}$。
+
+$\sin\theta=-\dfrac{1}{2}$ となるのは高さ $-\dfrac{1}{2}$ の水平線との交点で、第3象限と第4象限に1つずつあり、$\theta=\dfrac{7\pi}{6}$ と $\theta=\dfrac{11\pi}{6}$。
+
+以上から $0\le\theta<2\pi$ での解は $\theta=\dfrac{\pi}{2},\ \dfrac{7\pi}{6},\ \dfrac{11\pi}{6}$。範囲を指定しない一般解なら、それぞれに $2n\pi$ を足して $\theta=\dfrac{\pi}{2}+2n\pi$、$\dfrac{7\pi}{6}+2n\pi$、$\dfrac{11\pi}{6}+2n\pi$（$n$ は整数）。
+</Reveal>
+</FadedExample>
+
+合成を使えば、$\sin$ と $\cos$ が混ざった方程式も同じ手順で解ける。角の範囲をずらすところだけが新しい。
+
+<WorkedExample title="例題2: 合成して方程式を解く">
+$0\le\theta<2\pi$ のとき、$\sin\theta+\cos\theta=1$ を解け。
+
+<Steps>
+<Step reason="左辺を合成して1つの sin にします。係数 (1, 1) の距離は √2、向きは π/4 です。">左辺を合成すると $\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)$。よって $\sin\left(\theta+\dfrac{\pi}{4}\right)=\dfrac{1}{\sqrt{2}}$。</Step>
+<Step reason="θ が 0 以上 2π 未満なら、ずらした角 θ+π/4 は π/4 以上 9π/4 未満です。幅がちょうど1周期なので、解はこの範囲で探します。">$\phi=\theta+\dfrac{\pi}{4}$ とおくと $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$。この範囲で $\sin\phi=\dfrac{1}{\sqrt{2}}$ となるのは $\phi=\dfrac{\pi}{4},\ \dfrac{3\pi}{4}$。</Step>
+<Step reason="φ の値から π/4 を引けば、元の θ に戻ります。">$\theta=\phi-\dfrac{\pi}{4}$ より $\theta=0,\ \dfrac{\pi}{2}$。</Step>
+<Step reason="求めた θ を元の式に代入し、左辺が 1 になることを確かめます。">確認: $\sin0+\cos0=0+1=1$、$\sin\dfrac{\pi}{2}+\cos\dfrac{\pi}{2}=1+0=1$。</Step>
+</Steps>
+
+<Answer>
+$\theta=0,\ \dfrac{\pi}{2}$
+</Answer>
+</WorkedExample>
+
+続いて不等式を解く。方程式のときと同じで、まず単位円の上で「値の範囲」を「弧の範囲」に翻訳する。例として $0\le\theta<2\pi$ で $\sin\theta>\dfrac{1}{2}$ を解こう。$\sin\theta$ は点の高さだから、この不等式は「単位円上の点の高さが $\dfrac{1}{2}$ より上にある」という意味だ。高さ $\dfrac{1}{2}$ の水平線を引くと、円との交点は $\theta=\dfrac{\pi}{6}$ と $\theta=\dfrac{5\pi}{6}$。
+
+<Figure caption="点を動かして、高さ sinθ が 1/2 より大きくなる角の範囲を確かめよう。境界は π/6 と 5π/6">
+<UnitCircle angleDeg={90} interactive showSin />
+</Figure>
+
+この2点の間で円弧は水平線より上にあるから、解は
+
+$$
+\dfrac{\pi}{6}<\theta<\dfrac{5\pi}{6}
+$$
+
+である。境界の角は $\sin\theta=\dfrac{1}{2}$ となる角なので、等号のない今回は解に含めない。不等号が $\ge$ なら両端を含める。
+
+<Why>
+解を弧の範囲として読むのは、三角不等式の答えが「途切れない角の区間」になるからだ。境界の角を先に求め、その間の弧が不等式を満たすかどうかを確かめれば、数直線に戻って場合分けをやり直す必要はない。
+</Why>
+
+合成を使う不等式も同じ手順で解ける。$0\le\theta<2\pi$ で $\sin\theta+\cos\theta\ge1$ を解こう。まず左辺を合成する。
+
+$$
+\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)
+$$
+
+$\phi=\theta+\dfrac{\pi}{4}$ とおくと、範囲は $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$。不等式は
+
+$$
+\sin\phi\ge\dfrac{1}{\sqrt{2}}
+$$
+
+となる。単位円で高さ $\dfrac{1}{\sqrt{2}}$ 以上の弧を読むと、1周期の中では $\dfrac{\pi}{4}\le\phi\le\dfrac{3\pi}{4}$。この範囲は $\phi$ の動く範囲に収まっているから、$\dfrac{\pi}{4}\le\theta+\dfrac{\pi}{4}\le\dfrac{3\pi}{4}$。各辺から $\dfrac{\pi}{4}$ を引いて
+
+$$
+0\le\theta\le\dfrac{\pi}{2}
+$$
+
+を得る。$\theta=0$ と $\theta=\dfrac{\pi}{2}$ では左辺がちょうど $1$ になるから、等号つきで含める。$\theta=\dfrac{\pi}{4}$ では最大値 $\sqrt{2}$ をとる。
+
+<Note type="warn">
+ずらした角 $\phi$ の範囲は、元の角の範囲にずれ $\alpha$ を足したものだ。解を $\phi$ の範囲から選んだあと、必ず $\alpha$ を引いて $\theta$ に戻すこと。$\phi$ のまま答えないこと。
+</Note>
+
+<Misconception>
+<Wrong>
+$\sin\theta+\cos\theta$ の最大値は $2$。$\sin\theta$ も $\cos\theta$ も最大値は $1$ だから、両方が同時に $1$ になるときが最大だ。
+</Wrong>
+<WhyWrong>
+$\sin\theta=1$ となるのは $\theta=\dfrac{\pi}{2}+2n\pi$、$\cos\theta=1$ となるのは $\theta=2n\pi$。この2つを同時に満たす角は存在しない。実際 $\theta=\dfrac{\pi}{2}$ では $\cos\theta=0$ で和は $1$、$\theta=0$ では $\sin\theta=0$ で和は $1$ にしかならない。それぞれの最大を別々に足すことはできない。
+</WhyWrong>
+<Right>
+合成すると $\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)$。$\sin$ が $1$ になる角は存在するので、最大値は $\sqrt{2}$（$\theta=\dfrac{\pi}{4}+2n\pi$ のとき）。最大値は2つの最大の和ではなく、合成した1つの波の振幅 $R$ で決まる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+合成では $\cos\alpha=\dfrac{b}{R}$、$\sin\alpha=\dfrac{a}{R}$ だ。$a$ は sin の係数、$b$ は cos の係数だから、そのまま同じ名前どうしで対応する。
+</Wrong>
+<WhyWrong>
+展開した式 $R\sin(\theta+\alpha)=R\sin\theta\cos\alpha+R\cos\theta\sin\alpha$ と左辺を比べると、$\sin\theta$ の係数 $a$ は $R\cos\alpha$ に、$\cos\theta$ の係数 $b$ は $R\sin\alpha$ に対応する。つまり $a$ に付くのは $\cos\alpha$、$b$ に付くのは $\sin\alpha$ で、係数の名前と三角関数の名前は入れ替わる。
+</WhyWrong>
+<Right>
+$\cos\alpha=\dfrac{a}{R}$、$\sin\alpha=\dfrac{b}{R}$。点 $(a,\ b)$ を座標平面にかけば、その点の向きがそのまま $\alpha$ になる。この図を思い出せば入れ替えずに済む。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\sqrt{3}\sin\theta+\cos\theta$ を $R\sin(\theta+\alpha)$ の形に合成せよ。
+<Reveal label="答え">
+$R=\sqrt{3+1}=2$。$\cos\alpha=\dfrac{\sqrt{3}}{2}$、$\sin\alpha=\dfrac{1}{2}$ より $\alpha=\dfrac{\pi}{6}$。よって $\sqrt{3}\sin\theta+\cos\theta=2\sin\left(\theta+\dfrac{\pi}{6}\right)$。
+</Reveal>
+
+（2）$2\sin^2\theta-\sin\theta-1=0$ を $0\le\theta<2\pi$ で解け。
+<Reveal label="答え">
+因数分解すると $(2\sin\theta+1)(\sin\theta-1)=0$。$\sin\theta=-\dfrac{1}{2}$ より $\theta=\dfrac{7\pi}{6},\ \dfrac{11\pi}{6}$。$\sin\theta=1$ より $\theta=\dfrac{\pi}{2}$。よって $\theta=\dfrac{\pi}{2},\ \dfrac{7\pi}{6},\ \dfrac{11\pi}{6}$。
+</Reveal>
+
+（3）$0\le\theta<2\pi$ のとき、$\sin\theta+\cos\theta\le0$ を解け。
+<Reveal label="答え">
+合成すると $\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)\le0$。$\phi=\theta+\dfrac{\pi}{4}$ とおくと $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$ で、$\sin\phi\le0$ となるのは $\pi\le\phi\le2\pi$。よって $\pi\le\theta+\dfrac{\pi}{4}\le2\pi$ より $\dfrac{3\pi}{4}\le\theta\le\dfrac{7\pi}{4}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="まとめの練習（一般解・合成・2次式・不等式）">
+（1）$\cos\theta=-\dfrac{1}{2}$ の一般解を求めよ。
+（2）$-\sin\theta+\cos\theta$ を $R\sin(\theta+\alpha)$ の形に合成せよ。
+（3）$0\le\theta<2\pi$ のとき、$2\sin^2\theta+3\cos\theta=0$ を解け。
+（4）$0\le\theta<2\pi$ のとき、$\sqrt{3}\sin\theta+\cos\theta\ge1$ を解け。
+<Reveal label="解答">
+（1）$\cos\theta=-\dfrac{1}{2}$ の1つの解は $\alpha=\dfrac{2\pi}{3}$。一般解は $\theta=\pm\dfrac{2\pi}{3}+2n\pi$（$n$ は整数）。
+（2）$a=-1$、$b=1$ だから $R=\sqrt{1+1}=\sqrt{2}$。$\cos\alpha=-\dfrac{1}{\sqrt{2}}$、$\sin\alpha=\dfrac{1}{\sqrt{2}}$ より $\alpha=\dfrac{3\pi}{4}$。よって $-\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{3\pi}{4}\right)$。
+（3）相互関係 $\sin^2\theta=1-\cos^2\theta$ を代入すると $2(1-\cos^2\theta)+3\cos\theta=0$、すなわち $2\cos^2\theta-3\cos\theta-2=0$。因数分解して $(2\cos\theta+1)(\cos\theta-2)=0$。$\cos\theta=-\dfrac{1}{2}$（$\cos\theta=2$ は不適）より、$\theta=\dfrac{2\pi}{3},\ \dfrac{4\pi}{3}$。
+（4）左辺を合成すると $2\sin\left(\theta+\dfrac{\pi}{6}\right)\ge1$、つまり $\sin\left(\theta+\dfrac{\pi}{6}\right)\ge\dfrac{1}{2}$。$\phi=\theta+\dfrac{\pi}{6}$ とおくと $\dfrac{\pi}{6}\le\phi<\dfrac{13\pi}{6}$ で、$\sin\phi\ge\dfrac{1}{2}$ となるのは $\dfrac{\pi}{6}\le\phi\le\dfrac{5\pi}{6}$。よって $0\le\theta\le\dfrac{2\pi}{3}$。
+</Reveal>
+</Practice>
