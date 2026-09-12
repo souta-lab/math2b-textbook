@@ -136,3 +136,16 @@ $\displaystyle 6\cdot\frac{x^3}{3}-2\cdot\frac{x^2}{2}+C=2x^3-x^2+C$。
 $2x$ の原始関数の1つは $x^2$ なので、$\displaystyle\int 2x\,dx=x^2+C$。定数 $4$ は微分で消えるため、$+C$ に吸収されます。
 </Reveal>
 </CheckUnderstanding>
+
+<Practice title="まとめの練習（不定積分と増減）">
+（1）$\displaystyle\int (4x^3-6x+2)\,dx$ を求めよ。
+（2）点 P が直線上を動き、時刻 $t$ における速度が $v(t)=3t^2-4t$ である。$t=2$ のときの位置が $5$ であるとき、位置 $s(t)$ を求めよ。
+（3）導関数が $f'(x)=3x^2-6x$ で、$f(1)=2$ となる関数 $f(x)$ を求めよ。また、その極値を求めよ。
+（4）$\displaystyle\int (2x+1)^2\,dx$ を求めよ。
+<Reveal label="解答">
+（1）$\displaystyle\int x^n\,dx=\dfrac{x^{n+1}}{n+1}+C$ と項ごとの積分を使う。$4\cdot\dfrac{x^4}{4}-6\cdot\dfrac{x^2}{2}+2x+C=x^4-3x^2+2x+C$。微分すると $4x^3-6x+2$ に戻る。
+（2）$s(t)=\displaystyle\int (3t^2-4t)\,dt=t^3-2t^2+C$。$s(2)=8-8+C=C=5$ より $C=5$。よって $s(t)=t^3-2t^2+5$。微分すると $3t^2-4t$ に戻る。
+（3）$f(x)=\displaystyle\int (3x^2-6x)\,dx=x^3-3x^2+C$。$f(1)=1-3+C=C-2=2$ より $C=4$、すなわち $f(x)=x^3-3x^2+4$。$f'(x)=3x(x-2)$ なので、$x<0$ で $f'(x)>0$、$0<x<2$ で $f'(x)<0$、$x>2$ で $f'(x)>0$。よって $x=0$ で極大値 $f(0)=4$、$x=2$ で極小値 $f(2)=8-12+4=0$。
+（4）先に展開すると $(2x+1)^2=4x^2+4x+1$。よって $\displaystyle\int (4x^2+4x+1)\,dx=\dfrac{4x^3}{3}+2x^2+x+C$。
+</Reveal>
+</Practice>

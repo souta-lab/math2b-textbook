@@ -1,5 +1,5 @@
 ---
-title: "複素数・行列の時短ツールまとめ — 4つの道具の使い分け"
+title: "複素数・行列の時短 まとめ — 4つの道具の使い分け"
 summary: "ド・モアブル、1のn乗根、ケーリー・ハミルトン、対角化の4つを問題の形から選び分け、検算用と答案用を整理する総まとめ。"
 unit: "uni-complex-matrix-tools"
 order: 4
@@ -8,7 +8,7 @@ objectives:
   - "各道具の前提条件と、答案で使えるか検算専用かを説明できる"
   - "複素数の周期と行列の累乗を組み合わせて、大きな指数の問題を短時間で処理できる"
 prerequisites: ["uni-complex-matrix-tools/03-diagonalize"]
-tags: ["総まとめ", "ド・モアブル", "ケーリー・ハミルトン", "対角化", "使い分け"]
+tags: ["まとめ", "ド・モアブル", "ケーリー・ハミルトン", "対角化", "使い分け"]
 reviewed: 2026-09-12
 ---
 
@@ -63,7 +63,7 @@ $$
 の一般項を求めよ。
 
 <Steps>
-<Step reason="係数行列の固有値は、漸化式の特性方程式と同じになります。まず2次方程式を立てます。">特性方程式は $\lambda^{2}-5\lambda+6=0$。</Step>
+<Step reason="係数行列の固有値は、漸化式の特性方程式と同じになります。まず二次方程式を立てます。">特性方程式は $\lambda^{2}-5\lambda+6=0$。</Step>
 <Step reason="因数分解して固有値（指数の底）を求めます。">$(\lambda-2)(\lambda-3)=0$ より $\lambda=2,3$。</Step>
 <Step reason="一般項を固有値の $n$ 乗の和でおきます。">$a_n=A\cdot2^{n}+B\cdot3^{n}$。</Step>
 <Step reason="初期値 $a_0,a_1$ を代入して連立方程式を解きます。">$a_0=A+B=0$、$a_1=2A+3B=1$ より $B=1$、$A=-1$。</Step>
@@ -71,7 +71,7 @@ $$
 </Steps>
 
 <Answer>
-$a_n=3^{n}-2^{n}$（$0,1,5,19,\dots$）
+$a_n=3^{n}-2^{n}$（$0,1,5,19,\cdots$）
 </Answer>
 </WorkedExample>
 
@@ -118,7 +118,7 @@ $a_n=3^{n}-2^{n}$（$0,1,5,19,\dots$）
 <Practice title="章末練習（4つの道具を使い分ける）">
 (1) $(1+i)^{10}$ を求めよ。
 
-(2) $z^{7}=1$ の解の和を求め、$\omega=\cos\frac{2\pi}{7}+i\sin\frac{2\pi}{7}$ のとき $\omega^{100}$ を $1,\omega,\dots,\omega^{6}$ のどれかに直せ。
+(2) $z^{7}=1$ の解の和を求め、$\omega=\cos\frac{2\pi}{7}+i\sin\frac{2\pi}{7}$ のとき $\omega^{100}$ を $1,\omega,\cdots,\omega^{6}$ のどれかに直せ。
 
 (3) $A=\begin{pmatrix}2 & 1\\0 & 2\end{pmatrix}$ について $A^{6}$ を求めよ。
 

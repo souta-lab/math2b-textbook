@@ -25,13 +25,13 @@ reviewed: 2026-09-12
 
 ## 位置ベクトル
 
-平面上に基準点 O を1つ決めます。点 P に対して $\vec{p}=\vec{OP}$ を、O を基準とする点 P の**位置ベクトル**といいます。点 A、B の位置ベクトルを $\vec{a}$、$\vec{b}$ とすると
+平面上に基準点 O を1つ決めます。点 P に対して $\vec{p}=\overrightarrow{OP}$ を、O を基準とする点 P の**位置ベクトル**といいます。点 A、B の位置ベクトルを $\vec{a}$、$\vec{b}$ とすると
 
 $$
-\vec{AB}=\vec{b}-\vec{a}
+\overrightarrow{AB}=\vec{b}-\vec{a}
 $$
 
-です。点そのものは $\vec{p}$ で表せますが、$\vec{AB}$ のように2点の差で作ったベクトルは基準点 O の取り方に依存しません。
+です。点そのものは $\vec{p}$ で表せますが、$\overrightarrow{AB}$ のように2点の差で作ったベクトルは基準点 O の取り方に依存しません。
 
 <Why>
 点を位置ベクトルで表すのは、図形を「基準点からの矢印のつり合い」という式に翻訳するためです。たとえば「P が線分 AB 上の点」という条件は、$\vec{p}$ が $\vec{a}$ と $\vec{b}$ を重み付きで混ぜた形になる、と式で書けます。図形の条件を数式に変えれば、あとは係数を比べるだけで点の位置が決まります。入試のベクトル問題の多くは、この翻訳と係数比較で解けます。
@@ -39,7 +39,7 @@ $$
 
 ## 内分・外分・重心
 
-定理としてまとめます。分点の式は、移動 $\vec{AB}$ を割合で按分する形から出てきます。
+定理としてまとめます。分点の式は、移動 $\overrightarrow{AB}$ を割合で按分する形から出てきます。
 
 <Theorem name="分点と重心の位置ベクトル">
 点 A、B、C の位置ベクトルを $\vec{a}$、$\vec{b}$、$\vec{c}$ とする。
@@ -114,14 +114,14 @@ A の重みと B の重みを取り違えています。内分点は「A から 
 </CheckUnderstanding>
 
 <Practice title="合成した点を読む">
-(1) $\triangle ABC$ の辺 AB、AC の中点をそれぞれ M、N とする。$\vec{MN}$ を $\vec{BC}$ で表しなさい。
+(1) $\triangle ABC$ の辺 AB、AC の中点をそれぞれ M、N とする。$\overrightarrow{MN}$ を $\overrightarrow{BC}$ で表しなさい。
 
 (2) $\vec{p}=\dfrac{2\vec{a}+\vec{b}}{3}$ で表される点 P は、線分 AB をどのような比に内分するか。
 
 (3) $\triangle ABC$ について、$\vec{a}+\vec{b}+\vec{c}=\vec{0}$ が成り立つとき、点 G はどこにあるか（G を原点とする）。
 
 <Reveal label="解答">
-(1) $\vec{m}=\dfrac{\vec{a}+\vec{b}}{2}$、$\vec{n}=\dfrac{\vec{a}+\vec{c}}{2}$ なので $\vec{MN}=\vec{n}-\vec{m}=\dfrac{\vec{c}-\vec{b}}{2}=\dfrac{1}{2}\vec{BC}$。中点連結定理に対応する。
+(1) $\vec{m}=\dfrac{\vec{a}+\vec{b}}{2}$、$\vec{n}=\dfrac{\vec{a}+\vec{c}}{2}$ なので $\overrightarrow{MN}=\vec{n}-\vec{m}=\dfrac{\vec{c}-\vec{b}}{2}=\dfrac{1}{2}\overrightarrow{BC}$。中点連結定理に対応する。
 
 (2) $\vec{p}=\dfrac{2\vec{a}+\vec{b}}{3}$ で A の重みが 2、B の重みが 1。よって AP:PB=1:2 に内分する。
 

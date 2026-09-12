@@ -18,18 +18,18 @@ reviewed: 2026-09-12
 
 <Prediction
   question="3点 A、B、P が一直線上にある条件はどれ？（$\vec{a}$、$\vec{b}$ は点の位置ベクトル）"
-  options={['$\vec{AP}=k\vec{AB}$（$k$ は実数）', '$\vec{AP}\cdot\vec{AB}=0$', '$\vec{AP}=\vec{AB}$']}
-  answer="$\vec{AP}=k\vec{AB}$（$k$ は実数）"
+  options={['$\overrightarrow{AP}=k\overrightarrow{AB}$（$k$ は実数）', '$\overrightarrow{AP}\cdot\overrightarrow{AB}=0$', '$\overrightarrow{AP}=\overrightarrow{AB}$']}
+  answer="$\overrightarrow{AP}=k\overrightarrow{AB}$（$k$ は実数）"
   explanation="A から P へのベクトルが、A から B へのベクトルの実数倍になっていれば、P は直線 AB 上にあります。内積が 0 は垂直、等しいは同じ点を表すので条件が違います。"
 />
 
 ## 共線条件と一次独立
 
 <Definition term="3点の共線条件">
-3点 A、B、P が一直線上にあるための条件は、$\vec{0}$ でない $\vec{AB}$ を用いて
+3点 A、B、P が一直線上にあるための条件は、$\vec{0}$ でない $\overrightarrow{AB}$ を用いて
 
 $$
-\vec{AP}=k\vec{AB}\quad(k\ \text{は実数})
+\overrightarrow{AP}=k\overrightarrow{AB}\quad(k\ \text{は実数})
 $$
 
 と書けることである。位置ベクトルでは $\vec{p}=(1-k)\vec{a}+k\vec{b}$ となり、係数の和が $1$ になる。
@@ -48,9 +48,9 @@ $$
 </Why>
 
 <WorkedExample title="例題: 交点を係数比較で求める">
-$\triangle OAB$ で $\vec{OA}=\vec{a}$、$\vec{OB}=\vec{b}$ とする。辺 OA を $2:1$ に内分する点を C、辺 OB の中点を D とし、直線 AD と直線 BC の交点を P とする。
+$\triangle OAB$ で $\overrightarrow{OA}=\vec{a}$、$\overrightarrow{OB}=\vec{b}$ とする。辺 OA を $2:1$ に内分する点を C、辺 OB の中点を D とし、直線 AD と直線 BC の交点を P とする。
 
-(1) $\vec{OP}$ を $\vec{a}$、$\vec{b}$ で表しなさい。
+(1) $\overrightarrow{OP}$ を $\vec{a}$、$\vec{b}$ で表しなさい。
 
 (2) $AP:PD$ を求めなさい。
 
@@ -65,7 +65,7 @@ $\triangle OAB$ で $\vec{OA}=\vec{a}$、$\vec{OB}=\vec{b}$ とする。辺 OA �
 </Steps>
 
 <Answer>
-(1) $\vec{OP}=\dfrac{1}{2}\vec{a}+\dfrac{1}{4}\vec{b}$　(2) $AP:PD=1:1$
+(1) $\overrightarrow{OP}=\dfrac{1}{2}\vec{a}+\dfrac{1}{4}\vec{b}$　(2) $AP:PD=1:1$
 </Answer>
 </WorkedExample>
 
@@ -86,14 +86,14 @@ $\vec{a}$ と $\vec{b}$ が平行なとき、たとえば $\vec{b}=2\vec{a}$ な
 </Misconception>
 
 <CheckUnderstanding>
-(1) 3点 $A(-1,1)$、$B(2,4)$、$P(4,6)$ は一直線上にあるか、$\vec{AP}=k\vec{AB}$ を調べて判定しなさい。
+(1) 3点 $A(-1,1)$、$B(2,4)$、$P(4,6)$ は一直線上にあるか、$\overrightarrow{AP}=k\overrightarrow{AB}$ を調べて判定しなさい。
 
 (2) $\triangle OAB$ で辺 AB を $2:1$ に内分する点を P とする。$\triangle OAP$ と $\triangle OPB$ の面積比を求めなさい。
 
 (3) なぜ係数比較には一次独立が必要か、$\vec{b}=2\vec{a}$ の例を挙げて説明しなさい。
 
 <Reveal label="答え">
-(1) $\vec{AB}=(3,3)$、$\vec{AP}=(5,5)$ なので $\vec{AP}=\dfrac{5}{3}\vec{AB}$。実数倍で表せるから3点は一直線上にある。
+(1) $\overrightarrow{AB}=(3,3)$、$\overrightarrow{AP}=(5,5)$ なので $\overrightarrow{AP}=\dfrac{5}{3}\overrightarrow{AB}$。実数倍で表せるから3点は一直線上にある。
 
 (2) 高さが共通なので面積比は底辺の比 $AP:PB=2:1$。よって $2:1$。
 
@@ -102,7 +102,7 @@ $\vec{a}$ と $\vec{b}$ が平行なとき、たとえば $\vec{b}=2\vec{a}$ な
 </CheckUnderstanding>
 
 <Practice title="面積比まで踏み込む">
-(1) $\triangle OAB$ で $\vec{OA}=\vec{a}$、$\vec{OB}=\vec{b}$ とする。辺 OA の中点を M、辺 OB を $1:2$ に内分する点を N とする。直線 AN と直線 BM の交点を P とし、$\vec{OP}$ を求めなさい。
+(1) $\triangle OAB$ で $\overrightarrow{OA}=\vec{a}$、$\overrightarrow{OB}=\vec{b}$ とする。辺 OA の中点を M、辺 OB を $1:2$ に内分する点を N とする。直線 AN と直線 BM の交点を P とし、$\overrightarrow{OP}$ を求めなさい。
 
 (2) 三角形の面積をベクトルで表す式 $S=\dfrac{1}{2}|a_1b_2-a_2b_1|$ が、$a=(2,0)$、$b=(1,3)$ のとき何を表すか確認しなさい。
 

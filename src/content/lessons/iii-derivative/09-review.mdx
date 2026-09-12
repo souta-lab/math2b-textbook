@@ -1,13 +1,13 @@
 ---
-title: "章末まとめ — 微分計算の総仕上げ"
-summary: "式の構造から使う公式を選び、積・商・合成・指数対数・対数微分を組み合わせて微分する。"
+title: "微分法 章末まとめと発展 — 微分計算の総仕上げ"
+summary: "式の構造から使う公式を選び、積・商・合成・指数対数・対数微分・媒介変数表示・逆関数を組み合わせて微分する。"
 unit: "iii-differential"
-order: 8
+order: 9
 objectives:
   - "関数の形を見て、べき乗・積・商・合成・対数微分のどれを使うか判断できる"
   - "複数の公式を組み合わせた入試レベルの式を正確に微分できる"
   - "微分した結果を別の方法で検算できる"
-prerequisites: ["iii-derivative/07-higher"]
+prerequisites: ["iii-derivative/08-param-inverse"]
 tags: ["微分の総復習", "入試計算", "公式の選択"]
 reviewed: 2026-09-12
 ---
@@ -33,6 +33,7 @@ reviewed: 2026-09-12
 - 分数の形（分母が $x$ の式）→ $(f/g)'=(f'g-fg')/g^2$
 - $(\ \ )^n$、$\sqrt{\ \ }$、$\sin(\ \ )$、$\log(\ \ )$ のように**中に式が入る** → 連鎖律 $f'(g(x))g'(x)$
 - 底と指数の**両方**に変数 → 対数微分法
+- 媒介変数表示 $x(t)$、$y(t)$ → $\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$（第2次は $\dfrac{dy}{dx}$ を $t$ で微分して $dx/dt$ で割る）
 - 積の**高次**導関数 → ライプニッツの公式
 </KeyPoint>
 
@@ -88,14 +89,14 @@ $\{\log f(x)\}'=\dfrac{f'(x)}{f(x)}$。分子に必ず $f'(x)$ を書く。$\log
 </Misconception>
 
 <CheckUnderstanding>
-（1）$y=x^2e^x$ を微分しなさい。
+（1）$y=x e^{-x}$ を微分しなさい。
 <Reveal label="答え">
-積の微分より $y'=2xe^x+x^2e^x=e^x(x^2+2x)=xe^x(x+2)$。
+積の微分より $y'=1\cdot e^{-x}+x\cdot(-e^{-x})=e^{-x}(1-x)$。
 </Reveal>
 
-（2）$y=\log(x^2+1)$ を微分しなさい。
+（2）$y=e^{\sin x}$ を微分しなさい。
 <Reveal label="答え">
-連鎖律より $y'=\dfrac{2x}{x^2+1}$。
+外側 $e^u$ の導関数は $e^u$、内側 $\sin x$ の微分は $\cos x$。連鎖律より $y'=(\cos x)e^{\sin x}$。
 </Reveal>
 
 （3）$y=\dfrac{\sin x}{x}$（$x\ne 0$）を微分しなさい。
@@ -106,20 +107,23 @@ $\{\log f(x)\}'=\dfrac{f'(x)}{f(x)}$。分子に必ず $f'(x)$ を書く。$\log
 
 <Practice title="章末総合練習（微分計算）">
 （1）$y=(x^2+1)e^x$ を微分せよ。
-（2）$y=\dfrac{\sin x}{1+\cos x}$ を微分せよ。ただし $\cos x\ne -1$ とする。
+（2）$y=\dfrac{\log x}{x}$（$x>0$）を微分せよ。
 （3）$y=(x+2)^x$（$x>-2$）を微分せよ。
-（4）$y=x^2\log x$（$x>0$）の第2次導関数 $y''$ を求めよ。
+（4）$y=x\sin x$ の第2次導関数 $y''$ を求めよ。
 （5）$y=\dfrac{e^{2x}}{x^2+1}$ を微分せよ。
+（6）$x=\sin t$、$y=\cos 2t$（$-\dfrac{\pi}{2} \lt t \lt \dfrac{\pi}{2}$）について、$\dfrac{dy}{dx}$ と $\dfrac{d^2y}{dx^2}$ を求めよ。
 
 <Reveal label="解答">
 （1）積の微分より $y'=2x e^x+(x^2+1)e^x=e^x(x^2+2x+1)=e^x(x+1)^2$。
 
-（2）商の微分より $y'=\dfrac{\cos x(1+\cos x)-\sin x\cdot(-\sin x)}{(1+\cos x)^2}=\dfrac{\cos x+\cos^2 x+\sin^2 x}{(1+\cos x)^2}=\dfrac{1+\cos x}{(1+\cos x)^2}=\dfrac{1}{1+\cos x}$。
+（2）商の微分より $y'=\dfrac{\dfrac1x\cdot x-\log x\cdot 1}{x^2}=\dfrac{1-\log x}{x^2}$。
 
 （3）対数微分法を使う。$\log y=x\log(x+2)$ より $\dfrac{y'}{y}=\log(x+2)+\dfrac{x}{x+2}$。よって $y'=(x+2)^x\left(\log(x+2)+\dfrac{x}{x+2}\right)$。
 
-（4）$y'=2x\log x+x^2\cdot\dfrac1x=2x\log x+x$。さらに微分して $y''=2\log x+2x\cdot\dfrac1x+1=2\log x+3$。
+（4）$y'=\sin x+x\cos x$。さらに微分して $y''=\cos x+\cos x-x\sin x=2\cos x-x\sin x$。
 
 （5）商の微分より $y'=\dfrac{2e^{2x}(x^2+1)-e^{2x}\cdot 2x}{(x^2+1)^2}=\dfrac{2e^{2x}(x^2-x+1)}{(x^2+1)^2}$。
+
+（6）$\dfrac{dx}{dt}=\cos t$、$\dfrac{dy}{dt}=-2\sin 2t=-4\sin t\cos t$ より $\dfrac{dy}{dx}=\dfrac{-4\sin t\cos t}{\cos t}=-4\sin t$。さらに $\dfrac{d^2y}{dx^2}=\dfrac{\dfrac{d}{dt}(-4\sin t)}{\cos t}=\dfrac{-4\cos t}{\cos t}=-4$。
 </Reveal>
 </Practice>

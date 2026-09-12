@@ -1,5 +1,5 @@
 ---
-title: "章末まとめと発展 — 行列・一次変換・グラフ"
+title: "数学的な表現の工夫 章末まとめと発展 — 行列・一次変換・グラフ"
 summary: "行列の演算から逆行列・一次変換・固有値・離散グラフまでを、入試の型として総復習する。"
 unit: "c-representation"
 order: 9
@@ -83,14 +83,14 @@ $\det A=0$ の連立方程式は解なし、面積比は必ず $\det A$ 倍、�
 </Misconception>
 
 <CheckUnderstanding>
-(1) $A=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}$ について、$A^{2}$ と $A^{n}$ を求めなさい。
+(1) $A=\begin{pmatrix}4 & 3\\1 & 2\end{pmatrix}$ について、$A$ の固有値を求め、ケーリー・ハミルトンの定理を使って $A^{2}$ を $A$ と $E$ で表し、$A^{2}$ を計算しなさい。
 
 (2) 先に $A=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$（90°回転）、次に $B=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}$（x軸対称）を行う合成変換の行列を求めなさい。
 
 (3) 3頂点の完全グラフの隣接行列を $A$ とするとき、$A^{2}$ の $(1,2)$ 成分が $1$ である理由を、長さ2の道を挙げて説明しなさい。
 
 <Reveal label="答え">
-(1) $A^{2}=\begin{pmatrix}1 & 4\\0 & 1\end{pmatrix}$、$A^{n}=\begin{pmatrix}1 & 2n\\0 & 1\end{pmatrix}$。
+(1) $\operatorname{tr}A=4+2=6$、$\det A=4\cdot2-3\cdot1=5$ なので特性方程式は $\lambda^{2}-6\lambda+5=0$、よって $\lambda=1,\ 5$。ケーリー・ハミルトンより $A^{2}-6A+5E=O$、すなわち $A^{2}=6A-5E$。計算すると $A^{2}=\begin{pmatrix}24 & 18\\6 & 12\end{pmatrix}-\begin{pmatrix}5 & 0\\0 & 5\end{pmatrix}=\begin{pmatrix}19 & 18\\6 & 7\end{pmatrix}$。
 
 (2) 先に $A$、次に $B$ なので合成は $BA=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}=\begin{pmatrix}0 & -1\\-1 & 0\end{pmatrix}$。
 
@@ -107,6 +107,8 @@ $\det A=0$ の連立方程式は解なし、面積比は必ず $\det A$ 倍、�
 
 (4) 4頂点 $1,2,3,4$ が $1-2-3-4$ と一直線につながるとき、頂点1から頂点3へちょうど2本で行く道の数を隣接行列の2乗から求めなさい。
 
+(5) $A=\begin{pmatrix}3 & 2\\2 & 0\end{pmatrix}$ について、$A$ の固有値を求め、ケーリー・ハミルトンの定理を使って $A^{3}$ を $A$ と $E$ で表し、$A^{3}$ を計算しなさい。
+
 <Reveal label="解答">
 (1) $\det A=3-2=1$、$A^{-1}=\begin{pmatrix}1 & -1\\-2 & 3\end{pmatrix}$。$\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}1 & -1\\-2 & 3\end{pmatrix}\begin{pmatrix}5\\3\end{pmatrix}=\begin{pmatrix}5-3\\-10+9\end{pmatrix}=\begin{pmatrix}2\\-1\end{pmatrix}$。
 
@@ -115,6 +117,8 @@ $\det A=0$ の連立方程式は解なし、面積比は必ず $\det A$ 倍、�
 (3) $AB=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$、$BA=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}=\begin{pmatrix}0 & 1\\-1 & 0\end{pmatrix}$。
 
 (4) 隣接行列の2乗の $(1,3)$ 成分は $1$ で、道 $1-2-3$ の1通り。
+
+(5) $\operatorname{tr}A=3$、$\det A=3\cdot0-2\cdot2=-4$ なので特性方程式は $\lambda^{2}-3\lambda-4=0$、よって $\lambda=4,\ -1$。ケーリー・ハミルトンより $A^{2}=3A+4E$。したがって $A^{3}=A\cdot A^{2}=3A^{2}+4A=3(3A+4E)+4A=13A+12E$。計算すると $A^{3}=\begin{pmatrix}39 & 26\\26 & 0\end{pmatrix}+\begin{pmatrix}12 & 0\\0 & 12\end{pmatrix}=\begin{pmatrix}51 & 26\\26 & 12\end{pmatrix}$。
 </Reveal>
 </Practice>
 

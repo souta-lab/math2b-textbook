@@ -8,7 +8,7 @@ objectives:
   - "賛成者数のような標本データを二項分布でとらえ、正規近似して信頼区間と検定統計量を計算できる"
   - "95%信頼区間と有意水準5%の両側検定が、同じ境界値1.96を共有していることを説明できる"
 prerequisites: ["statistics/06-hypothesis-testing"]
-tags: ["章末", "まとめ", "発展"]
+tags: ["まとめ", "発展"]
 reviewed: 2026-09-12
 ---
 
@@ -118,7 +118,7 @@ $$
 
 （3）ある試験の得点 $X$ は正規分布 $N(64, 100)$ に従う。$P(54 \le X \le 74)$ を68–95–99.7の目安で求め、$P(X \ge 84)$ を $\Phi(2) = 0.9772$ を用いて求めよ。
 <Reveal label="答え">
-（1）取り出し方は $\binom{5}{2} = 10$ 通り。$P(X=0) = \frac{1}{10}$、$P(X=1) = \frac{3 \times 2}{10} = \frac{3}{5}$、$P(X=2) = \frac{3}{10}$ で、和は $1$。$E[X] = 0 \times \frac{1}{10} + 1 \times \frac{6}{10} + 2 \times \frac{3}{10} = \frac{6}{5}$。$E[X^2] = 1 \times \frac{6}{10} + 4 \times \frac{3}{10} = \frac{9}{5}$ なので、$V[X] = \frac{9}{5} - \left(\frac{6}{5}\right)^2 = \frac{9}{25}$。
+（1）取り出し方は ${}_5\mathrm{C}_2 = 10$ 通り。$P(X=0) = \frac{1}{10}$、$P(X=1) = \frac{3 \times 2}{10} = \frac{3}{5}$、$P(X=2) = \frac{3}{10}$ で、和は $1$。$E[X] = 0 \times \frac{1}{10} + 1 \times \frac{6}{10} + 2 \times \frac{3}{10} = \frac{6}{5}$。$E[X^2] = 1 \times \frac{6}{10} + 4 \times \frac{3}{10} = \frac{9}{5}$ なので、$V[X] = \frac{9}{5} - \left(\frac{6}{5}\right)^2 = \frac{9}{25}$。
 
 （2）$E[X] = 600 \times \frac{1}{6} = 100$、$V[X] = 600 \times \frac{1}{6} \times \frac{5}{6} = \frac{250}{3}$ より $\sigma = \sqrt{\frac{250}{3}} \approx 9.13$。標準化すると $85$ は $z = \frac{85-100}{9.13} \approx -1.64$、$115$ は $z \approx 1.64$。よって $P(85 \le X \le 115) \approx 2 \times 0.9495 - 1 = 0.899$。
 

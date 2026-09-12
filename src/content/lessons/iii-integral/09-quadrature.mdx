@@ -1,0 +1,218 @@
+---
+title: "区分求積法と不等式 — 和と積分を往復する"
+summary: "細い長方形の和の極限を定積分に読み替える区分求積法を学び、定積分の大小比較から不等式を作り、はさみうちで和や積分を評価する。"
+unit: "iii-integral"
+order: 9
+objectives:
+  - "和の極限 $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{k=1}^{n}f(k/n)$ を $\\int_0^1 f(x)\\,dx$ に直せる"
+  - "一般区間 $[a,\\ b]$ でも、幅と代表点の対応から区分求積法を使える"
+  - "区分求積法で、定積分を和の極限として計算できる"
+  - "定積分の大小比較から不等式を作り、はさみうちの原理に使える"
+prerequisites: ["iii-integral/08-curve-length"]
+tags: ["区分求積法", "和の極限", "定積分の不等式", "面積比較", "はさみうち", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+面積を求めるとき、曲線の下を細い長方形に刻んで足し上げました。この発想を逆向きに使うと、そのままでは足せそうにない「和」の極限が、積分で一発で求まります。反対に、積分そのものの値を見当づけたいときは、面積の大小比較が効きます。今回は、和と積分を往復する二つの道具を手に入れます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\frac{k}{n}$ の値はどれ？"
+  options={['$\dfrac12$', '$1$', '$0$']}
+  answer="$\dfrac12$"
+  explanation="$\frac{1}{n}\cdot\frac{k}{n}$ は幅 $1/n$、高さ $k/n$ の長方形の面積です。長方形を細かくすると、直線 $y=x$ の下の三角形の面積 $\int_0^1 x\,dx=\frac12$ に近づきます。実際、和は $\frac{n(n+1)}{2n^2}\to\frac12$ です。"
+/>
+
+<Note type="info">
+**入試での用途**：区分求積法は、$\frac{1}{n}\sum f(k/n)$ という形の和の極限を $\int_0^1 f(x)\,dx$ に読み替える道具です。入試では、和の極限を直接求める問題、定積分を定義から計算させる問題、不等式ではさみうちに持ち込む問題まで出題の幅が広い。和を見たら $\frac1n$ と $k/n$ を探す、積分の評価では被積分関数を上下からおさえる、という二つの反射を作っておきます。
+</Note>
+
+## 和の極限を定積分に変える
+
+$y=f(x)$ のグラフの下の面積を区間 $[0,\ 1]$ で求めることを考えます。区間を $n$ 等分し、幅 $\frac1n$ の長方形を $n$ 枚並べます。左から $k$ 番目の長方形の高さを、その区間の右端の値 $f\!\left(\frac{k}{n}\right)$ にとれば、面積は
+
+$$
+\frac{1}{n}\sum_{k=1}^{n}f\!\left(\frac{k}{n}\right)
+$$
+
+で近似できます。$n$ を大きくすると長方形は細くなり、この和は曲線の下の面積、すなわち定積分に近づきます。これが区分求積法です。
+
+<Theorem name="区分求積法">
+$f$ が区間 $[0,\ 1]$ で連続のとき
+
+$$
+\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}f\!\left(\frac{k}{n}\right)=\int_0^1 f(x)\,dx
+$$
+
+が成り立つ。一般の区間 $[a,\ b]$ では、幅を $\frac{b-a}{n}$ にとって
+
+$$
+\lim_{n\to\infty}\frac{b-a}{n}\sum_{k=1}^{n}f\!\left(a+\frac{(b-a)k}{n}\right)=\int_a^b f(x)\,dx
+$$
+
+となる。和の $\frac{1}{n}$（一般区間では $\frac{b-a}{n}$）が長方形の幅、$f$ の中身がその位置の高さに対応している。
+</Theorem>
+
+高さに区間の左端の値 $f\!\left(\frac{k-1}{n}\right)$ を使っても、$n\to\infty$ で同じ定積分に収束します。幅 $\frac1n$ と、$0$ から $1$ を埋めていく代表点 $k/n$ の組が決まっていれば、右端でも左端でもかまいません。和が $k=0$ から $n-1$ まで動く形でも同じです。
+
+<Why>
+区分求積法を使うのは、和のままでは極限が計算できないときに、面積という幾何的な量に置き換えられるからです。$\frac{1}{n}\sum$ の形は、それ自体が「幅 $\frac1n$ の長方形の面積の合計」なので、関数 $f$ と区間さえ読み取れば、あとは積分の公式で計算できます。逆に、積分の値を和の極限として定義することもでき、$f(x)=x^2$ のような基本の関数でも、和の公式から $\frac13$ が導けます。和と積分は、長方形を細くする極限でつながっているのです。
+</Why>
+
+<WorkedExample title="例題1: 和の極限を区分求積法で求める">
+$$
+\lim_{n\to\infty}\sum_{k=1}^{n}\frac{n}{n^2+k^2}
+$$
+を求めなさい。
+
+<Steps>
+<Step reason="区分求積法の形にするには、分母から n² をくくり出して 1/n と k/n を作る必要があるからです。">$\dfrac{n}{n^2+k^2}=\dfrac{1}{n}\cdot\dfrac{1}{1+(k/n)^2}$ と変形する。</Step>
+<Step reason="1/n が幅、1/(1+x²) が高さに対応するので、和の極限を積分に置き換えられるからです。">区分求積法より、極限は $\displaystyle\int_0^1\frac{dx}{1+x^2}$。</Step>
+<Step reason="1/(1+x²) の原始関数が arctan x だからです。">$=\Big[\arctan x\Big]_0^1$。</Step>
+<Step reason="arctan 1=π/4、arctan 0=0 を代入して値を確定するためです。">$=\dfrac{\pi}{4}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\lim_{n\to\infty}\sum_{k=1}^{n}\frac{n}{n^2+k^2}=\dfrac{\pi}{4}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 一般区間への拡張">
+$$
+\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\left(1+\frac{k}{n}\right)^2
+$$
+を求めなさい。
+
+<Steps>
+<Step reason="代表点 1+k/n は k=1 で 1 の近く、k=n で 2 に近づくので、積分区間は [1,2] と読み取れるからです。">$f(x)=x^2$、$a=1$、$b=2$ の場合にあたる（$b-a=1$）。</Step>
+<Step reason="一般区間の区分求積法で、和の極限を積分に置き換えるためです。">極限は $\displaystyle\int_1^2 x^2\,dx$。</Step>
+<Step reason="べき乗の公式で積分できるからです。">$=\Big[\dfrac{x^3}{3}\Big]_1^2$。</Step>
+<Step reason="上端と下端を代入して値を求めるためです。">$=\dfrac{8}{3}-\dfrac{1}{3}=\dfrac{7}{3}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\left(1+\frac{k}{n}\right)^2=\dfrac{7}{3}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 区分求積法で定積分を計算する">
+$$
+\int_0^1 x^2\,dx
+$$
+を、区分求積法の定義に従って求めなさい。
+
+<Steps>
+<Step reason="定積分を、右端の値で作った長方形の和の極限として表すためです。">$\displaystyle\int_0^1 x^2\,dx=\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\left(\frac{k}{n}\right)^2$。</Step>
+<Step reason="∑k² の公式を使って、和を n の式にまとめるためです。">$=\displaystyle\lim_{n\to\infty}\frac{1}{n^3}\sum_{k=1}^{n}k^2=\lim_{n\to\infty}\frac{1}{n^3}\cdot\frac{n(n+1)(2n+1)}{6}$。</Step>
+<Step reason="分母分子を整理して、n→∞ の様子が見える形にするためです。">$=\displaystyle\lim_{n\to\infty}\frac{(n+1)(2n+1)}{6n^2}$。</Step>
+<Step reason="分母を n² で割ると、1/n や 1/n² の項が 0 に消えるからです。">$=\displaystyle\lim_{n\to\infty}\frac{2n^2+3n+1}{6n^2}=\frac{1}{3}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^1 x^2\,dx=\dfrac{1}{3}$。面積の公式から得られる値と一致する。
+</Answer>
+</WorkedExample>
+
+## 定積分と不等式
+
+定積分は面積なので、被積分関数の大小関係がそのまま面積の大小関係になります。この性質を使うと、計算しにくい積分の値を、計算しやすい積分で上下からおさえられます。
+
+<Theorem name="定積分の不等式（面積比較）">
+$a\le x\le b$ で $f(x)\le g(x)$ のとき
+
+$$
+\int_a^b f(x)\,dx\le\int_a^b g(x)\,dx
+$$
+
+が成り立つ。とくに、区間 $[a,\ b]$ で $m\le f(x)\le M$ なら
+
+$$
+m(b-a)\le\int_a^b f(x)\,dx\le M(b-a)
+$$
+
+である。後者は、高さ $m$ と $M$ の長方形で面積をはさむという意味である。
+</Theorem>
+
+不等式を作るときは、まず区間内で被積分関数を上下からおさえる評価を探します。分母を大きくすれば分数は小さく、$1+x^2\ge1$ なら $\frac{1}{1+x^2}\le1$ というように、既知の単純な関数に置き換えるのが定石です。得られた不等式の各辺を積分すれば、そのまま定積分の不等式になります。さらにはさみうちの原理と組み合わせれば、和や積分の極限を求めることもできます。
+
+<WorkedExample title="例題4: 面積比較とはさみうち（入試頻出）">
+$n$ を自然数とする。不等式
+$$
+0\lt\int_0^1\frac{x^n}{1+x}\,dx\lt\frac{1}{n+1}
+$$
+を示し、$\displaystyle\lim_{n\to\infty}\int_0^1\frac{x^n}{1+x}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="被積分関数を、分母が簡単な既知の関数と比べておさえるためです。">$0\le x\le1$ では $1+x\ge1$ かつ $x^n\ge0$ なので、$\dfrac{x^n}{1+x}\le x^n$。</Step>
+<Step reason="区間全体で関数が小さいほど面積も小さいという性質を使うためです。">各辺を $0$ から $1$ まで積分して $\displaystyle\int_0^1\frac{x^n}{1+x}\,dx\le\int_0^1 x^n\,dx$。</Step>
+<Step reason="右辺はべき乗の積分で、n の式として計算できるからです。">$\displaystyle\int_0^1 x^n\,dx=\Big[\frac{x^{n+1}}{n+1}\Big]_0^1=\frac{1}{n+1}$。</Step>
+<Step reason="開区間 (0,1) では 1+x が 1 より大きいので等号が成り立たず、左辺は正だからです。">$0\lt\dfrac{x^n}{1+x}\lt x^n$（$0\lt x\lt1$）より $0\lt\displaystyle\int_0^1\frac{x^n}{1+x}\,dx\lt\frac{1}{n+1}$。</Step>
+<Step reason="右端 1/(n+1) が 0 に近づくので、はさみうちの原理で中央も 0 に収束するからです。">$\dfrac{1}{n+1}\to0$ より、はさみうちの原理で $\displaystyle\lim_{n\to\infty}\int_0^1\frac{x^n}{1+x}\,dx=0$。</Step>
+</Steps>
+
+<Answer>
+$0\lt\displaystyle\int_0^1\frac{x^n}{1+x}\,dx\lt\dfrac{1}{n+1}$ が成り立ち、極限は $0$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int_0^1 f(x)\,dx$ の値を評価するとき、$f(0)$ と $f(1)$ の2つの値だけを調べれば、$f(0)$ と $f(1)$ の間にあると分かる。
+</Wrong>
+<WhyWrong>
+両端の値だけでは、区間の途中で $f$ が大きく跳ねている場合を捉えられません。たとえば $f(x)=x(1-x)$ は両端で $0$ ですが、積分は $\frac16$ で正です。「端の値＝区間全体の上限・下限」は、$f$ が単調なときだけ成り立ちます。
+</WhyWrong>
+<Right>
+区間全体での最大値 $M$ と最小値 $m$（または $f$ をおさえる簡単な関数）を求め、$m\le f(x)\le M$ から $m(b-a)\le\int_a^b f\le M(b-a)$ を作る。端の値は、単調性を確認したうえで初めて使える。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+区分求積法では、高さに必ず右端の値 $f(k/n)$ を使わなければならない。左端の値 $f((k-1)/n)$ を使うと別の値に収束してしまう。
+</Wrong>
+<WhyWrong>
+長方形の高さを区間のどこで評価しても、$n$ を大きくすれば各区間の幅が 0 に近づき、関数の値の差は無視できるほど小さくなります。右端でも左端でも、和は同じ定積分に収束します。$k=0$ から $n-1$ までの和でも同じです。
+</WhyWrong>
+<Right>
+幅 $\frac1n$ と、区間を埋めていく代表点 $k/n$（または $(k-1)/n$）の対応が本質。代表点の選び方ではなく、幅と関数の対応を正しく読み取ることが大切。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\sqrt{\frac{k}{n}}$ を求めなさい。
+<Reveal label="答え">
+$\sqrt{x}$ の区間 $[0,1]$ での積分に等しい。$\displaystyle\int_0^1 x^{1/2}\,dx=\Big[\frac{2}{3}x^{3/2}\Big]_0^1=\frac{2}{3}$。
+</Reveal>
+
+（2）$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\left(2+\frac{k}{n}\right)$ を求めなさい。
+<Reveal label="答え">
+代表点 $2+k/n$ は $2$ から $3$ を動くので、区間 $[2,3]$ の $\int x\,dx$。$\displaystyle\int_2^3 x\,dx=\Big[\frac{x^2}{2}\Big]_2^3=\frac92-2=\frac52$。
+</Reveal>
+
+（3）$0\le x\le1$ で $0\le f(x)\le x^2+1$ が成り立つとき、$\displaystyle\int_0^1 f(x)\,dx$ のとりうる値の範囲を求めなさい。
+<Reveal label="答え">
+各辺を積分して $0\le\displaystyle\int_0^1 f(x)\,dx\le\int_0^1(x^2+1)\,dx=\frac13+1=\frac43$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（区分求積と不等式）">
+（1）$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\frac{1}{1+\frac{k}{n}}$ を求めよ。
+
+（2）$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}\left(\frac{k}{n}\right)^3$ を求めよ。
+
+（3）$\displaystyle\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}e^{-k/n}$ を、区分求積法を用いて求めよ。
+
+（4）$0\le x\le1$ で $\dfrac{x^4}{1+x^2}\le x^4$ であることを用いて、$\displaystyle\int_0^1\frac{x^4}{1+x^2}\,dx\le\frac15$ を示せ。
+
+<Reveal label="解答">
+（1）$f(x)=\dfrac{1}{1+x}$、区間 $[0,1]$ の区分求積法。$\displaystyle\int_0^1\frac{dx}{1+x}=\Big[\log(1+x)\Big]_0^1=\log2$。
+
+（2）$f(x)=x^3$ の区間 $[0,1]$。$\displaystyle\int_0^1 x^3\,dx=\Big[\frac{x^4}{4}\Big]_0^1=\frac14$。
+
+（3）$f(x)=e^{-x}$ の区間 $[0,1]$。$\displaystyle\int_0^1 e^{-x}\,dx=\Big[-e^{-x}\Big]_0^1=-e^{-1}+1=1-\frac1e$。
+
+（4）$0\le x\le1$ では $1+x^2\ge1$ かつ $x^4\ge0$ なので $\dfrac{x^4}{1+x^2}\le x^4$。各辺を積分して $\displaystyle\int_0^1\frac{x^4}{1+x^2}\,dx\le\int_0^1 x^4\,dx=\frac15$。
+</Reveal>
+</Practice>

@@ -20,12 +20,12 @@ reviewed: 2026-09-12
   question="2点 $A(1,0,2)$、$B(3,1,0)$ の間の距離はどれ？"
   options={['$3$', '$\sqrt{5}$', '$5$']}
   answer="$3$"
-  explanation="$\vec{AB}=(3-1,\ 1-0,\ 0-2)=(2,1,-2)$。大きさは $\sqrt{2^2+1^2+(-2)^2}=\sqrt{9}=3$ です。z の差も2乗に含めます。"
+  explanation="$\overrightarrow{AB}=(3-1,\ 1-0,\ 0-2)=(2,1,-2)$。大きさは $\sqrt{2^2+1^2+(-2)^2}=\sqrt{9}=3$ です。z の差も2乗に含めます。"
 />
 
 ## 空間座標と成分
 
-空間に3本の軸 $x$、$y$、$z$ を互いに垂直に取ります。点 P の座標を $(x,y,z)$ とし、原点 O を基準にしたベクトル $\vec{p}=\vec{OP}$ を成分で
+空間に3本の軸 $x$、$y$、$z$ を互いに垂直に取ります。点 P の座標を $(x,y,z)$ とし、原点 O を基準にしたベクトル $\vec{p}=\overrightarrow{OP}$ を成分で
 
 $$
 \vec{a}=(a_1,\ a_2,\ a_3)
@@ -47,7 +47,7 @@ $$
 |\vec{a}|=\sqrt{a_1^{2}+a_2^{2}+a_3^{2}}
 $$
 
-で、2点 A$(x_1,y_1,z_1)$、B$(x_2,y_2,z_2)$ の距離は $|\vec{AB}|$ に等しい。
+で、2点 A$(x_1,y_1,z_1)$、B$(x_2,y_2,z_2)$ の距離は $|\overrightarrow{AB}|$ に等しい。
 </Definition>
 
 <Why>
@@ -64,11 +64,11 @@ $$
 (2) 辺 $OB$ の中点を M、辺 $AC$ の中点を N とする。距離 $MN$ を求めなさい。
 
 <Steps>
-<Step reason="OA は原点から A へのベクトルの大きさなので、成分の2乗和の平方根を取ります。">(1) $|\vec{OA}|=\sqrt{1^2+1^2+0^2}=\sqrt{2}$。</Step>
-<Step reason="AB は終点 B から始点 A を引いて成分を求め、同じく大きさを出します。">(1) $\vec{AB}=(0,-1,1)$ なので $|\vec{AB}|=\sqrt{0+1+1}=\sqrt{2}$。</Step>
-<Step reason="AC も同様に終点 C から始点 A を引きます。">(1) $\vec{AC}=(-1,0,1)$ なので $|\vec{AC}|=\sqrt{1+0+1}=\sqrt{2}$。3辺とも等しい。</Step>
+<Step reason="OA は原点から A へのベクトルの大きさなので、成分の2乗和の平方根を取ります。">(1) $|\overrightarrow{OA}|=\sqrt{1^2+1^2+0^2}=\sqrt{2}$。</Step>
+<Step reason="AB は終点 B から始点 A を引いて成分を求め、同じく大きさを出します。">(1) $\overrightarrow{AB}=(0,-1,1)$ なので $|\overrightarrow{AB}|=\sqrt{0+1+1}=\sqrt{2}$。</Step>
+<Step reason="AC も同様に終点 C から始点 A を引きます。">(1) $\overrightarrow{AC}=(-1,0,1)$ なので $|\overrightarrow{AC}|=\sqrt{1+0+1}=\sqrt{2}$。3辺とも等しい。</Step>
 <Step reason="中点は座標を足して2で割れば求まります。">(2) $M\left(\dfrac{1}{2},0,\dfrac{1}{2}\right)$、$N\left(\dfrac{1}{2},1,\dfrac{1}{2}\right)$。</Step>
-<Step reason="2点の差をとって各成分を2乗し、平方根を取ります。">(2) $\vec{MN}=(0,1,0)$ なので $MN=\sqrt{0+1+0}=1$。</Step>
+<Step reason="2点の差をとって各成分を2乗し、平方根を取ります。">(2) $\overrightarrow{MN}=(0,1,0)$ なので $MN=\sqrt{0+1+0}=1$。</Step>
 </Steps>
 
 <Answer>
@@ -77,7 +77,7 @@ $$
 </WorkedExample>
 
 <KeyPoint>
-空間の点が動くときも、位置ベクトルの係数の和が $1$ なら分点、2つの独立なベクトルの実数倍の和なら平面上の点になる。空間ではさらに「4点が同一平面上にあるための共面条件」が加わる。$\vec{OP}=s\vec{a}+t\vec{b}+u\vec{c}$ で $s+t+u=1$ なら、P は三角形 ABC を含む平面上にある。
+空間の点が動くときも、位置ベクトルの係数の和が $1$ なら分点、2つの独立なベクトルの実数倍の和なら平面上の点になる。空間ではさらに「4点が同一平面上にあるための共面条件」が加わる。$\overrightarrow{OP}=s\vec{a}+t\vec{b}+u\vec{c}$ で $s+t+u=1$ なら、P は三角形 ABC を含む平面上にある。
 </KeyPoint>
 
 <Misconception>
@@ -85,7 +85,7 @@ $$
 2点 $A(1,0,2)$、$B(3,1,0)$ の距離は、$x$ と $y$ の差だけを使って $\sqrt{2^2+1^2}=\sqrt{5}$ である。
 </Wrong>
 <WhyWrong>
-空間では z 方向の差も距離に効きます。$\vec{AB}=(2,1,-2)$ で、z 成分は $0-2=-2$ です。これを無視すると、実際より短い距離になります。3方向すべての差を2乗して足す必要があります。
+空間では z 方向の差も距離に効きます。$\overrightarrow{AB}=(2,1,-2)$ で、z 成分は $0-2=-2$ です。これを無視すると、実際より短い距離になります。3方向すべての差を2乗して足す必要があります。
 </WhyWrong>
 <Right>
 成分が3つあっても、距離は $\sqrt{(x_2-x_1)^2+(y_2-y_1)^2+(z_2-z_1)^2}$ と、3方向すべてを2乗和に含めます。直方体の対角線の長さと同じ形です。
@@ -95,16 +95,16 @@ $$
 <CheckUnderstanding>
 (1) $\vec{a}=(2,-1,3)$ の大きさを求めなさい。
 
-(2) 2点 $A(1,2,3)$、$B(-1,0,4)$ について、$\vec{AB}$ の成分と距離 $AB$ を求めなさい。
+(2) 2点 $A(1,2,3)$、$B(-1,0,4)$ について、$\overrightarrow{AB}$ の成分と距離 $AB$ を求めなさい。
 
-(3) 3点 $A(1,0,0)$、$B(0,1,0)$、$C(0,0,1)$ について、$\vec{OA}+\vec{OB}+\vec{OC}$ の大きさを求めなさい。
+(3) 3点 $A(1,0,0)$、$B(0,1,0)$、$C(0,0,1)$ について、$\overrightarrow{OA}+\overrightarrow{OB}+\overrightarrow{OC}$ の大きさを求めなさい。
 
 <Reveal label="答え">
 (1) $|\vec{a}|=\sqrt{4+1+9}=\sqrt{14}$。
 
-(2) $\vec{AB}=(-2,-2,1)$、$AB=\sqrt{4+4+1}=3$。
+(2) $\overrightarrow{AB}=(-2,-2,1)$、$AB=\sqrt{4+4+1}=3$。
 
-(3) $\vec{OA}+\vec{OB}+\vec{OC}=(1,1,1)$ なので、大きさは $\sqrt{1+1+1}=\sqrt{3}$。
+(3) $\overrightarrow{OA}+\overrightarrow{OB}+\overrightarrow{OC}=(1,1,1)$ なので、大きさは $\sqrt{1+1+1}=\sqrt{3}$。
 </Reveal>
 </CheckUnderstanding>
 
@@ -120,7 +120,7 @@ $$
 
 (2) $M=\left(\dfrac{2+4}{2},\ \dfrac{-1+1}{2},\ \dfrac{1+3}{2}\right)=(3,0,2)$。
 
-(3) $\vec{AB}=(-1,2,0)$ で $AB=\sqrt{1+4}=\sqrt{5}$。$\vec{AC}=(-1,0,3)$ で $AC=\sqrt{1+9}=\sqrt{10}$。$\vec{BC}=(0,-2,3)$ で $BC=\sqrt{4+9}=\sqrt{13}$。
+(3) $\overrightarrow{AB}=(-1,2,0)$ で $AB=\sqrt{1+4}=\sqrt{5}$。$\overrightarrow{AC}=(-1,0,3)$ で $AC=\sqrt{1+9}=\sqrt{10}$。$\overrightarrow{BC}=(0,-2,3)$ で $BC=\sqrt{4+9}=\sqrt{13}$。
 </Reveal>
 </Practice>
 

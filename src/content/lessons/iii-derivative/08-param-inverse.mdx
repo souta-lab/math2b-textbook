@@ -1,0 +1,154 @@
+---
+title: "媒介変数表示と逆関数の微分"
+summary: "媒介変数で表された曲線の傾きを連鎖律から求め、逆関数の微分公式まで扱う。"
+unit: "iii-differential"
+order: 8
+objectives:
+  - "媒介変数表示の関数を dy/dx=(dy/dt)/(dx/dt) で微分できる"
+  - "媒介変数表示の第2次導関数 d²y/dx² を正しい手順で求められる"
+  - "逆関数の微分公式 dy/dx=1/(dx/dy) を使って導関数を求められる"
+prerequisites: ["iii-derivative/06-logarithmic"]
+tags: ["媒介変数表示", "逆関数の微分", "第2次導関数"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+平面上を動く点の位置は、x と y の関係式を直接書くより、時間 t のような別の文字を使って「x も y も t の式」として表す方が自然なことがあります。ボールの軌道や、円周上の点が描く曲線がその例です。ところが、この表し方のままでは、その曲線がどのくらいの傾きで進んでいるのかがすぐには分かりません。x と y が別々に動いているとき、2つの動きから曲線の傾きを取り出すにはどうすればよいのでしょうか。
+</Hook>
+
+<Prediction
+  question="x=t², y=t³ で表される曲線の、t=1 における傾き dy/dx はどれ？"
+  options={['3/2', '3', '2/3']}
+  answer="3/2"
+  explanation="t=1 では dx/dt=2、dy/dt=3。傾きは dy/dt を dx/dt で割った 3/2 です。dy/dt=3 をそのまま傾きとしてはいけません。"
+/>
+
+点 P の座標が、媒介変数 $t$ を用いて
+
+$$
+x=x(t),\qquad y=y(t)
+$$
+
+と表されているとします。この曲線の傾き $\dfrac{dy}{dx}$ を求めたいのですが、$y$ は $x$ の式として与えられていないので、そのまま $x$ で微分することはできません。
+
+そこで、媒介変数 $t$ を「x と y の両方を動かす共通の目盛り」とみなし、合成関数の微分（連鎖律）で x の変化と y の変化を結びつけます。すると
+
+$$
+\frac{dy}{dt}=\frac{dy}{dx}\cdot\frac{dx}{dt}
+$$
+
+が成り立ちます。この式を $\dfrac{dy}{dx}$ について解けばよいのです。
+
+<Why>
+なぜ割り算で求まるのかを、変化の速さで読み直します。$\dfrac{dy}{dt}$ は「t が1だけ進む間に y がどれだけ変わるか」、$\dfrac{dx}{dt}$ は「t が1だけ進む間に x がどれだけ変わるか」という速さです。知りたい傾き $\dfrac{dy}{dx}$ は「x が1だけ変わる間に y がどれだけ変わるか」ですから、「y の速さ ÷ x の速さ」で求まります。もし x が速く動いているのに y が少ししか動かなければ傾きは小さく、y が急に動けば傾きは大きくなります。割る順序を逆にすると傾きの逆数になり、坂の急さを取り違えてしまいます。数学IIの多項式でも変化の割合を考えたように、傾きとは変化量どうしの比だ、という見方がここでも働いています。
+</Why>
+
+<Theorem name="媒介変数表示の微分法">
+$x=x(t)$、$y=y(t)$ が微分可能で、$x'(t)\ne 0$ のとき
+
+$$
+\frac{dy}{dx}=\frac{\dfrac{dy}{dt}}{\dfrac{dx}{dt}}=\frac{y'(t)}{x'(t)}.
+$$
+
+第2次導関数は、$\dfrac{dy}{dx}$ をさらに $x$ で微分して
+
+$$
+\frac{d^2y}{dx^2}=\frac{\dfrac{d}{dt}\left(\dfrac{dy}{dx}\right)}{\dfrac{dx}{dt}}.
+$$
+
+すなわち「$\dfrac{dy}{dx}$ を $t$ で微分して、$\dfrac{dx}{dt}$ で割る」。
+</Theorem>
+
+注意したいのは、第2次導関数を $\dfrac{d^2y}{dt^2}\div\dfrac{d^2x}{dt^2}$ としてはいけないことです。$\dfrac{d^2y}{dx^2}$ は「傾き $\dfrac{dy}{dx}$ という $t$ の関数」を、もう一度 $x$ で微分した量です。まず $\dfrac{dy}{dx}$ を $t$ で微分し、その結果を $\dfrac{dx}{dt}$ で割ります。ここで、$\dfrac{dy}{dx}$ は $t$ の関数なので、連鎖律をもう一巡させる必要があるのです。
+
+次に、逆関数の微分を考えます。$y=f(x)$ の逆関数 $x=f^{-1}(y)$ が分かっているとき、$\dfrac{dx}{dy}$ から $\dfrac{dy}{dx}$ を逆算できます。$x=f^{-1}(y)$ は「y を決めると x が決まる」式なので、y で微分する方が簡単な場合に有効です。
+
+<Why>
+$\dfrac{dx}{dy}$ と $\dfrac{dy}{dx}$ が逆数になるのは、x と y の役割を入れ替えて見ているからです。$x=f^{-1}(y)$ の両辺を $x$ で微分すると、左辺は $1$、右辺は連鎖律より $\dfrac{dx}{dy}\cdot\dfrac{dy}{dx}$ になります。したがって $1=\dfrac{dx}{dy}\cdot\dfrac{dy}{dx}$、すなわち $\dfrac{dy}{dx}=\dfrac{1}{dx/dy}$ です。速さでいえば、x に対する y の変化率と、y に対する x の変化率は、行きと帰りで逆数になるという当たり前の関係です。直感としても、行きに2倍になった量は帰りには半分になる、と読めます。
+</Why>
+
+<Theorem name="逆関数の微分法">
+$y=f(x)$ が微分可能で逆関数 $x=f^{-1}(y)$ をもち、$\dfrac{dx}{dy}\ne 0$ のとき
+
+$$
+\frac{dy}{dx}=\frac{1}{\dfrac{dx}{dy}}.
+$$
+
+$\dfrac{dx}{dy}$ を求めて逆数をとれば、$\dfrac{dy}{dx}$ が得られる。
+</Theorem>
+
+<WorkedExample title="例題: 媒介変数表示の曲線の傾きと凹凸">
+$x=t^2+1$、$y=t^3-t$（$t\ne 0$）について、$\dfrac{dy}{dx}$ と $\dfrac{d^2y}{dx^2}$ を $t$ で表しなさい。
+
+<Steps>
+<Step reason="まず x と y をそれぞれ t で微分して、媒介変数に対する変化の速さを出します。">$\dfrac{dx}{dt}=2t$、$\dfrac{dy}{dt}=3t^2-1$。</Step>
+<Step reason="傾き dy/dx は、y の速さを x の速さで割ったものです。">$\dfrac{dy}{dx}=\dfrac{3t^2-1}{2t}=\dfrac32 t-\dfrac{1}{2t}$。</Step>
+<Step reason="d²y/dx² は dy/dx を x で微分する量なので、まず dy/dx を t で微分します。">$\dfrac{d}{dt}\left(\dfrac32 t-\dfrac{1}{2t}\right)=\dfrac32+\dfrac{1}{2t^2}=\dfrac{3t^2+1}{2t^2}$。</Step>
+<Step reason="この t についての変化率を dx/dt=2t で割れば、x についての変化率になります。">$\dfrac{d^2y}{dx^2}=\dfrac{\dfrac{3t^2+1}{2t^2}}{2t}=\dfrac{3t^2+1}{4t^3}$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac{dy}{dx}=\dfrac{3t^2-1}{2t}$、$\dfrac{d^2y}{dx^2}=\dfrac{3t^2+1}{4t^3}$（いずれも $t\ne 0$）
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題: 逆関数の微分法で立方根を微分する">
+$y=\sqrt[3]{x}$（$x\ne 0$）を、逆関数の微分法で微分しなさい。
+
+<Steps>
+<Step reason="そのまま微分するのは難しいので、逆関数 x=y³ を考えます。y で微分するのは簡単です。">$x=y^3$ より $\dfrac{dx}{dy}=3y^2$。</Step>
+<Step reason="dy/dx は dx/dy の逆数の関係にあるので、逆数をとります。">$\dfrac{dy}{dx}=\dfrac{1}{3y^2}$。</Step>
+<Step reason="y=∛x を戻して、x の式に直します。y²=(x^{1/3})²=x^{2/3} です。">$y^2=x^{2/3}$ より $\dfrac{dy}{dx}=\dfrac{1}{3x^{2/3}}$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac{dy}{dx}=\dfrac{1}{3x^{2/3}}$。べき乗の公式を有理数の指数に拡張した結果と一致します。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+媒介変数表示では $\dfrac{dy}{dx}=\dfrac{dx/dt}{dy/dt}$ と、上と下を逆にした割り算でよい。
+</Wrong>
+<WhyWrong>
+傾き $\dfrac{dy}{dx}$ は「x が1だけ増えるとき y がどれだけ増えるか」です。t が動いたときの変化量を比べるので、y の変化 $\dfrac{dy}{dt}$ を x の変化 $\dfrac{dx}{dt}$ で割ります。逆にしてしまうと、$x=t^2$、$y=t^3$ の $t=1$ で $\dfrac{2}{3}$ となり、実際の傾き $\dfrac{3}{2}$ と一致しません。求めたい $\dfrac{dy}{dx}$ の「y」が分子、「x」が分母に対応する、と文字を対応させて覚えると迷いません。
+</WhyWrong>
+<Right>
+$\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$。分子が y の変化、分母が x の変化です。また $x'(t)=0$ となる点では傾きが定義できず（接線が垂直になる）、この公式の分母が0になるので除外します。定義域や除外点を答案に添えると安全です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$x=t^2$、$y=t^3-3t$ のとき、$\dfrac{dy}{dx}$ を $t$ で表しなさい。
+<Reveal label="答え">
+$\dfrac{dx}{dt}=2t$、$\dfrac{dy}{dt}=3t^2-3$ より $\dfrac{dy}{dx}=\dfrac{3t^2-3}{2t}=\dfrac{3(t^2-1)}{2t}$。
+</Reveal>
+
+（2）（1）の曲線の $\dfrac{d^2y}{dx^2}$ を求めなさい。
+<Reveal label="答え">
+$\dfrac{dy}{dx}=\dfrac32 t-\dfrac{3}{2t}$ を $t$ で微分すると $\dfrac32+\dfrac{3}{2t^2}=\dfrac{3(t^2+1)}{2t^2}$。これを $\dfrac{dx}{dt}=2t$ で割って $\dfrac{d^2y}{dx^2}=\dfrac{3(t^2+1)}{4t^3}$。
+</Reveal>
+
+（3）$y=e^x$ の逆関数 $x=\log y$ を用いて、$\dfrac{dy}{dx}=e^x$ を確かめなさい。ただし $y>0$ とします。
+<Reveal label="答え">
+$\dfrac{dx}{dy}=\dfrac1y$ より $\dfrac{dy}{dx}=\dfrac{1}{1/y}=y=e^x$。指数関数の微分公式と一致します。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（媒介変数表示と逆関数の微分）">
+（1）$x=2\cos t$、$y=3\sin t$ のとき、$\dfrac{dy}{dx}$ を $t$ で表せ。
+（2）$x=t^2+2t$、$y=t^3$ のとき、$\dfrac{dy}{dx}$ と $\dfrac{d^2y}{dx^2}$ を求めよ。
+（3）$y=\sqrt[3]{x+1}$ を、逆関数の微分法で微分せよ。
+
+<Reveal label="解答">
+（1）$\dfrac{dx}{dt}=-2\sin t$、$\dfrac{dy}{dt}=3\cos t$ より $\dfrac{dy}{dx}=\dfrac{3\cos t}{-2\sin t}=-\dfrac{3\cos t}{2\sin t}$（$\sin t\ne 0$）。
+
+（2）$\dfrac{dx}{dt}=2t+2$、$\dfrac{dy}{dt}=3t^2$ より $\dfrac{dy}{dx}=\dfrac{3t^2}{2t+2}=\dfrac{3t^2}{2(t+1)}$。これを $t$ で微分すると $\dfrac{6t(2t+2)-3t^2\cdot 2}{(2t+2)^2}=\dfrac{6t^2+12t}{4(t+1)^2}=\dfrac{3t(t+2)}{2(t+1)^2}$。これを $\dfrac{dx}{dt}=2(t+1)$ で割って $\dfrac{d^2y}{dx^2}=\dfrac{3t(t+2)}{4(t+1)^3}$。
+
+（3）$x+1=y^3$ より $\dfrac{dx}{dy}=3y^2$。よって $\dfrac{dy}{dx}=\dfrac{1}{3y^2}=\dfrac{1}{3(x+1)^{2/3}}$。
+</Reveal>
+</Practice>
+
+<Note type="info">
+**入試ではこう出る（型・失点・時短）**：**型**は、媒介変数表示の曲線の接線・法線、増減表や凹凸の調査、そして $\sqrt[n]{x}$ のような関数の導関数。**失点**の最大源は第2次導関数で、$\dfrac{d^2y}{dx^2}$ を $\dfrac{d^2y}{dt^2}\div\dfrac{d^2x}{dt^2}$ と割り算してしまうことです。$\dfrac{dy}{dx}$ を $t$ で微分してから $\dfrac{dx}{dt}$ で割る、と手順を固定すれば速くて安全。**時短**としては、逆関数 $x=\cdots$ の方が微分しやすいときに、その逆数をとるだけで $\dfrac{dy}{dx}$ が得られます。
+</Note>

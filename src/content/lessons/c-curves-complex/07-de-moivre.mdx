@@ -50,13 +50,13 @@ $$
 $z^n=\alpha$ の形の方程式は、$n$ 個の解をもちます。$\alpha=r(\cos\theta+i\sin\theta)$ とすると、解は
 
 $$
-z=r^{1/n}\left(\cos\frac{\theta+2k\pi}{n}+i\sin\frac{\theta+2k\pi}{n}\right)\qquad(k=0,1,\dots,n-1)
+z=r^{1/n}\left(\cos\frac{\theta+2k\pi}{n}+i\sin\frac{\theta+2k\pi}{n}\right)\qquad(k=0,1,\cdots,n-1)
 $$
 
 です。偏角を $\frac{2\pi}{n}$ ずつずらして並ぶので、複素数平面上では原点を中心とする半径 $r^{1/n}$ の円に内接する**正 $n$ 角形**の頂点になります。特に $\alpha=1$ のときの $n$ 個の解を**1 の n 乗根**といいます。
 
 <KeyPoint>
-$z^n=1$ の解は単位円上に等間隔で並ぶ。$\omega=\cos\frac{2\pi}{n}+i\sin\frac{2\pi}{n}$ とおくと、解は $1,\omega,\omega^2,\dots,\omega^{n-1}$ で、その総和は $0$ になる。
+$z^n=1$ の解は単位円上に等間隔で並ぶ。$\omega=\cos\frac{2\pi}{n}+i\sin\frac{2\pi}{n}$ とおくと、解は $1,\omega,\omega^2,\cdots,\omega^{n-1}$ で、その総和は $0$ になる。
 </KeyPoint>
 
 <WorkedExample title="例題: 累乗と n 乗根">
@@ -113,12 +113,16 @@ $(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta$。角度が $n$ 倍さ�
 
 (3) $\omega=\cos\dfrac{2\pi}{3}+i\sin\dfrac{2\pi}{3}$ のとき、$1+\omega+\omega^2$ の値を求めなさい。
 
+(4) 複素数 $z=1+\sqrt{3}i$ を極形式で表し、$z^3$ を計算しなさい。また $|z^3|$ と $z^3$ の偏角を答えなさい。
+
 <Reveal label="解答">
 (1) $\sqrt{3}+i=2\left(\cos\frac{\pi}{6}+i\sin\frac{\pi}{6}\right)$。3乗すると $2^3\left(\cos\frac{\pi}{2}+i\sin\frac{\pi}{2}\right)=8i$。
 
 (2) $16=2^4$ を極形式で $16(\cos 0+i\sin 0)$。$z=2\left(\cos\frac{2k\pi}{4}+i\sin\frac{2k\pi}{4}\right)$（$k=0,1,2,3$）より $z=2,2i,-2,-2i$。
 
 (3) $\omega$ は $z^3=1$ の解で $\omega\ne 1$。$(z-1)(z^2+z+1)=z^3-1=0$ より $\omega^2+\omega+1=0$。よって $1+\omega+\omega^2=0$。
+
+(4) $|z|=\sqrt{1+3}=2$ で、偏角は $\dfrac{\pi}{3}$。よって $z=2\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{3}\right)$。ド・モアブルの定理より $z^3=2^3\left(\cos\pi+i\sin\pi\right)=8(-1+0i)=-8$。したがって $|z^3|=8$、偏角は $\pi$。
 </Reveal>
 </Practice>
 

@@ -57,15 +57,15 @@ $$
 <WorkedExample title="例題: 正四面体のなす角と面積">
 4点 $O(0,0,0)$、$A(1,1,0)$、$B(1,0,1)$、$C(0,1,1)$ は1辺 $\sqrt{2}$ の正四面体の頂点である。
 
-(1) $\vec{OA}$ と $\vec{OB}$ のなす角 $\theta$ を求めなさい。
+(1) $\overrightarrow{OA}$ と $\overrightarrow{OB}$ のなす角 $\theta$ を求めなさい。
 
 (2) $\triangle OAB$ の面積 $S$ を求めなさい。
 
 <Steps>
-<Step reason="なす角は内積と大きさから cosθ を出します。まず内積を成分の積和で計算します。">(1) $\vec{OA}=(1,1,0)$、$\vec{OB}=(1,0,1)$ より $\vec{OA}\cdot\vec{OB}=1\cdot1+1\cdot0+0\cdot1=1$。</Step>
-<Step reason="分母に使う大きさをそれぞれ求めます。">(1) $|\vec{OA}|=|\vec{OB}|=\sqrt{2}$。</Step>
+<Step reason="なす角は内積と大きさから cosθ を出します。まず内積を成分の積和で計算します。">(1) $\overrightarrow{OA}=(1,1,0)$、$\overrightarrow{OB}=(1,0,1)$ より $\overrightarrow{OA}\cdot\overrightarrow{OB}=1\cdot1+1\cdot0+0\cdot1=1$。</Step>
+<Step reason="分母に使う大きさをそれぞれ求めます。">(1) $|\overrightarrow{OA}|=|\overrightarrow{OB}|=\sqrt{2}$。</Step>
 <Step reason="cos の値を計算して、対応する角を読み取ります。">(1) $\cos\theta=\dfrac{1}{\sqrt{2}\cdot\sqrt{2}}=\dfrac{1}{2}$。よって $\theta=60^\circ$。</Step>
-<Step reason="面積の式に |a|^2、|b|^2、内積の2乗をそのまま代入すると、角を経由せずに面積が出ます。">(2) $|\vec{OA}|^2|\vec{OB}|^2-(\vec{OA}\cdot\vec{OB})^2=2\cdot2-1^2=3$。</Step>
+<Step reason="面積の式に |a|^2、|b|^2、内積の2乗をそのまま代入すると、角を経由せずに面積が出ます。">(2) $|\overrightarrow{OA}|^2|\overrightarrow{OB}|^2-(\overrightarrow{OA}\cdot\overrightarrow{OB})^2=2\cdot2-1^2=3$。</Step>
 <Step reason="平方根の半分を取ります。">(2) $S=\dfrac{1}{2}\sqrt{3}=\dfrac{\sqrt{3}}{2}$。</Step>
 </Steps>
 
@@ -113,12 +113,16 @@ z 成分も空間のベクトルの一部なので、内積に含めなければ
 
 (3) $|\vec{a}|=2$、$|\vec{b}|=3$、$|\vec{a}+\vec{b}|=4$ のとき、$\vec{a}\cdot\vec{b}$ を求めなさい。
 
+(4) 空間の3点 $A(1,0,0)$、$B(0,2,0)$、$C(0,0,3)$ について、$\overrightarrow{AB}$ と $\overrightarrow{AC}$ を求め、内積から $\angle BAC$ のコサインの値を計算しなさい。
+
 <Reveal label="解答">
-(1) $\vec{OF}=(1,1,1)$、$\vec{OA}=(1,0,0)$。内積は $1$、$|\vec{OF}|=\sqrt{3}$、$|\vec{OA}|=1$ なので $\cos\alpha=\dfrac{1}{\sqrt{3}}=\dfrac{\sqrt{3}}{3}$。
+(1) $\overrightarrow{OF}=(1,1,1)$、$\overrightarrow{OA}=(1,0,0)$。内積は $1$、$|\overrightarrow{OF}|=\sqrt{3}$、$|\overrightarrow{OA}|=1$ なので $\cos\alpha=\dfrac{1}{\sqrt{3}}=\dfrac{\sqrt{3}}{3}$。
 
 (2) $\vec{a}\cdot\vec{b}=1$、$|\vec{a}|^2=|\vec{b}|^2=2$ なので $S=\dfrac{1}{2}\sqrt{2\cdot2-1}=\dfrac{\sqrt{3}}{2}$。
 
 (3) $|\vec{a}+\vec{b}|^2=|\vec{a}|^2+2\vec{a}\cdot\vec{b}+|\vec{b}|^2$ より $16=4+2\vec{a}\cdot\vec{b}+9$。よって $2\vec{a}\cdot\vec{b}=3$、$\vec{a}\cdot\vec{b}=\dfrac{3}{2}$。
+
+(4) $\overrightarrow{AB}=(-1,2,0)$、$\overrightarrow{AC}=(-1,0,3)$。内積は $\overrightarrow{AB}\cdot\overrightarrow{AC}=(-1)(-1)+2\cdot0+0\cdot3=1$。$|\overrightarrow{AB}|=\sqrt{1+4}=\sqrt{5}$、$|\overrightarrow{AC}|=\sqrt{1+9}=\sqrt{10}$ なので $\cos\angle BAC=\dfrac{1}{\sqrt{5}\sqrt{10}}=\dfrac{1}{5\sqrt{2}}=\dfrac{\sqrt{2}}{10}$。
 </Reveal>
 </Practice>
 

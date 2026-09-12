@@ -23,6 +23,10 @@ $\displaystyle\lim_{n\to\infty}\frac1n\left(\sqrt{\frac1n}+\sqrt{\frac2n}+\cdots
   explanation="区分求積法より、極限は $\\displaystyle\\int_0^1 x^2\\,dx=\\left[\\dfrac{x^3}{3}\\right]_0^1=\\dfrac13$ です。$\\dfrac1n$ が $0$ に近づいても項が $n$ 個あるので、和は $0$ にならず有限の値になります。"
 />
 
+<Note type="info">
+**位置づけ（数学IIIの発展・時短）**：区分求積法は数学IIIの標準内容で、本編は「区分求積法と不等式」（`iii-integral/09-quadrature`）にあります。このレッスンは本編を前提に、$\sum$ の和の極限から $\dfrac1n$ と $\dfrac{k}{n}$ をくくり出して定積分へ読み替える手順を、**一撃で処理する時短の型**として整理する発展編です。
+</Note>
+
 和の極限は、多数の長方形の面積の合計と見なせます。区間 $[0,1]$ を $n$ 等分すると、1つの小区間の幅は $\dfrac1n$、その区間での高さを $f\!\left(\dfrac{k}{n}\right)$ とすれば、面積は $\dfrac1n f\!\left(\dfrac{k}{n}\right)$ です。これを $k=1$ から $n$ まで足し上げ、分割を細かくした極限が積分になります。
 
 <Definition term="区分求積法">
