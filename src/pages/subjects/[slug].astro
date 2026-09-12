@@ -1,0 +1,189 @@
+---
+/**
+ * Subject landing page (科目ランディング): one per entry in `SUBJECT_ORDER`.
+ * Lists the subject's units — published and planned — and links each to its
+ * chapter page so the roadmap is browsable even before lessons exist.
+ */
+import { getCollection } from 'astro:content';
+import type { Subject } from '@/data/curriculum';
+import {
+  statusLabel,
+  SUBJECT_META,
+  SUBJECT_ORDER,
+  unitsBySubject,
+} from '@/data/curriculum';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+
+export function getStaticPaths() {
+  return SUBJECT_ORDER.map((subject) => ({
+    params: { slug: SUBJECT_META[subject].slug },
+    props: { subject },
+  }));
+}
+
+interface Props {
+  subject: Subject;
+}
+
+const { subject } = Astro.props;
+const meta = SUBJECT_META[subject];
+
+const lessonCounts = new Map<string, number>();
+for (const lesson of await getCollection('lessons')) {
+  if (lesson.data.draft) continue;
+  lessonCounts.set(lesson.data.unit, (lessonCounts.get(lesson.data.unit) ?? 0) + 1);
+}
+
+const units = unitsBySubject(subject).map((unit, index) => ({
+  unit,
+  chapterNumber: index + 1,
+  lessonCount: lessonCounts.get(unit.id) ?? 0,
+  href: `${import.meta.env.BASE_URL}chapters/${unit.id}`,
+}));
+---
+
+<BaseLayout title={meta.label} description={meta.description}>
+  <div class="subject">
+    <Breadcrumbs
+      crumbs={[
+        { label: '科目一覧', href: `${import.meta.env.BASE_URL}subjects/` },
+        { label: meta.label },
+      ]}
+    />
+
+    <header class="subject__header">
+      <p class="subject__level">{meta.level}</p>
+      <h1>{meta.label}</h1>
+      <p class="subject__lead">{meta.description}</p>
+      <p class="subject__count">全{units.length}章</p>
+    </header>
+
+    <ol class="subject__units">
+      {
+        units.map(({ unit, chapterNumber, lessonCount, href }) => (
+          <li class="subject__unit">
+            <a class="subject__unit-link" href={href}>
+              <span class="subject__unit-index">第{chapterNumber}章</span>
+              <span class="subject__unit-title">{unit.title}</span>
+              <span class="subject__unit-summary">{unit.summary}</span>
+              <span class="subject__unit-meta">
+                <span class:list={['subject__status', `subject__status--${unit.status}`]}>
+                  {statusLabel[unit.status]}
+                </span>
+                {lessonCount > 0 && <span>レッスン{lessonCount}件</span>}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</BaseLayout>
+
+<style>
+  .subject {
+    max-width: var(--measure);
+  }
+
+  .subject__header {
+    margin-bottom: var(--sp-6);
+  }
+
+  .subject__level {
+    margin: 0 0 var(--sp-1);
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+  }
+
+  .subject__lead {
+    margin: var(--sp-2) 0 0;
+    color: var(--ink-soft);
+  }
+
+  .subject__count {
+    margin: var(--sp-2) 0 0;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+  }
+
+  .subject__units {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .subject__unit {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .subject__unit-link {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: var(--sp-1) var(--sp-3);
+    padding: var(--sp-4) var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .subject__unit-link:hover {
+    background: var(--surface-soft);
+  }
+
+  .subject__unit-index {
+    grid-row: span 3;
+    padding-top: 0.2em;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .subject__unit-title {
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: var(--line-tight);
+  }
+
+  .subject__unit-summary {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .subject__unit-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-4);
+    color: var(--ink-faint);
+    font-size: 0.8rem;
+  }
+
+  .subject__status {
+    display: inline-block;
+    padding: 0.1rem var(--sp-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .subject__status--published {
+    background: var(--correct-soft);
+    color: var(--correct);
+  }
+
+  .subject__status--draft {
+    background: var(--note-soft);
+    color: var(--note);
+  }
+
+  .subject__status--planned {
+    background: var(--surface-soft);
+    border-color: var(--rule);
+    color: var(--ink-faint);
+  }
+</style>

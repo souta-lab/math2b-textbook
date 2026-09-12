@@ -3,7 +3,7 @@
 この文書は、数学II・B教材の**本文（MDX）を書く人／コンポーネントを作る人**が従う唯一の規約である。
 数学的正確性を最優先し、初学者が前から読むだけで理解できることを目的とする。
 
-対象スコープ: **数学II・B 全単元（公開中）**
+対象スコープ: **数学II・B（公開中）** に加え、**中学数学・数学I・数学A・数学III・数学C・大学数学（計画中）**。マルチ科目の単元・ディレクトリ・ナビ規約は §13 を参照。
 三角関数は概念スパイン L0–L8 まで対応。
 `L0 三角比の復習 → L1 一般角 → L2 弧度法 → L3 単位円による定義 → L4 相互関係 → L5 周期性と対称性 → L6 グラフ → L7 加法定理（2倍角・半角） → L8 合成と三角方程式・不等式`
 
@@ -199,16 +199,75 @@ npm run new-lesson -- --unit <unitId> --slug <slug> --title "…" --summary "…
 
 ## 13. 単元 ⇔ ディレクトリ対応
 
-| unit id | lessonDir | 主な可視化（予定） |
+`unit id` は `src/data/curriculum.ts`、`lessonDir` は `src/content/lessons/` 直下のディレクトリ。**`id` と `lessonDir` は隣接・この順序で書く**（`scripts/new-lesson.mjs` が正規表現で読む）。`subject` は `SUBJECT_ORDER` のいずれか。各単元の `lessonPlan`（順序付き slug）は `.omo/plans/full-math-expansion.md` を正典とする。
+
+### 全科目対応表
+
+| subject | unit id | lessonDir | 状態 |
+|---|---|---|---|
+| 中学数学 | jhs-number-expression | jhs-number-expression | 予定 |
+| 中学数学 | jhs-equation-inequality | jhs-equation-inequality | 予定 |
+| 中学数学 | jhs-function | jhs-function | 予定 |
+| 中学数学 | jhs-geometry | jhs-geometry | 予定 |
+| 中学数学 | jhs-data | jhs-data | 予定 |
+| 数学I | i-expression | i-expression | 予定 |
+| 数学I | i-sets-logic | i-sets-logic | 予定 |
+| 数学I | i-quadratic | i-quadratic | 予定 |
+| 数学I | i-trig-ratio | i-trig-ratio | 予定 |
+| 数学I | i-data | i-data | 予定 |
+| 数学A | a-probability | a-probability | 予定 |
+| 数学A | a-geometry | a-plane-geometry | 予定 |
+| 数学A | a-activities | a-activities | 予定 |
+| 数学II | ii-expressions | expressions | 既存 |
+| 数学II | ii-coordinate | coordinate | 既存 |
+| 数学II | ii-trigonometric | trig | 既存 |
+| 数学II | ii-exponential | exponential | 既存 |
+| 数学II | ii-calculus | calculus | 既存 |
+| 数学B | b-sequences | sequences | 既存 |
+| 数学B | b-statistics | statistics | 既存 |
+| 数学B | b-society | society | 既存 |
+| 数学III | iii-limits | iii-limits | 予定 |
+| 数学III | iii-differential | iii-derivative | 予定 |
+| 数学III | iii-differential-apps | iii-derivative-apps | 予定 |
+| 数学III | iii-integral | iii-integral | 予定 |
+| 数学C | c-vectors | c-vectors | 予定 |
+| 数学C | c-curves-complex | c-curves-complex | 予定 |
+| 数学C | c-representation | c-representation | 予定 |
+| 大学数学 | uni-limits-tools | uni-limits-tools | 予定 |
+| 大学数学 | uni-calculus-tools | uni-calculus-tools | 予定 |
+| 大学数学 | uni-inequality-tools | uni-inequality-tools | 予定 |
+| 大学数学 | uni-integer-tools | uni-integer-tools | 予定 |
+| 大学数学 | uni-sequence-tools | uni-sequence-tools | 予定 |
+| 大学数学 | uni-geometry-tools | uni-geometry-tools | 予定 |
+| 大学数学 | uni-complex-matrix-tools | uni-complex-matrix-tools | 予定 |
+
+### マルチ科目の規約
+
+- **ディレクトリ接頭辞**: 新規単元の `lessonDir` は科目ごとの接頭辞を付ける。中学数学 `jhs-`、数学I `i-`、数学A `a-`、数学III `iii-`、数学C `c-`、大学数学 `uni-`。既存の数学IIは接頭辞なし（`expressions` `trig` など）、数学Bは `b-`。
+- **科目順序**: `SUBJECT_ORDER = ['中学数学','数学I','数学A','数学II','数学B','数学III','数学C','大学数学']`。ある単元の `prerequisites` が参照する単元の科目は、この順で自分より後に来てはならない（同科目内は可）。たとえば数学IIIは数学II・Bを前提にできるが、数学IIIより後に来る数学Cを前提にはできない。
+- **`lessonPlan` レジストリ**: `Unit` の任意フィールド `lessonPlan?: string[]` に、その単元のレッスン slug を**順序付き**で登録する。`status: 'published'` の単元は、`lessonDir` 内の MDX ファイル集合が `lessonPlan` と**完全一致**すること（`lessons.test.ts` で検証）。slug は単元内で一意。
+- **科目パンくず・ナビ**: `LessonLayout` / `Breadcrumbs` / 章ページに科目（`SUBJECT_META[subject].label`）をパンくずとして表示する。科目ランディングは `/subjects/[slug]`（例: 数学I `/subjects/math1`、数学III `/subjects/math3`、大学数学 `/subjects/university`）。リンクは相対パスのみ（root絶対パス禁止）。
+- **文字列prop内の数式**: 下記のとおり `Step reason` / `Prediction` / `SelfExplanation` の文字列propではインライン `$...$` が描画され、prop内の別行 `$$...$$` は使えない（§7・§9 と同一規約）。
+
+### 大学数学のスコープ（入試時短ツールキットに留める）
+
+大学数学は**入試で時間を短縮するための7つの道具モジュール**であり、厳密な理論体系・証明体系は範囲外。各モジュールは「近道」「検算」「定石（標準的な道具の使い方）」に絞り、一般論への拡張や理論の体系化は行わない。各レッスンでは必ず**「使える場面 / 手順 / 記述式での可否（検算専用か、答案で使えるか）」**を明示する。これ以上深追いしない。
+
+| unit id | 使う道具（到達点） | 扱わない |
 |---|---|---|
-| ii-expressions | expressions | 数直線、複素数の対応（数学Cではない範囲） |
-| ii-coordinate | coordinate | 座標平面、直線、円、領域 |
-| ii-trigonometric | trig | 単位円、三角関数グラフ、角 |
-| ii-exponential | exponential | 指数・対数グラフ、逆関数の折り返し |
-| ii-calculus | calculus | 接線・平均変化率、面積 |
-| b-sequences | sequences | 数列の対応、Σ |
-| b-statistics | statistics | 度数分布、正規分布、区間推定 |
-| b-society | society | 数学的モデル化 |
+| uni-limits-tools | ロピタル・テイラー近似・次数比較で極限を読む | ε-δ論法・収束半径・一様収束の理論 |
+| uni-calculus-tools | 陰関数/媒介変数の微分・ラグランジュ未定乗数法・区分求積・パップス=ギュルダン | 多変数関数の一般論・重積分の理論 |
+| uni-inequality-tools | コーシー・シュワルツ・相加相乗の拡張・並べ替え不等式 | 不等式の一般理論・証明体系 |
+| uni-integer-tools | 合同式・フェルマーの小定理・不定方程式の高速解法 | 整数論の一般論・代数的整数論 |
+| uni-sequence-tools | 特性方程式・母関数・確率漸化式・行列のn乗 | 形式冪級数論・マルコフ連鎖の一般論 |
+| uni-geometry-tools | 外積・トレミー/スチュワート・調和点列 | 射影幾何・非ユークリッド幾何 |
+| uni-complex-matrix-tools | ド・モアブル・1のn乗根・ケーリー・ハミルトン・対角化 | 複素解析（正則関数・留数定理）・ジョルダン標準形 |
+
+つまり、測度論・位相空間・ジョルダン標準形・複素解析・形式冪級数論は**どのモジュールでも扱わない**。
+
+### 数学C「数学的な表現の工夫」のスコープ
+
+`c-representation` は **行列・一次変換を主軸**に据え、離散グラフによる表現までを扱う。lessonPlan は 00-matrix-basics / 01-matrix-product / 02-inverse / 03-linear-systems / 04-linear-transform / 05-transform-figures / 06-composition / 07-eigen / 08-discrete-graph / 09-review。ベクトルは `c-vectors`、複素数平面は `c-curves-complex` で扱い、重複させない。
 
 ## 14. 章の Definition of Done
 - [ ] 全レッスンが `new-lesson` 由来の構造（Hook/Prediction/Why/WorkedExample/Misconception/CheckUnderstanding）を満たす。

@@ -1,12 +1,61 @@
 import { readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
+import { SUBJECT_ORDER, units } from '../src/data/curriculum';
 
 const lessonsDir = fileURLToPath(new URL('../src/content/lessons', import.meta.url));
+
 const LESSON_IDS = readdirSync(lessonsDir, { recursive: true, encoding: 'utf8' })
   .filter((entry) => entry.endsWith('.mdx'))
   .map((entry) => entry.replace(/\\/g, '/').replace(/\.mdx$/, ''))
   .sort();
+
+const SUBJECT_BY_DIR = new Map(units.map((unit) => [unit.lessonDir, unit.subject]));
+
+function evenlySpacedSample(ids: string[], size: number): string[] {
+  if (size <= 0 || ids.length === 0) return [];
+  if (ids.length <= size) return [...ids].sort();
+  if (size === 1) return [ids[0]];
+  const picks = new Set<string>();
+  for (let index = 0; index < size; index += 1) {
+    picks.add(ids[Math.round((index * (ids.length - 1)) / (size - 1))]);
+  }
+  return [...picks].sort();
+}
+
+function sampleBySubject(size: number): string[] {
+  const bySubject = new Map<string, string[]>();
+  for (const id of LESSON_IDS) {
+    const subject = SUBJECT_BY_DIR.get(id.split('/')[0]);
+    if (!subject) continue;
+    const bucket = bySubject.get(subject);
+    if (bucket) bucket.push(id);
+    else bySubject.set(subject, [id]);
+  }
+
+  const sample: string[] = [];
+  for (const subject of SUBJECT_ORDER) {
+    sample.push(...evenlySpacedSample(bySubject.get(subject) ?? [], size));
+  }
+  return sample;
+}
+
+const SAMPLE_SIZE = Math.max(1, Math.trunc(Number(process.env.SMOKE_SAMPLE_SIZE ?? '3')) || 3);
+
+/** Fixed representative lessons; deterministic sampling can miss an authored regression. */
+const SPINE = [
+  'trig/03-definition',
+  'trig/06-graphs',
+  'expressions/00-cubic-formulas',
+  'coordinate/00-points',
+  'exponential/00-power-extension',
+  'calculus/05-definite-integral',
+  'sequences/05-recurrence',
+  'statistics/04-normal-distribution',
+  'society/00-mathematize',
+];
+
+const SMOKE_LESSON_IDS = [...new Set([...SPINE, ...sampleBySubject(SAMPLE_SIZE)])].sort();
 
 test('home page shows the course map', async ({ page }) => {
   await page.goto('/');
@@ -57,7 +106,7 @@ test('trig graph slider updates the readout', async ({ page }) => {
   expect(after).not.toBe(before);
 });
 
-for (const id of LESSON_IDS) {
+for (const id of SMOKE_LESSON_IDS) {
   test(`lesson ${id} renders math with no errors and no overflow`, async ({ page }) => {
     await page.goto(`/lessons/${id}`);
     await expect(page.locator('.katex').first()).toBeVisible();

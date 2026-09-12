@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parse as parseYaml } from 'yaml';
 import { describe, expect, it } from 'vitest';
-import { units } from '../src/data/curriculum';
+import { LEGACY_CONCEPT_TO_UNIT, units } from '../src/data/curriculum';
 
 const projectRoot = fileURLToPath(new URL('..', import.meta.url));
 const lessonsDir = `${projectRoot}src/content/lessons`;
@@ -157,6 +157,23 @@ describe('lesson metadata quality', () => {
       const unit = units.find((candidate) => candidate.id === lesson.unit);
       expect(unit, `${lesson.id}: unknown unit ${lesson.unit}`).toBeDefined();
       expect(unit?.lessonDir, `${lesson.id}: directory does not match unit.lessonDir`).toBe(lesson.dir);
+    }
+  });
+
+  it('has no stale legacy externalConcept prerequisite edges', () => {
+    const unitIds = new Set(units.map((unit) => unit.id));
+    const lessonIds = new Set(lessons.map((lesson) => lesson.id));
+    const legacyTargets = new Map(Object.entries(LEGACY_CONCEPT_TO_UNIT));
+    for (const lesson of lessons) {
+      for (const prerequisite of lesson.prerequisites) {
+        const mappedUnit = legacyTargets.get(prerequisite);
+        const staleLegacyEdge =
+          mappedUnit !== undefined && !unitIds.has(prerequisite) && !lessonIds.has(prerequisite);
+        expect(
+          staleLegacyEdge,
+          `${lesson.id}: prerequisite '${prerequisite}' still points at a legacy external concept; use unit '${mappedUnit}'`,
+        ).toBe(false);
+      }
     }
   });
 

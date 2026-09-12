@@ -10,7 +10,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import ChapterNav from '@/components/nav/ChapterNav.astro';
 import LessonNav from '@/components/nav/LessonNav.astro';
-import { getUnit, prerequisiteLabel } from '@/data/curriculum';
+import { getUnit, prerequisiteLabel, SUBJECT_META } from '@/data/curriculum';
 // <components:imports>
 import Answer from '@/components/content/Answer.astro';
 import CheckUnderstanding from '@/components/content/CheckUnderstanding.astro';
@@ -142,8 +142,14 @@ const prerequisites = prerequisiteIds.map(
 );
 
 const chapterHref = `${import.meta.env.BASE_URL}chapters/${lesson.data.unit}`;
+const subjectHref = unit
+  ? `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[unit.subject].slug}/`
+  : undefined;
 const reviewed = lesson.data.reviewed?.toISOString().slice(0, 10);
 const crumbs = [
+  ...(unit
+    ? [{ label: SUBJECT_META[unit.subject].label, href: subjectHref }]
+    : []),
   { label: unit?.title ?? lesson.data.unit, href: unit ? chapterHref : undefined },
   { label: lesson.data.title },
 ];

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import type { Unit } from '@/data/curriculum';
-import { getUnit, prerequisiteLabel, statusLabel, units, unitsBySubject } from '@/data/curriculum';
+import { getUnit, prerequisiteLabel, statusLabel, SUBJECT_META, units, unitsBySubject } from '@/data/curriculum';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 
@@ -42,7 +42,15 @@ const emptyMessage =
 
 <BaseLayout title={unit.title} description={unit.summary}>
   <div class="chapter">
-    <Breadcrumbs crumbs={[{ label: unit.title }]} />
+    <Breadcrumbs
+      crumbs={[
+        {
+          label: SUBJECT_META[unit.subject].label,
+          href: `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[unit.subject].slug}/`,
+        },
+        { label: unit.title },
+      ]}
+    />
 
     <header class="chapter__header">
       <h1>{unit.title}</h1>

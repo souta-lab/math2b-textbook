@@ -2,20 +2,54 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CourseMap from '@/components/nav/CourseMap.astro';
+import { SUBJECT_META, SUBJECT_ORDER, unitsBySubject } from '@/data/curriculum';
 
 const lessons = await getCollection('lessons');
 const columns = (await getCollection('columns'))
   .filter((column) => !column.data.draft)
   .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+
+const subjects = SUBJECT_ORDER.map((subject) => {
+  const units = unitsBySubject(subject);
+  return {
+    meta: SUBJECT_META[subject],
+    href: `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[subject].slug}/`,
+    total: units.length,
+    published: units.filter((unit) => unit.status === 'published').length,
+  };
+});
 ---
 
-<BaseLayout title="学びの地図">
+<BaseLayout title="ホーム">
   <div class="home">
     <h1>学びの地図</h1>
     <p class="home__lead">
-      高校数学II・Bの内容を、単元の順に読むための教材です。各章の公開状況と、読み始める前に必要な事項を示します。
+      中学数学の復習から高校数学、大学数学の実用ツールまで、科目ごとに単元をたどる教材です。各章の公開状況と、読み始める前に必要な事項を示します。
     </p>
-    <CourseMap lessons={lessons} />
+
+    <section class="home__subjects" aria-labelledby="home-subjects" id="subjects">
+      <h2 class="home__subjects-title" id="home-subjects">科目から探す</h2>
+      <ul class="home__subjects-list">
+        {
+          subjects.map(({ meta, href, total, published }) => (
+            <li class="home__subject-card">
+              <a class="home__subject-link" href={href}>
+                <span class="home__subject-level">{meta.level}</span>
+                <span class="home__subject-label">{meta.label}</span>
+                <span class="home__subject-count">
+                  公開{published}章 / 全{total}章
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="home__map" aria-labelledby="home-map">
+      <h2 class="home__map-title" id="home-map">単元マップ</h2>
+      <CourseMap lessons={lessons} />
+    </section>
 
     <section class="home__columns" aria-labelledby="home-columns">
       <h2 class="home__columns-title" id="home-columns">発展コラム</h2>
@@ -49,6 +83,65 @@ const columns = (await getCollection('columns'))
   .home__lead {
     margin: 0 0 var(--sp-6);
     color: var(--ink-soft);
+  }
+
+  .home__subjects {
+    margin-bottom: var(--sp-7);
+  }
+
+  .home__subjects-title,
+  .home__map-title {
+    margin: 0 0 var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--ink);
+    font-size: 1.2rem;
+  }
+
+  .home__subjects-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    gap: var(--sp-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .home__subject-card {
+    min-width: 0;
+  }
+
+  .home__subject-link {
+    display: grid;
+    gap: var(--sp-1);
+    height: 100%;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home__subject-link:hover {
+    border-color: var(--ink);
+    background: var(--surface-soft);
+  }
+
+  .home__subject-level {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+  }
+
+  .home__subject-label {
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: var(--line-tight);
+  }
+
+  .home__subject-count {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
   }
 
   .home__columns {

@@ -94,3 +94,34 @@ describe('lesson content integrity', () => {
     }
   });
 });
+
+describe('published unit lesson plans', () => {
+  it('has globally unique unit lessonDir values', () => {
+    const dirs = units.map((unit) => unit.lessonDir);
+    expect(new Set(dirs).size, 'duplicate lessonDir across units').toBe(dirs.length);
+  });
+
+  it('matches unit.lessonPlan exactly for every published unit that declares one', () => {
+    // Units without a lessonPlan (the authored 数学II・B slice) are intentionally skipped.
+    for (const unit of units) {
+      if (unit.status !== 'published' || !unit.lessonPlan) continue;
+      const onDisk = files
+        .filter((file) => file.id.startsWith(`${unit.lessonDir}/`))
+        .map((file) => file.id)
+        .sort();
+      const planned = unit.lessonPlan.map((slug) => `${unit.lessonDir}/${slug}`).sort();
+      expect(onDisk, `${unit.id} lesson files must equal its lessonPlan`).toEqual(planned);
+    }
+  });
+
+  it('never marks a lesson in a published unit as draft', () => {
+    const unitById = new Map(units.map((unit) => [unit.id, unit]));
+    for (const file of files) {
+      if (file.data.draft !== true) continue;
+      const unit = unitById.get(String(file.data.unit));
+      expect(unit?.status, `${file.id} is draft but belongs to published ${unit?.id ?? 'unknown'}`).not.toBe(
+        'published',
+      );
+    }
+  });
+});

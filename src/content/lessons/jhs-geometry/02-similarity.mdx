@@ -1,0 +1,109 @@
+---
+title: "相似 — 対応順と相似比の使い方"
+summary: "相似条件の選び方と、対応順をそろえて辺の比を立てる方法を身につける。"
+unit: "jhs-geometry"
+order: 2
+objectives:
+  - "三角形の相似条件を3つ言える"
+  - "相似の対応順をそろえて辺の比を立てられる"
+  - "平行線が作る相似を使って辺の長さを求められる"
+prerequisites: ["jhs-geometry/01-congruence"]
+tags: ["相似", "相似条件", "相似比"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+晴れた日に木の影の長さを測るとします。木の高さは直接測れませんが、同じ時刻に地面に垂直な棒の影を測れば、棒とその影、木とその影が同じ形の三角形を作ります。なぜ影の長さから木の高さが分かるのでしょう。
+</Hook>
+
+<Prediction
+  question="相似な2つの三角形で、相似比が $2:3$ のとき、面積の比は？"
+  options={['$2:3$', '$4:9$', '$2:9$']}
+  answer="$4:9$"
+  explanation="相似比が $k$ のとき、長さは $k$ 倍、面積は $k^2$ 倍になります。$2:3$ なら面積比は $2^2:3^2 = 4:9$ です。"
+/>
+
+合同は「形も大きさも同じ」でした。今回は、形は同じで大きさだけが違う図形、すなわち相似を扱います。辺の比がすべてそろっていれば、片方を拡大・縮小したものがもう片方になります。
+
+<Definition term="相似と相似比">
+2つの図形が、一方を一定の割合で拡大または縮小したものになっているとき、それらは**相似**であるという。対応する辺の長さの比を**相似比**という。$\triangle ABC \sim \triangle DEF$ と書いたとき、頂点は $A \leftrightarrow D$、$B \leftrightarrow E$、$C \leftrightarrow F$ の順に対応している。
+</Definition>
+
+<Theorem name="三角形の相似条件">
+2つの三角形は、次のいずれかが成り立つとき相似である。
+
+- 3組の辺の比がすべて等しい
+- 2組の辺の比と、その間の角がそれぞれ等しい
+- 2組の角がそれぞれ等しい
+</Theorem>
+
+<Why>
+相似条件のうち「2組の角」をまず探すのは、角は平行線の錯角や対頂角から読めることが多く、辺の長さを測らずに相似を示せるからです。相似が言えれば、あとは対応する辺の比を1本の比例式にまとめて、未知の長さを求められます。
+</Why>
+
+<Figure caption="DE ∥ BC のとき、△ADE と △ABC は相似。A は共通、D と B、E と C が同位角で対応します。">
+<CoordinatePlane
+  xMin={-4}
+  xMax={4}
+  yMin={-1}
+  yMax={5}
+  points={[{ x: 0, y: 4, label: 'A' }, { x: -3, y: 0, label: 'B' }, { x: 3, y: 0, label: 'C' }, { x: -1.8, y: 1.6, label: 'D' }, { x: 1.8, y: 1.6, label: 'E' }]}
+  segments={[
+    { x1: 0, y1: 4, x2: -3, y2: 0 },
+    { x1: 0, y1: 4, x2: 3, y2: 0 },
+    { x1: -3, y1: 0, x2: 3, y2: 0 },
+    { x1: -1.8, y1: 1.6, x2: 1.8, y2: 1.6 }
+  ]}
+  showGrid={false}
+  label="平行線が作る相似な三角形"
+/>
+</Figure>
+
+平行線があると同位角・錯角が等しくなるので、相似が自然に現れます。前のレッスンの角の関係が、ここで辺の比の計算に変わります。
+
+<KeyPoint>
+相似比が $k$ のとき、長さの比は $k$、面積の比は $k^2$、体積の比は $k^3$。
+</KeyPoint>
+
+## 例題
+
+<WorkedExample title="例題: 平行線が作る相似">
+三角形 ABC で、辺 AB 上の点 D と辺 AC 上の点 E を結ぶ線分 DE が辺 BC に平行であるとします。$AD = 3$、$DB = 2$、$AE = 6$ のとき、$EC$ を求めなさい。
+
+<Steps>
+<Step reason="DE ∥ BC から同位角が等しくなり、2組の角で相似が言えます。">DE ∥ BC より $\angle ADE = \angle ABC$、$\angle AED = \angle ACB$。よって $\triangle ADE \sim \triangle ABC$。</Step>
+<Step reason="相似比は対応する辺 AD と AB の比で決まります。AB は AD + DB です。">相似比は $AD : AB = 3 : (3 + 2) = 3 : 5$。</Step>
+<Step reason="AE に対応するのは AC なので、同じ相似比で比例式を立てます。">$AE : AC = 3 : 5$。$AE = 6$ だから $6 : AC = 3 : 5$、すなわち $AC = 10$。</Step>
+<Step reason="求めるのは AC のうち AE より先の部分だからです。">$EC = AC - AE = 10 - 6 = 4$。</Step>
+</Steps>
+
+<Answer>
+$EC = 4$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\triangle ADE \sim \triangle ABC$ のとき、相似比は $AD : DB = AE : EC$ でよい。
+</Wrong>
+<WhyWrong>
+$AD : DB = AE : EC$ は平行線が作る比例式としては正しいのですが、これは相似比ではなく、対応する辺を取り違えた式です。相似比は $\triangle ADE$ と $\triangle ABC$ の対応する辺どうし、つまり $AD : AB = AE : AC = DE : BC$ です。対応順を飛ばして $AD : DB$ を使うと、比の値がずれて答えを誤ります。
+</WhyWrong>
+<Right>
+まず頂点の対応を書きます。$\triangle ADE \sim \triangle ABC$ なら $A \leftrightarrow A$、$D \leftrightarrow B$、$E \leftrightarrow C$。次に「対応する辺の比」を $AD : AB = AE : AC = DE : BC$ と並べ、分かっている長さを代入します。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. 2組の角がそれぞれ等しいことを示すと、なぜ相似と言えるのか。
+
+2. $\triangle ABC \sim \triangle DEF$ で、相似比が $3:4$ である。$BC = 9$ のとき $EF$ を求めよ。また、$\triangle ABC$ の面積が $18$ のとき $\triangle DEF$ の面積を求めよ。
+<Reveal label="答え">
+1. 2組の角が等しければ、残りの角も三角形の内角の和 $180^\circ$ から決まるので、3組の角がすべて等しくなり、形が同じ（相似）になるからです。
+
+2. 相似比 $3:4$ より $BC : EF = 3:4$。$9 : EF = 3:4$ なので $EF = 12$。面積比は $3^2:4^2 = 9:16$ で、$18 : S = 9:16$ より $S = 32$。
+</Reveal>
+</CheckUnderstanding>
+
+## 高校・入試での用途
+数学I「図形と計量」の面積比・体積比、数学A「図形の性質」の中点連結定理や方べきの定理は、すべて相似が土台です。入試では相似の対応順を1文字でも間違えると辺の比がずれて失点するので、「相似を書いたらまず対応順を確認する」を習慣にしてください。

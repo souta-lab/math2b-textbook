@@ -7,8 +7,8 @@ interface Props {
   description?: string;
 }
 
-const { title, description = '読むだけで理解できる高校数学II・BのWeb教材' } = Astro.props;
-const pageTitle = title === 'ホーム' ? title : `${title} — 数学II・B 読解教材`;
+const { title, description = '読むだけで理解できる高校数学のWeb教材' } = Astro.props;
+const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読解教材`;
 ---
 <!doctype html>
 <html lang="ja">
@@ -23,9 +23,10 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 数学II・B 読
     <a class="skip-link" href="#main">本文へスキップ</a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="site-brand" href={import.meta.env.BASE_URL}>数学II・B 読解教材</a>
+        <a class="site-brand" href={import.meta.env.BASE_URL}>高校数学 読解教材</a>
         <nav class="site-header__nav" aria-label="サイト">
           <a href={import.meta.env.BASE_URL}>目次</a>
+          <a href={`${import.meta.env.BASE_URL}subjects/`}>科目一覧</a>
         </nav>
       </div>
     </header>
@@ -33,7 +34,7 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 数学II・B 読
       <slot />
     </main>
     <footer class="site-footer">
-      <p>読み進めるだけで理解できることを目指した、高校数学II・Bの学習教材です。</p>
+      <p>読み進めるだけで理解できることを目指した、高校数学の学習教材です。</p>
     </footer>
     <style>
       .site-header {
@@ -59,6 +60,11 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 数学II・B 読
         font-size: 1.02rem;
         color: var(--ink);
         text-decoration: none;
+      }
+      .site-header__nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--sp-4);
       }
       .site-header__nav a {
         font-size: 0.92rem;

@@ -1,0 +1,109 @@
+---
+title: "三角形の合同 — 対応順と合同条件"
+summary: "合同条件の選び方と、頂点の対応順の読み方を身につける。"
+unit: "jhs-geometry"
+order: 1
+objectives:
+  - "三角形の合同条件を3つ言える"
+  - "合同な図形から頂点の対応順を読み取れる"
+  - "証明の第一手として合同を使える"
+prerequisites: ["jhs-geometry/00-angle-lines"]
+tags: ["合同", "合同条件", "対応順"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+同じ形で同じ大きさの三角形を2枚作ったとします。重ねて確かめれば同じだと分かりますが、片方を遠くへ送ってしまい重ねられないとき、辺や角のどれがどれだけ等しければ「同じ」と言い切れるでしょうか。全部の辺と角を測るのは大変そうです。
+</Hook>
+
+<Prediction
+  question="2組の辺と1組の角がそれぞれ等しければ、三角形は合同と言える？"
+  options={['いつでも合同と言える', '角が2辺の間にあるとき合同と言える', '辺と角の組み合わせでは判定できない']}
+  answer="角が2辺の間にあるとき合同と言える"
+  explanation="等しい角が2辺の「間」にあるときだけ合同が保証されます。間でない角だけでは、形が2通りに決まってしまい合同と言えません。"
+/>
+
+さきほど、2直線が平行なときは角が移せることを学びました。今回は、等しい辺や角を手がかりに「三角形まるごとが同じ」と言い切る条件を整理します。
+
+<Definition term="合同">
+2つの図形を、ずらしたり回したり裏返したりしてぴったり重ね合わせられるとき、それらは**合同**であるという。合同な三角形では、対応する辺と角がそれぞれ等しい。$\triangle ABC \equiv \triangle DEF$ と書いたとき、頂点は $A \leftrightarrow D$、$B \leftrightarrow E$、$C \leftrightarrow F$ の順に対応している。
+</Definition>
+
+<Theorem name="三角形の合同条件">
+2つの三角形は、次のいずれかが成り立つとき合同である。
+
+- 3組の辺がそれぞれ等しい
+- 2組の辺と、その間の角がそれぞれ等しい
+- 1組の辺と、その両端の角がそれぞれ等しい
+</Theorem>
+
+<Why>
+合同条件を使い分けるのは、いま分かっている等しい量（辺か角か、そしてそれらが隣り合っているか）に合わせて、測る手間を最小にするためです。3辺だけ、2辺と間の角だけ、1辺と両端の角だけのどれかがそろえば、残りの辺や角を測らなくても形と大きさが決まります。
+</Why>
+
+<Figure caption="二等辺三角形 ABC（AB=AC）と、頂角 A の二等分線 AD。△ABD と △ACD は合同になります。">
+<CoordinatePlane
+  xMin={-4}
+  xMax={4}
+  yMin={-1}
+  yMax={5}
+  points={[{ x: 0, y: 4, label: 'A' }, { x: -3, y: 0, label: 'B' }, { x: 3, y: 0, label: 'C' }, { x: 0, y: 0, label: 'D' }]}
+  segments={[
+    { x1: 0, y1: 4, x2: -3, y2: 0 },
+    { x1: 0, y1: 4, x2: 3, y2: 0 },
+    { x1: -3, y1: 0, x2: 3, y2: 0 },
+    { x1: 0, y1: 4, x2: 0, y2: 0, dashed: true }
+  ]}
+  showGrid={false}
+  label="二等辺三角形と頂角の二等分線"
+/>
+</Figure>
+
+## 合同は「証明の道具」
+
+合同はそれ自体が目的ではなく、対応する辺や角が等しいことを示すための道具です。合同を示せば、「同じ図形の一部分だから」と言って長さや角を移せます。
+
+## 例題
+
+<WorkedExample title="例題: 合同から性質を導く">
+三角形 ABC は $AB = AC$ の二等辺三角形で、頂角 A の二等分線 AD が辺 BC と交わるとします。このとき $\triangle ABD \equiv \triangle ACD$ を示し、$BD = DC$ と $\angle ADB = 90^\circ$ を導きなさい。
+
+<Steps>
+<Step reason="二等辺三角形の定義から、対応する2辺が等しいと言えます。">$AB = AC$（仮定）。</Step>
+<Step reason="AD が頂角 A の二等分線だからです。">$\angle BAD = \angle CAD$。</Step>
+<Step reason="辺 AD は2つの三角形に共通なので、同じ長さです。">$AD$ は共通。</Step>
+<Step reason="2組の辺とその間の角がそれぞれ等しいので、合同条件が使えます。">よって $\triangle ABD \equiv \triangle ACD$（2組の辺とその間の角）。</Step>
+<Step reason="合同な図形では対応する辺が等しいからです。">対応する辺だから $BD = DC$。</Step>
+<Step reason="B・D・C は一直線上にあり、等しい角の和は $180^\circ$ になります。">$\angle ADB = \angle ADC$ で、その和は $180^\circ$。よって各 $90^\circ$。</Step>
+</Steps>
+
+<Answer>
+$\triangle ABD \equiv \triangle ACD$。したがって $BD = DC$、$\angle ADB = 90^\circ$。頂角の二等分線は底辺を垂直に二等分します。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+2組の辺と1組の角がそれぞれ等しければ、いつでも合同である。
+</Wrong>
+<WhyWrong>
+等しい角が2辺の「間」にない場合、同じ2辺と角をもつ三角形が2通り作れてしまい、合同とは限りません。たとえば辺 4、辺 5、角 $30^\circ$ が与えられても、角の位置によって形が変わります。また、合同条件は辺や角の「数」だけではなく、対応の位置関係まで指定しています。
+</WhyWrong>
+<Right>
+使えるのは「3組の辺」「2組の辺とその間の角」「1組の辺とその両端の角」。等しい角が2辺の間にくるか、辺の両端にくるかを図で確かめてから条件を選びます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. 三角形 ABC と三角形 DEF について、$AB = DE$、$BC = EF$、$\angle B = \angle E$ が分かっている。どの合同条件が使えるか。
+
+2. $\triangle ABC \equiv \triangle DEF$ のとき、$BC = 7$、$CA = 5$ ならば、$EF$ と $FD$ はそれぞれいくらか。
+<Reveal label="答え">
+1. 2組の辺とその間の角（$AB$ と $BC$ の間の角が $\angle B$、$DE$ と $EF$ の間の角が $\angle E$）が等しいので、この条件で合同が言えます。
+
+2. 対応順から $B \leftrightarrow E$、$C \leftrightarrow F$ なので $EF = BC = 7$。同様に $C \leftrightarrow F$、$A \leftrightarrow D$ より $FD = CA = 5$。
+</Reveal>
+</CheckUnderstanding>
+
+## 高校・入試での用途
+数学A「図形の性質」の証明は、まず合同によって辺や角の相等を示すところから始まります。二等辺三角形の性質や作図の根拠も合同条件にあります。入試では「対応順を正しく書く」ことがそのまま論証の正確さになります。

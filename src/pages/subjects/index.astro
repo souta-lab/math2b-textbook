@@ -1,0 +1,119 @@
+---
+/**
+ * Subject index (科目一覧): every subject in `SUBJECT_ORDER` with its
+ * published/planned unit counts. Subject headings across the site link here.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+import { SUBJECT_META, SUBJECT_ORDER, unitsBySubject } from '@/data/curriculum';
+
+const subjects = SUBJECT_ORDER.map((subject) => {
+  const units = unitsBySubject(subject);
+  return {
+    subject,
+    meta: SUBJECT_META[subject],
+    total: units.length,
+    published: units.filter((unit) => unit.status === 'published').length,
+    href: `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[subject].slug}/`,
+  };
+});
+---
+
+<BaseLayout
+  title="科目一覧"
+  description="中学数学の復習から大学数学の実用ツールまで、科目ごとに単元をたどるための一覧。"
+>
+  <div class="subjects">
+    <Breadcrumbs crumbs={[{ label: '科目一覧' }]} />
+
+    <header class="subjects__header">
+      <h1>科目一覧</h1>
+      <p class="subjects__lead">
+        中学数学の復習から高校数学I・A・II・B・III・C、大学数学の実用ツールまで、科目ごとに単元を並べています。各科目のページから章へ進めます。
+      </p>
+    </header>
+
+    <ul class="subjects__list">
+      {
+        subjects.map(({ meta, total, published, href }) => (
+          <li class="subjects__item">
+            <a class="subjects__link" href={href}>
+              <span class="subjects__level">{meta.level}</span>
+              <span class="subjects__label">{meta.label}</span>
+              <span class="subjects__description">{meta.description}</span>
+              <span class="subjects__count">
+                公開{published}章 / 全{total}章
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>
+
+<style>
+  .subjects {
+    max-width: var(--measure);
+  }
+
+  .subjects__header {
+    margin-bottom: var(--sp-6);
+  }
+
+  .subjects__lead {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .subjects__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .subjects__item {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .subjects__link {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    gap: var(--sp-1) var(--sp-3);
+    padding: var(--sp-4) var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .subjects__link:hover {
+    background: var(--surface-soft);
+  }
+
+  .subjects__level {
+    grid-row: span 3;
+    padding-top: 0.15em;
+    color: var(--ink-faint);
+    font-size: 0.8rem;
+  }
+
+  .subjects__label {
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: var(--line-tight);
+  }
+
+  .subjects__description {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .subjects__count {
+    color: var(--ink-faint);
+    font-size: 0.8rem;
+  }
+</style>

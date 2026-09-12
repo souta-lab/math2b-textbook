@@ -1,0 +1,159 @@
+---
+title: "平方根の基礎 — 根号の変形と有理化"
+summary: "平方根の意味と変形を理解し、根号を含む計算と有理化を速く正確に処理する。"
+unit: "jhs-number-expression"
+order: 3
+objectives:
+  - "平方根の定義と、根号が表す値の約束を区別して説明できる"
+  - "根号の積・商と、因数を外に出す変形ができる"
+  - "分母の有理化ができ、2乗して検算できる"
+prerequisites: ["jhs-number-expression/02-poly-calc"]
+tags: ["平方根", "有理化", "無理数", "根号"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+1辺の長さが $1$ の正方形を思い浮かべる。その対角線の長さは、分数では書き表せない。小数で書いても同じ数字の繰り返しにならず、どこまでも続く。それでも「2乗すると $2$ になる数」として、その長さは確かに存在する。この数を扱うために用意された記号が根号である。根号の変形が速くなると、図形でも式の計算でも手が止まらなくなる。
+</Hook>
+
+<Prediction
+  question="$\sqrt{(-3)^2}$ の値はどれでしょう？"
+  options={['$3$', '$-3$', '$9$']}
+  answer="$3$"
+  explanation="$(-3)^2=9$ で、$\sqrt{9}$ は正の平方根なので $3$ です。$\sqrt{a^2}$ は $a$ そのものではなく $|a|$ になり、$a$ が負のときは符号が戻ります。"
+/>
+
+<Note type="info">
+**高校・入試での用途**：数学I「数と式」の根号計算・有理化はそのまま入試の計算問題に出る。数学I「図形と計量」の三角比でも $\dfrac{1}{\sqrt3}=\dfrac{\sqrt3}{3}$ のような分母有理化を頻繁に使う。
+</Note>
+
+<Definition term="平方根">
+2乗すると $a$ になる数を、$a$ の平方根という。$a\gt 0$ のとき平方根は正と負の2つあり、正のほうを $\sqrt{a}$、負のほうを $-\sqrt{a}$ と書く。$\sqrt{0}=0$ である。負の数の平方根は実数の範囲にはない。
+</Definition>
+
+ここで大切なのは、記号 $\sqrt{\ }$ は「負でないほう」だけを指すという約束である。だから $x^2=9$ の解が $\pm3$ の2つでも、$\sqrt9$ は $3$ ただ1つを表す。この約束から $\sqrt{a^2}=|a|$ が出てくる。
+
+<Why>
+$\sqrt{a^2}$ を $|a|$ とするのは、根号が「2乗して中身になる数のうち、負でないほう」と決められているからだ。$a$ が正なら $\sqrt{a^2}=a$ でよいが、$a=-3$ のとき $\sqrt{(-3)^2}=\sqrt9=3=-a$ となり、符号を戻さなければならない。場合分けを1つの式にまとめたものが $|a|$ である。約束を守れば、根号の値はいつも1つに定まる。
+</Why>
+
+<Theorem name="根号の計算">
+$a\gt 0$、$b\gt 0$ のとき、次の変形が使える。
+
+$$
+\sqrt{a}\sqrt{b}=\sqrt{ab},\qquad \dfrac{\sqrt{a}}{\sqrt{b}}=\sqrt{\dfrac{a}{b}}
+$$
+
+根号の中に2乗の因数があれば、外に出すことができる。
+
+$$
+\sqrt{a^2 b}=a\sqrt{b}
+$$
+
+分母に根号があるときは、分母と分子に同じ数を掛けて根号を消す。これを分母の有理化という。
+
+$$
+\dfrac{1}{\sqrt{a}}=\dfrac{\sqrt{a}}{a},\qquad \dfrac{1}{\sqrt{a}+\sqrt{b}}=\dfrac{\sqrt{a}-\sqrt{b}}{a-b}
+$$
+</Theorem>
+
+根号の足し算・引き算は、文字式の同類項と同じである。$\sqrt2$ を文字 $x$ のように見れば、$5\sqrt2-3\sqrt2+2\sqrt2=(5-3+2)\sqrt2$ とまとめられる。ただし、根号の中が同じときに限る。
+
+<WorkedExample title="例題1: 因数を外に出してまとめる">
+$\sqrt{50}-\sqrt{18}+\sqrt{8}$ を計算せよ。
+
+<Steps>
+<Step reason="根号の中の平方数（$25$、$9$、$4$）を外に出すと、すべて $\sqrt2$ の項にそろう。">$\sqrt{50}=5\sqrt2$、$\sqrt{18}=3\sqrt2$、$\sqrt{8}=2\sqrt2$。</Step>
+<Step reason="根号の中が同じなので、文字式の同類項と同じように係数だけをまとめる。">$(5-3+2)\sqrt2$。</Step>
+<Step reason="係数を計算する。">$4\sqrt2$。</Step>
+</Steps>
+
+<Answer>
+$4\sqrt2$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 分母の有理化">
+$\dfrac{6}{\sqrt3}$ と $\dfrac{1}{\sqrt5-\sqrt3}$ を、それぞれ分母に根号がない形にせよ。
+
+<Steps>
+<Step reason="分母の $\sqrt3$ を消すには、分母と分子に $\sqrt3$ を掛ける。$\sqrt3\times\sqrt3=3$ で根号が外れる。">$\dfrac{6}{\sqrt3}=\dfrac{6\sqrt3}{\sqrt3\times\sqrt3}=\dfrac{6\sqrt3}{3}$。</Step>
+<Step reason="$6$ と $3$ を約分する。">$2\sqrt3$。</Step>
+<Step reason="$\sqrt5-\sqrt3$ は、2乗の差 $(A-B)(A+B)=A^2-B^2$ を使うため、共役な $\sqrt5+\sqrt3$ を分母と分子に掛ける。">$\dfrac{1}{\sqrt5-\sqrt3}=\dfrac{\sqrt5+\sqrt3}{(\sqrt5)^2-(\sqrt3)^2}$。</Step>
+<Step reason="分母を計算する。$5-3=2$。">$\dfrac{\sqrt5+\sqrt3}{2}$。</Step>
+</Steps>
+
+<Answer>
+$2\sqrt3$ と $\dfrac{\sqrt5+\sqrt3}{2}$
+</Answer>
+</WorkedExample>
+
+<Note type="tip">
+**時短と検算**：有理化した答えは、小数に直して元の式と一致するか確かめられる。$2\sqrt3\approx3.464$ で、$\dfrac{6}{\sqrt3}=\dfrac{6}{1.732}\approx3.464$ と一致する。別の道として、平方数 $1,4,9,16,25,36,49,64,81,100$ を覚えておくと、因数を外に出す判断が速くなる。
+</Note>
+
+<Misconception>
+<Wrong>
+$\sqrt{a}+\sqrt{b}=\sqrt{a+b}$ である。たとえば $\sqrt9+\sqrt{16}=\sqrt{25}=5$ になる。
+</Wrong>
+<WhyWrong>
+実際は $\sqrt9+\sqrt{16}=3+4=7$ で、$\sqrt{25}=5$ と等しくない。根号の積については $\sqrt a\sqrt b=\sqrt{ab}$ が成り立つが、和については成り立たない。混同すると計算の土台が崩れる。
+</WhyWrong>
+<Right>
+根号の和は、中の数が同じときだけ係数をまとめる。$\sqrt2+\sqrt3$ はこれ以上簡単にならない。$\sqrt{a}+\sqrt{b}$ と $\sqrt{ab}$ は別物である。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$x^2=9$ の解は $x=\sqrt9=3$ の1つだけである。
+</Wrong>
+<WhyWrong>
+2乗して $9$ になる数は $3$ と $-3$ の2つある。$\sqrt9=3$ はそのうち負でないほうだけを表す記号であり、方程式の解を表す記号ではない。解を1つに絞ると取りこぼしが生じる。
+</WhyWrong>
+<Right>
+$\sqrt{\ }$ は負でない平方根を表す。方程式 $x^2=a$（$a\gt 0$）の解は $x=\pm\sqrt a$ と2つ書く。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\sqrt{72}$ を $a\sqrt b$ の形にせよ。
+<Reveal label="答え">
+$72=36\times2$ なので $\sqrt{72}=\sqrt{36}\sqrt2=6\sqrt2$。
+</Reveal>
+
+（2）$\sqrt{12}\times\sqrt3$ を計算せよ。
+<Reveal label="答え">
+$\sqrt{12\times3}=\sqrt{36}=6$。
+</Reveal>
+
+（3）$\dfrac{4}{\sqrt2}$ を有理化せよ。
+<Reveal label="答え">
+分母と分子に $\sqrt2$ を掛ける。$\dfrac{4\sqrt2}{\sqrt2\times\sqrt2}=\dfrac{4\sqrt2}{2}=2\sqrt2$。
+</Reveal>
+
+（4）$(\sqrt5+2)(\sqrt5-2)$ を計算せよ。
+<Reveal label="答え">
+2乗の差の公式より $(\sqrt5)^2-2^2=5-4=1$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（根号と有理化）">
+（1）$\sqrt{48}-\sqrt{27}+\sqrt{12}$ を計算せよ。
+
+（2）$\dfrac{\sqrt2}{\sqrt3}$ を有理化せよ。
+
+（3）$\sqrt{20}\div\sqrt5$ を計算せよ。
+
+（4）$\dfrac{1}{\sqrt7+\sqrt6}$ を有理化せよ。
+
+<Reveal label="解答">
+（1）$\sqrt{48}=4\sqrt3$、$\sqrt{27}=3\sqrt3$、$\sqrt{12}=2\sqrt3$。まとめて $(4-3+2)\sqrt3=3\sqrt3$。
+
+（2）分母と分子に $\sqrt3$ を掛けて $\dfrac{\sqrt2\times\sqrt3}{3}=\dfrac{\sqrt6}{3}$。
+
+（3）$\sqrt{20}\div\sqrt5=\sqrt{\dfrac{20}{5}}=\sqrt4=2$。
+
+（4）共役な $\sqrt7-\sqrt6$ を分母と分子に掛ける。$\dfrac{\sqrt7-\sqrt6}{(\sqrt7)^2-(\sqrt6)^2}=\dfrac{\sqrt7-\sqrt6}{7-6}=\sqrt7-\sqrt6$。
+</Reveal>
+</Practice>

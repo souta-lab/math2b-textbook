@@ -1,12 +1,18 @@
 ---
 /**
- * Full 数学II・B unit graph: subjects → ordered units, each with its status,
- * prerequisite concepts and lesson count. Only published units link to their
- * chapter page; planned units stay visible so the roadmap is honest.
+ * Site-wide course map: subjects in `SUBJECT_ORDER`, each heading linking to its
+ * subject landing page. Published/draft units are listed openly; planned units
+ * are collapsed under a 準備中 summary so the roadmap stays honest but compact.
+ * Only published units link to their chapter page.
  */
 import type { CollectionEntry } from 'astro:content';
-import { prerequisiteLabels, statusLabel, units, unitsBySubject } from '@/data/curriculum';
-import type { Subject } from '@/data/curriculum';
+import {
+  prerequisiteLabels,
+  statusLabel,
+  SUBJECT_META,
+  SUBJECT_ORDER,
+  unitsBySubject,
+} from '@/data/curriculum';
 
 interface Props {
   /** All lesson entries; drafts are excluded from counts. */
@@ -15,27 +21,29 @@ interface Props {
 
 const { lessons = [] } = Astro.props;
 
-const subjectOrder: Subject[] = [];
-for (const unit of units) {
-  if (!subjectOrder.includes(unit.subject)) subjectOrder.push(unit.subject);
-}
-
 const lessonCounts = new Map<string, number>();
 for (const lesson of lessons) {
   if (lesson.data.draft) continue;
   lessonCounts.set(lesson.data.unit, (lessonCounts.get(lesson.data.unit) ?? 0) + 1);
 }
 
-const subjectGroups = subjectOrder.map((subject) => ({
-  subject,
-  headingId: `subject-${subject}`,
-  units: unitsBySubject(subject).map((unit, index) => ({
+const subjectGroups = SUBJECT_ORDER.map((subject) => {
+  const meta = SUBJECT_META[subject];
+  const mapped = unitsBySubject(subject).map((unit, index) => ({
     unit,
     chapterNumber: index + 1,
     lessonCount: lessonCounts.get(unit.id) ?? 0,
     prerequisites: prerequisiteLabels(unit.id),
-  })),
-}));
+  }));
+  return {
+    subject,
+    meta,
+    headingId: `subject-${meta.slug}`,
+    href: `${import.meta.env.BASE_URL}subjects/${meta.slug}/`,
+    units: mapped.filter(({ unit }) => unit.status !== 'planned'),
+    planned: mapped.filter(({ unit }) => unit.status === 'planned'),
+  };
+});
 ---
 
 <div class="course-map">
@@ -43,9 +51,12 @@ const subjectGroups = subjectOrder.map((subject) => ({
     subjectGroups.map((group) => (
       <section class="course-map__subject" aria-labelledby={group.headingId}>
         <h2 class="course-map__subject-title" id={group.headingId}>
-          {group.subject}
-          <span class="course-map__count">全{group.units.length}章</span>
+          <a class="course-map__subject-link" href={group.href}>
+            {group.meta.label}
+          </a>
+          <span class="course-map__count">全{group.units.length + group.planned.length}章</span>
         </h2>
+
         <ol class="course-map__units">
           {group.units.map(({ unit, chapterNumber, lessonCount, prerequisites }) => (
             <li class="course-map__unit">
@@ -72,6 +83,34 @@ const subjectGroups = subjectOrder.map((subject) => ({
             </li>
           ))}
         </ol>
+
+        {group.planned.length > 0 && (
+          <details class="course-map__planned">
+            <summary class="course-map__planned-summary">
+              準備中の{group.planned.length}章
+            </summary>
+            <ol class="course-map__units course-map__units--planned">
+              {group.planned.map(({ unit, chapterNumber, lessonCount, prerequisites }) => (
+                <li class="course-map__unit">
+                  <p class="course-map__index">第{chapterNumber}章</p>
+                  <div class="course-map__body">
+                    <h3 class="course-map__title">{unit.title}</h3>
+                    <p class="course-map__summary">{unit.summary}</p>
+                    <p class="course-map__meta">
+                      <span class:list={['course-map__status', `course-map__status--${unit.status}`]}>
+                        {statusLabel[unit.status]}
+                      </span>
+                      {lessonCount > 0 && <span class="course-map__lesson-count">レッスン{lessonCount}件</span>}
+                    </p>
+                    {prerequisites.length > 0 && (
+                      <p class="course-map__prerequisites">前提: {prerequisites.join('、')}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
       </section>
     ))
   }
@@ -95,6 +134,15 @@ const subjectGroups = subjectOrder.map((subject) => ({
     padding-bottom: var(--sp-2);
     border-bottom: 1px solid var(--ink);
     font-size: 1.2rem;
+  }
+
+  .course-map__subject-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .course-map__subject-link:hover {
+    text-decoration: underline;
   }
 
   .course-map__count {
@@ -181,5 +229,22 @@ const subjectGroups = subjectOrder.map((subject) => ({
     margin: var(--sp-2) 0 0;
     color: var(--ink-soft);
     font-size: 0.82rem;
+  }
+
+  .course-map__planned {
+    margin-top: var(--sp-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .course-map__planned-summary {
+    padding: var(--sp-3) var(--sp-2);
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+
+  .course-map__units--planned {
+    padding-left: var(--sp-3);
+    border-left: 2px solid var(--rule);
   }
 </style>
