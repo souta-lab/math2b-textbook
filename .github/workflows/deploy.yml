@@ -43,6 +43,12 @@ jobs:
           fi
           echo "site=https://${owner}.github.io" >> "$GITHUB_OUTPUT"
 
+      - name: Typecheck
+        run: npm run check
+
+      - name: Unit and content tests
+        run: npm run test
+
       - name: Build
         run: npm run build
         env:

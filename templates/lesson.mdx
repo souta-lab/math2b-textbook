@@ -1,0 +1,75 @@
+---
+title: "{{TITLE}}"
+summary: "{{SUMMARY}}"
+unit: "{{UNIT}}"
+order: {{ORDER}}
+objectives:
+  - "（学習目標を観察可能な形で1つ書く）"
+prerequisites: {{PREREQUISITES}}
+tags: []
+reviewed: {{DATE}}
+---
+
+<Hook>
+（現象・素朴な疑問。まだ式を出さない。読者が「考えてみたい」と思う具体場面。）
+</Hook>
+
+<Prediction
+  question="（1ステップで答えられる直感プローブ）"
+  options={['（選択肢1）', '（選択肢2）']}
+  answer="（選択肢1）"
+  explanation="（正解と短い理由。ここは数式にせず平文で）"
+/>
+
+<PrerequisiteNote concept="{{PREREQ_CONCEPT}}" />
+
+（直感 → 図。可視化は直後の Figure に置き、本文で「何に注目するか」を説明する。）
+
+<Figure caption="（図の説明）">
+<UnitCircle angleDeg={30} />
+</Figure>
+
+<Why>
+（なぜその操作・その変形・その順序を選ぶのか。手順の言い換えは禁止。既習事項や直感に結びつける。）
+</Why>
+
+<Definition term="（用語）">
+（定義。現象・具体例・直感の後に置く。）
+</Definition>
+
+<WorkedExample title="例題: （何を求めるか）">
+（問題文）
+
+<Steps>
+<Step reason="（なぜこの手順を選ぶのか）">（式変形）</Step>
+</Steps>
+
+<Answer>
+（答え）
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="（なぜそうなる？）"
+  options={['（候補1）', '（候補2）']}
+  model="（模範説明）"
+/>
+
+<Misconception>
+<Wrong>
+（よくある誤り）
+</Wrong>
+<WhyWrong>
+（なぜ誤りか）
+</WhyWrong>
+<Right>
+（正しい見方）
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（記憶から思い出す確認問題）
+<Reveal label="答え">
+（答え）
+</Reveal>
+</CheckUnderstanding>
