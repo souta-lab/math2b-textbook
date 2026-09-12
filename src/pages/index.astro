@@ -4,6 +4,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import CourseMap from '@/components/nav/CourseMap.astro';
 
 const lessons = await getCollection('lessons');
+const columns = (await getCollection('columns'))
+  .filter((column) => !column.data.draft)
+  .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
 ---
 
 <BaseLayout title="学びの地図">
@@ -13,6 +16,28 @@ const lessons = await getCollection('lessons');
       高校数学II・Bの内容を、単元の順に読むための教材です。各章の公開状況と、読み始める前に必要な事項を示します。
     </p>
     <CourseMap lessons={lessons} />
+
+    <section class="home__columns" aria-labelledby="home-columns">
+      <h2 class="home__columns-title" id="home-columns">発展コラム</h2>
+      <p class="home__columns-lead">
+        本文の内容を、歴史・実社会・他の分野とのつながりから読むためのコラムです。定理を新しく覚える必要はありません。
+      </p>
+      {
+        columns.length > 0 && (
+          <ul class="home__columns-list">
+            {columns.map((column) => (
+              <li>
+                <a href={`${import.meta.env.BASE_URL}columns/${column.id}`}>{column.data.title}</a>
+                <span class="home__columns-category">{column.data.category}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <p class="home__columns-more">
+        <a href={`${import.meta.env.BASE_URL}columns`}>発展コラムをすべて読む</a>
+      </p>
+    </section>
   </div>
 </BaseLayout>
 
@@ -24,5 +49,49 @@ const lessons = await getCollection('lessons');
   .home__lead {
     margin: 0 0 var(--sp-6);
     color: var(--ink-soft);
+  }
+
+  .home__columns {
+    margin-top: var(--sp-7);
+    padding-top: var(--sp-5);
+    border-top: 1px solid var(--rule);
+  }
+
+  .home__columns-title {
+    margin: 0 0 var(--sp-2);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--ink);
+    font-size: 1.2rem;
+  }
+
+  .home__columns-lead {
+    margin: 0 0 var(--sp-3);
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  .home__columns-list {
+    margin: 0 0 var(--sp-3);
+    padding: 0;
+    list-style: none;
+  }
+
+  .home__columns-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-2);
+    padding: var(--sp-2) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .home__columns-category {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+  }
+
+  .home__columns-more {
+    margin: var(--sp-3) 0 0;
+    font-size: 0.9rem;
   }
 </style>

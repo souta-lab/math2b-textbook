@@ -1,0 +1,107 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const columns = await getCollection('columns');
+  return columns
+    .filter((column) => !column.data.draft)
+    .map((column) => ({
+      params: { slug: column.id },
+      props: { column },
+    }));
+}
+
+interface Props {
+  column: CollectionEntry<'columns'>;
+}
+
+const { column } = Astro.props;
+const { Content } = await render(column);
+
+const columnsHref = `${import.meta.env.BASE_URL}columns`;
+const reviewed = column.data.reviewed?.toISOString().slice(0, 10);
+---
+
+<BaseLayout title={column.data.title} description={column.data.summary}>
+  <article class="column">
+    <p class="column__back"><a href={columnsHref}>← 発展コラム一覧</a></p>
+
+    <header class="column__header">
+      <p class="column__meta">
+        <span class="column__category">{column.data.category}</span>
+        {column.data.tags.map((tag) => <span class="column__tag">{tag}</span>)}
+      </p>
+      <h1>{column.data.title}</h1>
+      <p class="column__summary">{column.data.summary}</p>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {reviewed && <p class="column__reviewed">最終確認: {reviewed}</p>}
+
+    <p class="column__back column__back--bottom"><a href={columnsHref}>← 発展コラム一覧へ</a></p>
+  </article>
+</BaseLayout>
+
+<style>
+  .column {
+    max-width: var(--measure);
+  }
+
+  .column__back {
+    margin: 0 0 var(--sp-4);
+    font-size: 0.88rem;
+  }
+
+  .column__header {
+    margin-bottom: var(--sp-5);
+    padding-bottom: var(--sp-4);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .column__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-1) var(--sp-2);
+    margin: 0 0 var(--sp-2);
+  }
+
+  .column__category {
+    padding: 0.1rem var(--sp-2);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    background: var(--surface-soft);
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+
+  .column__tag {
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+  }
+
+  .column__tag::before {
+    content: '#';
+  }
+
+  .column__summary {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .column__reviewed {
+    margin: var(--sp-6) 0 0;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+  }
+
+  .column__back--bottom {
+    margin: var(--sp-5) 0 0;
+  }
+</style>

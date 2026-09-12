@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const columns = (await getCollection('columns'))
+  .filter((column) => !column.data.draft)
+  .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+---
+
+<BaseLayout
+  title="発展コラム"
+  description="高校数学II・Bの内容を、歴史・実社会・他分野とのつながりから読むためのコラム集。"
+>
+  <div class="columns">
+    <header class="columns__header">
+      <h1>発展コラム</h1>
+      <p class="columns__lead">
+        本文で扱った内容を、歴史・実社会・他の分野とのつながりから読むための読み物です。新しい定理を覚える必要はありません。数式の背景をゆっくりたどってください。
+      </p>
+    </header>
+
+    {
+      columns.length > 0 ? (
+        <ol class="columns__list">
+          {columns.map((column) => (
+            <li class="columns__item">
+              <a class="columns__link" href={`${import.meta.env.BASE_URL}columns/${column.id}`}>
+                <span class="columns__category">{column.data.category}</span>
+                <span class="columns__title">{column.data.title}</span>
+                <span class="columns__summary">{column.data.summary}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="columns__empty">コラムは準備中です。</p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .columns {
+    max-width: var(--measure);
+  }
+
+  .columns__header {
+    margin-bottom: var(--sp-6);
+  }
+
+  .columns__lead {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .columns__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .columns__item {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .columns__link {
+    display: grid;
+    gap: var(--sp-1);
+    padding: var(--sp-4) var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .columns__link:hover {
+    background: var(--surface-soft);
+  }
+
+  .columns__category {
+    justify-self: start;
+    padding: 0.1rem var(--sp-2);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+
+  .columns__title {
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: var(--line-tight);
+  }
+
+  .columns__summary {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .columns__empty {
+    margin: 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface-soft);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+</style>
