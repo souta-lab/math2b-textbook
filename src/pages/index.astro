@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import CourseMap from '@/components/nav/CourseMap.astro';
+
+const lessons = await getCollection('lessons');
+---
+
+<BaseLayout title="学びの地図">
+  <div class="home">
+    <h1>学びの地図</h1>
+    <p class="home__lead">
+      高校数学II・Bの内容を、単元の順に読むための教材です。各章の公開状況と、読み始める前に必要な事項を示します。
+    </p>
+    <CourseMap lessons={lessons} />
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    max-width: var(--measure);
+  }
+
+  .home__lead {
+    margin: 0 0 var(--sp-6);
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,155 @@
+---
+title: "単位円で三角関数を定義する"
+summary: "半径1の円を使って、どんな角でも三角関数の値を読み取る。"
+unit: "ii-trigonometric"
+order: 3
+objectives:
+  - "単位円上で sinθ・cosθ・tanθ を定義できる"
+  - "象限に応じた符号を座標から判断できる"
+  - "特別な角の三角関数の値を求められる"
+prerequisites: ["i-trig-ratio", "ii-coordinate", "trig/02-radian"]
+tags: ["単位円", "三角関数の定義"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+数学Iでは、直角三角形の辺の比として三角比を学びました。斜辺の長さは三角形ごとに違うので、角が鈍くなって直角三角形が作れなくなると、もう手が出ません。それでも「120°のサイン」を考えたいとき、どうすればいいのでしょう。
+</Hook>
+
+<Prediction
+  question="鈍角、たとえば 120° の sin の値は、正と負のどちらでしょう？"
+  options={['正', '負', '0']}
+  answer="正"
+  explanation="120° の動径は第2象限にあり、単位円上の点の y 座標は正です。sin は y 座標なので正になります。"
+/>
+
+<PrerequisiteNote concept="i-trig-ratio" />
+
+## 斜辺を1に固定する
+
+直角三角形の斜辺をいつも 1 に決めてしまえば、$\sin$ は「高さ」、$\cos$ は「底辺」そのものになります。そこで座標平面に、原点を中心とする半径1の円（単位円）を用意します。$x$ 軸の正の部分を始線とし、原点を中心に角 $\theta$ だけ回した半直線を動径と呼びます。動径と単位円が交わる点を $P$ とすれば、斜辺が1で角が $\theta$ の直角三角形を思い描けます。直角三角形が作れない角でも、動径を回せば点 $P$ は必ず決まります。
+
+<Figure caption="30°のときの単位円。縦の線分が sin、横の線分が cos にあたります。">
+<UnitCircle angleDeg={30} showSin showCos />
+</Figure>
+
+<Why>
+斜辺を1に固定するのは、点 $P$ の座標をそのまま三角関数の値として読み取れるようにするためです。斜辺が1なら「高さ÷斜辺」と「底辺÷斜辺」の分母が消え、$\sin$ は $y$ 座標、$\cos$ は $x$ 座標に一致します。鋭角では数学Iで学んだ三角比と完全に同じ値になり、そのうえ直角三角形が作れない角にまで考え方を広げられます。
+</Why>
+
+<Definition term="三角関数">
+単位円上で、動径が角 $\theta$ を表すとき、動径と単位円の交点を $P(x, y)$ とする。このとき
+
+$$
+\sin\theta = y,\qquad \cos\theta = x,\qquad \tan\theta = \frac{y}{x}\quad (x \ne 0)
+$$
+
+と定める。$\sin$、$\cos$、$\tan$ をまとめて三角関数という。
+</Definition>
+
+これは「$P$ の $y$ 座標が $\sin\theta$、$x$ 座標が $\cos\theta$、その比 $y/x$ が $\tan\theta$」という意味です。$0^\circ$ より大きく $90^\circ$ より小さい鋭角では、斜辺1の直角三角形の対辺が $y$、隣辺が $x$ にあたるので、数学Iの三角比と一致します。また $y/x$ は原点と $P$ を結ぶ動径の傾きでもあります。
+
+## 象限ごとの符号は座標から決まる
+
+$\sin$ は $y$ 座標、$\cos$ は $x$ 座標、$\tan$ はその比でした。符号を暗記する必要はありません。動径がどの象限にあるかを見て、$x$ と $y$ の符号を確かめれば決まります。
+
+<Figure caption="120°（2π/3）の単位円。ドラッグして角を動かせます。縦の線分（sin）と横の線分（cos）が軸のどちら側にあるかに注目しましょう。">
+<UnitCircle angleDeg={120} interactive showSin showCos showTan />
+</Figure>
+
+図で角を第2象限まで動かしてみましょう。点 $P$ の $y$ 座標は正のままなので $\sin$ は正、$x$ 座標は負に変わったので $\cos$ は負、比 $y/x$ も負になります。縦の線分（sin）が $x$ 軸より上に、横の線分（cos）が $y$ 軸より左に出ていることを確かめてください。破線は $x=1$ の直線上に $\tan$ を表しています。
+
+<KeyPoint>
+三角関数の値と符号は、すべて単位円上の点 $P$ の座標から読み取れます。暗記するのは定義だけにしましょう。
+</KeyPoint>
+
+| 象限 | $\sin\theta = y$ | $\cos\theta = x$ | $\tan\theta = y/x$ |
+| --- | --- | --- | --- |
+| 第1象限（$x$ も $y$ も正） | 正 | 正 | 正 |
+| 第2象限（$x$ が負、$y$ が正） | 正 | 負 | 負 |
+| 第3象限（$x$ も $y$ も負） | 負 | 負 | 正 |
+| 第4象限（$x$ が正、$y$ が負） | 負 | 正 | 負 |
+
+<Note type="warn">
+$\tan\theta = y/x$ は $x = 0$ のとき計算できません。$x = \cos\theta$ なので、$\tan\theta$ が定義されるのは $\cos\theta \ne 0$ のとき、すなわち $\theta \ne \dfrac{\pi}{2} + n\pi$（$n$ は整数）です。
+</Note>
+
+## 特別な角の値
+
+象限ごとの符号は、上の表のとおりです。次に、第1象限の特別な角の値を、2つの直角三角形（$1:2:\sqrt{3}$ と $1:1:\sqrt{2}$）から読み取ります。
+
+| $\theta$（度） | $\theta$（弧度） | $\sin\theta$ | $\cos\theta$ | $\tan\theta$ |
+| --- | --- | --- | --- | --- |
+| $0^\circ$ | $0$ | $0$ | $1$ | $0$ |
+| $30^\circ$ | $\pi/6$ | $1/2$ | $\sqrt{3}/2$ | $\sqrt{3}/3$ |
+| $45^\circ$ | $\pi/4$ | $\sqrt{2}/2$ | $\sqrt{2}/2$ | $1$ |
+| $60^\circ$ | $\pi/3$ | $\sqrt{3}/2$ | $1/2$ | $\sqrt{3}$ |
+| $90^\circ$ | $\pi/2$ | $1$ | $0$ | 定義されない |
+
+第2〜第4象限の値は、単位円の対称移動から導けます。そのしくみは次の「周期性と対称性」のレッスンでじっくり扱います。ここでは、下の例題で1つだけ折り返しの考え方に触れておきます。
+
+<WorkedExample title="例題1: 2π/3 の値を読む">
+$\theta = 2\pi/3$（$120^\circ$）のとき、$\sin\theta$、$\cos\theta$、$\tan\theta$ の値を求めよ。
+
+<Steps>
+<Step reason="2π/3 は 60° の点を y 軸について折り返した角だからです。">点 $P$ は第2象限にあり、$60^\circ$（$\pi/3$）の点の $x$ 座標だけが符号を変えた位置にある。</Step>
+<Step reason="点 P の座標はそのまま cos と sin でした。">$\cos\theta = -1/2$、$\sin\theta = \sqrt{3}/2$。</Step>
+<Step reason="tan は座標の比 y/x だからです。">$\tan\theta = \dfrac{\sqrt{3}/2}{-1/2} = -\sqrt{3}$。</Step>
+</Steps>
+
+<Answer>
+$\sin(2\pi/3) = \dfrac{\sqrt{3}}{2}$、$\cos(2\pi/3) = -\dfrac{1}{2}$、$\tan(2\pi/3) = -\sqrt{3}$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: tan が定義されない角と負の角">
+$\theta = 3\pi/2$（$270^\circ$）と $\theta = -\pi/4$（$-45^\circ$）について、それぞれ三角関数の値を求めよ。
+
+<Steps>
+<Step reason="3π/2 の動径は y 軸の負の向きを指すからです。">点 $P$ は $(0, -1)$。よって $\sin(3\pi/2) = -1$、$\cos(3\pi/2) = 0$。</Step>
+<Step reason="x が 0 のときは比 y/x を作れないからです。">$\tan(3\pi/2)$ は定義されない。</Step>
+<Step reason="時計回りに 45° 回ると第4象限に来るからです。">$-\pi/4$ の点 $P$ は $(\sqrt{2}/2, -\sqrt{2}/2)$。</Step>
+<Step reason="y が負なので sin と tan は負、x が正なので cos は正です。">$\sin(-\pi/4) = -\sqrt{2}/2$、$\cos(-\pi/4) = \sqrt{2}/2$、$\tan(-\pi/4) = -1$。</Step>
+</Steps>
+
+<Answer>
+$\sin(3\pi/2) = -1$、$\cos(3\pi/2) = 0$、$\tan(3\pi/2)$ は定義されない。$\sin(-\pi/4) = -\sqrt{2}/2$、$\cos(-\pi/4) = \sqrt{2}/2$、$\tan(-\pi/4) = -1$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="2π/3 で sin は正なのに cos は負になるのは、なぜでしょう？"
+  options={['点 P の y 座標が正で x 座標が負だから', 'sin はいつも正だから', 'tan が負だから']}
+  model="2π/3 の動径は第2象限にあり、単位円上の点 P は y 座標が正、x 座標が負です。sin は y、cos は x なので、sin は正、cos は負になります。"
+/>
+
+<Misconception>
+<Wrong>
+$\sin\theta$ はどの角でも正である。
+</Wrong>
+<WhyWrong>
+$\sin\theta$ は単位円上の点の $y$ 座標です。第3象限と第4象限では $y$ 座標が負になるので、$\sin\theta$ も負になります。たとえば $\sin(3\pi/2) = -1$ です。
+</WhyWrong>
+<Right>
+$\sin\theta$ の符号は、点 $P$ の $y$ 座標の符号、つまり動径がどの象限にあるかで決まります。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\tan\theta$ はすべての角 $\theta$ で定義される。
+</Wrong>
+<WhyWrong>
+$\tan\theta = y/x$ は $x = 0$ のとき計算できません。$x = \cos\theta$ なので、動径が $y$ 軸上に来る $\theta = \pi/2$ や $\theta = 3\pi/2$ では $\tan\theta$ は定義されません。
+</WhyWrong>
+<Right>
+$\tan\theta$ が定義されるのは $\cos\theta \ne 0$ のときだけです。一般には $\theta \ne \dfrac{\pi}{2} + n\pi$（$n$ は整数）です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $2\pi/3$ について、$\sin$ と $\cos$ の値と符号を単位円から説明せよ。(2) $\tan\theta$ が定義されない角を、$0$ から $2\pi$ の範囲で1つ挙げよ。
+<Reveal label="答え">
+(1) 動径は第2象限にあり、点は $(-1/2, \sqrt{3}/2)$。よって $\cos(2\pi/3) = -1/2$（負）、$\sin(2\pi/3) = \sqrt{3}/2$（正）。(2) 動径が $y$ 軸上に来るときで、$\theta = \pi/2$（$\theta = 3\pi/2$ でもよい）。
+</Reveal>
+</CheckUnderstanding>

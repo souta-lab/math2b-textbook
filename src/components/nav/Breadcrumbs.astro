@@ -1,0 +1,84 @@
+---
+/**
+ * Breadcrumb trail. ホーム is always prepended; the final crumb is the current
+ * page and is marked with aria-current="page".
+ */
+interface Crumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  /** Trail after ホーム, e.g. 章 → レッスン. */
+  crumbs: Crumb[];
+}
+
+const { crumbs } = Astro.props;
+const trail: Crumb[] = [{ label: 'ホーム', href: import.meta.env.BASE_URL }, ...crumbs];
+const lastIndex = trail.length - 1;
+---
+
+<nav class="breadcrumbs" aria-label="パンくずリスト">
+  <ol class="breadcrumbs__list">
+    {
+      trail.map((crumb, index) =>
+        index === lastIndex ? (
+          <li class="breadcrumbs__item">
+            <span class="breadcrumbs__current" aria-current="page">
+              {crumb.label}
+            </span>
+          </li>
+        ) : (
+          <li class="breadcrumbs__item">
+            <a class="breadcrumbs__link" href={crumb.href}>
+              {crumb.label}
+            </a>
+          </li>
+        )
+      )
+    }
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    margin-bottom: var(--sp-5);
+  }
+
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--sp-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  .breadcrumbs__item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--sp-2);
+    min-width: 0;
+  }
+
+  .breadcrumbs__item + .breadcrumbs__item::before {
+    content: '/';
+    color: var(--ink-faint);
+  }
+
+  .breadcrumbs__link {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .breadcrumbs__link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumbs__current {
+    color: var(--ink-soft);
+  }
+</style>

@@ -1,0 +1,116 @@
+/*
+ * Design tokens — "maths notebook" direction.
+ *
+ * Grounded in the subject's own vernacular: 方眼紙 (graph paper) paper stock,
+ * dark ink, and the restrained 朱色 (vermillion) of a teacher's correcting pen.
+ * Deliberately NOT the generic warm-cream + terracotta SaaS look.
+ * Highlights are provided by CSS custom properties in :root and [data-theme=dark].
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Paper / surfaces */
+  --paper: #fcfcfb;
+  --paper-grid: rgba(31, 78, 121, 0.055);
+  --surface: #ffffff;
+  --surface-soft: #f5f7f8;
+  --rule: #dde3e8;
+  --rule-strong: #c6d0d8;
+
+  /* Ink */
+  --ink: #16202b;
+  --ink-soft: #4a5560;
+  --ink-faint: #79838d;
+
+  /* Accents (used sparingly) */
+  --accent: #1f4e79;
+  --accent-ink: #ffffff;
+  --accent-soft: #e8f0f7;
+  --shu: #b3402f;
+  --shu-soft: #f7ebe8;
+  --correct: #2f6b4f;
+  --correct-soft: #e9f2ed;
+  --note: #8a6a1e;
+  --note-soft: #f7f1e3;
+
+  /* Typography */
+  --font-body: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic",
+    "Yu Gothic UI", "Meiryo", "Noto Sans JP", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-heading: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho",
+    "Noto Serif JP", "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
+
+  --measure: 40rem;          /* readable Japanese line length (~40 chars) */
+  --measure-wide: 52rem;     /* figures may breathe a little wider */
+
+  /* Space scale (1 = 0.25rem) */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --line-body: 1.95;
+  --line-tight: 1.5;
+
+  --shadow-soft: 0 1px 2px rgba(22, 32, 43, 0.06);
+}
+
+[data-theme='dark'] {
+  --paper: #12161a;
+  --paper-grid: rgba(110, 168, 216, 0.07);
+  --surface: #181d22;
+  --surface-soft: #1e252b;
+  --rule: #2b343d;
+  --rule-strong: #3a454f;
+
+  --ink: #e7edf3;
+  --ink-soft: #a9b4bd;
+  --ink-faint: #76818b;
+
+  --accent: #74aede;
+  --accent-ink: #0e1a24;
+  --accent-soft: #1a2a38;
+  --shu: #e0806a;
+  --shu-soft: #33211d;
+  --correct: #74c096;
+  --correct-soft: #17281f;
+  --note: #d6b46e;
+  --note-soft: #2a2417;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #12161a;
+    --paper-grid: rgba(110, 168, 216, 0.07);
+    --surface: #181d22;
+    --surface-soft: #1e252b;
+    --rule: #2b343d;
+    --rule-strong: #3a454f;
+    --ink: #e7edf3;
+    --ink-soft: #a9b4bd;
+    --ink-faint: #76818b;
+    --accent: #74aede;
+    --accent-ink: #0e1a24;
+    --accent-soft: #1a2a38;
+    --shu: #e0806a;
+    --shu-soft: #33211d;
+    --correct: #74c096;
+    --correct-soft: #17281f;
+    --note: #d6b46e;
+    --note-soft: #2a2417;
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}

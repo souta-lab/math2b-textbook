@@ -1,0 +1,227 @@
+---
+/**
+ * One lesson page. Authors write only frontmatter + MDX body:
+ * breadcrumbs, objectives, prerequisites, chapter TOC, prev/next and the
+ * chapter link are injected here.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+import ChapterNav from '@/components/nav/ChapterNav.astro';
+import LessonNav from '@/components/nav/LessonNav.astro';
+import Callout from '@/components/ui/Callout.astro';
+import Hook from '@/components/content/Hook.astro';
+import KeyPoint from '@/components/content/KeyPoint.astro';
+import Why from '@/components/content/Why.astro';
+import Definition from '@/components/content/Definition.astro';
+import Theorem from '@/components/content/Theorem.astro';
+import Note from '@/components/content/Note.astro';
+import PrerequisiteNote from '@/components/content/PrerequisiteNote.astro';
+import Steps from '@/components/content/Steps.astro';
+import Step from '@/components/content/Step.astro';
+import WorkedExample from '@/components/content/WorkedExample.astro';
+import Answer from '@/components/content/Answer.astro';
+import Reveal from '@/components/content/Reveal.astro';
+import Prediction from '@/components/content/Prediction.astro';
+import SelfExplanation from '@/components/content/SelfExplanation.astro';
+import Misconception from '@/components/content/Misconception.astro';
+import Wrong from '@/components/content/Wrong.astro';
+import WhyWrong from '@/components/content/WhyWrong.astro';
+import Right from '@/components/content/Right.astro';
+import Contrast from '@/components/content/Contrast.astro';
+import FadedExample from '@/components/content/FadedExample.astro';
+import Practice from '@/components/content/Practice.astro';
+import CheckUnderstanding from '@/components/content/CheckUnderstanding.astro';
+import Figure from '@/components/content/Figure.astro';
+import UnitCircle from '@/components/viz/UnitCircle.astro';
+import TrigGraph from '@/components/viz/TrigGraph.astro';
+import AngleDiagram from '@/components/viz/AngleDiagram.astro';
+import Slider from '@/components/viz/Slider.astro';
+import RightTriangle from '@/components/viz/RightTriangle.astro';
+import { getUnit, prerequisiteLabel } from '@/data/curriculum';
+
+const mdxComponents = {
+  Callout,
+  Hook,
+  KeyPoint,
+  Why,
+  Definition,
+  Theorem,
+  Note,
+  PrerequisiteNote,
+  Steps,
+  Step,
+  WorkedExample,
+  Answer,
+  Reveal,
+  Prediction,
+  SelfExplanation,
+  Misconception,
+  Wrong,
+  WhyWrong,
+  Right,
+  Contrast,
+  FadedExample,
+  Practice,
+  CheckUnderstanding,
+  Figure,
+  UnitCircle,
+  TrigGraph,
+  AngleDiagram,
+  Slider,
+  RightTriangle,
+};
+
+interface Props {
+  lesson: CollectionEntry<'lessons'>;
+}
+
+const { lesson } = Astro.props;
+
+const unit = getUnit(lesson.data.unit);
+const { Content } = await render(lesson);
+
+const allLessons = await getCollection('lessons');
+const unitLessons = allLessons
+  .filter((entry) => !entry.data.draft && entry.data.unit === lesson.data.unit)
+  .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+const lessonTitleById = new Map(allLessons.map((entry) => [entry.id, entry.data.title]));
+
+const currentIndex = unitLessons.findIndex((entry) => entry.id === lesson.id);
+const prev = currentIndex > 0 ? unitLessons[currentIndex - 1] : undefined;
+const next =
+  currentIndex >= 0 && currentIndex < unitLessons.length - 1
+    ? unitLessons[currentIndex + 1]
+    : undefined;
+
+const prerequisiteIds =
+  lesson.data.prerequisites.length > 0 ? lesson.data.prerequisites : (unit?.prerequisites ?? []);
+const prerequisites = prerequisiteIds.map(
+  (id) => lessonTitleById.get(id) ?? prerequisiteLabel(id),
+);
+
+const chapterHref = `${import.meta.env.BASE_URL}chapters/${lesson.data.unit}`;
+const reviewed = lesson.data.reviewed?.toISOString().slice(0, 10);
+const crumbs = [
+  { label: unit?.title ?? lesson.data.unit, href: unit ? chapterHref : undefined },
+  { label: lesson.data.title },
+];
+---
+
+<BaseLayout title={lesson.data.title} description={lesson.data.summary}>
+  <div class="lesson-layout">
+    <Breadcrumbs crumbs={crumbs} />
+    <div class="lesson-layout__body">
+      <aside class="lesson-layout__aside">
+        {unit && <ChapterNav unit={unit} lessons={unitLessons} currentId={lesson.id} />}
+      </aside>
+      <article class="lesson-layout__article">
+        <header class="lesson-layout__header">
+          <h1>{lesson.data.title}</h1>
+          <p class="lesson-layout__summary">{lesson.data.summary}</p>
+        </header>
+
+        <section class="lesson-layout__objectives" aria-labelledby="lesson-objectives">
+          <h2 class="lesson-layout__objectives-title" id="lesson-objectives">学習目標</h2>
+          <ul>
+            {lesson.data.objectives.map((objective) => <li>{objective}</li>)}
+          </ul>
+        </section>
+
+        {
+          prerequisites.length > 0 && (
+            <p class="lesson-layout__prerequisites">前提: {prerequisites.join('、')}</p>
+          )
+        }
+
+        <div class="prose">
+          <Content components={mdxComponents} />
+        </div>
+
+        {reviewed && <p class="lesson-layout__reviewed">最終確認: {reviewed}</p>}
+
+        <LessonNav prev={prev} next={next} />
+
+        <p class="lesson-layout__chapter-link">
+          {unit ? <a href={chapterHref}>「{unit.title}」の章へ</a> : <a href={import.meta.env.BASE_URL}>目次へ</a>}
+        </p>
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .lesson-layout__body {
+    display: grid;
+    gap: var(--sp-5);
+  }
+
+  .lesson-layout__aside {
+    min-width: 0;
+  }
+
+  .lesson-layout__article {
+    min-width: 0;
+    max-width: var(--measure);
+  }
+
+  .lesson-layout__summary {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .lesson-layout__objectives {
+    margin: var(--sp-5) 0 var(--sp-6);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--rule);
+  }
+
+  .lesson-layout__objectives-title {
+    margin: 0 0 var(--sp-2);
+    font-size: 1.02rem;
+  }
+
+  .lesson-layout__objectives ul {
+    margin: 0;
+    padding-left: 1.4em;
+  }
+
+  .lesson-layout__objectives li {
+    margin: 0.15em 0;
+  }
+
+  .lesson-layout__prerequisites {
+    margin: var(--sp-3) 0 var(--sp-6);
+    padding-bottom: var(--sp-4);
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+  }
+
+  .lesson-layout__reviewed {
+    margin: var(--sp-6) 0 0;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+  }
+
+  .lesson-layout__chapter-link {
+    margin: var(--sp-5) 0 0;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 60rem) {
+    .lesson-layout__body {
+      grid-template-columns: 11rem minmax(0, var(--measure));
+      align-items: start;
+    }
+
+    .lesson-layout__aside {
+      position: sticky;
+      top: var(--sp-8);
+      max-height: calc(100vh - var(--sp-8) - var(--sp-4));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+</style>

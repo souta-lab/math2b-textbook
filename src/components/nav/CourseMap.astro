@@ -1,0 +1,185 @@
+---
+/**
+ * Full 数学II・B unit graph: subjects → ordered units, each with its status,
+ * prerequisite concepts and lesson count. Only published units link to their
+ * chapter page; planned units stay visible so the roadmap is honest.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { prerequisiteLabels, statusLabel, units, unitsBySubject } from '@/data/curriculum';
+import type { Subject } from '@/data/curriculum';
+
+interface Props {
+  /** All lesson entries; drafts are excluded from counts. */
+  lessons?: CollectionEntry<'lessons'>[];
+}
+
+const { lessons = [] } = Astro.props;
+
+const subjectOrder: Subject[] = [];
+for (const unit of units) {
+  if (!subjectOrder.includes(unit.subject)) subjectOrder.push(unit.subject);
+}
+
+const lessonCounts = new Map<string, number>();
+for (const lesson of lessons) {
+  if (lesson.data.draft) continue;
+  lessonCounts.set(lesson.data.unit, (lessonCounts.get(lesson.data.unit) ?? 0) + 1);
+}
+
+const subjectGroups = subjectOrder.map((subject) => ({
+  subject,
+  headingId: `subject-${subject}`,
+  units: unitsBySubject(subject).map((unit, index) => ({
+    unit,
+    chapterNumber: index + 1,
+    lessonCount: lessonCounts.get(unit.id) ?? 0,
+    prerequisites: prerequisiteLabels(unit.id),
+  })),
+}));
+---
+
+<div class="course-map">
+  {
+    subjectGroups.map((group) => (
+      <section class="course-map__subject" aria-labelledby={group.headingId}>
+        <h2 class="course-map__subject-title" id={group.headingId}>
+          {group.subject}
+          <span class="course-map__count">全{group.units.length}章</span>
+        </h2>
+        <ol class="course-map__units">
+          {group.units.map(({ unit, chapterNumber, lessonCount, prerequisites }) => (
+            <li class="course-map__unit">
+              <p class="course-map__index">第{chapterNumber}章</p>
+              <div class="course-map__body">
+                <h3 class="course-map__title">
+                  {unit.status === 'published' ? (
+                    <a href={`${import.meta.env.BASE_URL}chapters/${unit.id}`}>{unit.title}</a>
+                  ) : (
+                    unit.title
+                  )}
+                </h3>
+                <p class="course-map__summary">{unit.summary}</p>
+                <p class="course-map__meta">
+                  <span class:list={['course-map__status', `course-map__status--${unit.status}`]}>
+                    {statusLabel[unit.status]}
+                  </span>
+                  {lessonCount > 0 && <span class="course-map__lesson-count">レッスン{lessonCount}件</span>}
+                </p>
+                {prerequisites.length > 0 && (
+                  <p class="course-map__prerequisites">前提: {prerequisites.join('、')}</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .course-map {
+    margin-top: var(--sp-4);
+  }
+
+  .course-map__subject {
+    margin-bottom: var(--sp-7);
+  }
+
+  .course-map__subject-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--ink);
+    font-size: 1.2rem;
+  }
+
+  .course-map__count {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--ink-faint);
+  }
+
+  .course-map__units {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .course-map__unit {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: var(--sp-3);
+    padding: var(--sp-4) 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .course-map__unit:first-child {
+    border-top: 0;
+  }
+
+  .course-map__index {
+    margin: 0;
+    padding-top: 0.2em;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .course-map__title {
+    margin: 0 0 var(--sp-1);
+    font-size: 1.05rem;
+    line-height: var(--line-tight);
+  }
+
+  .course-map__summary {
+    margin: 0 0 var(--sp-2);
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
+
+  .course-map__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-4);
+    margin: 0;
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+  }
+
+  .course-map__status {
+    display: inline-block;
+    padding: 0.1rem var(--sp-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .course-map__status--published {
+    background: var(--correct-soft);
+    color: var(--correct);
+  }
+
+  .course-map__status--draft {
+    background: var(--note-soft);
+    color: var(--note);
+  }
+
+  .course-map__status--planned {
+    background: var(--surface-soft);
+    border-color: var(--rule);
+    color: var(--ink-faint);
+  }
+
+  .course-map__prerequisites {
+    margin: var(--sp-2) 0 0;
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+</style>

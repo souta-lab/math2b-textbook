@@ -1,0 +1,47 @@
+---
+/**
+ * CheckUnderstanding — end-of-lesson recall from memory (AUTHORING.md §5).
+ *
+ * Usage:
+ *   <CheckUnderstanding>
+ *     …one or two questions…
+ *     <Reveal label="答え">…answers…</Reveal>
+ *   </CheckUnderstanding>
+ *
+ * `title` defaults to 「理解の確認」. Answers must sit inside <Reveal>: the
+ * point is retrieval, not recognition.
+ */
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const label = title?.trim() || '理解の確認';
+---
+
+<section class="check" aria-label={label}>
+  <p class="check__label">{label}</p>
+  <div class="check__body"><slot /></div>
+</section>
+
+<style>
+  .check {
+    margin: var(--sp-6) 0 var(--sp-4);
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .check__label {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .check__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

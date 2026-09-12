@@ -1,0 +1,125 @@
+---
+title: "三角関数の相互関係"
+summary: "sin²θ+cos²θ=1 などの関係を、単位円から導いて使う。"
+unit: "ii-trigonometric"
+order: 4
+objectives:
+  - "sin²θ+cos²θ=1 を単位円から説明できる"
+  - "tanθ と sinθ・cosθ の関係を使える"
+  - "象限に応じて符号を正しく選べる"
+prerequisites: ["trig/03-definition"]
+tags: ["相互関係", "符号"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+自転車のペダルが回っている。ペダルの位置は角度で決まり、横方向の位置と高さが同時に変わる。この2つは別々に動いているように見えるけれど、実はある一つの決まりで結ばれている。その決まりは新しく暗記するものではなく、すでに知っている図形の定理からそのまま出てくる。
+</Hook>
+
+<Prediction
+  question="sinθ = 3/5 のとき、cosθ の値はどうなる？"
+  options={['4/5 である', '±4/5 である', '−4/5 である']}
+  answer="±4/5 である"
+  explanation="sinθ の値だけでは cosθ の符号が決まりません。象限が分かれば符号が決まります。"
+/>
+
+前のレッスンで、単位円上の点 P の座標が $(\cos\theta,\ \sin\theta)$ であることを学んだ。ここでは、この1つの点だけを見て、$\sin\theta$ と $\cos\theta$ の間に成り立つ関係を見つける。
+
+点 P から $x$ 軸に垂線を下ろすと、横の脚が $|\cos\theta|$、縦の脚が $|\sin\theta|$、斜辺が半径1の直角三角形ができます。角 $\theta$ がどの象限にあっても、同じ作り方で斜辺1の直角三角形としてとらえられます。
+
+<Figure caption="単位円上の点 P と直角三角形。脚の長さは |cosθ| と |sinθ|、斜辺は半径 1">
+<UnitCircle angleDeg={150} showSin showCos />
+</Figure>
+
+<Why>
+$\sin^2\theta+\cos^2\theta=1$ を別の公式として覚える必要はない。斜辺が1の直角三角形に三平方の定理を使えば、$|\cos\theta|^2+|\sin\theta|^2=1$ がそのまま出てくる。さらに $|\cos\theta|^2=\cos^2\theta$、$|\sin\theta|^2=\sin^2\theta$ なので、絶対値を外しても符号を気にせず成り立つ。つまり、この関係は図形の定理を言い換えただけなのだ。
+</Why>
+
+<Steps>
+<Step reason="点 P は半径1の円周上にあり、直角三角形の斜辺が半径1だからです。">$|\cos\theta|^2+|\sin\theta|^2=1$。</Step>
+<Step reason="2乗すれば絶対値の記号は消えるからです。">$\sin^2\theta+\cos^2\theta=1$。</Step>
+</Steps>
+
+これが $\sin^2\theta+\cos^2\theta=1$、つまり単位円上の点の座標が必ずみたす関係である。
+
+<Theorem name="三角関数の相互関係">
+次の3つの関係が成り立つ。
+
+1. $\sin^2\theta+\cos^2\theta=1$
+2. $\cos\theta\ne 0$ のとき $\tan\theta=\dfrac{\sin\theta}{\cos\theta}$
+3. $\cos\theta\ne 0$ のとき $1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$
+</Theorem>
+
+2つ目の式は定義そのものだ。単位円上の点で $\tan\theta$ は傾き $y/x$ を表すので、$\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ は定義から直ちに従う。実質的に覚えるのは1つ目の式だけで、3つ目はそこから導ける。
+
+<Why>
+3つ目の式 $1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$ は、$\tan$ と $\cos$ を結び直して計算を軽くするために使う。導き方は単純で、$\sin^2\theta+\cos^2\theta=1$ の両辺を $\cos^2\theta$ で割るだけでよい。
+</Why>
+
+<Steps>
+<Step reason="両辺を $\cos^2\theta$（$\cos\theta\ne 0$）で割れば、左の第1項が $\tan$ の形になります。">$\dfrac{\sin^2\theta}{\cos^2\theta}+1=\dfrac{1}{\cos^2\theta}$。</Step>
+<Step reason="$\tan\theta=\sin\theta/\cos\theta$ の定義を戻せば左が整います。">$1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$。</Step>
+</Steps>
+
+<Note type="warn">
+2つ目と3つ目の式には $\cos\theta\ne 0$ という条件が付く。$\theta=\dfrac{\pi}{2}+n\pi$（$n$ は整数）では $\cos\theta=0$ となり、$\tan\theta$ もこの式も定義されない。
+</Note>
+
+ここで一番大事なのは、$\sin\theta$ の値から $\cos\theta$ を求めるときの符号だ。$\cos^2\theta=1-\sin^2\theta$ から分かるのは $\cos\theta$ の大きさだけで、符号はまだ決まっていない。正か負かは、点 P が単位円の左右どちら側にあるか、つまりどの象限にあるかで決まる。
+
+<KeyPoint>
+cosθ = ±√(1 − sin²θ) までが大きさで、符号は象限が決める。第1・第4象限では cosθ > 0、第2・第3象限では cosθ < 0。
+</KeyPoint>
+
+象限ごとの符号を、単位円の座標からまとめておく。暗記せず、点 P の位置を思い浮かべればよい。
+
+| 象限 | 点 P の位置 | $\sin\theta$ | $\cos\theta$ | $\tan\theta$ |
+| --- | --- | --- | --- | --- |
+| 第1象限 | 右上 | $+$ | $+$ | $+$ |
+| 第2象限 | 左上 | $+$ | $-$ | $-$ |
+| 第3象限 | 左下 | $-$ | $-$ | $+$ |
+| 第4象限 | 右下 | $-$ | $+$ | $-$ |
+
+<WorkedExample title="例題: 象限から符号を決める">
+$\sin\theta=\dfrac{3}{5}$ で、$\theta$ が第2象限の角であるとき、$\cos\theta$ と $\tan\theta$ の値を求めよ。
+
+<Steps>
+<Step reason="$\cos^2\theta=1-\sin^2\theta$ を使えば、分かっている $\sin\theta$ だけで $\cos\theta$ の大きさが出ます。">$\cos^2\theta=1-\left(\dfrac{3}{5}\right)^2=1-\dfrac{9}{25}=\dfrac{16}{25}$。</Step>
+<Step reason="第2象限では点 P の $x$ 座標が負、つまり $\cos\theta<0$ だからです。">$\cos\theta=-\dfrac{4}{5}$。</Step>
+<Step reason="$\tan\theta=\sin\theta/\cos\theta$ の定義に、求めた値をそのまま代入します。">$\tan\theta=\dfrac{\sin\theta}{\cos\theta}=\dfrac{3/5}{-4/5}=-\dfrac{3}{4}$。</Step>
+</Steps>
+
+<Answer>
+$\cos\theta=-\dfrac{4}{5}$、$\tan\theta=-\dfrac{3}{4}$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="同じ sinθ = 3/5 でも、θ が第1象限なら cosθ はどうなる？"
+  options={['4/5 になる', '−4/5 になる', '0 になる']}
+  model="第1象限では点 P の x 座標が正なので cosθ = 4/5 になります。sinθ の値が同じでも、象限が変われば cosθ の符号は変わります。"
+/>
+
+<Misconception>
+<Wrong>
+$\cos\theta=\sqrt{1-\sin^2\theta}$ はいつでも正しい。つまり $\cos\theta$ は常に正である。
+</Wrong>
+<WhyWrong>
+$\cos^2\theta=1-\sin^2\theta$ までは正しい。しかし2乗を外すときには符号が2通りあり、記号 $\sqrt{\ }$ は負でない平方根だけを表す。だから $\cos\theta=\sqrt{1-\sin^2\theta}$ と書くと、第2・第3象限の負の $\cos\theta$ を落としてしまう。
+</WhyWrong>
+<Right>
+$\cos\theta=\pm\sqrt{1-\sin^2\theta}$ とし、象限（点 P の $x$ 座標の符号）から $+$ か $-$ を選ぶ。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\sin\theta=-\dfrac{5}{13}$ で、$\theta$ が第3象限のとき、$\cos\theta$ と $\tan\theta$ を求めよ。
+<Reveal label="答え">
+$\cos^2\theta=1-\dfrac{25}{169}=\dfrac{144}{169}$。第3象限では $\cos\theta<0$ だから $\cos\theta=-\dfrac{12}{13}$。よって $\tan\theta=\dfrac{-5/13}{-12/13}=\dfrac{5}{12}$。
+</Reveal>
+
+（2）$1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$ は、どの式からどのように導かれるか。
+<Reveal label="答え">
+$\sin^2\theta+\cos^2\theta=1$ の両辺を $\cos^2\theta$（$\cos\theta\ne 0$）で割る。左辺の第1項は $\tan^2\theta$ になるので、$1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$ が得られる。
+</Reveal>
+</CheckUnderstanding>

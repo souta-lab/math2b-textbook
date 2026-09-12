@@ -1,0 +1,150 @@
+---
+title: "三角比の復習 — 直角三角形から"
+summary: "数学Iの三角比を短く確認し、つまずきがあれば戻れるようにする。"
+unit: "ii-trigonometric"
+order: 0
+objectives:
+  - "直角三角形で sin・cos・tan を正しく言える"
+  - "30°・45°・60° の三角比の値を導ける"
+  - "sin²θ+cos²θ=1 と tanθ=sinθ/cosθ を使える"
+prerequisites: ["i-trig-ratio"]
+tags: ["三角比", "復習"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+目の前に高い木が立っています。持っているのは、木の根元から自分の立ち位置までの長さを測れる巻き尺だけ。木には登れませんし、上までの高さも直接は測れません。それでも、この木の高さを知る方法はあるでしょうか。
+</Hook>
+
+<Prediction
+  question="直角三角形で「高さ ÷ 底辺」の比から分かるのはどれ？"
+  options={['sin の値', 'cos の値', 'tan の値']}
+  answer="tan の値"
+  explanation="tan は対辺（高さ）÷ 隣辺（底辺）で、傾きを表します。"
+/>
+
+<PrerequisiteNote concept="i-trig-ratio" />
+
+このレッスンは数学Iの三角比の復習です。ここで扱うのは **直角三角形の鋭角**、つまり $0^{\circ} \lt \theta \lt 90^{\circ}$ の角だけです。一般角や弧度法は、次のレッスン以降で扱います。
+
+## 直角三角形の辺の名前
+
+まず、辺の呼び方を確認しましょう。直角三角形で、注目している角 $\theta$ に対して、3つの辺にはそれぞれ名前があります。
+
+- **斜辺**：直角の向かい側にある、いちばん長い辺
+- **対辺**：角 $\theta$ の向かい側にある辺
+- **隣辺**：角 $\theta$ をはさむ2辺のうち、斜辺でないほうの辺
+
+<Figure caption="直角三角形と角 θ。斜辺・対辺・隣辺の位置を確かめましょう。">
+<RightTriangle deg={30} />
+</Figure>
+
+この3つの辺の比として、三角比を定めます。
+
+## 特別な角の三角比を導く
+
+$30^{\circ}$、$45^{\circ}$、$60^{\circ}$ の値は、暗記するものではありません。数学Iで学んだ2つの三角形から、その場で導けます。
+
+**$45^{\circ}$ の場合。** 直角二等辺三角形の辺の比は $1:1:\sqrt{2}$ です。角 $\theta$ を $45^{\circ}$ に取ると、対辺と隣辺はどちらも $1$、斜辺は $\sqrt{2}$ です。よって
+
+$$ \sin 45^{\circ} = \frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2}, \qquad \cos 45^{\circ} = \frac{1}{\sqrt{2}} = \frac{\sqrt{2}}{2}, \qquad \tan 45^{\circ} = \frac{1}{1} = 1. $$
+
+**$30^{\circ}$ と $60^{\circ}$ の場合。** 正三角形を半分に切ると、$30^{\circ}$、$60^{\circ}$、$90^{\circ}$ の直角三角形ができます。もとの正三角形の1辺を $2$ とすると、短い辺は $1$、三平方の定理から残りの辺は $\sqrt{3}$ です。つまり辺の比は $1:\sqrt{3}:2$（短い辺 : 長い辺 : 斜辺）です。
+
+<Why>
+正三角形を半分に切って考えるのは、$60^{\circ}$ という角と「斜辺がもとの1辺」という長さの情報を、数学Iで学んだ三平方の定理にそのまま持ち込めるからです。$30^{\circ}$ の三角形を別に作らなくても、切り口に $30^{\circ}$ が自動的に現れます。
+</Why>
+
+$30^{\circ}$ では、対辺が短い辺 $1$、隣辺が長い辺 $\sqrt{3}$、斜辺が $2$ です。$60^{\circ}$ では長短が入れ替わり、対辺が $\sqrt{3}$、隣辺が $1$ になります。以上をまとめると次の表になります。
+
+| $\theta$ | $30^{\circ}$ | $45^{\circ}$ | $60^{\circ}$ |
+| --- | --- | --- | --- |
+| $\sin\theta$ | $\dfrac{1}{2}$ | $\dfrac{\sqrt{2}}{2}$ | $\dfrac{\sqrt{3}}{2}$ |
+| $\cos\theta$ | $\dfrac{\sqrt{3}}{2}$ | $\dfrac{\sqrt{2}}{2}$ | $\dfrac{1}{2}$ |
+| $\tan\theta$ | $\dfrac{\sqrt{3}}{3}$ | $1$ | $\sqrt{3}$ |
+
+> $30^{\circ}$ と $60^{\circ}$ の表は、sin と cos が入れ替わっていることに注目してください。これは「短い辺」と「長い辺」が対辺と隣辺で交代するためです。
+
+## 定義と相互関係
+
+三角比の定義を、あらためて言葉で確認します。斜辺の長さを $c$、角 $\theta$ の対辺を $a$、隣辺を $b$ とすると、$\sin\theta$ は対辺を斜辺で割った比、$\cos\theta$ は隣辺を斜辺で割った比、$\tan\theta$ は対辺を隣辺で割った比です。
+
+<Definition term="三角比">
+直角三角形で、斜辺を $c$、角 $\theta$ の対辺を $a$、隣辺を $b$ とする。このとき
+
+$$ \sin\theta = \frac{a}{c}, \qquad \cos\theta = \frac{b}{c}, \qquad \tan\theta = \frac{a}{b}. $$
+</Definition>
+
+これら3つの間には、次の関係が成り立ちます。鋭角の範囲で使う式です。
+
+<Theorem name="鋭角の三角比の相互関係">
+$0^{\circ} \lt \theta \lt 90^{\circ}$ において
+
+$$ \sin^2\theta + \cos^2\theta = 1, \qquad \tan\theta = \frac{\sin\theta}{\cos\theta} \quad (\cos\theta \neq 0). $$
+</Theorem>
+
+1つ目の式は、三平方の定理 $a^2 + b^2 = c^2$ の両辺を $c^2$ で割れば得られます。$a/c = \sin\theta$、$b/c = \cos\theta$ なので、そのまま $\sin^2\theta + \cos^2\theta = 1$ になります。2つ目の式は、$\sin\theta$ と $\cos\theta$ の比を取ると斜辺 $c$ が約分されて消え、対辺と隣辺の比 $\tan\theta$ が残るという関係です。
+
+<Why>
+$\tan\theta$ を $\sin\theta / \cos\theta$ と表すのは、斜辺という共通の分母を約分で消し、対辺と隣辺という傾きの情報だけを取り出せるからです。$\cos\theta = 0$ のときは分母が $0$ になるので、この式は使えません。
+</Why>
+
+さらに、直角三角形の残りの鋭角は $90^{\circ} - \theta$ です。この角から見ると、もとの対辺と隣辺の役割が入れ替わるので、次が成り立ちます。
+
+<KeyPoint>
+$\sin(90^{\circ} - \theta) = \cos\theta$、$\cos(90^{\circ} - \theta) = \sin\theta$、$\tan(90^{\circ} - \theta) = \dfrac{1}{\tan\theta}$。
+</KeyPoint>
+
+## 例題
+
+<WorkedExample title="例題: 辺の長さを求める">
+斜辺の長さが $6$ の直角三角形で、1つの鋭角が $30^{\circ}$ であるとき、その角の対辺と隣辺の長さを求めなさい。
+
+<Steps>
+<Step reason="斜辺と角が分かっていて、角の向かい側の辺（対辺）を求めるので sin を使います。">対辺は $\sin 30^{\circ} \times 6 = \dfrac{1}{2} \times 6 = 3$。</Step>
+<Step reason="角をはさむ辺（隣辺）を求めるので cos を使います。">隣辺は $\cos 30^{\circ} \times 6 = \dfrac{\sqrt{3}}{2} \times 6 = 3\sqrt{3}$。</Step>
+</Steps>
+
+<Answer>
+対辺は $3$、隣辺は $3\sqrt{3}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="この例題で、対辺には sin を、隣辺には cos を使ったのはなぜ？"
+  options={['求める辺が角の向かい側か、角をはさむ辺かで決まるから', '斜辺の長さが 6 だから', '30° だから sin と cos が等しくなるから']}
+  model="sin は対辺/斜辺、cos は隣辺/斜辺。角の向かい側の辺を求めるときは sin、角をはさむ辺を求めるときは cos を使います。"
+/>
+
+<Misconception>
+<Wrong>
+$\sin\theta$ は「隣辺 ÷ 斜辺」、$\cos\theta$ は「対辺 ÷ 斜辺」である。
+</Wrong>
+<WhyWrong>
+sin と cos が逆です。$\sin\theta$ は角 $\theta$ の向かい側にある辺（対辺）を斜辺で割った比で、$\cos\theta$ は角 $\theta$ をはさむ辺（隣辺）を斜辺で割った比です。どちらも分母は斜辺なので、区別がつきにくいときは必ず定義に戻りましょう。
+</WhyWrong>
+<Right>
+角から見て「向かい側の辺」なら sin、「はさんの辺」なら cos。迷ったら直角三角形を描き、$\sin\theta = \dfrac{\text{対辺}}{\text{斜辺}}$、$\cos\theta = \dfrac{\text{隣辺}}{\text{斜辺}}$、$\tan\theta = \dfrac{\text{対辺}}{\text{隣辺}}$ に当てはめます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+次の問いに、まず自分の手で答えてから開いてください。
+
+1. $\sin 60^{\circ}$、$\cos 60^{\circ}$、$\tan 60^{\circ}$ の値をそれぞれ言いなさい。
+   <Reveal label="答え">
+   $\sin 60^{\circ} = \dfrac{\sqrt{3}}{2}$、$\cos 60^{\circ} = \dfrac{1}{2}$、$\tan 60^{\circ} = \sqrt{3}$。$30^{\circ}$ の値と sin と cos が入れ替わっています。
+   </Reveal>
+
+2. 鋭角 $\theta$ について $\sin\theta = \dfrac{3}{5}$ のとき、$\cos\theta$ の値を求めなさい。
+   <Reveal label="答え">
+   $\cos^2\theta = 1 - \left(\dfrac{3}{5}\right)^2 = \dfrac{16}{25}$。$\theta$ は鋭角なので $\cos\theta > 0$ であり、$\cos\theta = \dfrac{4}{5}$。
+   </Reveal>
+
+3. $\sin(90^{\circ} - \theta)$ を $\theta$ の三角比で表しなさい。
+   <Reveal label="答え">
+   $\cos\theta$。余角では対辺と隣辺の役割が入れ替わるためです。
+   </Reveal>
+</CheckUnderstanding>
+
+ここまでが数学Iの三角比の確認です。値を覚えているかよりも、図を描いて定義と相互関係から導けるかを確かめてください。すべて導けたら、次の一般角のレッスンへ進みましょう。もし $30^{\circ}$・$45^{\circ}$・$60^{\circ}$ の表で迷ったら、正三角形を半分に切る図と直角二等辺三角形に戻れば大丈夫です。

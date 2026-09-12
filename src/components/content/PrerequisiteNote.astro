@@ -1,0 +1,31 @@
+---
+/**
+ * PrerequisiteNote — the prior knowledge a lesson assumes.
+ *
+ * Usage: <PrerequisiteNote concept="i-trig-ratio" />
+ * `concept` is an id from src/data/curriculum.ts (units or external concepts).
+ *
+ * The resolved label is rendered as plain text: the referenced material is not
+ * part of this collection, and a dead link would be worse than none.
+ */
+import { prerequisiteLabel } from '@/data/curriculum';
+
+interface Props {
+  concept: string;
+}
+
+const { concept } = Astro.props;
+const label = prerequisiteLabel(concept);
+---
+
+<p class="prereq">前提: {label}</p>
+
+<style>
+  .prereq {
+    margin: var(--sp-4) 0;
+    padding-left: var(--sp-3);
+    border-left: 2px solid var(--rule-strong);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,90 @@
+---
+import 'katex/dist/katex.min.css';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '読むだけで理解できる高校数学II・BのWeb教材' } = Astro.props;
+const pageTitle = title === 'ホーム' ? title : `${title} — 数学II・B 読解教材`;
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-brand" href={import.meta.env.BASE_URL}>数学II・B 読解教材</a>
+        <nav class="site-header__nav" aria-label="サイト">
+          <a href={import.meta.env.BASE_URL}>目次</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>読み進めるだけで理解できることを目指した、高校数学II・Bの学習教材です。</p>
+    </footer>
+    <style>
+      .site-header {
+        border-bottom: 1px solid var(--rule);
+        background: color-mix(in srgb, var(--paper) 88%, transparent);
+        backdrop-filter: saturate(1.2) blur(6px);
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      .site-header__inner {
+        max-width: var(--measure-wide);
+        margin: 0 auto;
+        padding: var(--sp-3) var(--sp-4);
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--sp-4);
+      }
+      .site-brand {
+        font-family: var(--font-heading);
+        font-weight: 600;
+        font-size: 1.02rem;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .site-header__nav a {
+        font-size: 0.92rem;
+        color: var(--ink-soft);
+        text-decoration: none;
+      }
+      .site-main {
+        max-width: var(--measure-wide);
+        margin: 0 auto;
+        padding: var(--sp-5) var(--sp-4) var(--sp-8);
+      }
+      .site-footer {
+        border-top: 1px solid var(--rule);
+        color: var(--ink-faint);
+        font-size: 0.86rem;
+      }
+      .site-footer p {
+        max-width: var(--measure-wide);
+        margin: 0 auto;
+        padding: var(--sp-5) var(--sp-4);
+      }
+      @media (min-width: 60rem) {
+        .site-main {
+          padding-top: var(--sp-6);
+        }
+      }
+    </style>
+  </body>
+</html>

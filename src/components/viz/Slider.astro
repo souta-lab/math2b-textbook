@@ -1,0 +1,91 @@
+---
+import { fmtNum } from './viz-math';
+
+interface Props {
+  label: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  value?: number;
+  unit?: string;
+}
+
+const { label, min = 0, max = 100, step = 1, value = min, unit = '' } = Astro.props;
+const display = `${fmtNum(value, 2)}${unit}`;
+---
+
+<div
+  class="viz viz-slider"
+  data-viz="slider"
+  data-value={String(value)}
+  data-unit={unit}
+  data-label={label}
+>
+  <label class="viz-slider__label">
+    <span class="viz-slider__name">{label}</span>
+    <output class="viz-slider__value" data-slider-out>{display}</output>
+    <input
+      class="viz-slider__input"
+      type="range"
+      min={String(min)}
+      max={String(max)}
+      step={String(step)}
+      value={String(value)}
+      data-slider-input
+    />
+  </label>
+</div>
+
+<script>
+  import { fmtNum } from './viz-math';
+
+  function init(root: HTMLElement): void {
+    const input = root.querySelector<HTMLInputElement>('[data-slider-input]');
+    const out = root.querySelector<HTMLOutputElement>('[data-slider-out]');
+    if (!input || !out) return;
+
+    const unit = root.dataset.unit ?? '';
+    const label = root.dataset.label ?? '';
+
+    input.addEventListener('input', () => {
+      const value = Number(input.value);
+      out.textContent = `${fmtNum(value, 2)}${unit}`;
+      root.dataset.value = String(value);
+      root.dispatchEvent(
+        new CustomEvent('viz:change', {
+          detail: { value, unit, label },
+          bubbles: true,
+        }),
+      );
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="slider"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-slider {
+    margin: var(--sp-4) 0;
+    max-width: 30rem;
+  }
+  .viz-slider__label {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem var(--sp-3);
+    align-items: center;
+  }
+  .viz-slider__name {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  .viz-slider__value {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+  }
+  .viz-slider__input {
+    grid-column: 1 / -1;
+    width: 100%;
+    accent-color: var(--accent);
+  }
+</style>

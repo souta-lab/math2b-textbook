@@ -1,0 +1,44 @@
+---
+/**
+ * Contrast — an optional side-by-side case that sharpens a distinction
+ * (AUTHORING.md §1, optional module).
+ *
+ * Usage:
+ *   <Contrast title="0°と360°">…two cases to compare…</Contrast>
+ *
+ * `title` defaults to 「対比」. Children are arbitrary prose; keep it short
+ * enough to stay an aside, not a second lesson.
+ */
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const label = title?.trim() || '対比';
+---
+
+<section class="contrast" aria-label={label}>
+  <p class="contrast__label">{label}</p>
+  <div class="contrast__body"><slot /></div>
+</section>
+
+<style>
+  .contrast {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .contrast__label {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .contrast__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

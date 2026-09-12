@@ -1,0 +1,293 @@
+---
+import { UNIT_CIRCLE_GEOM, unitCircleFrame } from './viz-math';
+import { unitCircleDynamicMarkup } from './viz-render';
+
+interface Props {
+  angleDeg?: number;
+  interactive?: boolean;
+  showSin?: boolean;
+  showCos?: boolean;
+  showTan?: boolean;
+  label?: string;
+}
+
+const {
+  angleDeg = 30,
+  interactive = false,
+  showSin = false,
+  showCos = false,
+  showTan = false,
+  label = '単位円と角 θ',
+} = Astro.props;
+
+const { size, cx, cy, r } = UNIT_CIRCLE_GEOM;
+const frame = unitCircleFrame(angleDeg);
+const dynamic = unitCircleDynamicMarkup(frame, { showSin, showCos, showTan });
+---
+
+<figure
+  class="viz viz-uc"
+  data-viz="unit-circle"
+  data-angle={String(angleDeg)}
+  data-interactive={interactive ? 'true' : 'false'}
+  data-show-sin={showSin ? 'true' : 'false'}
+  data-show-cos={showCos ? 'true' : 'false'}
+  data-show-tan={showTan ? 'true' : 'false'}
+>
+  <div
+    class="viz-uc__plot"
+    role={interactive ? 'slider' : undefined}
+    tabindex={interactive ? 0 : undefined}
+    aria-label={label}
+    aria-valuemin={interactive ? 0 : undefined}
+    aria-valuemax={interactive ? 360 : undefined}
+    aria-valuenow={interactive ? Math.round(frame.normDeg) : undefined}
+    aria-valuetext={interactive ? frame.ariaText : undefined}
+  >
+    <svg
+      viewBox={`0 0 ${size} ${size}`}
+      role={interactive ? 'presentation' : 'img'}
+      aria-hidden={interactive ? 'true' : undefined}
+      aria-label={interactive ? undefined : label}
+    >
+      <line class="v-axis" x1={cx - r - 14} y1={cy} x2={cx + r + 22} y2={cy} />
+      <line class="v-axis" x1={cx} y1={cy + r + 14} x2={cx} y2={cy - r - 22} />
+      <path
+        class="v-axis-head"
+        d={`M${cx + r + 30} ${cy} L${cx + r + 20} ${cy - 4.5} L${cx + r + 20} ${cy + 4.5} Z`}
+      />
+      <path
+        class="v-axis-head"
+        d={`M${cx} ${cy - r - 30} L${cx - 4.5} ${cy - r - 20} L${cx + 4.5} ${cy - r - 20} Z`}
+      />
+      <circle class="v-circle" cx={cx} cy={cy} r={r} />
+      <text class="v-faint" x={frame.oneX.x} y={frame.oneX.y} text-anchor={frame.oneX.anchor}>1</text>
+      <text class="v-faint" x={frame.negOneX.x} y={frame.negOneX.y} text-anchor={frame.negOneX.anchor}>-1</text>
+      <text class="v-faint" x={frame.oneY.x} y={frame.oneY.y} text-anchor={frame.oneY.anchor}>1</text>
+      <text class="v-faint" x={frame.negOneY.x} y={frame.negOneY.y} text-anchor={frame.negOneY.anchor}>-1</text>
+      {
+        ['I', 'II', 'III', 'IV'].map((q, i) => (
+          <text
+            class="v-faint"
+            x={frame.quadrants[i].x}
+            y={frame.quadrants[i].y}
+            text-anchor={frame.quadrants[i].anchor}
+          >
+            {q}
+          </text>
+        ))
+      }
+      <g data-uc-dyn set:html={dynamic} />
+    </svg>
+  </div>
+  <div class="viz-readout">
+    <span>角度 θ ＝ <span data-out="deg">{frame.values.deg}</span>° ＝ <span data-out="rad">{frame.values.rad}</span></span>
+    <span>sin θ ＝ <span data-out="sin">{frame.values.sin}</span></span>
+    <span>cos θ ＝ <span data-out="cos">{frame.values.cos}</span></span>
+    <span>tan θ ＝ <span data-out="tan">{frame.values.tan}</span></span>
+  </div>
+  {interactive && <p class="viz-hint">ドラッグ、または ← → ↑ ↓ で角を動かせます。</p>}
+</figure>
+
+<script>
+  import { UNIT_CIRCLE_GEOM, unitCircleFrame } from './viz-math';
+  import { unitCircleDynamicMarkup } from './viz-render';
+
+  const { size, cx, cy } = UNIT_CIRCLE_GEOM;
+
+  function setText(root: HTMLElement, key: string, value: string): void {
+    const el = root.querySelector(`[data-out="${key}"]`);
+    if (el) el.textContent = value;
+  }
+
+  function paint(root: HTMLElement, rawDeg: number): void {
+    const frame = unitCircleFrame(rawDeg);
+    const dyn = root.querySelector<SVGGElement>('[data-uc-dyn]');
+    if (dyn) {
+      dyn.innerHTML = unitCircleDynamicMarkup(frame, {
+        showSin: root.dataset.showSin === 'true',
+        showCos: root.dataset.showCos === 'true',
+        showTan: root.dataset.showTan === 'true',
+      });
+    }
+    setText(root, 'deg', frame.values.deg);
+    setText(root, 'rad', frame.values.rad);
+    setText(root, 'sin', frame.values.sin);
+    setText(root, 'cos', frame.values.cos);
+    setText(root, 'tan', frame.values.tan);
+    const plot = root.querySelector<HTMLElement>('.viz-uc__plot');
+    if (plot) {
+      plot.setAttribute('aria-valuenow', String(Math.round(frame.normDeg)));
+      plot.setAttribute('aria-valuetext', frame.ariaText);
+    }
+  }
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const plot = root.querySelector<HTMLElement>('.viz-uc__plot');
+    const svg = root.querySelector<SVGSVGElement>('svg');
+    if (!plot || !svg) return;
+
+    let angle = Number(root.dataset.angle ?? '30');
+    let dragging = false;
+    let lastPointerDeg = 0;
+
+    const angleFromEvent = (clientX: number, clientY: number): number => {
+      const rect = svg.getBoundingClientRect();
+      const vx = ((clientX - rect.left) / rect.width) * size;
+      const vy = ((clientY - rect.top) / rect.height) * size;
+      return (Math.atan2(cy - vy, vx - cx) * 180) / Math.PI;
+    };
+
+    plot.addEventListener('pointerdown', (event) => {
+      dragging = true;
+      lastPointerDeg = angleFromEvent(event.clientX, event.clientY);
+      plot.setPointerCapture(event.pointerId);
+      plot.focus();
+      event.preventDefault();
+    });
+    plot.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      const deg = angleFromEvent(event.clientX, event.clientY);
+      let delta = deg - lastPointerDeg;
+      while (delta > 180) delta -= 360;
+      while (delta <= -180) delta += 360;
+      angle += delta;
+      lastPointerDeg = deg;
+      paint(root, angle);
+    });
+    const stop = (): void => {
+      dragging = false;
+    };
+    plot.addEventListener('pointerup', stop);
+    plot.addEventListener('pointercancel', stop);
+
+    plot.addEventListener('keydown', (event) => {
+      const big = event.shiftKey ? 15 : 1;
+      let next: number | null = null;
+      if (event.key === 'ArrowRight') next = angle + big;
+      else if (event.key === 'ArrowLeft') next = angle - big;
+      else if (event.key === 'ArrowUp') next = angle + 15;
+      else if (event.key === 'ArrowDown') next = angle - 15;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = 360;
+      if (next === null) return;
+      event.preventDefault();
+      angle = next;
+      paint(root, angle);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="unit-circle"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-uc {
+    margin: var(--sp-5) 0;
+  }
+  .viz-uc__plot {
+    max-width: 20rem;
+    margin-inline: auto;
+  }
+  .viz-uc__plot svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .viz-uc__plot:focus-visible {
+    outline: 2.5px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+  .viz-uc .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-uc .v-axis-head {
+    fill: var(--ink-faint);
+  }
+  .viz-uc .v-circle {
+    fill: none;
+    stroke: var(--rule-strong);
+    stroke-width: 1.5;
+  }
+  .viz-uc .v-radius {
+    stroke: var(--ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+  }
+  .viz-uc .v-point {
+    fill: var(--ink);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-uc .v-arc {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.2;
+  }
+  .viz-uc .v-arc-head {
+    fill: var(--accent);
+  }
+  .viz-uc .v-sin {
+    stroke: var(--shu);
+    stroke-width: 2.4;
+  }
+  .viz-uc .v-cos {
+    stroke: var(--correct);
+    stroke-width: 2.4;
+  }
+  .viz-uc .v-tan {
+    stroke: var(--note);
+    stroke-width: 2;
+    stroke-dasharray: 5 4;
+  }
+  .viz-uc .v-tan-line {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+  .viz-uc .v-tan-dot {
+    fill: var(--note);
+  }
+  .viz-uc .v-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+  }
+  .viz-uc .v-label-sin {
+    fill: var(--shu);
+  }
+  .viz-uc .v-label-cos {
+    fill: var(--correct);
+  }
+  .viz-uc .v-label-tan {
+    fill: var(--note);
+  }
+  .viz-uc .v-angle {
+    fill: var(--accent);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .viz-uc .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+/**
+ * Definition — names a term (AUTHORING.md §1.5).
+ *
+ * Usage: <Definition term="三角関数">…</Definition>
+ *
+ * Rendered as <dl>/<dt>/<dd>, so the term–body relationship survives with CSS
+ * off and is announced correctly by screen readers. `term` is required.
+ */
+interface Props {
+  term: string;
+}
+
+const { term } = Astro.props;
+---
+
+<dl class="definition">
+  <dt class="definition__term">
+    <span class="definition__label">定義</span>
+    <span class="definition__name">{term}</span>
+  </dt>
+  <dd class="definition__body"><slot /></dd>
+</dl>
+
+<style>
+  .definition {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .definition__term {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-3);
+  }
+  .definition__label {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .definition__name {
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .definition__body {
+    margin: var(--sp-3) 0 0;
+  }
+  .definition__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

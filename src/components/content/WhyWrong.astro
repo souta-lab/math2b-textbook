@@ -1,0 +1,34 @@
+---
+/**
+ * WhyWrong — why the error above fails, inside <Misconception>.
+ * Labelled 「なぜ誤りか」; neutral keyline so it reads as the analysis step
+ * between the wrong claim and the correction.
+ */
+---
+
+<div class="mc mc--why">
+  <p class="mc__label">なぜ誤りか</p>
+  <div class="mc__body"><slot /></div>
+</div>
+
+<style>
+  .mc {
+    margin: var(--sp-3) 0;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+  .mc__label {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+  .mc__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

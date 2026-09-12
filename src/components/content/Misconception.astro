@@ -1,0 +1,28 @@
+---
+/**
+ * Misconception — a real, named error, explicitly refuted (AUTHORING.md §4).
+ *
+ * Usage:
+ *   <Misconception>
+ *     <Wrong>…</Wrong>
+ *     <WhyWrong>…</WhyWrong>
+ *     <Right>…</Right>
+ *   </Misconception>
+ *
+ * Each part is a block with its own written label; the 朱色 / green keylines
+ * support the labels but never carry the meaning on their own.
+ */
+---
+
+<section class="misconception" aria-label="よくある誤りと正しい見方">
+  <div class="misconception__body"><slot /></div>
+</section>
+
+<style>
+  .misconception {
+    margin: var(--sp-5) 0;
+  }
+  .misconception__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

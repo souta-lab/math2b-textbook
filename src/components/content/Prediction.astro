@@ -1,0 +1,86 @@
+---
+/**
+ * Prediction — an immediate, non-graded intuition probe (AUTHORING.md §3).
+ *
+ * Usage:
+ *   <Prediction
+ *     question="…"
+ *     options={['A', 'B', 'C']}
+ *     answer="B"
+ *     explanation="…"
+ *   />
+ *
+ * `answer` must be one of `options` (not enforced at compile time). All props
+ * are plain strings: KaTeX is not processed inside attributes, so keep math in
+ * the surrounding MDX body, not in these props.
+ *
+ * Rendering: question, a non-interactive option list, and a JS-free <details>
+ * that discloses the correct option and why. The note that this is ungraded is
+ * part of the component, per the contract.
+ */
+import Reveal from './Reveal.astro';
+
+interface Props {
+  question: string;
+  options: string[];
+  answer: string;
+  explanation?: string;
+}
+
+const { question, options, answer, explanation } = Astro.props;
+---
+
+<section class="prediction" aria-label="予想">
+  <p class="prediction__label">予想</p>
+  <p class="prediction__question">{question}</p>
+  <p class="prediction__note">（成績には関係ありません。まず自分で予想しましょう）</p>
+  <ol class="prediction__options">
+    {options.map((option) => <li>{option}</li>)}
+  </ol>
+  <Reveal>
+    <p class="prediction__answer">正解: {answer}</p>
+    {explanation && <p>{explanation}</p>}
+  </Reveal>
+</section>
+
+<style>
+  .prediction {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .prediction__label {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .prediction__question {
+    margin: 0 0 var(--sp-2);
+    font-size: 1.04em;
+    font-weight: 600;
+  }
+  .prediction__note {
+    margin: 0 0 var(--sp-3);
+    color: var(--ink-faint);
+    font-size: 0.86rem;
+  }
+  .prediction__options {
+    margin: 0 0 var(--sp-2);
+    padding-left: 1.6em;
+  }
+  .prediction__options li {
+    margin: var(--sp-2) 0;
+  }
+  .prediction__answer {
+    font-weight: 600;
+  }
+  .prediction :global(details:last-child) {
+    margin-bottom: 0;
+  }
+</style>

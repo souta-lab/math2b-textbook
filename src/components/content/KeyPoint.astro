@@ -1,0 +1,35 @@
+---
+/**
+ * KeyPoint — the one sentence a section must leave behind.
+ *
+ * Usage: <KeyPoint>…</KeyPoint>
+ * Keep it to a claim, not a summary of everything above.
+ */
+---
+
+<div class="keypoint" role="note" aria-label="要点">
+  <p class="keypoint__label">要点</p>
+  <div class="keypoint__body"><slot /></div>
+</div>
+
+<style>
+  .keypoint {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+  }
+  .keypoint__label {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .keypoint__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

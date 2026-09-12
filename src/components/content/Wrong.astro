@@ -1,0 +1,33 @@
+---
+/**
+ * Wrong — the common error itself, inside <Misconception>.
+ * Labelled 「よくある誤り」 and keyed with a muted 朱色 border.
+ */
+---
+
+<div class="mc mc--wrong">
+  <p class="mc__label">よくある誤り</p>
+  <div class="mc__body"><slot /></div>
+</div>
+
+<style>
+  .mc {
+    margin: var(--sp-3) 0;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--shu);
+    border-radius: var(--radius-sm);
+    background: var(--shu-soft);
+  }
+  .mc__label {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--shu);
+  }
+  .mc__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

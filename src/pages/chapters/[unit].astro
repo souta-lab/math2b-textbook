@@ -1,0 +1,211 @@
+---
+import { getCollection } from 'astro:content';
+import type { Unit } from '@/data/curriculum';
+import { getUnit, prerequisiteLabel, statusLabel, units, unitsBySubject } from '@/data/curriculum';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+
+export function getStaticPaths() {
+  return units.map((unit) => ({
+    params: { unit: unit.id },
+    props: { unit },
+  }));
+}
+
+interface Props {
+  unit: Unit;
+}
+
+const { unit } = Astro.props;
+
+const lessons = (await getCollection('lessons'))
+  .filter((lesson) => !lesson.data.draft && lesson.data.unit === unit.id)
+  .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+
+const chapterNumber = unitsBySubject(unit.subject).findIndex((entry) => entry.id === unit.id) + 1;
+const status = statusLabel[unit.status];
+
+const prerequisites = unit.prerequisites.map((id) => {
+  const target = getUnit(id);
+  return {
+    id,
+    label: prerequisiteLabel(id),
+    href: target ? `${import.meta.env.BASE_URL}chapters/${target.id}` : undefined,
+  };
+});
+
+const emptyMessage =
+  unit.status === 'published'
+    ? 'この章のレッスンはまだ公開されていません。準備が整い次第、ここに追加されます。'
+    : `この章は${status}です。公開までしばらくお待ちください。`;
+---
+
+<BaseLayout title={unit.title} description={unit.summary}>
+  <div class="chapter">
+    <Breadcrumbs crumbs={[{ label: unit.title }]} />
+
+    <header class="chapter__header">
+      <h1>{unit.title}</h1>
+      <p class="chapter__meta">
+        <span>{unit.subject} 第{chapterNumber}章</span>
+        <span class:list={['chapter__status', `chapter__status--${unit.status}`]}>{status}</span>
+      </p>
+      <p class="chapter__summary">{unit.summary}</p>
+    </header>
+
+    {
+      prerequisites.length > 0 && (
+        <section class="chapter__section" aria-labelledby="chapter-prerequisites">
+          <h2 id="chapter-prerequisites">前提</h2>
+          <ul class="chapter__prereq-list">
+            {prerequisites.map((item) => (
+              <li>{item.href ? <a href={item.href}>{item.label}</a> : item.label}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section class="chapter__section" aria-labelledby="chapter-lessons">
+      <h2 id="chapter-lessons">レッスン{lessons.length > 0 && `（${lessons.length}）`}</h2>
+      {
+        lessons.length > 0 ? (
+          <ol class="chapter__lessons">
+            {lessons.map((lesson) => (
+              <li class="chapter__lesson">
+                <a class="chapter__lesson-link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
+                  <span class="chapter__lesson-num">{lesson.data.order}</span>
+                  <span class="chapter__lesson-title">{lesson.data.title}</span>
+                  <span class="chapter__lesson-summary">{lesson.data.summary}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="chapter__empty">{emptyMessage}</p>
+        )
+      }
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .chapter {
+    max-width: var(--measure);
+  }
+
+  .chapter__header {
+    margin-bottom: var(--sp-6);
+  }
+
+  .chapter__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-3);
+    margin: 0 0 var(--sp-2);
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  .chapter__status {
+    display: inline-block;
+    padding: 0.1rem var(--sp-2);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    line-height: 1.6;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .chapter__status--published {
+    background: var(--correct-soft);
+    color: var(--correct);
+  }
+
+  .chapter__status--draft {
+    background: var(--note-soft);
+    color: var(--note);
+  }
+
+  .chapter__status--planned {
+    background: var(--surface-soft);
+    border-color: var(--rule);
+    color: var(--ink-faint);
+  }
+
+  .chapter__summary {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+
+  .chapter__section {
+    margin-bottom: var(--sp-7);
+  }
+
+  .chapter__prereq-list {
+    margin: 0;
+    padding-left: 1.4em;
+  }
+
+  .chapter__prereq-list li {
+    margin: 0.2em 0;
+  }
+
+  .chapter__lessons {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .chapter__lesson {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .chapter__lesson-link {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0 var(--sp-3);
+    padding: var(--sp-4) var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .chapter__lesson-link:hover {
+    background: var(--surface-soft);
+  }
+
+  .chapter__lesson-num {
+    grid-row: span 2;
+    color: var(--ink-faint);
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chapter__lesson-title {
+    color: var(--accent);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: var(--line-tight);
+  }
+
+  .chapter__lesson-summary {
+    margin-top: var(--sp-1);
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    line-height: 1.7;
+  }
+
+  .chapter__empty {
+    margin: 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface-soft);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+</style>

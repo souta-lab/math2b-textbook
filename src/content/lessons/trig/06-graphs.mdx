@@ -1,0 +1,173 @@
+---
+title: "三角関数のグラフ"
+summary: "単位円の動きと対応させて、sin・cos・tan のグラフを読む。"
+unit: "ii-trigonometric"
+order: 6
+objectives:
+  - "sin・cos・tan のグラフの概形をかける"
+  - "それぞれの周期と値域を言える"
+  - "tan のグラフの漸近線を指摘できる"
+prerequisites: ["trig/05-properties"]
+tags: ["グラフ", "周期", "漸近線"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+円周上を一定の速さで回り続ける点を思い浮かべよう。この点の高さ（縦の位置）だけを、回り始めからの角度とともに記録していくと、どんな線が現れるだろう。回り続けるかぎり高さは上がったり下がったりを繰り返すはずだ。この記録の線こそ、これから見る三角関数のグラフである。
+</Hook>
+
+<Prediction
+  question="回る点の高さを、角度を大きくしながら記録していくとどうなる？"
+  options={['限りなく大きくなる', '1と−1の間を行き来する', 'ずっと0のまま']}
+  answer="1と−1の間を行き来する"
+  explanation="点は半径1の円周上を回り続けるので、高さは円の半径を超えられません。上がって下がることを繰り返します。"
+/>
+
+前のレッスンまでで、単位円上の点 P の座標が $(\cos\theta,\ \sin\theta)$ であること、そして $\theta$ を $2\pi$ 増やすと同じ点に戻ることを学んだ。ここでは視点を変えて、$\theta$ を横軸に、点の $y$ 座標（つまり $\sin\theta$）を縦軸にとって、高さの変化を1本の曲線として描く。これが関数 $y=\sin\theta$ のグラフだ。
+
+$\theta$ を $0$ から増やしていくと、点 P は円周上を反時計回りに進む。点の高さは次のように変わる。
+
+<Figure caption="y = sin θ のグラフ。点を動かすと、単位円上の高さと曲線上の点が連動する">
+<TrigGraph fn="sin" from={0} to={6.283185} interactive linked />
+</Figure>
+
+- $\theta=0$：高さ $0$
+- $\theta=\dfrac{\pi}{2}$：高さ $1$（最大）
+- $\theta=\pi$：高さ $0$
+- $\theta=\dfrac{3\pi}{2}$：高さ $-1$（最小）
+- $\theta=2\pi$：高さ $0$（出発点に戻る）
+
+この5点をなめらかにつなぐと、上にふくらんで下にへこむ波の1山分ができる。さらに $\theta$ を増やすと、点 P は同じ円の2周目に入り、グラフは同じ形を繰り返す。どの山も高さ1、どの谷も深さ1で、振れ幅は変わらない。この山の高さ（最大値）が1であることを、振幅が1ともいう。
+
+<Why>
+グラフが波になるのは、点 P が円周上を回っているからだ。円を1周すると点はもとの位置に戻る。同じ位置なら $y$ 座標も同じ値に戻るのだから、曲線も $2\pi$ ごとにまったく同じ形を繰り返す。波の1山は、円1周と正確に対応している。
+</Why>
+
+まず、繰り返しの間隔を言葉にしておく。
+
+<Definition term="周期">
+関数 $f(\theta)$ がすべての $\theta$ について $f(\theta+p)=f(\theta)$ を満たす正の定数 $p$ のうち、最小のものをこの関数の周期という。
+</Definition>
+
+<Theorem name="sinθ と cosθ のグラフ">
+$y=\sin\theta$ と $y=\cos\theta$ は、どちらも周期 $2\pi$ の関数である。定義域はすべての実数 $\R$、値域は $-1\le y\le 1$ で、$y$ は $-1$ と $1$ の間を繰り返し往復する。
+</Theorem>
+
+次に $y=\cos\theta$ を見る。これは単位円上の点の $x$ 座標を $\theta$ の関数として見たものだ。$\theta=0$ で最大1、$\theta=\dfrac{\pi}{2}$ で0、$\theta=\pi$ で最小 $-1$、$\theta=\dfrac{3\pi}{2}$ で0、$\theta=2\pi$ で1に戻る。波の形は sin とよく似ているが、山や谷の位置は同じではない。
+
+<Figure caption="y = cos θ のグラフ。θ = 0 で最大 1 から始まる">
+<TrigGraph fn="cos" from={0} to={6.283185} interactive linked />
+</Figure>
+
+対称性も、前のレッスンで確認した性質がそのままグラフの形になる。$\sin(-\theta)=-\sin\theta$ だから $y=\sin\theta$ のグラフは原点対称。$\cos(-\theta)=\cos\theta$ だから $y=\cos\theta$ のグラフは $y$ 軸対称だ。
+
+<KeyPoint>
+sin は奇関数（原点対称）、cos は偶関数（y 軸対称）。グラフをかくときは、この対称性を使うと片側だけでよい。
+</KeyPoint>
+
+最後に $\tan\theta$ だ。定義 $\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ を思い出すと、$\cos\theta=0$ となる角では $\tan\theta$ は定義されない。$\cos\theta=0$ となるのは $\theta=\dfrac{\pi}{2}+n\pi$（$n$ は整数）のときだ。この角の前後では、$\tan\theta$ の値は限りなく大きくなったり小さくなったりして、グラフはそこで途切れる。
+
+<Figure caption="y = tan θ のグラフ。破線は漸近線を表す">
+<TrigGraph fn="tan" from={0} to={6.283185} interactive linked />
+</Figure>
+
+グラフを見ると、$\theta=\dfrac{\pi}{2}$ と $\theta=\dfrac{3\pi}{2}$ に縦の破線がある。これはグラフが近づいても決して交わらない直線で、漸近線とよぶ。tan のグラフは、この漸近線ごとに区切られた1区間ずつを見ると、右上がりに増えていく同じ形を繰り返している。
+
+<Theorem name="tanθ のグラフ">
+$y=\tan\theta$ は周期 $\pi$ の関数である。定義域は $\theta\ne\dfrac{\pi}{2}+n\pi$（$n$ は整数）、値域はすべての実数 $\R$ で、$\theta=\dfrac{\pi}{2}+n\pi$ に縦の漸近線をもつ。また $\tan(-\theta)=-\tan\theta$ だから原点対称である。
+</Theorem>
+
+ここで、グラフを横にずらす見方を導入しよう。$y=\sin\theta$ の $\theta$ を $\theta+\dfrac{\pi}{2}$ に置き換えると、$\theta$ が $\dfrac{\pi}{2}$ だけ進んだときの値が、もとの $\theta$ の位置に来る。つまりグラフは左へ $\dfrac{\pi}{2}$ だけ平行移動する。この新しい関数は
+
+$$y=\sin\left(\theta+\dfrac{\pi}{2}\right)$$
+
+であり、これは $\cos\theta$ に等しい。
+
+<Why>
+$\sin\left(\theta+\dfrac{\pi}{2}\right)=\cos\theta$ が成り立つ。前のレッスンで見た $\sin\left(\dfrac{\pi}{2}-\theta\right)=\cos\theta$ と、$\cos$ が偶関数であることを合わせれば確かめられる。加法定理はまだ使わない。ここでは「$\theta$ を $\theta+\dfrac{\pi}{2}$ に置き換える」という操作だけで、cos のグラフが sin のグラフの平行移動として得られることをおさえたい。
+</Why>
+
+つまり、$y=\cos\theta$ のグラフは、$y=\sin\theta$ のグラフを左へ $\dfrac{\pi}{2}$ だけ平行移動したものだ。実際、sin の最大が $\theta=\dfrac{\pi}{2}$ にあるのに対し、cos の最大は $\theta=0$ にあり、ちょうど $\dfrac{\pi}{2}$ だけ左へずれている。
+
+ここまでの内容を表にまとめる。
+
+| 関数 | 定義域 | 値域 | 周期 | 対称性 |
+| --- | --- | --- | --- | --- |
+| $y=\sin\theta$ | すべての実数 | $-1\le y\le 1$ | $2\pi$ | 原点対称（奇関数） |
+| $y=\cos\theta$ | すべての実数 | $-1\le y\le 1$ | $2\pi$ | $y$ 軸対称（偶関数） |
+| $y=\tan\theta$ | $\theta\ne\dfrac{\pi}{2}+n\pi$ | すべての実数 | $\pi$ | 原点対称（奇関数） |
+
+<WorkedExample title="例題: 基本のグラフをかき、cos を sin の平行移動としてとらえる">
+(1) $y=\sin\theta$ のグラフの概形を、$0\le\theta\le 2\pi$ の範囲で、最大・最小・軸との交点を押さえてかこう。
+
+(2) $y=\cos\theta$ のグラフは、$y=\sin\theta$ のグラフをどのように平行移動したものか。
+
+<Steps>
+<Step reason="単位円で θ を 0, π/2, π, 3π/2, 2π と動かしたときの y 座標が、グラフの通る点になるからです。">まず5つの点 $(0,0)$、$\left(\dfrac{\pi}{2},1\right)$、$(\pi,0)$、$\left(\dfrac{3\pi}{2},-1\right)$、$(2\pi,0)$ をとる。</Step>
+<Step reason="sin は周期 2π の波なので、この5点をなめらかにつなげば1周期分が完成します。">5点をなめらかにつなぐと、$\theta=\dfrac{\pi}{2}$ で最大1、$\theta=\dfrac{3\pi}{2}$ で最小 $-1$ の波になる。</Step>
+<Step reason="θ を θ+π/2 に置き換えると値が cosθ になり、置き換えは左への平行移動に対応するからです。">$\cos\theta=\sin\left(\theta+\dfrac{\pi}{2}\right)$ なので、$y=\sin\theta$ を左へ $\dfrac{\pi}{2}$ だけ平行移動すれば $y=\cos\theta$ になる。</Step>
+</Steps>
+
+<Answer>
+(1) $\theta=0$ で0、$\theta=\dfrac{\pi}{2}$ で最大1、$\theta=\pi$ で0、$\theta=\dfrac{3\pi}{2}$ で最小 $-1$、$\theta=2\pi$ で0を通る、周期 $2\pi$ の波。
+(2) 左へ $\dfrac{\pi}{2}$ だけ平行移動したもの。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="なぜ y=cosθ のグラフは y=sinθ のグラフを左にずらした形になる？"
+  options={['θ を θ+π/2 に置き換えると cosθ になるから', 'sin と cos の値域が違うから', 'tanθ の周期が π だから']}
+  model="cosθ = sin(θ+π/2) なので、y=sinθ の θ を θ+π/2 に置き換えると y=cosθ になります。置き換えはグラフを左へ π/2 平行移動することに対応します。"
+/>
+
+<Misconception>
+<Wrong>
+$y=\tan\theta$ のグラフは、途切れずにつながった1本の曲線である。
+</Wrong>
+<WhyWrong>
+$\theta=\dfrac{\pi}{2}+n\pi$ では $\cos\theta=0$ となり、$\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ は定義されない。この角の前後で $\tan\theta$ の値は正の側と負の側へ限りなく離れていくので、グラフはそこで必ず途切れる。
+</WhyWrong>
+<Right>
+$y=\tan\theta$ のグラフは $\theta=\dfrac{\pi}{2}+n\pi$ に縦の漸近線をもち、その位置で区切られた別々の曲線の集まりとしてかかれる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$y=\sin\theta$ と $y=\cos\theta$ のグラフはまったく同じ形である。
+</Wrong>
+<WhyWrong>
+確かに波の形は同じだが、位置がずれている。$\theta=0$ のとき $\sin\theta=0$、$\cos\theta=1$ で、同じ $\theta$ での値は一般に等しくない。
+</WhyWrong>
+<Right>
+$\cos\theta=\sin\left(\theta+\dfrac{\pi}{2}\right)$ だから、cos のグラフは sin のグラフを左へ $\dfrac{\pi}{2}$ だけ平行移動したもの。形は同じでも、横に $\dfrac{\pi}{2}$ ずれている。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$y=\sin\theta$ の周期と値域を答えよ。
+<Reveal label="答え">
+周期は $2\pi$、値域は $-1\le y\le 1$（定義域はすべての実数）。
+</Reveal>
+
+（2）$y=\tan\theta$ の周期と、漸近線の位置を答えよ。
+<Reveal label="答え">
+周期は $\pi$。漸近線は $\theta=\dfrac{\pi}{2}+n\pi$（$n$ は整数）。
+</Reveal>
+
+（3）$y=\cos\theta$ のグラフは $y=\sin\theta$ のグラフをどちらへどれだけ平行移動したものか。
+<Reveal label="答え">
+左へ $\dfrac{\pi}{2}$ だけ平行移動したもの。$\cos\theta=\sin\left(\theta+\dfrac{\pi}{2}\right)$ による。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="まとめの練習（相互関係・還元・グラフ）">
+（1）$\tan\left(\pi+\dfrac{\pi}{4}\right)$ の値を求めよ。
+（2）$\sin\theta=\dfrac{3}{5}$ で $\theta$ が第2象限のとき、$\cos\theta$ と $\tan\theta$ を求めよ。
+（3）$y=\sin\theta$ と $y=\cos\theta$ のグラフで山の位置が $\dfrac{\pi}{2}$ だけずれていることを、$\cos\theta=\sin\left(\theta+\dfrac{\pi}{2}\right)$ を使って説明せよ。
+<Reveal label="解答">
+（1）$\tan$ の周期は $\pi$ なので $\tan\left(\pi+\dfrac{\pi}{4}\right) = \tan\dfrac{\pi}{4} = 1$。
+（2）$\cos^2\theta = 1 - \dfrac{9}{25} = \dfrac{16}{25}$。第2象限では $\cos\theta < 0$ だから $\cos\theta = -\dfrac{4}{5}$、$\tan\theta = \dfrac{3/5}{-4/5} = -\dfrac{3}{4}$。
+（3）$\sin$ のグラフを左へ $\dfrac{\pi}{2}$ ずらすと $\cos$ のグラフになる。最大となる角が、$\sin$ では $\theta=\dfrac{\pi}{2}$、$\cos$ では $\theta=0$ であり、ちょうど $\dfrac{\pi}{2}$ ずれていることに対応する。
+</Reveal>
+</Practice>

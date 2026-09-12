@@ -1,0 +1,57 @@
+---
+/**
+ * Theorem — a named result. The name is optional.
+ *
+ * Usage: <Theorem name="加法定理">…</Theorem>
+ * The label 「定理」 (plus the name when given) is focusable context, not a
+ * document heading — lesson heading levels stay owned by the author.
+ */
+interface Props {
+  name?: string;
+}
+
+const { name } = Astro.props;
+const label = name ? `定理: ${name}` : '定理';
+---
+
+<section class="theorem" aria-label={label}>
+  <p class="theorem__label">
+    <span class="theorem__tag">定理</span>
+    {name && <span class="theorem__name">{name}</span>}
+  </p>
+  <div class="theorem__body"><slot /></div>
+</section>
+
+<style>
+  .theorem {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .theorem__label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--sp-3);
+    margin: 0 0 var(--sp-3);
+  }
+  .theorem__tag {
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .theorem__name {
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .theorem__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

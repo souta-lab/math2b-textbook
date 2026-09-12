@@ -1,0 +1,48 @@
+---
+/**
+ * FadedExample — a worked example with later steps removed (AUTHORING.md §1,
+ * optional module).
+ *
+ * Usage:
+ *   <FadedExample title="穴埋め">
+ *     …first steps shown…
+ *     <Reveal label="続きを見る">…remaining steps…</Reveal>
+ *   </FadedExample>
+ *
+ * `title` defaults to 「穴埋め例」. Always wrap the removed steps in <Reveal>
+ * so the reader can attempt them before checking. The dashed frame signals
+ * "this one is yours to finish".
+ */
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const label = title?.trim() || '穴埋め例';
+---
+
+<section class="faded" aria-label={label}>
+  <p class="faded__label">{label}</p>
+  <div class="faded__body"><slot /></div>
+</section>
+
+<style>
+  .faded {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px dashed var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .faded__label {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .faded__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

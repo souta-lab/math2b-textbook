@@ -1,0 +1,161 @@
+---
+/**
+ * Table of contents for the current unit.
+ * Mobile: collapsible <details>. Desktop (>= 60rem): sticky sidebar list.
+ * The current lesson is marked with aria-current="page".
+ */
+interface LessonLink {
+  id: string;
+  data: { title: string; order: number };
+}
+
+interface Props {
+  unit: { id: string; title: string };
+  /** Non-draft lessons of the unit, sorted by order. */
+  lessons: LessonLink[];
+  currentId?: string;
+}
+
+const { unit, lessons, currentId } = Astro.props;
+const headingId = 'chapter-nav-heading';
+---
+
+<details class="chapter-nav chapter-nav--mobile">
+  <summary class="chapter-nav__summary">{unit.title}の目次</summary>
+  <nav class="chapter-nav__panel" aria-label={`${unit.title}のレッスン一覧`}>
+    {
+      lessons.length > 0 ? (
+        <ol class="chapter-nav__list">
+          {lessons.map((lesson) => (
+            <li class="chapter-nav__item">
+              {lesson.id === currentId ? (
+                <span class="chapter-nav__link chapter-nav__link--current" aria-current="page">
+                  <span class="chapter-nav__num">{lesson.data.order}</span>
+                  {lesson.data.title}
+                </span>
+              ) : (
+                <a class="chapter-nav__link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
+                  <span class="chapter-nav__num">{lesson.data.order}</span>
+                  {lesson.data.title}
+                </a>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="chapter-nav__empty">この章のレッスンは準備中です。</p>
+      )
+    }
+  </nav>
+</details>
+
+<nav class="chapter-nav chapter-nav--desktop" aria-labelledby={headingId}>
+  <p class="chapter-nav__heading" id={headingId}>{unit.title}</p>
+  {
+    lessons.length > 0 ? (
+      <ol class="chapter-nav__list">
+        {lessons.map((lesson) => (
+          <li class="chapter-nav__item">
+            {lesson.id === currentId ? (
+              <span class="chapter-nav__link chapter-nav__link--current" aria-current="page">
+                <span class="chapter-nav__num">{lesson.data.order}</span>
+                {lesson.data.title}
+              </span>
+            ) : (
+              <a class="chapter-nav__link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
+                <span class="chapter-nav__num">{lesson.data.order}</span>
+                {lesson.data.title}
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+    ) : (
+      <p class="chapter-nav__empty">この章のレッスンは準備中です。</p>
+    )
+  }
+</nav>
+
+<style>
+  .chapter-nav--desktop {
+    display: none;
+  }
+
+  .chapter-nav__summary {
+    padding: var(--sp-2) var(--sp-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .chapter-nav__panel {
+    margin-top: var(--sp-3);
+  }
+
+  .chapter-nav__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .chapter-nav__link {
+    display: block;
+    padding: var(--sp-1) var(--sp-2);
+    border-radius: var(--radius-sm);
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    text-decoration: none;
+  }
+
+  a.chapter-nav__link:hover {
+    background: var(--surface-soft);
+    color: var(--ink);
+  }
+
+  .chapter-nav__link--current {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .chapter-nav__num {
+    margin-right: var(--sp-2);
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chapter-nav__link--current .chapter-nav__num {
+    color: var(--accent);
+  }
+
+  .chapter-nav__empty {
+    margin: 0;
+    color: var(--ink-faint);
+    font-size: 0.85rem;
+  }
+
+  @media (min-width: 60rem) {
+    .chapter-nav--mobile {
+      display: none;
+    }
+
+    .chapter-nav--desktop {
+      display: block;
+      padding-left: var(--sp-4);
+      border-left: 1px solid var(--rule);
+    }
+
+    .chapter-nav__heading {
+      margin: 0 0 var(--sp-3);
+      font-family: var(--font-heading);
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: var(--line-tight);
+      color: var(--ink);
+    }
+  }
+</style>

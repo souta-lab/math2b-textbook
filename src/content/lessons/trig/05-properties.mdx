@@ -1,0 +1,154 @@
+---
+title: "周期性と対称性 — 還元公式"
+summary: "単位円の対称性から、角を鋭角に帰着させる公式を導く。"
+unit: "ii-trigonometric"
+order: 5
+objectives:
+  - "sin・cos・tan の周期を正しく言える"
+  - "負角・補角・余角の関係を単位円から導ける"
+  - "大きい角や負の角を鋭角に帰着できる"
+prerequisites: ["trig/04-identities"]
+tags: ["周期性", "還元公式", "対称性"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+観覧車がゆっくり回っている。ゴンドラの高さが同じになる瞬間は、一周のあいだに何度もある。角が $150^\circ$ でも $30^\circ$ でも高さが同じなら、横の位置だけが左右で入れ替わっているだけかもしれない。角度を大きくしても、負にしても、単位円の上では「同じ点」か「鏡に映した点」に着地することが多い。その位置関係さえ見れば、値はもう分かっている。
+</Hook>
+
+<Prediction
+  question="sin150° と sin30° の値はどう関係している？"
+  options={['等しい', '符号だけが逆', 'まったく無関係']}
+  answer="等しい"
+  explanation="150° の点は 30° の点を y 軸について折り返した位置にあり、高さ（sin）は変わらないからです。横の cos だけが符号を変えます。"
+/>
+
+前のレッスンで、角 $\theta$ の点 P は $(\cos\theta,\ \sin\theta)$ と表せることを学んだ。角の大きさや向きを変えると点 P は円周上を動くが、着いた先が元の点と「同じ」か「対称な位置」なら、その座標は元の角の値からすぐに読み取れる。新しい値を暗記する必要はない。
+
+まず、$150^\circ$ と $30^\circ$ を比べよう。$150^\circ=180^\circ-30^\circ$ なので、$150^\circ$ の点は $30^\circ$ の点を $y$ 軸について折り返した位置にある。
+
+<Figure caption="150° の点は 30° の点を y 軸について折り返した位置。高さ sin は同じで、横 cos は符号が反転する">
+<UnitCircle angleDeg={150} showSin showCos />
+</Figure>
+
+<Why>
+折り返しても高さ（$y$ 座標）は変わらないので、$\sin150^\circ=\sin30^\circ$ がすぐ分かる。一方で横方向（$x$ 座標）は左右が入れ替わるので、$\cos150^\circ=-\cos30^\circ$ となる。数学Iで学んだ「$90^\circ-\theta$」の関係も、同じ単位円の折り返しで説明できる。覚えるべきは式ではなく、点がどこへ移るかという位置関係だ。
+</Why>
+
+<Theorem name="補角の公式">
+$\theta$ を任意の角とするとき、
+$\sin(\pi-\theta)=\sin\theta$、$\cos(\pi-\theta)=-\cos\theta$、$\tan(\pi-\theta)=-\tan\theta$。
+</Theorem>
+
+<Note type="info">
+$\tan$ を含む式は、$\tan$ が定義される角（$\cos\theta\ne0$）で考えます。この条件は、以下に現れる $\tan$ の公式でも同じです。
+</Note>
+
+これは、$y$ 軸について折り返すと、高さはそのままで、向き（左右）だけが反転するという事実を式にしたものだ。$y$ 座標と $x$ 座標の両方が関わる $\tan$ は、符号が反転する。
+
+次に、$210^\circ$ を見てみよう。$210^\circ=180^\circ+30^\circ$ だから、$210^\circ$ の点は $30^\circ$ の点を原点について点対称に移した位置にある。
+
+<Figure caption="210° の点は 30° の点を原点について点対称に移した位置。y と x が同時に符号を変えるので傾き tan は変わらない">
+<UnitCircle angleDeg={210} showSin showCos showTan />
+</Figure>
+
+原点対称では、$y$ 座標も $x$ 座標も符号が入れ替わる。だから $\sin(\theta+\pi)=-\sin\theta$、$\cos(\theta+\pi)=-\cos\theta$。ところが比 $y/x$ で決まる $\tan$ は、分子と分母がともに符号を変えるため、値は変わらない。ここが $\tan$ だけ周期が短くなる理由だ。
+
+<Theorem name="周期性">
+$\theta$ を任意の角とするとき、
+$\sin(\theta+2\pi)=\sin\theta$、$\cos(\theta+2\pi)=\cos\theta$、$\tan(\theta+\pi)=\tan\theta$。
+</Theorem>
+
+$2\pi$ は半径1の円をちょうど1周する角だから、点は同じ位置に戻る。だから $\sin$ と $\cos$ は $2\pi$ ごとに同じ値になる。いっぽう $\tan$ は半周（$\pi$）で、原点対称の位置へ移っても比が変わらないので、$\pi$ ごとに値を繰り返す。
+
+<KeyPoint>
+$\tan$ の周期は $2\pi$ ではなく $\pi$。原点について点対称な位置では、$y$ も $x$ も同時に符号が変わり、比 $y/x$ は変わらないからだ。
+</KeyPoint>
+
+続いて、負の角を考えよう。$-\theta$ は時計回りの回転で、点を $x$ 軸について折り返した位置に対応する。折り返しても横の座標は変わらないが、縦の座標は正負が入れ替わる。
+
+<Definition term="負角の公式（偶関数・奇関数）">
+$\cos(-\theta)=\cos\theta$、$\sin(-\theta)=-\sin\theta$、$\tan(-\theta)=-\tan\theta$。
+</Definition>
+
+$\cos$ は負角でも値が変わらないため偶関数、$\sin$ と $\tan$ は符号が反転するため奇関数とよばれる。点 $(x,\ y)$ が $(x,\ -y)$ に移る、という $x$ 軸対称の一言に尽きる。
+
+最後に、$90^\circ-\theta$（$\frac{\pi}{2}-\theta$）の関係を確認する。これは直線 $y=x$ について折り返すことに対応し、$x$ 座標と $y$ 座標が入れ替わる。座標が入れ替わるとは、$\sin$ と $\cos$ が入れ替わるということだ。
+
+<Theorem name="余角の公式">
+$\sin\left(\dfrac{\pi}{2}-\theta\right)=\cos\theta$、$\cos\left(\dfrac{\pi}{2}-\theta\right)=\sin\theta$。
+</Theorem>
+
+<WorkedExample title="例題: 鋭角に帰着して値を求める">
+次の値を求めよ。
+
+(1) $\sin\dfrac{5\pi}{6}$　(2) $\cos\left(-\dfrac{\pi}{4}\right)$　(3) $\tan\dfrac{3\pi}{4}$
+
+<Steps>
+<Step reason="$\frac{5\pi}{6}=\pi-\frac{\pi}{6}$ とみれば、補角の公式で鋭角 $\frac{\pi}{6}$ に帰着できます。">(1) $\sin\dfrac{5\pi}{6}=\sin\left(\pi-\dfrac{\pi}{6}\right)=\sin\dfrac{\pi}{6}=\dfrac{1}{2}$。</Step>
+<Step reason="$-\frac{\pi}{4}$ は負角。$\cos$ は偶関数なので符号は変わりません。">(2) $\cos\left(-\dfrac{\pi}{4}\right)=\cos\dfrac{\pi}{4}=\dfrac{\sqrt{2}}{2}$。</Step>
+<Step reason="$\frac{3\pi}{4}=\pi-\frac{\pi}{4}$。$\tan$ は補角で符号が反転します。">(3) $\tan\dfrac{3\pi}{4}=\tan\left(\pi-\dfrac{\pi}{4}\right)=-\tan\dfrac{\pi}{4}=-1$。</Step>
+</Steps>
+
+<Answer>
+(1) $\dfrac{1}{2}$　(2) $\dfrac{\sqrt{2}}{2}$　(3) $-1$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="cos(-π/4) の値が cos(π/4) と等しくなるのはなぜ？"
+  options={['x 軸について折り返しても横の座標が変わらないから', 'y 軸について折り返しても高さが変わらないから', 'tan が負になるから']}
+  model="負角 -θ は点を x 軸について折り返した位置に対応します。折り返しても横の座標（cos）は変わらないので cos(-θ)=cosθ です。"
+/>
+
+<Misconception>
+<Wrong>
+$\tan$ の周期も $\sin$・$\cos$ と同じ $2\pi$ である。
+</Wrong>
+<WhyWrong>
+$\sin$ と $\cos$ は円を1周（$2\pi$）してはじめて同じ点に戻る。しかし $\tan$ は $y/x$ という比で、原点について点対称な位置（$\theta+\pi$）では $y$ と $x$ が同時に符号を変える。比の値は変わらないので、$\tan$ は半周の $\pi$ で同じ値に戻ってしまう。
+</WhyWrong>
+<Right>
+$\tan(\theta+\pi)=\tan\theta$。$\tan$ の周期は $\pi$ であり、$2\pi$ ではない。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\sin(-\theta)=\sin\theta$ である。つまり $\sin$ も負角で符号が変わらない。
+</Wrong>
+<WhyWrong>
+負角 $-\theta$ は時計回りの回転で、点を $x$ 軸について折り返した位置になる。横の座標は変わらないが、縦の座標（$\sin$）は正負が入れ替わる。負角で符号が変わらないのは $\cos$ だけであり、$\sin$ は符号が反転する。
+</WhyWrong>
+<Right>
+$\sin(-\theta)=-\sin\theta$、$\cos(-\theta)=\cos\theta$。$\sin$ は奇関数、$\cos$ は偶関数。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\tan(\theta+\pi)=\tan\theta$ となる理由を、単位円の対称性から説明せよ。
+<Reveal label="答え">
+$\theta+\pi$ の点は、$\theta$ の点を原点について点対称に移した位置にある。このとき $y$ 座標も $x$ 座標も符号が入れ替わるので、比 $y/x$ で決まる $\tan$ の値は変わらない。よって $\tan$ の周期は $\pi$ である。
+</Reveal>
+
+（2）$\sin\dfrac{7\pi}{6}$ を鋭角の三角関数で表し、値を求めよ。
+<Reveal label="答え">
+$\dfrac{7\pi}{6}=\pi+\dfrac{\pi}{6}$。原点対称では $\sin(\theta+\pi)=-\sin\theta$ なので、$\sin\dfrac{7\pi}{6}=-\sin\dfrac{\pi}{6}=-\dfrac{1}{2}$。
+</Reveal>
+
+（3）$\cos\dfrac{2\pi}{3}$ の値を求めよ。
+<Reveal label="答え">
+$\dfrac{2\pi}{3}=\pi-\dfrac{\pi}{3}$。補角の公式より $\cos\dfrac{2\pi}{3}=-\cos\dfrac{\pi}{3}=-\dfrac{1}{2}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="まとめの練習（符号・相互関係・還元）">
+（1）$\sin\theta=-\dfrac{3}{5}$ で $\theta$ が第4象限のとき、$\cos\theta$ と $\tan\theta$ を求めよ。
+（2）$\cos\left(-\dfrac{\pi}{6}\right)$ の値を求めよ。
+（3）$\tan\left(\pi+\dfrac{\pi}{4}\right)$ の値を求めよ。
+<Reveal label="解答">
+（1）$\cos^2\theta = 1 - \dfrac{9}{25} = \dfrac{16}{25}$。第4象限では $\cos\theta > 0$ だから $\cos\theta = \dfrac{4}{5}$、$\tan\theta = \dfrac{-3/5}{4/5} = -\dfrac{3}{4}$。
+（2）$\cos$ は偶関数なので $\cos\left(-\dfrac{\pi}{6}\right) = \cos\dfrac{\pi}{6} = \dfrac{\sqrt{3}}{2}$。
+（3）$\tan$ の周期は $\pi$ なので $\tan\left(\pi+\dfrac{\pi}{4}\right) = \tan\dfrac{\pi}{4} = 1$。
+</Reveal>
+</Practice>

@@ -1,0 +1,50 @@
+---
+/**
+ * Step — one numbered move inside <Steps>.
+ *
+ * `reason` is an optional なぜ annotation: why this move (or this order) is
+ * chosen (AUTHORING.md §2). It is a plain string — keep real math in the
+ * step body, and use <Why> in body text when a fuller explanation is needed.
+ */
+interface Props {
+  reason?: string;
+}
+
+const { reason } = Astro.props;
+---
+
+<li class="step">
+  <div class="step__body"><slot /></div>
+  {
+    reason && (
+      <p class="step__reason">
+        <span class="step__reason-label">なぜ</span>
+        {reason}
+      </p>
+    )
+  }
+</li>
+
+<style>
+  .step::marker {
+    color: var(--accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .step__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+  .step__reason {
+    margin: var(--sp-2) 0 0;
+    padding-left: var(--sp-3);
+    border-left: 2px solid var(--note);
+    color: var(--ink-soft);
+    font-size: 0.94em;
+  }
+  .step__reason-label {
+    margin-right: 0.5em;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--note);
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+/**
+ * Steps — an ordered derivation or procedure (AUTHORING.md §7).
+ *
+ * Usage:
+ *   <Steps>
+ *     <Step reason="…（任意）">…</Step>
+ *   </Steps>
+ *
+ * Renders a real <ol>; each <Step> is one <li> with a visible native number,
+ * so the order is conveyed without CSS counters.
+ */
+---
+
+<ol class="steps"><slot /></ol>
+
+<style>
+  .steps {
+    margin: var(--sp-4) 0;
+    padding-left: 1.7em;
+  }
+  .steps > :global(li) {
+    margin: var(--sp-3) 0;
+  }
+  .steps > :global(li:last-child) {
+    margin-bottom: 0;
+  }
+</style>

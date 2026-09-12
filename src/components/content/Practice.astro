@@ -1,0 +1,47 @@
+---
+/**
+ * Practice — additional exercises, ideally mixing earlier lessons
+ * (AUTHORING.md §5).
+ *
+ * Usage:
+ *   <Practice title="練習">
+ *     …questions…
+ *     <Reveal label="解答">…answers…</Reveal>
+ *   </Practice>
+ *
+ * `title` defaults to 「練習」. Answers must sit inside <Reveal> so retrieval
+ * happens before checking.
+ */
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const label = title?.trim() || '練習';
+---
+
+<section class="practice" aria-label={label}>
+  <p class="practice__label">{label}</p>
+  <div class="practice__body"><slot /></div>
+</section>
+
+<style>
+  .practice {
+    margin: var(--sp-5) 0;
+    padding: var(--sp-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface-soft);
+  }
+  .practice__label {
+    margin: 0 0 var(--sp-3);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .practice__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

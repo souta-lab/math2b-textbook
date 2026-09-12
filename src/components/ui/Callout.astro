@@ -1,0 +1,67 @@
+---
+/**
+ * Callout — the quiet boxed-note primitive.
+ *
+ * Usage:
+ *   <Callout type="tip" title="コツ">…</Callout>
+ *
+ * `type` picks the tint and keyline; `title` overrides the written label.
+ * The label is always visible text (補足 / ヒント / 注意), so meaning never
+ * depends on color alone.
+ */
+interface Props {
+  type?: 'info' | 'tip' | 'warn';
+  title?: string;
+}
+
+const { type = 'info', title } = Astro.props;
+
+const defaultLabels: Record<'info' | 'tip' | 'warn', string> = {
+  info: '補足',
+  tip: 'ヒント',
+  warn: '注意',
+};
+
+const label = title ?? defaultLabels[type];
+---
+
+<div class={`callout callout--${type}`} role="note" aria-label={label}>
+  <p class="callout__title">{label}</p>
+  <div class="callout__body"><slot /></div>
+</div>
+
+<style>
+  .callout {
+    margin: var(--sp-4) 0;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+  }
+  .callout--tip {
+    border-left-color: var(--correct);
+    background: var(--correct-soft);
+  }
+  .callout--warn {
+    border-left-color: var(--note);
+    background: var(--note-soft);
+  }
+  .callout__title {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .callout--tip .callout__title {
+    color: var(--correct);
+  }
+  .callout--warn .callout__title {
+    color: var(--note);
+  }
+  .callout__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

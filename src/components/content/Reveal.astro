@@ -1,0 +1,49 @@
+---
+/**
+ * Reveal — hidden answer/continuation behind a native <details>.
+ *
+ * Usage: <Reveal label="答えを見る">…hidden content…</Reveal>
+ *
+ * No JavaScript: <details>/<summary> is keyboard operable and works before
+ * hydration (there is no hydration). The default label is 「答えを見る」.
+ */
+interface Props {
+  label?: string;
+}
+
+const { label = '答えを見る' } = Astro.props;
+---
+
+<details class="reveal">
+  <summary class="reveal__summary">{label}</summary>
+  <div class="reveal__body"><slot /></div>
+</details>
+
+<style>
+  .reveal {
+    margin: var(--sp-4) 0;
+  }
+  .reveal__summary {
+    padding: var(--sp-1) 0;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .reveal__summary::marker {
+    color: var(--accent);
+  }
+  .reveal__summary:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+  .reveal[open] > .reveal__summary {
+    margin-bottom: var(--sp-2);
+  }
+  .reveal__body {
+    padding-left: var(--sp-4);
+    border-left: 2px solid var(--rule-strong);
+  }
+  .reveal__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

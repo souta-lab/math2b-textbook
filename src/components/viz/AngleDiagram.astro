@@ -1,0 +1,174 @@
+---
+import { degToRad, formatPi, normalizeDeg } from '../../lib/trig';
+import { polarToCartesian } from '../../lib/graph';
+
+interface Props {
+  deg?: number;
+  showArc?: boolean;
+  showQuadrants?: boolean;
+  label?: string;
+}
+
+const { deg = 120, showArc = true, showQuadrants = false, label } = Astro.props;
+
+const vbWidth = 320;
+const vbHeight = 240;
+const vx = 150;
+const vy = 120;
+const rayLength = 96;
+const arcR = 34;
+const turnGrowth = 7;
+
+const norm = normalizeDeg(deg);
+const rad = degToRad(deg);
+const endX = vx + rayLength * Math.cos(rad);
+const endY = vy - rayLength * Math.sin(rad);
+
+const spiral = (() => {
+  if (!showArc || Math.abs(deg) < 0.5) return null;
+  const steps = Math.max(24, Math.ceil(Math.abs(deg)));
+  const points: string[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = (deg * i) / steps;
+    const radius = arcR + turnGrowth * (Math.abs(t) / 360);
+    const p = polarToCartesian(vx, vy, radius, degToRad(t));
+    points.push(`${i === 0 ? 'M' : 'L'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`);
+  }
+  return points.join(' ');
+})();
+
+const arrowDirX = Math.cos(rad);
+const arrowDirY = -Math.sin(rad);
+const headLength = 11;
+const headHalf = 4;
+const headBaseX = endX - arrowDirX * headLength;
+const headBaseY = endY - arrowDirY * headLength;
+const normalX = -arrowDirY;
+const normalY = arrowDirX;
+const headPath = `M${endX.toFixed(2)} ${endY.toFixed(2)} L${(headBaseX + normalX * headHalf).toFixed(2)} ${(headBaseY + normalY * headHalf).toFixed(2)} L${(headBaseX - normalX * headHalf).toFixed(2)} ${(headBaseY - normalY * headHalf).toFixed(2)} Z`;
+
+const labelRadius = arcR + turnGrowth * (Math.abs(deg) / 720) + 24;
+const labelPoint = polarToCartesian(vx, vy, labelRadius, degToRad(deg / 2));
+
+const radLabel = formatPi(degToRad(deg));
+const wraps = Math.abs(deg) > 360.001 || deg < -0.001;
+const normNote = wraps ? `基準 ${norm}°` : null;
+const ariaLabel = label ?? `角 ${deg} 度の図`;
+---
+
+<figure class="viz viz-angle" data-viz="angle-diagram">
+  <svg
+    viewBox={`0 0 ${vbWidth} ${vbHeight}`}
+    role="img"
+    aria-label={`${ariaLabel}${radLabel ? `（${radLabel}）` : ''}`}
+  >
+    {
+      showQuadrants && (
+        <g>
+          <line class="v-axis" x1={vx - 138} y1={vy} x2={vx + 138} y2={vy} />
+          <line class="v-axis" x1={vx} y1={vy - 104} x2={vx} y2={vy + 104} />
+          <text class="v-faint" x={vx + 84} y={vy - 72} text-anchor="middle">
+            I
+          </text>
+          <text class="v-faint" x={vx - 84} y={vy - 72} text-anchor="middle">
+            II
+          </text>
+          <text class="v-faint" x={vx - 84} y={vy + 82} text-anchor="middle">
+            III
+          </text>
+          <text class="v-faint" x={vx + 84} y={vy + 82} text-anchor="middle">
+            IV
+          </text>
+        </g>
+      )
+    }
+    <line class="v-axis" x1={vx} y1={vy} x2={vx + rayLength + 12} y2={vy} />
+    <path
+      class="v-axis-head"
+      d={`M${vx + rayLength + 19} ${vy} L${vx + rayLength + 10} ${vy - 4} L${vx + rayLength + 10} ${vy + 4} Z`}
+    />
+    <line class="v-terminal" x1={vx} y1={vy} x2={endX.toFixed(2)} y2={endY.toFixed(2)} />
+    <path class="v-terminal-head" d={headPath} />
+    {spiral && <path class="v-arc" d={spiral} />}
+    <circle class="v-vertex" cx={vx} cy={vy} r="3.2" />
+    <text
+      class="v-angle-label"
+      x={labelPoint.x.toFixed(1)}
+      y={labelPoint.y.toFixed(1)}
+      text-anchor="middle"
+    >
+      {deg}°
+    </text>
+    {
+      radLabel && (
+        <text
+          class="v-faint"
+          x={labelPoint.x.toFixed(1)}
+          y={(labelPoint.y + 15).toFixed(1)}
+          text-anchor="middle"
+        >
+          {radLabel}
+        </text>
+      )
+    }
+    {
+      normNote && (
+        <text
+          class="v-faint"
+          x={labelPoint.x.toFixed(1)}
+          y={(labelPoint.y + 29).toFixed(1)}
+          text-anchor="middle"
+        >
+          {normNote}
+        </text>
+      )
+    }
+  </svg>
+</figure>
+
+<style is:global>
+  .viz-angle {
+    margin: var(--sp-5) 0;
+  }
+  .viz-angle svg {
+    display: block;
+    width: 100%;
+    max-width: 20rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-angle .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-angle .v-axis-head {
+    fill: var(--ink-faint);
+  }
+  .viz-angle .v-terminal {
+    stroke: var(--accent);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+  }
+  .viz-angle .v-terminal-head {
+    fill: var(--accent);
+  }
+  .viz-angle .v-arc {
+    fill: none;
+    stroke: var(--shu);
+    stroke-width: 2;
+  }
+  .viz-angle .v-vertex {
+    fill: var(--ink);
+  }
+  .viz-angle .v-angle-label {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .viz-angle .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+</style>

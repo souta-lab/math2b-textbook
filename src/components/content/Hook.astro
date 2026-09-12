@@ -1,0 +1,23 @@
+---
+/**
+ * Hook — the lesson's opening scene (AUTHORING.md §1).
+ *
+ * No equations here: a concrete situation or a naive question that makes the
+ * need for the concept visible. The first paragraph reads a touch larger than
+ * body copy; everything else is ordinary prose.
+ */
+---
+
+<div class="hook"><slot /></div>
+
+<style>
+  .hook {
+    margin: var(--sp-5) 0 var(--sp-6);
+  }
+  .hook > :global(p:first-child) {
+    font-size: 1.06em;
+  }
+  .hook > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>

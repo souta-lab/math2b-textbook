@@ -1,0 +1,19 @@
+---
+/**
+ * Note — a side remark in one of three registers (AUTHORING.md §9).
+ *
+ * Usage: <Note type="info | tip | warn">…</Note>
+ *
+ * Thin wrapper over the shared <Callout> primitive; the visible label
+ * (補足 / ヒント / 注意) carries the register, so color is never the only cue.
+ */
+import Callout from '../ui/Callout.astro';
+
+interface Props {
+  type?: 'info' | 'tip' | 'warn';
+}
+
+const { type = 'info' } = Astro.props;
+---
+
+<Callout type={type}><slot /></Callout>

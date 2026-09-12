@@ -1,0 +1,35 @@
+---
+/**
+ * Answer — the highlighted final-answer box labelled 「答え」.
+ *
+ * Usage: place inside <WorkedExample> after <Steps>, or inside a <Reveal>
+ * when the answer must stay hidden (e.g. within <Practice>).
+ */
+---
+
+<div class="answer" role="note" aria-label="答え">
+  <p class="answer__label">答え</p>
+  <div class="answer__body"><slot /></div>
+</div>
+
+<style>
+  .answer {
+    margin: var(--sp-4) 0 0;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--accent-soft);
+  }
+  .answer__label {
+    margin: 0 0 var(--sp-2);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+  .answer__body > :global(:last-child) {
+    margin-bottom: 0;
+  }
+</style>
