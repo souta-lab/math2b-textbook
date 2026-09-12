@@ -1,0 +1,119 @@
+---
+title: "三角比の定義 — sin・cos・tan は辺の比"
+summary: "直角三角形の3辺の比として sin・cos・tan を定義し、入試の図形問題の入口を作る。"
+unit: "i-trig-ratio"
+order: 0
+objectives:
+  - "注目する角に対して斜辺・対辺・隣辺を正しく言える"
+  - "sin・cos・tan を辺の比として定義し、値を求められる"
+  - "辺の比が角だけで決まる理由を相似で説明できる"
+prerequisites: ["jhs-geometry", "i-expression"]
+tags: ["三角比", "sin", "cos", "tan", "直角三角形"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+川の向こう岸に立つ木の高さを測りたいとします。川を渡って巻き尺を当てることはできません。しかし、こちら岸から木の根元までの距離と、木のてっぺんを見上げる角さえ測れば、高さが計算で求まります。角という「長さではない情報」が、なぜ長さに変わるのでしょう。
+</Hook>
+
+<Prediction
+  question="直角三角形で、角 $\theta$ の「向かい側の辺 ÷ 斜辺」を表すのはどれ？"
+  options={['$\sin\theta$', '$\cos\theta$', '$\tan\theta$']}
+  answer="$\sin\theta$"
+  explanation="sin は対辺 ÷ 斜辺、cos は隣辺 ÷ 斜辺、tan は対辺 ÷ 隣辺です。角の向かい側の辺を使うのが sin です。"
+/>
+
+直角三角形では、注目する角 $\theta$ を決めると、3つの辺にそれぞれ役割が決まります。
+
+- **斜辺**：直角の向かい側にある、いちばん長い辺
+- **対辺**：角 $\theta$ の向かい側にある辺
+- **隣辺**：角 $\theta$ をはさむ2辺のうち、斜辺でないほうの辺
+
+<Figure caption="角 θ から見た斜辺・対辺・隣辺。θ がついている頂点の向かい側が対辺です。">
+<RightTriangle deg={30} label="角 θ の直角三角形。θ の向かい側が対辺、θ をはさむ斜辺でない辺が隣辺。" />
+</Figure>
+
+対辺・隣辺は、どの角に注目するかで入れ替わります。斜辺だけは直角の向かい側なので、どの角から見ても同じ辺です。
+
+<Definition term="三角比（sin・cos・tan）">
+直角三角形で、角 $\theta$ の対辺を $a$、隣辺を $b$、斜辺を $c$ とする。このとき
+
+$$
+\sin\theta=\frac{a}{c}, \qquad \cos\theta=\frac{b}{c}, \qquad \tan\theta=\frac{a}{b}
+$$
+
+と定める。$\sin\theta$、$\cos\theta$、$\tan\theta$ をまとめて**三角比**という。
+</Definition>
+
+<Why>
+辺の比で角を表せるのは、相似の性質があるからです。角 $\theta$ を1つ決めれば、その角をもつ直角三角形は大きさが違ってもすべて相似になります。相似な図形では対応する辺の比が等しいので、$\dfrac{a}{c}$ や $\dfrac{b}{c}$ の値は三角形の大きさに依らず、角 $\theta$ だけで決まります。つまり三角比は「角の情報を辺の比に翻訳したもの」なのです。
+</Why>
+
+<KeyPoint>
+覚え方はこの3つ。$\sin\theta=\dfrac{\text{対辺}}{\text{斜辺}}$、$\cos\theta=\dfrac{\text{隣辺}}{\text{斜辺}}$、$\tan\theta=\dfrac{\text{対辺}}{\text{隣辺}}$。分母が斜辺なのは sin と cos だけです。
+</KeyPoint>
+
+## 例題
+
+<WorkedExample title="例題: 3辺から三角比を求める">
+$\angle C=90^\circ$ の直角三角形 $ABC$ で、$AB=13$、$BC=5$、$CA=12$ とする。角 $A$ について $\sin A$、$\cos A$、$\tan A$ を求めなさい。また、角 $B$ について $\sin B$ を求めなさい。
+
+<Steps>
+<Step reason="斜辺は直角 C の向かい側にある AB です。角 A から見た対辺は BC、隣辺は CA です。">斜辺 $c=AB=13$、角 $A$ の対辺 $a=BC=5$、隣辺 $b=CA=12$。</Step>
+<Step reason="定義どおり、sin は対辺÷斜辺、cos は隣辺÷斜辺、tan は対辺÷隣辺に代入します。">$\sin A=\dfrac{5}{13}$、$\cos A=\dfrac{12}{13}$、$\tan A=\dfrac{5}{12}$。</Step>
+<Step reason="角 B から見ると、対辺は AC に入れ替わります。斜辺 AB は共通なので分母は 13 のままです。">$\sin B=\dfrac{AC}{AB}=\dfrac{12}{13}$。</Step>
+</Steps>
+
+<Answer>
+$\sin A=\dfrac{5}{13}$、$\cos A=\dfrac{12}{13}$、$\tan A=\dfrac{5}{12}$、$\sin B=\dfrac{12}{13}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="角 A から角 B に注目を変えたとき、sin の分子が 5 から 12 に変わったのはなぜ？"
+  options={['対辺が BC から AC に入れ替わるから', '斜辺が 13 から 12 に変わるから', '角 B が直角だから']}
+  model="sin の分子は角の向かい側の辺（対辺）です。角 A では対辺が BC=5、角 B では対辺が AC=12 になります。斜辺 AB=13 はどちらから見ても同じなので、分母は変わりません。"
+/>
+
+<Misconception>
+<Wrong>
+辺 $BC$ は辺 $AB$ のとなりにあるから、$BC$ はいつも隣辺である。
+</Wrong>
+<WhyWrong>
+対辺か隣辺かは、辺そのものではなく「どの角に注目するか」で決まります。角 $A$ から見ると $BC$ は向かい側なので対辺ですが、角 $B$ から見ると $BC$ は角をはさむ辺なので隣辺です。辺の位置だけで決め打ちすると、$\cos A$ と $\cos B$ を取り違えて失点します。
+</WhyWrong>
+<Right>
+まず注目する角に丸を付け、「向かい側の辺＝対辺、角をはさむ斜辺でない辺＝隣辺」とその場で決めます。同じ図でも角が変われば役割が入れ替わることを確認してから定義に代入します。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. 斜辺が $10$、1つの鋭角の対辺が $6$ の直角三角形で、隣辺の長さと $\tan$ の値を求めなさい。
+2. ある直角三角形で $\sin\theta=\dfrac{3}{5}$、斜辺が $15$ のとき、角 $\theta$ の対辺の長さを求めなさい。
+3. 角 $\theta$ だけを決めれば、どんな大きさの直角三角形でも $\sin\theta$ が同じ値になるのはなぜか。
+<Reveal label="答え">
+1. 三平方の定理より隣辺は $\sqrt{10^2-6^2}=\sqrt{64}=8$。よって $\tan\theta=\dfrac{対辺}{隣辺}=\dfrac{6}{8}=\dfrac{3}{4}$。
+
+2. $\sin\theta=\dfrac{対辺}{斜辺}$ だから、対辺 $=15\times\dfrac{3}{5}=9$。
+
+3. 角 $\theta$ が等しい直角三角形はすべて相似で、対応する辺の比が等しいから。$\dfrac{対辺}{斜辺}$ の値は大きさに依らず $\theta$ だけで決まります。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+次の直角三角形について答えなさい。ただし $\angle C=90^\circ$ とする。
+
+(1) $\sin\theta=\dfrac{5}{13}$、$\cos\theta=\dfrac{12}{13}$ のとき、$\tan\theta$ を求めなさい。
+
+(2) 斜辺が $5$、1つの鋭角の対辺が $3$ のとき、$\cos\theta$ と $\tan\theta$ を求めなさい。
+
+<Reveal label="解答">
+(1) 3辺の比は $5:12:13$ と分かる。$\tan\theta=\dfrac{対辺}{隣辺}=\dfrac{5}{12}$。
+
+(2) 隣辺は $\sqrt{5^2-3^2}=4$。よって $\cos\theta=\dfrac{4}{5}$、$\tan\theta=\dfrac{3}{4}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+三角比は「直接測れない長さを、測れる長さと角から求める」ための道具です。入試の図形問題では、まず図の辺に斜辺・対辺・隣辺の名前を付け、$\sin$・$\cos$・$\tan$ を当てるところから計算が始まります。$3:4:5$ や $5:12:13$ の辺の比、$30^\circ$・$45^\circ$・$60^\circ$ の値を即答できるようにしておくと、後の正弦定理・余弦定理・面積の計算が一気に速くなります。

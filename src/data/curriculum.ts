@@ -239,7 +239,7 @@ export const units: Unit[] = [
     title: '数と式',
     summary: '展開・因数分解・実数・平方根と、一次不等式・絶対値を扱う。',
     prerequisites: ['jhs-number-expression', 'jhs-equation-inequality'],
-    status: 'planned',
+    status: 'published',
     order: 1,
     lessonPlan: [
       '00-expand-formulas',
@@ -258,7 +258,7 @@ export const units: Unit[] = [
     title: '集合と命題',
     summary: '集合の記号と、命題・条件・証明の論理を学ぶ。',
     prerequisites: ['i-expression'],
-    status: 'planned',
+    status: 'published',
     order: 2,
     lessonPlan: [
       '00-sets',
@@ -277,7 +277,7 @@ export const units: Unit[] = [
     title: '二次関数',
     summary: '平方完成からグラフ・最大最小・二次不等式までを扱う。',
     prerequisites: ['i-expression'],
-    status: 'planned',
+    status: 'published',
     order: 3,
     lessonPlan: [
       '00-function-graph',
@@ -298,7 +298,7 @@ export const units: Unit[] = [
     title: '図形と計量',
     summary: '三角比の定義から正弦定理・余弦定理・面積へ。',
     prerequisites: ['jhs-geometry', 'i-expression'],
-    status: 'planned',
+    status: 'published',
     order: 4,
     lessonPlan: [
       '00-sin-cos-tan',
@@ -319,7 +319,7 @@ export const units: Unit[] = [
     title: 'データの分析',
     summary: '四分位数・分散・相関を、散らばりの指標として読む。',
     prerequisites: ['jhs-data'],
-    status: 'planned',
+    status: 'published',
     order: 5,
     lessonPlan: [
       '00-quartile',
@@ -341,7 +341,7 @@ export const units: Unit[] = [
     title: '場合の数と確率',
     summary: '数え上げから条件付き確率・期待値まで。',
     prerequisites: ['i-sets-logic', 'jhs-number-expression'],
-    status: 'planned',
+    status: 'published',
     order: 1,
     lessonPlan: [
       '00-counting',
@@ -364,7 +364,7 @@ export const units: Unit[] = [
     title: '図形の性質',
     summary: '三角形の心・チェバ・円周角・方べきなど平面図形の性質。',
     prerequisites: ['jhs-geometry', 'i-trig-ratio'],
-    status: 'planned',
+    status: 'published',
     order: 2,
     lessonPlan: [
       '00-triangle-angles',
@@ -386,7 +386,7 @@ export const units: Unit[] = [
     title: '数学と人間の活動',
     summary: '約数・互除法・合同式・n進法と、数学の歴史・生活への応用。',
     prerequisites: ['a-probability', 'a-geometry'],
-    status: 'planned',
+    status: 'published',
     order: 3,
     lessonPlan: [
       '00-divisors',

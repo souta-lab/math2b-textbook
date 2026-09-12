@@ -1,0 +1,142 @@
+---
+title: "三角比の相互関係 — 1つの値から残りを出す"
+summary: "sin²θ+cos²θ=1 と tanθ=sinθ/cosθ を三平方の定理から導き、余角の関係まで使う。"
+unit: "i-trig-ratio"
+order: 2
+objectives:
+  - "sin²θ+cos²θ=1 を三平方の定理から導ける"
+  - "1つの三角比の値から他の2つを求められる"
+  - "余角の関係 sin(90°−θ)=cosθ を説明できる"
+prerequisites: ["i-trig-ratio/01-special-angles"]
+tags: ["相互関係", "sin2cos2", "余角", "tan"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+直角三角形の形は、1つの鋭角 $\theta$ だけで決まります。つまり $\sin\theta$ の値が分かれば、その三角形の形が決まり、$\cos\theta$ や $\tan\theta$ も自動的に決まっているはずです。3つの値は、別々に覚える必要のない関係で結ばれています。
+</Hook>
+
+<Prediction
+  question="鋭角 $\theta$ で $\sin\theta=\dfrac{3}{5}$ のとき、$\cos\theta$ の値は？"
+  options={['$\dfrac{4}{5}$', '$\pm\dfrac{4}{5}$', '$-\dfrac{4}{5}$']}
+  answer="$\dfrac{4}{5}$"
+  explanation="$\sin^2\theta+\cos^2\theta=1$ から大きさは $\dfrac{4}{5}$ と決まります。$\theta$ が鋭角なら $\cos\theta>0$ なので、符号は正です。"
+/>
+
+辺の長さの関係を調べると、3つの三角比の間に成り立つ式が見えてきます。斜辺 $c$、角 $\theta$ の対辺 $a$、隣辺 $b$ の直角三角形で、三平方の定理 $a^2+b^2=c^2$ の両辺を $c^2$ で割ります。
+
+$$
+\left(\frac{a}{c}\right)^2+\left(\frac{b}{c}\right)^2=1
+$$
+
+$a/c=\sin\theta$、$b/c=\cos\theta$ なので、次の関係が得られます。
+
+<Theorem name="鋭角の三角比の相互関係">
+$0^\circ \lt \theta \lt 90^\circ$ において
+
+$$
+\sin^2\theta+\cos^2\theta=1, \qquad \tan\theta=\frac{\sin\theta}{\cos\theta}
+$$
+
+が成り立つ。さらに、両辺を $\cos^2\theta$ で割ると
+
+$$
+1+\tan^2\theta=\frac{1}{\cos^2\theta}
+$$
+
+も成り立つ。
+</Theorem>
+
+<Why>
+$\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ と表すのは、斜辺という共通の分母を約分で消し、対辺と隣辺という「傾き」の情報だけを取り出せるからです。$\sin\theta=\dfrac{a}{c}$、$\cos\theta=\dfrac{b}{c}$ の比を取ると $\dfrac{a/c}{b/c}=\dfrac{a}{b}$ となり、確かに $\tan\theta$ に戻ります。$\cos\theta=0$ のときは分母が $0$ になるので、この式は使えません。
+</Why>
+
+<Figure caption="3:4:5 の直角三角形。θ の対辺が 3、隣辺が 4、斜辺が 5 なので、sinθ=3/5、cosθ=4/5、tanθ=3/4。">
+<CoordinatePlane
+  xMin={-1}
+  xMax={5}
+  yMin={-1}
+  yMax={4}
+  points={[{ x: 0, y: 0, label: 'A' }, { x: 4, y: 0, label: 'B' }, { x: 4, y: 3, label: 'C' }]}
+  segments={[
+    { x1: 0, y1: 0, x2: 4, y2: 0 },
+    { x1: 4, y1: 0, x2: 4, y2: 3 },
+    { x1: 0, y1: 0, x2: 4, y2: 3 }
+  ]}
+  showGrid={false}
+  label="3:4:5 の直角三角形と角 θ"
+/>
+</Figure>
+
+## 例題
+
+<WorkedExample title="例題: sinθ から cosθ と tanθ を求める">
+鋭角 $\theta$ について $\sin\theta=\dfrac{3}{5}$ のとき、$\cos\theta$ と $\tan\theta$ を求めなさい。
+
+<Steps>
+<Step reason="$\sin^2\theta+\cos^2\theta=1$ を使えば、分かっている sinθ だけで cosθ の2乗が求まります。">$\cos^2\theta=1-\sin^2\theta=1-\dfrac{9}{25}=\dfrac{16}{25}$。</Step>
+<Step reason="鋭角では点が直角三角形の内部にあり、cosθ は必ず正だからです。">$\theta$ は鋭角なので $\cos\theta \gt 0$。よって $\cos\theta=\dfrac{4}{5}$。</Step>
+<Step reason="tanθ は $\sin\theta/\cos\theta$ の定義に、求めた値をそのまま代入します。">$\tan\theta=\dfrac{\sin\theta}{\cos\theta}=\dfrac{3/5}{4/5}=\dfrac{3}{4}$。</Step>
+</Steps>
+
+<Answer>
+$\cos\theta=\dfrac{4}{5}$、$\tan\theta=\dfrac{3}{4}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="$\cos\theta$ の大きさが 4/5 と分かったとき、符号を + に決めた理由は？"
+  options={['θ が鋭角で cosθ が正だから', 'sinθ が正だから', 'tanθ が正だと決まっているから']}
+  model="2乗から分かるのは大きさだけです。鋭角の直角三角形では隣辺が正の長さをもつので cosθ>0。角度の範囲が符号を決めます。"
+/>
+
+直角三角形の残りの鋭角は $90^\circ-\theta$ です。この角から見ると、もとの対辺と隣辺の役割が入れ替わるので、次の関係が成り立ちます。
+
+<KeyPoint>
+余角の関係：$\sin(90^\circ-\theta)=\cos\theta$、$\cos(90^\circ-\theta)=\sin\theta$、$\tan(90^\circ-\theta)=\dfrac{1}{\tan\theta}$。一方の角の対辺が他方の角の隣辺になる、と図で確認できます。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+$\tan\theta=\dfrac{\cos\theta}{\sin\theta}$ である。
+</Wrong>
+<WhyWrong>
+逆です。定義は $\sin\theta=\dfrac{対辺}{斜辺}$、$\cos\theta=\dfrac{隣辺}{斜辺}$、$\tan\theta=\dfrac{対辺}{隣辺}$。両辺の比を計算すると $\dfrac{\sin\theta}{\cos\theta}=\dfrac{対辺/斜辺}{隣辺/斜辺}=\dfrac{対辺}{隣辺}=\tan\theta$ となり、分子が sin、分母が cos です。逆にすると $\tan 30^\circ$ が $\sqrt{3}$ になってしまい、正しい $\dfrac{\sqrt{3}}{3}$ と食い違います。
+</WhyWrong>
+<Right>
+$\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ と覚え、$\sin$ と $\cos$ のどちらが分子かを迷ったら、$\tan 45^\circ=1$（対辺と隣辺が等しい）で確かめます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. 鋭角 $\theta$ について $\cos\theta=\dfrac{5}{13}$ のとき、$\sin\theta$ と $\tan\theta$ を求めなさい。
+2. $\tan\theta=\dfrac{3}{4}$ のとき、$\sin\theta$ と $\cos\theta$ を求めなさい。
+3. $\sin(90^\circ-\theta)=\cos\theta$ が成り立つ理由を、直角三角形の辺の役割から説明しなさい。
+<Reveal label="答え">
+1. $\sin^2\theta=1-\dfrac{25}{169}=\dfrac{144}{169}$。鋭角だから $\sin\theta=\dfrac{12}{13}$、$\tan\theta=\dfrac{\sin\theta}{\cos\theta}=\dfrac{12/13}{5/13}=\dfrac{12}{5}$。
+
+2. $1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$ に $\tan\theta=\dfrac{3}{4}$ を代入すると $\dfrac{1}{\cos^2\theta}=1+\dfrac{9}{16}=\dfrac{25}{16}$。鋭角だから $\cos\theta=\dfrac{4}{5}$、$\sin\theta=\cos\theta\tan\theta=\dfrac{4}{5}\times\dfrac{3}{4}=\dfrac{3}{5}$。
+
+3. 角 $\theta$ の対辺は、残りの鋭角 $90^\circ-\theta$ から見ると隣辺になる。斜辺は共通なので、$\sin(90^\circ-\theta)=\dfrac{隣辺}{斜辺}=\cos\theta$ となる。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) 鋭角 $\theta$ について $\sin\theta=\dfrac{8}{17}$ のとき、$\cos\theta$ と $\tan\theta$ を求めなさい。
+
+(2) $1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$ を、$\sin^2\theta+\cos^2\theta=1$ から導きなさい。
+
+(3) $\cos 30^\circ=\sin 60^\circ$ が余角の関係で説明できることを確かめなさい。
+
+<Reveal label="解答">
+(1) $\cos^2\theta=1-\dfrac{64}{289}=\dfrac{225}{289}$。鋭角だから $\cos\theta=\dfrac{15}{17}$、$\tan\theta=\dfrac{8}{15}$。
+
+(2) $\sin^2\theta+\cos^2\theta=1$ の両辺を $\cos^2\theta$（$\cos\theta\neq0$）で割る。左辺の第1項は $\dfrac{\sin^2\theta}{\cos^2\theta}=\tan^2\theta$ なので、$1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$。
+
+(3) $30^\circ$ と $60^\circ$ は $90^\circ-\theta$ の関係。余角では対辺と隣辺が入れ替わるので、$\cos 30^\circ=\sin(90^\circ-30^\circ)=\sin 60^\circ$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+相互関係は、「1つの三角比の値だけが与えられたときに、残りを計算する」場面で使います。入試では、$\sin\theta$ から $\cos\theta$ を出して余弦定理や面積に持ち込む、といった連鎖が頻出です。重要なのは、2乗を外すときの符号を角度の範囲から決めること。鋭角なら $\cos\theta \gt 0$、鈍角なら $\cos\theta \lt 0$ という判断は、次の鈍角のレッスンでそのまま使います。

@@ -1,0 +1,123 @@
+---
+title: "特別な角の三角比 — 表を導いて即答する"
+summary: "30°・45°・60° の値を正三角形と直角二等辺三角形から導き、入試で使える即答表にする。"
+unit: "i-trig-ratio"
+order: 1
+objectives:
+  - "正三角形と正方形から 30°・45°・60° の辺の比を導ける"
+  - "特別角の sin・cos・tan を表を見ずに即答できる"
+  - "有理化した値と大小関係を正しく書ける"
+prerequisites: ["i-trig-ratio/00-sin-cos-tan"]
+tags: ["特別角", "30度", "45度", "60度", "三角比の値"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+三角定規は2枚1組で売られています。1枚は直角二等辺三角形、もう1枚は3つの角が $30^\circ$、$60^\circ$、$90^\circ$ の三角形です。この2つの形には、辺の長さの比がきれいな数で表せるという特別な性質があります。その比を使うと、三角比の値を計算機なしで正確に書けるようになります。
+</Hook>
+
+<Prediction
+  question="$\sin 30^\circ$ の値はどれ？"
+  options={['$\dfrac{1}{2}$', '$\dfrac{\sqrt{3}}{2}$', '$\dfrac{\sqrt{2}}{2}$']}
+  answer="$\dfrac{1}{2}$"
+  explanation="正三角形を半分に切った $30^\circ$・$60^\circ$・$90^\circ$ の三角形では、短い辺が対辺になります。対辺÷斜辺 $=1\div2=\dfrac{1}{2}$ です。"
+/>
+
+特別角の値は暗記するものではなく、中学で学んだ2つの三角形からその場で導けます。まず $45^\circ$ から確認しましょう。
+
+**$45^\circ$ の三角比。** 直角二等辺三角形の辺の比は $1:1:\sqrt{2}$ です。角 $\theta=45^\circ$ では、対辺と隣辺がどちらも $1$、斜辺が $\sqrt{2}$ なので
+
+$$
+\sin 45^\circ=\frac{1}{\sqrt{2}}=\frac{\sqrt{2}}{2}, \qquad
+\cos 45^\circ=\frac{1}{\sqrt{2}}=\frac{\sqrt{2}}{2}, \qquad
+\tan 45^\circ=\frac{1}{1}=1
+$$
+
+<Why>
+正三角形を半分に切って $30^\circ$・$60^\circ$ を作るのは、$60^\circ$ と「斜辺がもとの一辺」という長さの情報を、中学で学んだ三平方の定理にそのまま持ち込めるからです。辺の比 $1:\sqrt{3}:2$ が決まれば、$30^\circ$ と $60^\circ$ の三角比は対辺と隣辺を入れ替えるだけで両方得られます。表を丸暗記するより、毎回この図を思い出して導くほうが忘れません。
+</Why>
+
+**$30^\circ$ と $60^\circ$ の三角比。** 1辺が $2$ の正三角形を、頂点から底辺に垂線を下ろして半分に切ります。できる直角三角形の辺の比は、短い辺が $1$、長い辺が $\sqrt{3}$、斜辺が $2$、すなわち $1:\sqrt{3}:2$ です。
+
+<Figure caption="正三角形を半分に切ると 30°・60°・90° の直角三角形ができる。短い辺が 1、長い辺が √3、斜辺が 2。">
+<RightTriangle deg={30} showValues label="30°・60°・90° の直角三角形。対辺が短い辺、隣辺が長い辺に対応する。" />
+</Figure>
+
+まとめると次の表になります。$\tan 30^\circ$ と $\tan 60^\circ$ は分母を有理化してあります。
+
+| $\theta$ | $30^\circ$ | $45^\circ$ | $60^\circ$ |
+| --- | --- | --- | --- |
+| $\sin\theta$ | $\dfrac{1}{2}$ | $\dfrac{\sqrt{2}}{2}$ | $\dfrac{\sqrt{3}}{2}$ |
+| $\cos\theta$ | $\dfrac{\sqrt{3}}{2}$ | $\dfrac{\sqrt{2}}{2}$ | $\dfrac{1}{2}$ |
+| $\tan\theta$ | $\dfrac{\sqrt{3}}{3}$ | $1$ | $\sqrt{3}$ |
+
+<KeyPoint>
+$30^\circ$ と $60^\circ$ では sin と cos が入れ替わる。値の大小は「角が大きいほど sin は大きい、cos は小さい」で確かめられます。分母の有理化は $\dfrac{1}{\sqrt{3}}=\dfrac{\sqrt{3}}{3}$ のようにそろえます。
+</KeyPoint>
+
+## 例題
+
+<WorkedExample title="例題: 特別角を含む直角三角形">
+$\angle C=90^\circ$ の直角三角形 $ABC$ で、斜辺 $AB=8$、$\angle A=30^\circ$ とする。$BC$ と $AC$ を求めなさい。また三平方の定理で答えを検算しなさい。
+
+<Steps>
+<Step reason="斜辺と角 A が分かっていて、角 A の向かい側の辺 BC を求めるので sin を使います。">$BC=AB\sin 30^\circ=8\times\dfrac{1}{2}=4$。</Step>
+<Step reason="角 A をはさむ辺 AC を求めるので cos を使います。">$AC=AB\cos 30^\circ=8\times\dfrac{\sqrt{3}}{2}=4\sqrt{3}$。</Step>
+<Step reason="求めた2辺で三平方の定理が成り立てば、取り違えがないことを確かめられます。">検算：$4^2+(4\sqrt{3})^2=16+48=64=8^2$ となり、斜辺に一致する。</Step>
+</Steps>
+
+<Answer>
+$BC=4$、$AC=4\sqrt{3}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="この例題で、対辺 BC に sin を、隣辺 AC に cos を使ったのはなぜ？"
+  options={['求める辺が角の向かい側か、角をはさむ辺かで決まるから', '斜辺が 8 だから', '30° では必ず sin を使うから']}
+  model="sin は対辺÷斜辺、cos は隣辺÷斜辺。角 A の向かい側にある辺は BC なので sin、角 A をはさむ辺は AC なので cos を使います。角の位置で決まります。"
+/>
+
+<Misconception>
+<Wrong>
+$30^\circ$ では $\sin 30^\circ=\dfrac{\sqrt{3}}{2}$、$\cos 30^\circ=\dfrac{1}{2}$ である。
+</Wrong>
+<WhyWrong>
+この2つは入れ替わっています。$30^\circ$ の直角三角形では、対辺が短い辺 $1$、斜辺が $2$ なので $\sin 30^\circ=\dfrac{1}{2}$ です。$\dfrac{\sqrt{3}}{2}$ になるのは $\cos 30^\circ$ です。$30^\circ$ と $60^\circ$ の表は sin と cos がちょうど入れ替わるので、どちらか一方を間違えるともう一方も連鎖して誤ります。
+</WhyWrong>
+<Right>
+辺の比 $1:\sqrt{3}:2$ の図で、$30^\circ$ から見ると短い辺が対辺、長い辺が隣辺、$2$ が斜辺です。$\sin 30^\circ=\dfrac{短い辺}{斜辺}=\dfrac{1}{2}$、$\cos 30^\circ=\dfrac{長い辺}{斜辺}=\dfrac{\sqrt{3}}{2}$ と、図から毎回確かめます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. $\sin 45^\circ$、$\cos 45^\circ$、$\tan 45^\circ$ の値を言いなさい。また、$\sin 60^\circ$ の値も言いなさい。
+2. $\sin 60^\circ+\cos 30^\circ$ を計算しなさい。
+3. 斜辺が $4$ の直角二等辺三角形の、残りの2辺の長さを求めなさい。
+<Reveal label="答え">
+1. $\sin 45^\circ=\cos 45^\circ=\dfrac{\sqrt{2}}{2}$、$\tan 45^\circ=1$、$\sin 60^\circ=\dfrac{\sqrt{3}}{2}$。
+
+2. $\sin 60^\circ=\dfrac{\sqrt{3}}{2}$、$\cos 30^\circ=\dfrac{\sqrt{3}}{2}$ なので、和は $\sqrt{3}$。
+
+3. $45^\circ$ の直角二等辺三角形の辺の比は $1:1:\sqrt{2}$。斜辺が $4$ なら他の2辺は $\dfrac{4}{\sqrt{2}}=2\sqrt{2}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) 1辺が $6$ の正三角形がある。この正三角形の高さを求めなさい。
+
+(2) $\tan 30^\circ$ と $\tan 60^\circ$ の値を、分母を有理化した形で答えなさい。
+
+(3) $45^\circ$・$45^\circ$・$90^\circ$ の直角三角形で、1つの鋭角の対辺が $5$ のとき、斜辺を求めなさい。
+
+<Reveal label="解答">
+(1) 正三角形を半分に切ると $30^\circ$・$60^\circ$・$90^\circ$ の直角三角形になり、高さは長い辺。$6\times\sin 60^\circ=6\times\dfrac{\sqrt{3}}{2}=3\sqrt{3}$。
+
+(2) $\tan 30^\circ=\dfrac{1}{\sqrt{3}}=\dfrac{\sqrt{3}}{3}$、$\tan 60^\circ=\sqrt{3}$。
+
+(3) 辺の比 $1:1:\sqrt{2}$ より、斜辺は $5\sqrt{2}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+$30^\circ$・$45^\circ$・$60^\circ$ の三角比は、入試の図形問題で最もよく現れる値です。余弦定理や面積の公式に $\sin 30^\circ$ や $\cos 60^\circ$ を代入する場面が頻繁にあり、ここで手が止まると時間を大きく失います。表を丸暗記するのではなく、正三角形を半分に切った図と直角二等辺三角形を思い出してその場で導けるようにしておけば、ど忘れがなくなります。有理化の形を統一しておくことも、記述式で減点されないコツです。

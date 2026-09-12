@@ -1,0 +1,168 @@
+---
+title: "共通部分・和集合・補集合 — 「かつ」「または」「でない」"
+summary: "集合の3つの基本操作と要素の個数の数え方、ド・モルガンの法則を使えるようにする。"
+unit: "i-sets-logic"
+order: 1
+objectives:
+  - "共通部分・和集合・補集合を記号で表し、要素を求められる"
+  - "要素の個数の公式 $n(A\\cup B)=n(A)+n(B)-n(A\\cap B)$ を使える"
+  - "ド・モルガンの法則で「〜でない」を言い換えられる"
+prerequisites: ["i-sets-logic/00-sets"]
+tags: ["共通部分", "和集合", "補集合", "ド・モルガン"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+クラスで「犬を飼っている人」「猫を飼っている人」を調べたとする。犬は $25$ 人、猫は $18$ 人だった。では「どちらかを飼っている人」は $25+18=43$ 人だろうか。実際にはそうならない。両方飼っている人がいるからだ。その人は犬の集まりとしても猫の集まりとしても数えられ、$2$ 回足されてしまっている。集合の計算は、この「二重に数えた分を戻す」という発想から始まる。
+</Hook>
+
+<Prediction
+  question="40人のクラスで、犬を飼っている人は25人、猫を飼っている人は18人、両方飼っている人は10人でした。「少なくともどちらかを飼っている人」は何人でしょう？"
+  options={['$33$ 人', '$43$ 人', '$35$ 人']}
+  answer="$33$ 人"
+  explanation="$25+18=43$ では両方飼っている10人を2回数えています。$43-10=33$ 人です。重複を1回分だけ引き戻します。"
+/>
+
+<Note type="info">
+**入試での用途**：「$A$ または $B$」の人数や個数を求める問題は、集合の要素の個数の公式でほぼ一発で処理できる。記述式でも、ド・モルガンの法則で「〜でない」を言い換える手順が証明問題の定番になる。
+</Note>
+
+<Definition term="共通部分・和集合・補集合">
+2つの集合 $A$、$B$ について次を定める。
+
+- **共通部分** $A \cap B$：$A$ と $B$ のどちらにも属する要素全体の集合。
+- **和集合** $A \cup B$：$A$ と $B$ の少なくとも一方に属する要素全体の集合。
+- **補集合** $\overline{A}$：全体集合 $U$ の要素のうち、$A$ に属さないもの全体の集合。
+
+$$
+A \cap B=\{x \mid x \in A \text{ かつ } x \in B\},\qquad A \cup B=\{x \mid x \in A \text{ または } x \in B\}
+$$
+</Definition>
+
+補集合は全体集合 $U$ を決めて初めて意味をもつ。「$A$ でない」を表すには、何を全体としているかをはっきりさせておく必要がある。
+
+<Theorem name="ド・モルガンの法則">
+全体集合 $U$ の部分集合 $A$、$B$ について次が成り立つ。
+
+$$
+\overline{A \cup B}=\overline{A} \cap \overline{B},\qquad \overline{A \cap B}=\overline{A} \cup \overline{B}
+$$
+
+前半は「$A$ または $B$ でない」は「$A$ でなく、かつ $B$ でない」と同じだという意味である。
+</Theorem>
+
+<Theorem name="要素の個数">
+要素の個数を $n(A)$ で表すと、次の公式が成り立つ。
+
+$$
+n(A \cup B)=n(A)+n(B)-n(A \cap B),\qquad n(\overline{A})=n(U)-n(A)
+$$
+
+3つの集合では、次のようになる。
+
+$$
+n(A \cup B \cup C)=n(A)+n(B)+n(C)-n(A \cap B)-n(B \cap C)-n(C \cap A)+n(A \cap B \cap C)
+$$
+</Theorem>
+
+<Why>
+和集合の個数を単純に足し算で求めると、共通部分の要素を2回数えてしまう。だから「$2$ 回数えた分から $1$ 回分を引く」という引き算を入れる。これが要素の個数の公式である。補集合は「全体から取り除く」という引き算で個数が分かる。ド・モルガンの法則は、否定を内側へ押し込む言い換えであり、「〜でない」の条件を整理するときに計算量を大きく減らす。
+</Why>
+
+<WorkedExample title="例題1: 2つの条件を数える">
+あるクラスの生徒 $50$ 人に、数学が好きか、英語が好きかを尋ねた。数学が好きな生徒は $32$ 人、英語が好きな生徒は $21$ 人、両方とも好きな生徒は $12$ 人であった。次の人数を求めよ。
+
+（1）数学と英語の少なくとも一方が好きな生徒
+（2）どちらも好きでない生徒
+
+<Steps>
+<Step reason="まず両方を好きな人を2回数えている単純和を出し、1回分を引く。これが和集合の公式である。">$n(A \cup B)=32+21-12=41$。</Step>
+<Step reason="全体から和集合を除いた残りが、どちらでもない人である。補集合の個数は全体から引けばよい。">$n(\overline{A \cup B})=50-41=9$。</Step>
+</Steps>
+
+<Answer>
+（1）$41$ 人、（2）$9$ 人。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: ド・モルガンの法則を確かめる">
+全体集合を $U=\{1,2,3,4,5,6,7,8,9\}$ とし、$A=\{1,2,3,4,5\}$、$B=\{4,5,6,7\}$ とする。$A \cup B$ の補集合 $\overline{A \cup B}$ と、$\overline{A} \cap \overline{B}$ をそれぞれ求め、一致することを確かめよ。
+
+<Steps>
+<Step reason="まず和集合を求め、それから全体集合から取り除く。">$A \cup B=\{1,2,3,4,5,6,7\}$ なので $\overline{A \cup B}=\{8,9\}$。</Step>
+<Step reason="$\overline{A}$ は $U$ から $A$ の要素を取り除いた集合である。">$\overline{A}=\{6,7,8,9\}$。</Step>
+<Step reason="$\overline{B}$ も同様に求める。">$\overline{B}=\{1,2,3,8,9\}$。</Step>
+<Step reason="両方に共通して属する要素をとる。">$\overline{A} \cap \overline{B}=\{8,9\}$。</Step>
+<Step reason="2つの結果が同じ集合であることを確認する。">$\overline{A \cup B}=\overline{A} \cap \overline{B}$ が成り立っている。</Step>
+</Steps>
+
+<Answer>
+$\overline{A \cup B}=\{8,9\}$、$\overline{A} \cap \overline{B}=\{8,9\}$ で一致する。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$n(A \cup B)=n(A)+n(B)$ としてよい。両方に属する要素も、それぞれの集合の要素なのだから足せばよい。
+</Wrong>
+<WhyWrong>
+共通部分の要素は $A$ にも $B$ にも属するため、$n(A)+n(B)$ ではちょうど $2$ 回数えられている。和集合では $1$ 回として数えたいので、$1$ 回分を引き戻す必要がある。たとえば $n(A)=10$、$n(B)=8$、$n(A \cap B)=3$ なら、正しい $n(A \cup B)$ は $10+8-3=15$ であり、$18$ ではない。引き忘れると、共通部分の個数だけ多く答えてしまう。
+</WhyWrong>
+<Right>
+$n(A \cup B)=n(A)+n(B)-n(A \cap B)$。共通部分を2回数えていると意識して、必ず1回分を引く。3つの集合では、2回数えた部分を引き、3回数えた部分を足し戻す。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+「$A$ または $B$ でない」を、$\overline{A} \cup \overline{B}$ と書いてよい。
+</Wrong>
+<WhyWrong>
+$\overline{A} \cup \overline{B}$ は「$A$ でない、または $B$ でない」であり、$A$ と $B$ の一方だけを満たさない要素を含んでしまう。たとえば $A$ に属し $B$ に属さない要素は、$A \cup B$ には属するので $\overline{A \cup B}$ には入らないが、$\overline{A} \cup \overline{B}$ には入ってしまう。ここを混同すると、補集合の計算が丸ごとずれる。
+</WhyWrong>
+<Right>
+ド・モルガンの法則では、否定は「または」と「かつ」を入れ替える。$\overline{A \cup B}=\overline{A} \cap \overline{B}$、$\overline{A \cap B}=\overline{A} \cup \overline{B}$ である。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$n(A)=15$、$n(B)=9$、$n(A \cap B)=4$ のとき、$n(A \cup B)$ を求めよ。
+<Reveal label="答え">
+$n(A \cup B)=15+9-4=20$。
+</Reveal>
+
+（2）全体集合 $U$ の要素が $100$ 個で、その部分集合 $A$ の要素が $37$ 個のとき、$n(\overline{A})$ を求めよ。
+<Reveal label="答え">
+$n(\overline{A})=100-37=63$。
+</Reveal>
+
+（3）$\overline{A \cap B}$ を、$\overline{A}$、$\overline{B}$ と「または」を使って言い換えよ。
+<Reveal label="答え">
+$\overline{A \cap B}=\overline{A} \cup \overline{B}$。否定では「かつ」と「または」が入れ替わる。
+</Reveal>
+
+（4）要素が $10$ 個の全体集合 $U$ と、$n(A)=6$、$n(B)=5$、$n(A \cap B)=3$ が与えられている。$n(A \cup B)$ と $n(\overline{A \cup B})$ を求めよ。
+<Reveal label="答え">
+$n(A \cup B)=6+5-3=8$。$n(\overline{A \cup B})=10-8=2$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（集合の操作と個数）">
+（1）$A=\{1,2,3,4\}$、$B=\{3,4,5,6\}$ について、$A \cap B$、$A \cup B$ を求めよ。
+
+（2）$40$ 人の生徒のうち、通学で電車を使う人は $26$ 人、自転車を使う人は $15$ 人、両方を使う人は $6$ 人である。電車と自転車の少なくとも一方を使う人は何人か。
+
+（3）$n(U)=80$、$n(A)=35$、$n(B)=28$、$n(A \cap B)=11$ のとき、$n(A \cup B)$ と $n(\overline{A \cup B})$ を求めよ。
+
+（4）$A=\{1,2,3,4,5,6\}$、$B=\{2,4,6,8\}$ のとき、$\overline{A \cap B}$ を、全体集合を $U=\{1,2,3,4,5,6,7,8\}$ として求めよ。
+
+<Reveal label="解答">
+（1）$A \cap B=\{3,4\}$、$A \cup B=\{1,2,3,4,5,6\}$。
+
+（2）$26+15-6=35$ 人。
+
+（3）$n(A \cup B)=35+28-11=52$。$n(\overline{A \cup B})=80-52=28$。
+
+（4）$A \cap B=\{2,4,6\}$。$U$ から取り除いて $\overline{A \cap B}=\{1,3,5,7,8\}$。
+</Reveal>
+</Practice>

@@ -1,0 +1,133 @@
+---
+title: "余弦定理 — 2辺と間の角から辺へ"
+summary: "a²=b²+c²−2bc cosA を、辺を求める向きと角を求める向きの両方で使う。"
+unit: "i-trig-ratio"
+order: 5
+objectives:
+  - "2辺とその間の角から、余弦定理で第三辺を求められる"
+  - "3辺が分かっているとき、余弦定理から角を求められる"
+  - "A=90° のとき三平方の定理に一致することを確かめられる"
+prerequisites: ["i-trig-ratio/04-sine-rule"]
+tags: ["余弦定理", "三平方の定理", "間の角", "cos"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+2本のロープの一端を同じ杭に結び、他端を別々の場所に固定します。2本の長さと、杭のところでロープがつくる角が分かれば、2つの他端の間の距離も決まるはずです。角度を1つ変えるだけで距離が伸び縮みする。この関係を式にしたものが余弦定理です。
+</Hook>
+
+<Prediction
+  question="$\triangle ABC$ で $b=c=1$、$A=60^\circ$ のとき、$a^2$ の値は？"
+  options={['$1$', '$2$', '$3$']}
+  answer="$1$"
+  explanation="余弦定理 $a^2=b^2+c^2-2bc\cos A$ に代入すると、$1+1-2\times1\times1\times\dfrac{1}{2}=2-1=1$。3辺がすべて1の正三角形になります。"
+/>
+
+$\triangle ABC$ で $a=BC$、$b=CA$、$c=AB$ とすると、次の関係が成り立ちます。
+
+<Theorem name="余弦定理">
+$\triangle ABC$ において
+
+$$
+a^2=b^2+c^2-2bc\cos A, \qquad b^2=c^2+a^2-2ca\cos B, \qquad c^2=a^2+b^2-2ab\cos C
+$$
+
+が成り立つ。これを $a^2$ の式について解き直すと
+
+$$
+\cos A=\frac{b^2+c^2-a^2}{2bc}
+$$
+
+も得られる。
+</Theorem>
+
+<Why>
+余弦定理は、三平方の定理 $a^2=b^2+c^2$ に「角のズレ」を補正する項 $-2bc\cos A$ を加えたものです。$A=90^\circ$ のときは $\cos 90^\circ=0$ なので補正項が消え、三平方の定理に戻ります。向きによって使い方が2通りあり、辺を求めたいときは $a^2=\cdots$ の形を、角を求めたいときは $\cos A=\cdots$ の形を使います。3辺さえ分かれば、$\cos A$ を計算して角を逆算できるのが強みです。
+</Why>
+
+<Figure caption="辺と対角の対応。辺 a は頂点 A の向かい側、辺 b は B の向かい側、辺 c は C の向かい側にある。">
+<CoordinatePlane
+  xMin={-1}
+  xMax={5}
+  yMin={-1}
+  yMax={4}
+  points={[{ x: 0, y: 0, label: 'A' }, { x: 4, y: 0, label: 'B' }, { x: 1, y: 3, label: 'C' }]}
+  segments={[
+    { x1: 0, y1: 0, x2: 4, y2: 0 },
+    { x1: 4, y1: 0, x2: 1, y2: 3 },
+    { x1: 1, y1: 3, x2: 0, y2: 0 }
+  ]}
+  showGrid={false}
+  label="辺 a=BC、b=CA、c=AB と頂点の対応"
+/>
+</Figure>
+
+## 例題
+
+<WorkedExample title="例題: 辺を求める向きと角を求める向き">
+(1) $\triangle ABC$ で $b=3$、$c=4$、$A=60^\circ$ とする。$a$ を求めなさい。
+
+(2) 3辺が $a=7$、$b=5$、$c=3$ の三角形で、角 $A$ を求めなさい。
+
+<Steps>
+<Step reason="2辺 b、c とその間の角 A がそろっているので、辺を求める形の余弦定理を使います。">$a^2=3^2+4^2-2\times3\times4\times\cos 60^\circ=25-12=13$。</Step>
+<Step reason="長さは正なので、2乗を外します。">$a=\sqrt{13}$。</Step>
+<Step reason="3辺が分かっていて角 A を求めるので、$\cos A$ について解いた形を使います。辺 a の対角が A です。">$\cos A=\dfrac{b^2+c^2-a^2}{2bc}=\dfrac{25+9-49}{2\times5\times3}=\dfrac{-15}{30}=-\dfrac{1}{2}$。</Step>
+<Step reason="$\cos 120^\circ=-\dfrac{1}{2}$ なので、角 A は鈍角だと分かります。">$A=120^\circ$。</Step>
+</Steps>
+
+<Answer>
+(1) $a=\sqrt{13}$。(2) $A=120^\circ$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="(2) で $\cos A$ が負になったことから、角 A について何が分かる？"
+  options={['A が鈍角である', 'A が鋭角である', '計算を間違えた']}
+  model="0°から180°の範囲では、cos が負になるのは角が90°を超えるときだけです。cosA=−1/2 から A=120° と決まります。"
+/>
+
+<Misconception>
+<Wrong>
+余弦定理は $a^2=b^2+c^2+2bc\cos A$ である。
+</Wrong>
+<WhyWrong>
+符号はマイナスです。$A=90^\circ$ なら $\cos A=0$ でどちらでも同じですが、$A=60^\circ$ では差が出ます。$b=3$、$c=4$ のとき、正しい式では $a^2=25-12=13$ ですが、プラスの式では $25+12=37$ となり、実際の辺の長さと合いません。三平方の定理（$A=90^\circ$）に戻るのはマイナスのときだけです。
+</WhyWrong>
+<Right>
+$a^2=b^2+c^2-2bc\cos A$ と覚え、迷ったら $A=60^\circ$ の正三角形（$b=c=1$）で確かめます。$1+1-1=1$ となり、$a=1$ でつじつまが合います。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. $\triangle ABC$ で $b=2$、$c=5$、$A=60^\circ$ のとき、$a$ を求めなさい。
+2. 3辺が $a=7$、$b=5$、$c=8$ の三角形で、角 $A$ を求めなさい。
+3. 余弦定理で $A=90^\circ$ とすると、どの定理に戻るか。式を書いて確かめなさい。
+<Reveal label="答え">
+1. $a^2=4+25-2\times2\times5\times\dfrac{1}{2}=29-10=19$ なので $a=\sqrt{19}$。
+
+2. $\cos A=\dfrac{25+64-49}{2\times5\times8}=\dfrac{40}{80}=\dfrac{1}{2}$ なので $A=60^\circ$。
+
+3. $\cos 90^\circ=0$ より $a^2=b^2+c^2$。三平方の定理に一致する。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) $\triangle ABC$ で $b=3$、$c=5$、$A=120^\circ$ のとき、$a$ を求めなさい。
+
+(2) 3辺が $a=6$、$b=4$、$c=5$ の三角形で、角 $A$ を求めなさい。
+
+(3) $\triangle ABC$ で $a=4$、$b=5$、$c=6$ のとき、$\cos A$ を求めなさい。
+
+<Reveal label="解答">
+(1) $a^2=9+25-2\times3\times5\times\cos 120^\circ=34-30\times\left(-\dfrac{1}{2}\right)=34+15=49$ なので $a=7$。
+
+(2) $\cos A=\dfrac{16+25-36}{2\times4\times5}=\dfrac{5}{40}=\dfrac{1}{8}$。
+
+(3) $\cos A=\dfrac{25+36-16}{2\times5\times6}=\dfrac{45}{60}=\dfrac{3}{4}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+余弦定理は「間の角」か「3辺」がキーワードです。2辺とその間の角から第三辺を出す、3辺から角を出す、どちらの向きも入試で頻出します。特に3辺から角を求める形は、三角形の形を決定したり、鈍角かどうかを判定したりする場面で使います。正弦定理と迷ったら、対角ペアがそろっていれば正弦定理、間の角や3辺なら余弦定理、と切り分けると迷いません。$A=90^\circ$ で三平方の定理に戻ることを覚えておくと、答案の検算にも使えます。

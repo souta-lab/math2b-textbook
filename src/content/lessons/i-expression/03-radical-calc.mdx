@@ -1,0 +1,140 @@
+---
+title: "根号を含む計算と有理化 — 分母から根号を消す"
+summary: "根号の加減乗除を整理し、分母の有理化を入試の答案で使える形にする。"
+unit: "i-expression"
+order: 3
+objectives:
+  - "根号の中をそろえて、同類項として加減できる"
+  - "分母の共役を掛けて有理化し、分母から根号を消せる"
+  - "対称式の値を、有理化した $x$ と $1/x$ の和から求められる"
+prerequisites: ["i-expression/02-real-numbers"]
+tags: ["根号", "有理化", "対称式", "共役"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+入試の答案では、分母に根号が残ったままだと標準的な形とみなされず、減点の対象になることがある。とくに数学I「図形と計量」では $\dfrac{1}{\sqrt3}$ を $\dfrac{\sqrt3}{3}$ に直す場面が繰り返し出る。有理化は、値を変えずに式の形を整える技術であり、その手順は共役を掛けるという一手に集約される。
+</Hook>
+
+<Prediction
+  question="$\sqrt{12}+\sqrt{75}$ を計算すると、どれになるでしょう？"
+  options={['2√3', '5√3', '7√3']}
+  answer="7√3"
+  explanation="$\sqrt{12}=2\sqrt3$、$\sqrt{75}=5\sqrt3$ です。根号の中をそろえてから、文字式の同類項と同じように係数を足すと $(2+5)\sqrt3=7\sqrt3$。$\sqrt{12}+\sqrt{75}=\sqrt{87}$ ではありません。"
+/>
+
+<Note type="info">
+**入試での用途**：分母の有理化は、三角比の値、複素数の除法、数学IIIの極限で分母を整えるときなど、広い範囲で使う。$\dfrac{1}{\sqrt a+\sqrt b}$ の形は、共役を掛けて2乗の差を作るという同じ型で処理できる。
+</Note>
+
+<Theorem name="根号の計算と有理化">
+$a\gt 0$、$b\gt 0$ のとき、根号の中をそろえれば係数をまとめられる。
+
+$$
+\sqrt{a^2b}=a\sqrt b,\qquad \sqrt a\sqrt b=\sqrt{ab},\qquad \dfrac{\sqrt a}{\sqrt b}=\sqrt{\dfrac ab}
+$$
+
+分母に根号があるときは、分母と分子に同じ数を掛けて根号を消す。これを分母の有理化という。
+
+$$
+\dfrac{1}{\sqrt a}=\dfrac{\sqrt a}{a},\qquad \dfrac{c}{\sqrt a+\sqrt b}=\dfrac{c(\sqrt a-\sqrt b)}{a-b}
+$$
+</Theorem>
+
+<Why>
+$\sqrt5-\sqrt3$ に $\sqrt5+\sqrt3$ を掛けるのは、2乗の差 $(A-B)(A+B)=A^2-B^2$ を作るためだ。分子と分母に同じ数を掛けても値は変わらない。掛ける相手を符号だけ変えた式（共役）にすれば、分母は $(\sqrt5)^2-(\sqrt3)^2=5-3=2$ となり、根号が消えて整数だけが残る。2乗の差の公式が、有理化の仕組みそのものである。
+</Why>
+
+<WorkedExample title="例題1: 分母が根号の差">
+$\dfrac{2}{\sqrt5-\sqrt3}$ を有理化せよ。
+
+<Steps>
+<Step reason="分母の $\sqrt5-\sqrt3$ に対して、共役な $\sqrt5+\sqrt3$ を分母と分子の両方に掛ける。2乗の差で根号が消える。">$\dfrac{2(\sqrt5+\sqrt3)}{(\sqrt5-\sqrt3)(\sqrt5+\sqrt3)}$。</Step>
+<Step reason="分母は $(A-B)(A+B)=A^2-B^2$ で計算する。$(\sqrt5)^2-(\sqrt3)^2=5-3=2$。">$\dfrac{2(\sqrt5+\sqrt3)}{5-3}=\dfrac{2(\sqrt5+\sqrt3)}{2}$。</Step>
+<Step reason="分子と分母を $2$ で約分する。">$\sqrt5+\sqrt3$。</Step>
+</Steps>
+
+<Answer>
+$\sqrt5+\sqrt3$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 対称式の値を求める">
+$x=\dfrac{1}{\sqrt5-\sqrt3}$ のとき、$x^2+\dfrac{1}{x^2}$ の値を求めよ。
+
+<Steps>
+<Step reason="まず $x$ を有理化する。例題1と同じ計算で、分母の根号が消える。">$x=\dfrac{\sqrt5+\sqrt3}{2}$。</Step>
+<Step reason="$1/x$ はもとの分母をそのまま返した $\dfrac{\sqrt5-\sqrt3}{2}$。$x$ と $1/x$ の積が $1$ であることから確認できる。">$\dfrac{1}{x}=\dfrac{\sqrt5-\sqrt3}{2}$。</Step>
+<Step reason="$x^2+1/x^2$ は、そのまま計算すると重い。$x+\dfrac1x$ を作ってから2乗すると、対称式の値が短く出る。">$x+\dfrac1x=\dfrac{\sqrt5+\sqrt3+\sqrt5-\sqrt3}{2}=\sqrt5$。</Step>
+<Step reason="$x^2+\dfrac{1}{x^2}=\left(x+\dfrac1x\right)^2-2$ を計算する。$(\sqrt5)^2-2=5-2=3$。">$3$。</Step>
+</Steps>
+
+<Answer>
+$3$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+根号計算の型は、①中身を平方数で外に出して同類項にする ②分母に根号があれば共役を掛けて有理化する ③対称式は $x+\dfrac1x$ を作って2乗する、の3段である。
+</KeyPoint>
+
+<Note type="tip">
+**検算**：有理化した答えは、小数に直して元の式と一致するかを確かめられる。$\sqrt5+\sqrt3\approx2.236+1.732=3.968$ で、$\dfrac{2}{\sqrt5-\sqrt3}=\dfrac{2}{0.504}\approx3.968$ と一致する。対称式の結果が負や無理数になったときも、大小関係から妥当性を判断できる。
+</Note>
+
+<Misconception>
+<Wrong>
+$\sqrt a+\sqrt b=\sqrt{a+b}$ である。
+</Wrong>
+<WhyWrong>
+$\sqrt9+\sqrt{16}=3+4=7$ だが、$\sqrt{9+16}=\sqrt{25}=5$ で一致しない。積については $\sqrt a\sqrt b=\sqrt{ab}$ が成り立つが、和については成り立たない。根号の和は、中身が同じときだけ係数をまとめられる。$\sqrt2+\sqrt3$ はこれ以上簡単にならない。
+</WhyWrong>
+<Right>
+根号の和は同類項の和と同じで、中身がそろっているときだけまとめる。$\sqrt a+\sqrt b$ と $\sqrt{a+b}$ は別物である。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\dfrac{1}{\sqrt5+\sqrt3}$ を有理化するとき、分母にだけ $\sqrt5-\sqrt3$ を掛ける。
+</Wrong>
+<WhyWrong>
+分母だけに掛けると式の値が変わってしまう。値を変えずに分母の根号を消すには、分子と分母の両方に同じ共役を掛ける必要がある。片方だけに掛けるのは、$\dfrac{1}{2}$ を $\dfrac{1}{2-\text{何か}}$ に書き換える操作と同じで、等式が崩れる。
+</WhyWrong>
+<Right>
+分母の共役を、分子と分母の両方に掛ける。掛ける数が同じだから値は変わらず、分母だけが整数になる。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\sqrt{50}-\sqrt{18}+\sqrt{8}$ を計算せよ。
+<Reveal label="答え">
+$\sqrt{50}=5\sqrt2$、$\sqrt{18}=3\sqrt2$、$\sqrt{8}=2\sqrt2$。よって $(5-3+2)\sqrt2=4\sqrt2$。
+</Reveal>
+
+（2）$\dfrac{4}{\sqrt2}$ を有理化せよ。
+<Reveal label="答え">
+分母と分子に $\sqrt2$ を掛けて $\dfrac{4\sqrt2}{2}=2\sqrt2$。
+</Reveal>
+
+（3）$\dfrac{1}{\sqrt7+\sqrt6}$ を有理化せよ。
+<Reveal label="答え">
+共役な $\sqrt7-\sqrt6$ を分母と分子に掛ける。分母は $7-6=1$ なので、答えは $\sqrt7-\sqrt6$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（根号と有理化）">
+（1）$\sqrt{20}\div\sqrt5$ を計算せよ。
+
+（2）$\dfrac{6}{\sqrt3}$ を有理化せよ。
+
+（3）$x=\dfrac{1}{\sqrt3-\sqrt2}$ のとき、$x+\dfrac1x$ の値を求めよ。
+
+<Reveal label="解答">
+（1）$\sqrt{20}\div\sqrt5=\sqrt{\dfrac{20}{5}}=\sqrt4=2$。
+
+（2）分母と分子に $\sqrt3$ を掛けて $\dfrac{6\sqrt3}{3}=2\sqrt3$。
+
+（3）$x$ を有理化すると $x=\sqrt3+\sqrt2$、$\dfrac1x=\sqrt3-\sqrt2$。よって $x+\dfrac1x=2\sqrt3$。
+</Reveal>
+</Practice>

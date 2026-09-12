@@ -1,0 +1,140 @@
+---
+title: "鈍角の三角比 — 座標で定義を広げる"
+summary: "0°から180°の角に三角比を広げ、補角の公式で鈍角を鋭角に直して計算する。"
+unit: "i-trig-ratio"
+order: 3
+objectives:
+  - "鈍角の三角比を座標を用いて定義できる"
+  - "90°を超える角で sin・cos・tan の符号を判断できる"
+  - "補角の公式 sin(180°−θ)=sinθ などを使える"
+prerequisites: ["i-trig-ratio/02-reciprocal"]
+tags: ["鈍角", "座標", "補角", "符号"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+三角形の内角は、いつも直角より小さいとは限りません。$120^\circ$ の角をもつ三角形もあれば、頂角が $150^\circ$ の二等辺三角形もあります。ところが、鋭角の三角比は「直角三角形の辺の比」として定義しました。直角三角形に $90^\circ$ 以上の角は入れません。では、鈍角の三角比はどう考えればよいのでしょう。
+</Hook>
+
+<Prediction
+  question="$\theta=120^\circ$ のとき、$\cos\theta$ の符号はどれ？"
+  options={['正', '0', '負']}
+  answer="負"
+  explanation="鈍角では動径が x 軸の負の向き寄りになるので、点 P の x 座標が負になります。cosθ は x 座標の符号を引き継ぐので負です。"
+/>
+
+鋭角の定義は直角三角形が前提なので、鈍角にはそのまま使えません。そこで、辺の比ではなく**座標**で三角比を定義し直します。原点 O を頂点とし、$x$ 軸の正の向きから角 $\theta$ だけ回した半直線上に点 $P(x,\ y)$ を取ります。O と P の距離を $r=\sqrt{x^2+y^2}$ とすると、$r \gt 0$ です。
+
+<Definition term="鈍角の三角比">
+座標平面上の原点 O を頂点とし、$x$ 軸の正の向きから角 $\theta$ だけ回した半直線上の点を $P(x,\ y)$、$OP=r=\sqrt{x^2+y^2}$ とする。このとき
+
+$$
+\sin\theta=\frac{y}{r}, \qquad \cos\theta=\frac{x}{r}, \qquad \tan\theta=\frac{y}{x} \quad (x\neq 0)
+$$
+
+と定める。$\theta$ が鋭角のときは、対辺が $y$、隣辺が $x$、斜辺が $r$ の直角三角形とみなせ、前の定義と一致する。
+</Definition>
+
+<Why>
+座標で定義し直すのは、角が $90^\circ$ を超えても「半直線の向き」ならそのまま表せるからです。辺の比の定義は直角三角形の形に縛られますが、座標の定義なら $x$ と $y$ の符号がそのまま $\cos\theta$ と $\sin\theta$ の符号になります。$r$ は常に正なので、符号は点 P の位置だけで決まり、鈍角では $x \lt 0$、$y \gt 0$ から $\cos\theta \lt 0$、$\sin\theta \gt 0$ と読み取れます。
+</Why>
+
+<Figure caption="角 θ=135° の動径 OP。P(−1, 1)、r=√2 なので sinθ=1/√2、cosθ=−1/√2、tanθ=−1。x 座標が負なので cosθ は負になる。">
+<CoordinatePlane
+  xMin={-3}
+  xMax={2}
+  yMin={-1}
+  yMax={3}
+  points={[{ x: 0, y: 0, label: 'O' }, { x: -1, y: 1, label: 'P' }, { x: -1, y: 0, label: 'H' }]}
+  segments={[
+    { x1: 0, y1: 0, x2: -1, y2: 1 },
+    { x1: -1, y1: 1, x2: -1, y2: 0, dashed: true },
+    { x1: 0, y1: 0, x2: -1, y2: 0 }
+  ]}
+  showGrid={false}
+  label="鈍角 135° の動径と点 P(−1, 1)"
+/>
+</Figure>
+
+$\theta$ が $90^\circ$ を超えると、点 P は左側（$x \lt 0$）に移ります。このとき $\cos\theta=\dfrac{x}{r}$ は負、$\sin\theta=\dfrac{y}{r}$ は正です。$0^\circ$ から $180^\circ$ までの符号と値を整理します。
+
+| $\theta$ の範囲 | $\sin\theta$ | $\cos\theta$ | $\tan\theta$ |
+| --- | --- | --- | --- |
+| $0^\circ \lt \theta \lt 90^\circ$ | $+$ | $+$ | $+$ |
+| $\theta=90^\circ$ | $1$ | $0$ | 定義されない |
+| $90^\circ \lt \theta \lt 180^\circ$ | $+$ | $-$ | $-$ |
+| $\theta=180^\circ$ | $0$ | $-1$ | $0$ |
+
+$90^\circ$ では $x=0$ なので $\tan\theta=\dfrac{y}{x}$ の分母が $0$ になり、$\tan 90^\circ$ は考えません。
+
+<KeyPoint>
+$90^\circ$ を超える角は、$180^\circ-\theta$ という鋭角に置き換えて計算します。補角の公式：$\sin(180^\circ-\theta)=\sin\theta$、$\cos(180^\circ-\theta)=-\cos\theta$、$\tan(180^\circ-\theta)=-\tan\theta$。sin だけ符号が変わらないのがポイントです。
+</KeyPoint>
+
+## 例題
+
+<WorkedExample title="例題: 鈍角の値を鋭角に直す">
+$\theta=120^\circ$ のとき、$\sin\theta$、$\cos\theta$、$\tan\theta$ を求めなさい。また $\theta=135^\circ$ のときの $\sin\theta$ を求めなさい。
+
+<Steps>
+<Step reason="120° は 180°−60° と書けるので、60° の値に補角の公式を使えます。">$120^\circ=180^\circ-60^\circ$ だから、$\sin 120^\circ=\sin 60^\circ=\dfrac{\sqrt{3}}{2}$。</Step>
+<Step reason="cos は補角で符号が反転します。">$\cos 120^\circ=-\cos 60^\circ=-\dfrac{1}{2}$。</Step>
+<Step reason="tan も補角で符号が反転します。">$\tan 120^\circ=-\tan 60^\circ=-\sqrt{3}$。</Step>
+<Step reason="135°=180°−45° なので、sin は 45° の値のままです。">$\sin 135^\circ=\sin 45^\circ=\dfrac{\sqrt{2}}{2}$。</Step>
+</Steps>
+
+<Answer>
+$\sin 120^\circ=\dfrac{\sqrt{3}}{2}$、$\cos 120^\circ=-\dfrac{1}{2}$、$\tan 120^\circ=-\sqrt{3}$、$\sin 135^\circ=\dfrac{\sqrt{2}}{2}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="$\sin 120^\circ$ の符号が正で、$\cos 120^\circ$ の符号が負になるのはなぜ？"
+  options={['点 P の y 座標が正、x 座標が負だから', '120° が特別な角だから', 'sin はいつも正だから']}
+  model="鈍角では点 P が左上にあり、$y \gt 0$、$x \lt 0$ です。sinθ=y/r は正、cosθ=x/r は負になります。符号は座標の符号から読み取ります。"
+/>
+
+<Misconception>
+<Wrong>
+鈍角では $\sin\theta$ も $\cos\theta$ も負になる。
+</Wrong>
+<WhyWrong>
+鈍角で負になるのは $\cos\theta$ だけです。点 P は左上にあるので $x \lt 0$、$y \gt 0$、$r \gt 0$。よって $\cos\theta=\dfrac{x}{r} \lt 0$ ですが、$\sin\theta=\dfrac{y}{r} \gt 0$ は正のままです。$\sin$ まで負にすると、$\sin 120^\circ=-\dfrac{\sqrt{3}}{2}$ としてしまい、三角形の面積が負になるなど計算全体が崩れます。
+</WhyWrong>
+<Right>
+符号は暗記せず、動径がどの向きにあるかを思い浮かべ、点 P の $x$、$y$ の符号から決めます。$0^\circ$ から $90^\circ$ は右上で両方正、$90^\circ$ から $180^\circ$ は左上で $y$ だけ正です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. $\theta=150^\circ$ のとき、$\sin\theta$、$\cos\theta$、$\tan\theta$ を求めなさい。
+2. $\sin 150^\circ+\cos 120^\circ+\tan 135^\circ$ を計算しなさい。
+3. $\theta=100^\circ$ のとき、$\sin\theta$、$\cos\theta$ の符号を言いなさい。また $\sin 100^\circ$ を $0^\circ$ から $90^\circ$ の角の三角比で表しなさい。
+<Reveal label="答え">
+1. $150^\circ=180^\circ-30^\circ$。$\sin 150^\circ=\dfrac{1}{2}$、$\cos 150^\circ=-\dfrac{\sqrt{3}}{2}$、$\tan 150^\circ=-\dfrac{\sqrt{3}}{3}$。
+
+2. $\sin 150^\circ=\dfrac{1}{2}$、$\cos 120^\circ=-\dfrac{1}{2}$、$\tan 135^\circ=-1$ なので、和は $\dfrac{1}{2}-\dfrac{1}{2}-1=-1$。
+
+3. $100^\circ$ は鈍角なので $\sin\theta \gt 0$、$\cos\theta \lt 0$。$\sin 100^\circ=\sin(180^\circ-80^\circ)=\sin 80^\circ$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) $\theta=120^\circ$ のとき、$\sin\theta$ と $\cos\theta$ の値を求めなさい。
+
+(2) $\cos 150^\circ$ を、$0^\circ$ から $90^\circ$ の角の三角比を使って表しなさい。
+
+(3) 鈍角 $\theta$ について $\sin\theta=\dfrac{1}{2}$ のとき、$\theta$ を求めなさい。また、この $\theta$ で $\cos\theta$ の値を求めなさい。
+
+<Reveal label="解答">
+(1) $\sin 120^\circ=\sin 60^\circ=\dfrac{\sqrt{3}}{2}$、$\cos 120^\circ=-\cos 60^\circ=-\dfrac{1}{2}$。
+
+(2) $150^\circ=180^\circ-30^\circ$ より $\cos 150^\circ=-\cos 30^\circ=-\dfrac{\sqrt{3}}{2}$。
+
+(3) $\sin\theta=\dfrac{1}{2}$ で $\theta$ が鈍角だから $\theta=180^\circ-30^\circ=150^\circ$。このとき $\cos\theta=-\cos 30^\circ=-\dfrac{\sqrt{3}}{2}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+三角形の内角は $0^\circ$ より大きく $180^\circ$ より小さいので、入試の図形問題では鈍角の三角比が普通に登場します。補角の公式を使えば、鈍角を特別角に直して正確な値を書けます。また、$\sin\theta$ の値から角を求めるとき、$\theta$ と $180^\circ-\theta$ の2つが候補になる点も重要です。鈍角か鋭角かの条件を最後まで見落とさないことが、記述式での失点を防ぎます。

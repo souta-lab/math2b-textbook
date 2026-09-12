@@ -1,0 +1,129 @@
+---
+title: "正弦定理 — 対角と対辺を結ぶ"
+summary: "a/sinA = b/sinB = c/sinC = 2R を使い、角と辺のペアから未知量と外接円の半径を出す。"
+unit: "i-trig-ratio"
+order: 4
+objectives:
+  - "正弦定理の形と、辺と対角の対応を正しく言える"
+  - "2角と1辺、または2辺と1角から辺・角を求められる"
+  - "外接円の半径 R を正弦定理から求められる"
+prerequisites: ["i-trig-ratio/03-obtuse"]
+tags: ["正弦定理", "外接円", "対角", "2R"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+向こう岸の2点 A、B の間の距離を測りたいとします。川を渡れないので、こちら岸の1点 C から A、B までの距離は測れません。しかし、C で見込む角 ACB、A で見込む角 BAC と、測れる辺 AC さえあれば、AB の長さが分かります。角が辺の長さを教えてくれる仕組みを見ていきましょう。
+</Hook>
+
+<Prediction
+  question="$\angle A=90^\circ$ の直角三角形で、正弦定理 $\dfrac{a}{\sin A}=2R$ から $a$ はどう表される？"
+  options={['$a=R$', '$a=2R$', '$a=\dfrac{R}{2}$']}
+  answer="$a=2R$"
+  explanation="$\sin 90^\circ=1$ なので $\dfrac{a}{\sin A}=a$。これが外接円の直径 $2R$ に等しく、$a=2R$ です。$A=90^\circ$ のとき、辺 $a$ は外接円の直径になります。"
+/>
+
+$\triangle ABC$ で、各頂点に向かい合う辺を、頂点と同じ小文字で $a=BC$、$b=CA$、$c=AB$ と書きます。「辺 $a$ の対角は $A$」という対応を、すべての計算で守ります。
+
+<Theorem name="正弦定理">
+$\triangle ABC$ の外接円の半径を $R$ とすると
+
+$$
+\frac{a}{\sin A}=\frac{b}{\sin B}=\frac{c}{\sin C}=2R
+$$
+
+が成り立つ。
+</Theorem>
+
+<Why>
+正弦定理を使うときは、まず「辺とその対角のペア」を作ります。辺と対角はセットで、どのペアを取っても同じ値 $2R$ になるので、分かっているペアを基準に、求めたい辺や角へ比例で移れます。角の情報を辺の情報に翻訳する装置だと思うとよいでしょう。同じ式から外接円の半径 $R$ まで一緒に出せるのも強みです。
+</Why>
+
+<Figure caption="三角形 ABC とその外接円。どの辺と対角のペアでも a/sinA = b/sinB = c/sinC = 2R が成り立つ。">
+<CoordinatePlane
+  xMin={-3}
+  xMax={3}
+  yMin={-2}
+  yMax={3}
+  points={[{ x: 0, y: 2, label: 'A' }, { x: -1.73, y: -1, label: 'B' }, { x: 1.73, y: -1, label: 'C' }]}
+  segments={[
+    { x1: 0, y1: 2, x2: -1.73, y2: -1 },
+    { x1: -1.73, y1: -1, x2: 1.73, y2: -1 },
+    { x1: 1.73, y1: -1, x2: 0, y2: 2 }
+  ]}
+  circles={[{ cx: 0, cy: 0, r: 2 }]}
+  showGrid={false}
+  label="三角形 ABC と外接円（半径 R）"
+/>
+</Figure>
+
+## 例題
+
+<WorkedExample title="例題: 辺と対角のペアを作る">
+$\triangle ABC$ で $a=2\sqrt{3}$、$A=60^\circ$、$B=45^\circ$ とする。$b$ を求めなさい。また外接円の半径 $R$ を求めなさい。
+
+<Steps>
+<Step reason="辺 a とその対角 A がそろっているので、このペアを作ります。辺 b は対角 B と対応させます。">$\dfrac{a}{\sin A}=\dfrac{b}{\sin B}$ より $b=\dfrac{a\sin B}{\sin A}$。</Step>
+<Step reason="特別角の値を代入して、分母分子を整理します。">$b=\dfrac{2\sqrt{3}\times\dfrac{\sqrt{2}}{2}}{\dfrac{\sqrt{3}}{2}}=2\sqrt{2}$。</Step>
+<Step reason="同じペア a/sinA は外接円の直径 2R に等しいので、R を別に計算できます。">$2R=\dfrac{a}{\sin A}=\dfrac{2\sqrt{3}}{\dfrac{\sqrt{3}}{2}}=4$。よって $R=2$。</Step>
+</Steps>
+
+<Answer>
+$b=2\sqrt{2}$、$R=2$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="辺 b を求めるとき、$\dfrac{b}{\sin B}$ と $\dfrac{a}{\sin A}$ を等しいと置いたのはなぜ？"
+  options={['b の対角が B、a の対角が A で、対応がそろっているから', 'a と b がどちらも正だから', 'B が 45° だから']}
+  model="正弦定理は同じ頂点の辺と角をセットにしないと成り立ちません。辺 b の対角は B、辺 a の対角は A です。分子の辺と分母の角が同じ頂点になるように式を立てます。"
+/>
+
+<Note type="warn">
+正弦定理で角を求めると、$\sin\theta=\sin(180^\circ-\theta)$ のため角の候補が2つ現れることがあります。たとえば $\sin\theta=\dfrac{\sqrt{3}}{2}$ なら $\theta=60^\circ$ か $120^\circ$ です。どちらが正しいかは、三角形の内角の和や、鈍角か鋭角かの条件から決めます。
+</Note>
+
+<Misconception>
+<Wrong>
+正弦定理 $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}$ で、$a$ と $B$ を同じ分数に置いてよい（$\dfrac{a}{\sin B}=\dfrac{b}{\sin A}$）。
+</Wrong>
+<WhyWrong>
+分数の分子と分母は、同じ頂点の辺と対角のペアでなければなりません。辺 $a$ の対角は $A$ なので、正しいセットは $\dfrac{a}{\sin A}$ です。$a$ と $B$ を組にすると別の比になり、等式が崩れます。たとえば $a=2\sqrt{3}$、$A=60^\circ$、$B=45^\circ$ で $\dfrac{a}{\sin B}$ を使うと $b$ の値が変わってしまいます。
+</WhyWrong>
+<Right>
+式を立てる前に、$a\leftrightarrow A$、$b\leftrightarrow B$、$c\leftrightarrow C$ の対応を図で確認します。辺を選んだら、その向かい側の角を分母に置く。この順で $b=\dfrac{a\sin B}{\sin A}$ のように組み立てます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. $\triangle ABC$ で $a=4$、$A=45^\circ$、$B=60^\circ$ のとき、$b$ を求めなさい。
+2. $\triangle ABC$ で $b=2$、$B=30^\circ$ のとき、外接円の半径 $R$ を求めなさい。
+3. $\sin\theta=\dfrac{\sqrt{3}}{2}$ となる三角形の内角 $\theta$ は2つある。それらを言い、どちらを選ぶかをどう決めるか説明しなさい。
+<Reveal label="答え">
+1. $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}$ より $b=\dfrac{4\sin 60^\circ}{\sin 45^\circ}=\dfrac{4\times\dfrac{\sqrt{3}}{2}}{\dfrac{\sqrt{2}}{2}}=2\sqrt{6}$。
+
+2. $2R=\dfrac{b}{\sin B}=\dfrac{2}{\dfrac{1}{2}}=4$ なので $R=2$。
+
+3. $\theta=60^\circ$ または $120^\circ$。三角形の内角の和が $180^\circ$ に収まるか、および他の角の大きさや辺の長さの条件から、どちらかを選びます。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) $\triangle ABC$ で $c=6$、$C=120^\circ$、$A=30^\circ$ のとき、$a$ を求めなさい。
+
+(2) $\triangle ABC$ で $a=\sqrt{2}$、$A=45^\circ$ のとき、外接円の半径 $R$ を求めなさい。
+
+(3) $\triangle ABC$ で $A=30^\circ$、$B=45^\circ$、$b=2$ のとき、$a$ を求めなさい。
+
+<Reveal label="解答">
+(1) $\dfrac{a}{\sin A}=\dfrac{c}{\sin C}$ より $a=\dfrac{c\sin A}{\sin C}=\dfrac{6\times\dfrac{1}{2}}{\dfrac{\sqrt{3}}{2}}=\dfrac{3}{\sqrt{3}}=\sqrt{3}$。
+
+(2) $2R=\dfrac{a}{\sin A}=\dfrac{\sqrt{2}}{\dfrac{\sqrt{2}}{2}}=2$ なので $R=1$。
+
+(3) $\dfrac{a}{\sin A}=\dfrac{b}{\sin B}$ より $a=\dfrac{b\sin A}{\sin B}=\dfrac{2\times\dfrac{1}{2}}{\dfrac{\sqrt{2}}{2}}=\dfrac{1}{\sqrt{2}}=\dfrac{\sqrt{2}}{2}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+正弦定理は「対角ペアがそろっている」ときに使います。2つの角と1辺、または2辺とそのうち1つの対角が分かっている場合が典型で、外接円の半径を求める問題でも必ず出番があります。入試では、角を求めたあとに「鋭角か鈍角か」を吟味する一手が差になります。また余弦定理とどちらを使うか迷ったら、対角ペアがあるかどうかで判断すると速く決まります。

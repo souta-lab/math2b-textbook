@@ -1,0 +1,136 @@
+---
+title: "三角形の面積 — 2辺と間の角で測る"
+summary: "S=(1/2)bc sinA を高さから導き、面積比や鈍角の場合まで使いこなす。"
+unit: "i-trig-ratio"
+order: 6
+objectives:
+  - "S=(1/2)bc sinA を、高さを使って導ける"
+  - "2辺とその間の角から面積を求められる"
+  - "共通の角をもつ三角形の面積比を sin を使って比べられる"
+prerequisites: ["i-trig-ratio/05-cosine-rule"]
+tags: ["面積", "sin", "面積比", "鈍角"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+三角形の土地の面積を測りたいとします。3辺すべてを測るのは大変でも、2辺と、その間の角だけ測れば面積が出せる、と聞いたらどうでしょう。高さを直接測らなくても、角の情報から高さを計算で作れるからです。
+</Hook>
+
+<Prediction
+  question="$\triangle ABC$ で $b=2$、$c=3$、$A=30^\circ$ のとき、面積 $S$ は？"
+  options={['$\dfrac{1}{2}$', '$\dfrac{3}{2}$', '$3$']}
+  answer="$\dfrac{3}{2}$"
+  explanation="$S=\dfrac{1}{2}bc\sin A=\dfrac{1}{2}\times2\times3\times\dfrac{1}{2}=\dfrac{3}{2}$ です。sin を使うと高さを別に測らずに面積が出ます。"
+/>
+
+$\triangle ABC$ で、辺 $c=AB$ を底辺とし、頂点 C から辺 AB に垂線を下ろしてその高さを $h$ とします。直角三角形ができ、角 A を使って $h=b\sin A$ と表せます。三角形の面積は「底辺 × 高さ ÷ 2」だったので
+
+$$
+S=\frac{1}{2}\,c\,h=\frac{1}{2}\,c\,(b\sin A)=\frac{1}{2}\,bc\sin A
+$$
+
+<Theorem name="三角形の面積">
+$\triangle ABC$ の面積を $S$ とすると
+
+$$
+S=\frac{1}{2}\,bc\sin A=\frac{1}{2}\,ca\sin B=\frac{1}{2}\,ab\sin C
+$$
+
+が成り立つ。すなわち、2辺とその**はさむ角**の sin が分かれば面積が求まる。
+</Theorem>
+
+<Why>
+高さを直接測れないときでも、辺と角から高さを作れるのがこの公式の利点です。「底辺 × 高さ ÷ 2」という中学の面積の考え方を、三角比で高さを表すことに置き換えただけです。角 A が鈍角でも $\sin(180^\circ-\theta)=\sin\theta \gt 0$ なので高さは正のまま、同じ式が使えます。2辺を選んだら、その2辺がはさむ角を使うのがコツです。
+</Why>
+
+<Figure caption="底辺 AB=4、頂点 C の高さが 1 の三角形。面積は 4×1÷2=2。高さは辺 AC と角 A から sin で作れる。">
+<CoordinatePlane
+  xMin={-1}
+  xMax={5}
+  yMin={-1}
+  yMax={3}
+  points={[{ x: 0, y: 0, label: 'A' }, { x: 4, y: 0, label: 'B' }, { x: 1, y: 1, label: 'C' }]}
+  segments={[
+    { x1: 0, y1: 0, x2: 4, y2: 0 },
+    { x1: 4, y1: 0, x2: 1, y2: 1 },
+    { x1: 1, y1: 1, x2: 0, y2: 0 },
+    { x1: 1, y1: 1, x2: 1, y2: 0, dashed: true }
+  ]}
+  showGrid={false}
+  label="底辺 AB と高さ h をもつ三角形"
+/>
+</Figure>
+
+## 例題
+
+<WorkedExample title="例題: 間の角が鋭角のときと鈍角のとき">
+$\triangle ABC$ で $b=4$、$c=6$ とする。
+
+(1) $A=30^\circ$ のとき、面積 $S$ を求めなさい。
+
+(2) $A=120^\circ$ のとき、面積 $S$ を求めなさい。
+
+<Steps>
+<Step reason="2辺 b、c とその間の角 A がそろっているので、面積の公式をそのまま使います。">(1) $S=\dfrac{1}{2}\times4\times6\times\sin 30^\circ=12\times\dfrac{1}{2}=6$。</Step>
+<Step reason="鈍角でも $\sin 120^\circ=\sin 60^\circ=\dfrac{\sqrt{3}}{2}$ と正の値になるので、高さは正のままです。">(2) $S=\dfrac{1}{2}\times4\times6\times\sin 120^\circ=12\times\dfrac{\sqrt{3}}{2}=6\sqrt{3}$。</Step>
+</Steps>
+
+<Answer>
+(1) $S=6$。(2) $S=6\sqrt{3}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="(2) で角 A が鈍角でも面積が正になったのは、$\sin 120^\circ$ がどんな値だから？"
+  options={['正の値だから', '負の値だから', '0 だから']}
+  model="sin は 0°から180°の範囲で常に正の値（0以上）をとります。だから高さ b sinA も正で、面積は正になります。"
+/>
+
+<KeyPoint>
+2辺 $b$、$c$ と、その**はさむ角** $A$ を使う。角 $A$ は辺 $b$ と辺 $c$ の間の角であり、辺 $a$ の対角でもあります。3辺だけが分かっているときは、余弦定理で $\cos A$ を出し、$\sin^2A+\cos^2A=1$ から $\sin A$ を作って面積に持ち込みます。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+面積の公式は $\dfrac{1}{2}bc\sin B$ のように、辺 $b$、$c$ と角 $B$ を組み合わせてもよい。
+</Wrong>
+<WhyWrong>
+$\sin$ の中の角は、選んだ2辺の**はさむ角**でなければなりません。$b=4$、$c=6$ のとき、はさむ角は $A$ です。ここで角 $B$ を使うと $b\sin B$ は高さを表さず、面積が正しく求まりません。どの角が2辺の間にあるかを図で確かめないまま代入すると、値がずれます。
+</WhyWrong>
+<Right>
+2辺を選んだら、その2辺が共有する頂点の角を探します。辺 $b=CA$ と辺 $c=AB$ が共有する頂点は A なので、使う角は $A$ です。$S=\dfrac{1}{2}bc\sin A$ と、はさむ角を確認してから代入します。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. $\triangle ABC$ で $b=3$、$c=8$、$A=45^\circ$ のとき、面積 $S$ を求めなさい。
+2. 2辺が $4$ と $5$ で、面積が $10$ の三角形について、この2辺のはさむ角を求めなさい。
+3. $\triangle ABC$ と $\triangle ADE$ が角 $A$ を共有している。$AB=6$、$AC=9$、$AD=2$、$AE=3$ のとき、面積比 $S_{ABC}:S_{ADE}$ を求めなさい。
+<Reveal label="答え">
+1. $S=\dfrac{1}{2}\times3\times8\times\sin 45^\circ=12\times\dfrac{\sqrt{2}}{2}=6\sqrt{2}$。
+
+2. $\dfrac{1}{2}\times4\times5\times\sin A=10$ より $10\sin A=10$、$\sin A=1$。したがって $A=90^\circ$。
+
+3. 角 A が共通なので、面積比は辺の積の比で決まる。$(6\times9):(2\times3)=54:6=9:1$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) $\triangle ABC$ で $b=2$、$c=3$、$A=120^\circ$ のとき、面積 $S$ を求めなさい。
+
+(2) 3辺が $5$、$6$、$7$ の三角形の面積を求めなさい。
+
+(3) 2辺が $3$ と $6$ で、その間の角が $30^\circ$ の三角形の面積を求めなさい。
+
+<Reveal label="解答">
+(1) $S=\dfrac{1}{2}\times2\times3\times\sin 120^\circ=3\times\dfrac{\sqrt{3}}{2}=\dfrac{3\sqrt{3}}{2}$。
+
+(2) 辺 $a=5$ の対角を $A$ とする。$\cos A=\dfrac{6^2+7^2-5^2}{2\times6\times7}=\dfrac{60}{84}=\dfrac{5}{7}$。$\sin A=\sqrt{1-\dfrac{25}{49}}=\dfrac{2\sqrt{6}}{7}$。よって $S=\dfrac{1}{2}\times6\times7\times\dfrac{2\sqrt{6}}{7}=6\sqrt{6}$。
+
+(3) $S=\dfrac{1}{2}\times3\times6\times\sin 30^\circ=9\times\dfrac{1}{2}=\dfrac{9}{2}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+面積の公式は、図形問題の最後のゴールとしても、面積比を比べる途中の道具としても頻出です。2辺と間の角が与えられればすぐ面積が出ます。3辺だけの場合は、余弦定理で角の cos を出し、相互関係で sin を作ってから面積へ、という2段構えを使います。また、共通の角をもつ三角形どうしなら、面積比は「2辺の積の比」に等しくなります。この見方を使うと、面積を実際に計算せずに比だけを求められ、入試の時間短縮につながります。

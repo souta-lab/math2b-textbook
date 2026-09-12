@@ -1,0 +1,146 @@
+---
+title: "チェバの定理とメネラウスの定理 — 辺の比で共点・共線を制す"
+summary: "三角形の辺の比の積が1になる条件で、3直線の共点（チェバ）と3点の共線（メネラウス）を判定する。"
+unit: "a-geometry"
+order: 3
+objectives:
+  - "チェバの定理の形を覚え、3直線が1点で交わることを辺の比で示せる"
+  - "メネラウスの定理を使い、直線が辺の延長と交わる点の比を求められる"
+  - "チェバとメネラウスを混同せず、状況から使い分けられる"
+prerequisites: ["a-plane-geometry/01-centers"]
+tags: ["チェバの定理", "メネラウスの定理", "共点", "共線", "辺の比"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+三角形の頂点から、向かいの辺へ3本の線を引きます。3本がたまたま1点で交わるとき、それぞれが辺を分ける比の間には、必ず決まった関係があります。逆に、その関係さえ成り立てば3本は1点で交わります。長さを測らなくても、比だけで「交わるかどうか」が分かる仕組みです。
+</Hook>
+
+<Prediction
+  question="3本の線分 AD、BE、CF が1点で交わるとき、$\dfrac{BD}{DC}\cdot\dfrac{CE}{EA}\cdot\dfrac{AF}{FB}$ の値は？"
+  options={['1', '2', '$\dfrac{1}{2}$']}
+  answer="1"
+  explanation="チェバの定理より、3つの比の積は $1$ になります。分母分子がうまく打ち消し合う形です。"
+/>
+
+三角形の辺を分ける3つの比を、順番に掛けるだけで共点を判定できます。
+
+<Theorem name="チェバの定理">
+$\triangle ABC$ の辺 $BC$、$CA$、$AB$ 上にそれぞれ点 $D$、$E$、$F$ をとる。$AD$、$BE$、$CF$ が1点で交わるための必要十分条件は
+
+$$
+\frac{BD}{DC}\cdot\frac{CE}{EA}\cdot\frac{AF}{FB}=1
+$$
+
+である。
+</Theorem>
+
+<Theorem name="メネラウスの定理">
+$\triangle ABC$ の辺 $BC$、$CA$、$AB$（延長も可）上に点 $D$、$E$、$F$ をとる。$D$、$E$、$F$ が一直線上にあるための必要十分条件は、長さの比で
+
+$$
+\frac{BD}{DC}\cdot\frac{CE}{EA}\cdot\frac{AF}{FB}=1
+$$
+
+が成り立つことである。延長上の点では比の向き（符号）に注意するが、長さで扱えば積は $1$ である。
+</Theorem>
+
+<Why>
+なぜ積が1になるのか。$\dfrac{BD}{DC}$ は、高さが等しい $\triangle ABD$ と $\triangle ACD$ の面積比です。同様に $\dfrac{CE}{EA}$ は $\triangle BCE$ と $\triangle BAE$ の面積比、$\dfrac{AF}{FB}$ は $\triangle CAF$ と $\triangle CBF$ の面積比と見られます。3つを掛けると、現れる6つの小さな三角形の面積が分子分母で順に打ち消し合い、最後に $1$ だけが残ります。比を面積の橋渡しとして使うと、定理が覚えやすい形で出てきます。
+</Why>
+
+<Figure caption="チェバの定理の配置。AD、BE、CF が1点 P で交わり、BD:DC=2:1、CE:EA=3:2、AF:FB=1:3 のときに (2/1)(3/2)(1/3)=1 が成り立ちます。">
+<CoordinatePlane
+  xMin={-1}
+  xMax={7}
+  yMin={-1}
+  yMax={4}
+  points={[
+    { x: 0, y: 0, label: 'A' },
+    { x: 6, y: 0, label: 'B' },
+    { x: 0, y: 3, label: 'C' },
+    { x: 2, y: 2, label: 'D' },
+    { x: 0, y: 1.2, label: 'E' },
+    { x: 1.5, y: 0, label: 'F' },
+    { x: 1, y: 1, label: 'P' }
+  ]}
+  segments={[
+    { x1: 0, y1: 0, x2: 6, y2: 0 },
+    { x1: 6, y1: 0, x2: 0, y2: 3 },
+    { x1: 0, y1: 3, x2: 0, y2: 0 },
+    { x1: 0, y1: 0, x2: 2, y2: 2 },
+    { x1: 6, y1: 0, x2: 0, y2: 1.2 },
+    { x1: 0, y1: 3, x2: 1.5, y2: 0 }
+  ]}
+  showGrid={false}
+  label="チェバの定理：3本の線分が1点 P で交わる"
+/>
+</Figure>
+
+## 例題
+
+<WorkedExample title="例題: チェバで比を決め、メネラウスで比を求める">
+(1) $\triangle ABC$ の辺 $BC$ 上に $BD:DC=2:1$、辺 $CA$ 上に $CE:EA=3:2$ となる点 $D$、$E$ をとる。$AD$ と $BE$ の交点を $P$ とし、直線 $CP$ が辺 $AB$ と交わる点を $F$ とする。$AF:FB$ を求めなさい。
+
+(2) $\triangle ABC$ の辺 $BC$ 上に $BD=2$、$DC=3$ となる点 $D$、辺 $CA$ 上に $AE=1$、$EC=4$ となる点 $E$ をとる。直線 $DE$ が直線 $AB$ と交わる点を $F$ とする。$AF:FB$ を求めなさい。
+
+<Steps>
+<Step reason="(1) 3直線 AD、BE、CF は1点 P で交わるので、チェバの定理が使えます。求めたいのは AF:FB で、他の2つの比は分かっています。">$\dfrac{BD}{DC}\cdot\dfrac{CE}{EA}\cdot\dfrac{AF}{FB}=1$ に $\dfrac{BD}{DC}=\dfrac{2}{1}$、$\dfrac{CE}{EA}=\dfrac{3}{2}$ を代入する。</Step>
+<Step reason="分かっている積を先に計算して、未知の比を孤立させます。">$\dfrac{2}{1}\cdot\dfrac{3}{2}=3$ なので $3\cdot\dfrac{AF}{FB}=1$。よって $\dfrac{AF}{FB}=\dfrac{1}{3}$、すなわち $AF:FB=1:3$。</Step>
+<Step reason="(2) D、E、F は一直線上にあるので、今度はメネラウスの定理を使います。辺 BC と CA の比は $BD=2$、$DC=3$ および $AE=1$、$EC=4$ から作ります。">$\dfrac{BD}{DC}=\dfrac{2}{3}$、$\dfrac{CE}{EA}=\dfrac{4}{1}$ として $\dfrac{BD}{DC}\cdot\dfrac{CE}{EA}\cdot\dfrac{AF}{FB}=1$。</Step>
+<Step reason="積を整理して AF:FB を出します。F は辺 AB の延長上（A 側の外側）にあります。">$\dfrac{2}{3}\cdot\dfrac{4}{1}=\dfrac{8}{3}$ より $\dfrac{AF}{FB}=\dfrac{3}{8}$。よって $AF:FB=3:8$。</Step>
+</Steps>
+
+<Answer>
+(1) $AF:FB=1:3$。(2) $AF:FB=3:8$（点 $F$ は辺 $AB$ を $A$ 側へ延長した直線上にある）。
+</Answer>
+</WorkedExample>
+
+<Note type="tip">
+チェバとメネラウスが同じ形なのは偶然ではありません。チェバの定理で「辺の上の点」の代わりに「辺の延長上の点」を1つ混ぜるとメネラウスの定理になります。どちらも「周りを1周しながら比を掛ける」と覚えると、順序を間違えません。
+</Note>
+
+<Misconception>
+<Wrong>
+メネラウスの定理でも「点はすべて辺の上にある」と考え、延長上に点がある配置を想定しない。また、チェバとメネラウスを混同して、共線の問題にチェバを使う。
+</Wrong>
+<WhyWrong>
+メネラウスの定理は、直線が三角形と交わるときに使います。1本の直線は三角形の3辺のうち2辺までしか辺の内部では交われないので、残りの1点は必ず辺の延長上にあります（または3点すべてが延長上）。すべての点が辺の上にある状態を考えるチェバとは配置が違います。チェバは「3直線が1点で交わる（共点）」、メネラウスは「3点が一直線上にある（共線）」で、結論が別物です。図を描き、点が辺の上か延長かを見てから定理を選びます。
+</WhyWrong>
+<Right>
+まず配置を図に描きます。3本の線が内側で交わるならチェバ、1本の直線が三角形を切って1点が外に出るならメネラウスです。辺の比を取る順序はどちらも $\dfrac{BD}{DC}\cdot\dfrac{CE}{EA}\cdot\dfrac{AF}{FB}$ で固定し、長さの積は $1$ になります。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. チェバの定理とメネラウスの定理は、それぞれ何を判定するための定理か。
+2. $\triangle ABC$ で $D$ が辺 $BC$ 上、$E$ が辺 $CA$ 上、$F$ が辺 $AB$ 上にあり、$AD$、$BE$、$CF$ が1点で交わる。$\dfrac{BD}{DC}=\dfrac{1}{2}$、$\dfrac{CE}{EA}=\dfrac{2}{3}$ のとき $\dfrac{AF}{FB}$ を求めなさい。
+3. メネラウスの定理で、3点のうち辺の延長上にあるのは最大で何個か。
+<Reveal label="答え">
+1. チェバは3直線の共点（1点で交わること）、メネラウスは3点の共線（一直線上にあること）を判定する。
+
+2. $\dfrac{1}{2}\cdot\dfrac{2}{3}\cdot\dfrac{AF}{FB}=1$ より $\dfrac{1}{3}\cdot\dfrac{AF}{FB}=1$、$\dfrac{AF}{FB}=3$。
+
+3. 1本の直線は三角形の辺の内部と2回までしか交われないので、延長上にある点は1個または3個。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) $\triangle ABC$ で $D$ は辺 $BC$ 上、$E$ は辺 $CA$ 上、$F$ は辺 $AB$ 上にある。$\dfrac{BD}{DC}=\dfrac{3}{2}$、$\dfrac{AF}{FB}=\dfrac{5}{4}$ のとき、$AD$、$BE$、$CF$ が1点で交わるために $\dfrac{CE}{EA}$ をいくらにすればよいか。
+
+(2) $\triangle ABC$ で $D$ は辺 $BC$ 上の点、$E$ は辺 $CA$ 上の点、$F$ は辺 $AB$ の延長上の点で、$D$、$E$、$F$ は一直線上にある。$\dfrac{BD}{DC}=\dfrac{4}{3}$、$\dfrac{CE}{EA}=\dfrac{2}{5}$ のとき $AF:FB$ を求めなさい。
+
+(3) $\triangle ABC$ の辺 $AB$ の中点を $F$、辺 $AC$ の中点を $E$ とする。直線 $FE$ と辺 $BC$ の関係を、メネラウスとは別に「中点連結定理」の観点から述べなさい。
+
+<Reveal label="解答">
+(1) $\dfrac{3}{2}\cdot\dfrac{CE}{EA}\cdot\dfrac{5}{4}=1$ より $\dfrac{15}{8}\cdot\dfrac{CE}{EA}=1$、$\dfrac{CE}{EA}=\dfrac{8}{15}$。
+
+(2) $\dfrac{4}{3}\cdot\dfrac{2}{5}\cdot\dfrac{AF}{FB}=1$ より $\dfrac{8}{15}\cdot\dfrac{AF}{FB}=1$、$\dfrac{AF}{FB}=\dfrac{15}{8}$。よって $AF:FB=15:8$。
+
+(3) $F$、$E$ はそれぞれ辺 $AB$、$AC$ の中点なので、$FE$ は $BC$ に平行で、$FE=\dfrac{1}{2}BC$ である（中点連結定理）。
+</Reveal>
+</Practice>
+
+## 入試での使いどころ
+
+チェバは重心・内心の存在を辺の比で証明する場面や、3本の線が1点で交わることを示す問題で使います。メネラウスは「1本の直線が三角形の辺と延長を切る」配置の辺の比を一発で出す最強の道具です。補助線で相似を探すより速く、面積比や線分比を求める問題の多くがこの2定理に帰着します。検算として、比の積が $1$ になっているかを確かめると、どの比を掛け忘れたかをすぐ発見できます。

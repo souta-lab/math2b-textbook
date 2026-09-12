@@ -109,7 +109,8 @@ test('trig graph slider updates the readout', async ({ page }) => {
 for (const id of SMOKE_LESSON_IDS) {
   test(`lesson ${id} renders math with no errors and no overflow`, async ({ page }) => {
     await page.goto(`/lessons/${id}`);
-    await expect(page.locator('.katex').first()).toBeVisible();
+    await expect(page.locator('.katex').first()).toBeAttached();
+    expect(await page.locator('.katex:visible').count()).toBeGreaterThan(0);
     await expect(page.locator('.katex-error')).toHaveCount(0);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

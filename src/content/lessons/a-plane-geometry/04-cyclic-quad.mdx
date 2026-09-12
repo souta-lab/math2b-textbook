@@ -1,0 +1,131 @@
+---
+title: "円に内接する四角形 — 対角の和180°と余弦定理の連携"
+summary: "内接四角形の対角・外角の性質と、対角の和180°を使って余弦定理を2回使う入試の典型計算を扱う。"
+unit: "a-geometry"
+order: 5
+objectives:
+  - "円に内接する四角形では対角の和が180°になることを使える"
+  - "外角が向かい合う内角に等しいことを説明できる"
+  - "対角の和180°から cosine の符号を切り替え、余弦定理で対角線と面積を求められる"
+prerequisites: ["a-plane-geometry/03-inscribed-angle"]
+tags: ["内接四角形", "対角の和", "余弦定理", "面積"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+四角形の向かい合う角を足すと、いつも $180^\circ$ になるわけではありません。しかし4つの頂点が1つの円の上に乗っていると、向かい合う角の和はきっかり $180^\circ$ に固定されます。円という舞台が、四角形の角の間に特別な関係を強制しているのです。
+</Hook>
+
+<Prediction
+  question="円に内接する四角形の、向かい合う内角の和は？"
+  options={['90°', '180°', '360°']}
+  answer="180°"
+  explanation="円に内接する四角形では、対角の和は $180^\circ$ です。それぞれの対角が、向かいの対角が作る弧を見ていることから導かれます。"
+/>
+
+<Theorem name="円に内接する四角形の性質">
+円に内接する四角形 $ABCD$ では
+
+$$
+\angle A+\angle C=180^\circ,\qquad \angle B+\angle D=180^\circ
+$$
+
+が成り立つ。また、1つの外角は、それと向かい合う内角に等しい。
+</Theorem>
+
+<Theorem name="内接四角形の判定（逆）">
+四角形 $ABCD$ で $\angle A+\angle C=180^\circ$（または $\angle B+\angle D=180^\circ$）ならば、この四角形は円に内接する。
+</Theorem>
+
+<Why>
+入試で最も効くのは、$\angle C=180^\circ-\angle A$ から $\cos C=-\cos A$ と符号が反転する点です。共通の対角線 $AC$ を、$\triangle ABC$ と $\triangle ACD$ の両方で余弦定理を使って表し、2つの式を等号で結べば、$\dfrac{b^{2}+c^{2}-AC^{2}}{2bc}$ と $\dfrac{d^{2}+e^{2}-AC^{2}}{2de}$ の連立から角と対角線が同時に求まります。内接四角形を見たら、対角線をはさんで余弦定理を2回、が定石です。
+</Why>
+
+<Figure caption="円に内接する四角形 ABCD と対角線 AC。向かい合う角の和は 180° で、対角線で分けた2つの三角形は角が補角の関係になります。">
+<CoordinatePlane
+  xMin={-3}
+  xMax={3}
+  yMin={-3}
+  yMax={3}
+  circles={[{ cx: 0, cy: 0, r: 2 }]}
+  points={[
+    { x: -1.29, y: 1.53, label: 'A' },
+    { x: 1.73, y: 1.0, label: 'B' },
+    { x: 1.29, y: -1.53, label: 'C' },
+    { x: -1.73, y: -1.0, label: 'D' }
+  ]}
+  segments={[
+    { x1: -1.29, y1: 1.53, x2: 1.73, y2: 1.0 },
+    { x1: 1.73, y1: 1.0, x2: 1.29, y2: -1.53 },
+    { x1: 1.29, y1: -1.53, x2: -1.73, y2: -1.0 },
+    { x1: -1.73, y1: -1.0, x2: -1.29, y2: 1.53 },
+    { x1: -1.29, y1: 1.53, x2: 1.29, y2: -1.53, dashed: true }
+  ]}
+  showGrid={false}
+  label="円に内接する四角形 ABCD と対角線 AC"
+/>
+</Figure>
+
+## 例題
+
+<WorkedExample title="例題: 内接四角形で対角線と面積を求める">
+円に内接する四角形 $ABCD$ で、$AB=1$、$BC=2$、$CD=2$、$DA=3$ とする。対角線 $AC$ の長さと、四角形の面積を求めなさい。
+
+<Steps>
+<Step reason="$\angle ABC$ と $\angle ADC$ は向かい合う対角なので、和が $180^\circ$ です。そこで $\angle ABC=\theta$ とおくと、$\angle ADC=180^\circ-\theta$ と書けます。">$\angle ABC=\theta$ とおくと $\angle ADC=180^\circ-\theta$。</Step>
+<Step reason="対角線 AC を、$\triangle ABC$ の余弦定理で表します。2辺 AB、BC とその間の角 $\theta$ を使います。">$\triangle ABC$ より $AC^{2}=1^{2}+2^{2}-2\cdot1\cdot2\cos\theta=5-4\cos\theta$。</Step>
+<Step reason="同じ対角線 AC を $\triangle ADC$ の余弦定理でも表します。角は $180^\circ-\theta$ なので $\cos(180^\circ-\theta)=-\cos\theta$ を代入します。ここが符号反転の要所です。">$\triangle ADC$ より $AC^{2}=3^{2}+2^{2}-2\cdot3\cdot2\cos(180^\circ-\theta)=13+12\cos\theta$。</Step>
+<Step reason="同じ AC の2通りの表し方を等号で結び、$\cos\theta$ を求めます。">$5-4\cos\theta=13+12\cos\theta$ より $-8=16\cos\theta$、$\cos\theta=-\dfrac{1}{2}$。よって $\theta=120^\circ$。</Step>
+<Step reason="$\cos\theta$ を最初の式に戻して AC を出します。$AC$ は正の長さなので、正の平方根を取ります。">$AC^{2}=5-4\left(-\dfrac{1}{2}\right)=7$ より $AC=\sqrt{7}$。</Step>
+<Step reason="面積は対角線 AC で2つの三角形に分けて足します。どちらも2辺と間の角が分かっているので、面積公式 $\frac{1}{2}ab\sin\theta$ が使えます。">面積は $\frac{1}{2}\cdot1\cdot2\sin120^\circ+\frac{1}{2}\cdot2\cdot3\sin60^\circ=\frac{\sqrt{3}}{2}+\frac{3\sqrt{3}}{2}=2\sqrt{3}$。</Step>
+</Steps>
+
+<Answer>
+$AC=\sqrt{7}$、面積は $2\sqrt{3}$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+「四角形なら向かい合う角の和はいつでも $180^\circ$」と一般化する。また、$\angle ADC=180^\circ-\angle ABC$ のとき $\cos\angle ADC$ を $\cos\angle ABC$ のまま代入してしまう。
+</Wrong>
+<WhyWrong>
+対角の和が $180^\circ$ になるのは、四角形が円に内接するときに限ります。円に内接しない一般の四角形では成り立ちません。また $\cos(180^\circ-\theta)=\cos180^\circ\cos\theta+\sin180^\circ\sin\theta=-\cos\theta$ であり、符号が反転します。$180^\circ-\theta$ の余弦を $+\cos\theta$ とすると、連立方程式の符号がずれて対角線の値が誤り、面積も合いません。
+</WhyWrong>
+<Right>
+「円に内接する」という条件を確認してから対角の和 $180^\circ$ を使います。対角線を共有する2つの三角形の余弦定理を立てたら、片方の角を $180^\circ-\theta$ とおき、余弦の符号を必ず反転させます。求めた $\cos\theta$ が負なら鈍角、と角の種類も確認できます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+1. 円に内接する四角形 $ABCD$ で $\angle A=75^\circ$ のとき、$\angle C$ を求めなさい。
+2. 円に内接する四角形で、1つの外角が $110^\circ$ のとき、それに向かい合う内角を求めなさい。
+3. 四角形 $ABCD$ で $\angle B+\angle D=180^\circ$ が成り立つとき、この四角形について何が言えるか。
+<Reveal label="答え">
+1. $\angle A+\angle C=180^\circ$ より $\angle C=180^\circ-75^\circ=105^\circ$。
+
+2. 外角は向かい合う内角に等しいので $110^\circ$。
+
+3. 内接四角形の判定（逆）より、この四角形は円に内接する。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習">
+(1) 円に内接する四角形 $ABCD$ で $AB=2$、$BC=3$、$CD=4$、$DA=5$ とする。$\cos\angle ABC$ を求めなさい。
+
+(2) 円に内接する四角形 $ABCD$ で $\angle ABC=110^\circ$、$\angle BCD=95^\circ$ とする。$\angle BAD$ と $\angle CDA$ を求めなさい。
+
+(3) 円に内接する四角形 $ABCD$ で $AB=2$、$BC=3$、$CD=4$、$DA=3$ とする。対角線 $AC$ を求めなさい。
+
+<Reveal label="解答">
+(1) $\angle ABC=\theta$、$\angle ADC=180^\circ-\theta$ とおく。$AC^{2}=2^{2}+3^{2}-2\cdot2\cdot3\cos\theta=13-12\cos\theta$ と、$AC^{2}=5^{2}+4^{2}-2\cdot5\cdot4\cos(180^\circ-\theta)=41+40\cos\theta$。等号より $13-12\cos\theta=41+40\cos\theta$、$-28=52\cos\theta$、$\cos\theta=-\dfrac{7}{13}$。
+
+(2) 対角の和より $\angle BAD=180^\circ-\angle BCD=180^\circ-95^\circ=85^\circ$、$\angle CDA=180^\circ-\angle ABC=180^\circ-110^\circ=70^\circ$。
+
+(3) $\angle ABC=\theta$、$\angle ADC=180^\circ-\theta$ とおく。$AC^{2}=2^{2}+3^{2}-2\cdot2\cdot3\cos\theta=13-12\cos\theta$ と、$AC^{2}=3^{2}+4^{2}-2\cdot3\cdot4\cos(180^\circ-\theta)=25+24\cos\theta$。等号より $13-12\cos\theta=25+24\cos\theta$、$-12=36\cos\theta$、$\cos\theta=-\dfrac{1}{3}$。よって $AC^{2}=13-12\left(-\dfrac{1}{3}\right)=17$、$AC=\sqrt{17}$。
+</Reveal>
+</Practice>
+
+## 入試での使いどころ
+
+円に内接する四角形は、対角線をはさんで余弦定理を2回使う問題の宝庫です。4辺の長さから対角線と面積を求める流れは、そのまま入試の典型になります。角度だけを問う問題でも「対角の和 $180^\circ$」と「外角＝対角」で角を運べます。検算としては、求めた4辺と対角線で2つの三角形を作り、$\cos$ の値が $\cos(180^\circ-\theta)=-\cos\theta$ を満たしているかを確かめると、符号ミスを素早く発見できます。
