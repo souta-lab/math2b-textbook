@@ -1,0 +1,167 @@
+---
+title: "定積分と基本定理 — 上端を動かすと何が起こるか"
+summary: "面積の蓄積を微分すると高さに戻るという基本定理を使い、定積分を含む関数の増減・極値・対称性を扱う。"
+unit: "iii-integral"
+order: 4
+objectives:
+  - "微分積分学の基本定理を、累積関数の微分として説明できる"
+  - "上端が $x^2$ などの関数のとき、合成関数の微分を掛けて微分できる"
+  - "偶関数・奇関数の対称性を使って定積分を短縮できる"
+prerequisites: ["iii-integral/03-partial-fractions"]
+tags: ["基本定理", "定積分関数", "対称性", "定積分方程式", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+曲線の下の面積を、左端から右端まで足し上げていくことを考えます。左端を固定して、右端を少しずつ動かすと、面積は増えていきます。では、その増え方の割合は何で決まるでしょうか。答えは驚くほど単純で、動かしている地点の曲線の高さそのものです。この関係が、積分と微分をつなぐ基本定理です。
+</Hook>
+
+<Prediction
+  question="$F(x)=\displaystyle\int_0^x f(t)\,dt$ を $x$ で微分すると、どれになる？"
+  options={['f(x)', 'f′(x)', 'F(x)']}
+  answer="f(x)"
+  explanation="$F(x)$ は「面積の蓄積」で、左端を固定して右端だけを動かしています。右端をわずかに動かしたときの増分は、その地点の高さ $f(x)$ と幅の積で近似できます。だから $F'(x)=f(x)$ です。$F$ を微分すると $f$ に戻る、という関係です。"
+/>
+
+$F(x)=\displaystyle\int_0^x f(t)\,dt$ は、$x$ の値に応じて決まる新しい関数です。この $F$ を「累積関数」と見なします。$x$ を少しだけ $h$ 進めると、$F(x+h)-F(x)$ は幅 $h$、高さおよそ $f(x)$ の細長い帯の面積です。よって $\dfrac{F(x+h)-F(x)}{h}$ は $f(x)$ に近づき、$F'(x)=f(x)$ が得られます。
+
+<Theorem name="微分積分学の基本定理">
+$f$ が連続で $a$ を定数とするとき
+
+$$
+F(x)=\int_a^x f(t)\,dt
+$$
+
+と置くと $F'(x)=f(x)$ である。また $u(x)$、$v(x)$ が微分可能なら
+
+$$
+\frac{d}{dx}\int_{u(x)}^{v(x)} f(t)\,dt=f(v(x))\,v'(x)-f(u(x))\,u'(x)
+$$
+
+が成り立つ。上端・下端が $x$ の関数なら、それぞれの微分を掛ける。
+</Theorem>
+
+たとえば $\displaystyle\int_0^{x^2}\sin t\,dt$ を $x$ で微分すると、上端 $x^2$ の微分 $2x$ を掛けて $2x\sin(x^2)$ になります。上端がそのまま $x$ でない場合は、合成関数の微分を忘れないことが要点です。
+
+<Why>
+基本定理が成り立つのは、微分と積分が面積の視点で逆操作になっているからです。累積関数 $F$ を「ここまでに貯まった面積」と読むと、$x$ を動かしたときの増分は、その地点の幅 $\Delta x$ と高さ $f(x)$ の長方形で近似できます。$\Delta x\to 0$ とすると、増分の割合は $f(x)$ そのものになります。だから蓄積を微分すれば高さに戻り、逆に高さを積分すれば蓄積が求まるのです。面積を積分で計算できるのは、この往復があるからです。
+</Why>
+
+<WorkedExample title="例題1: 累積関数の極値を求める">
+$F(x)=\displaystyle\int_0^x (t^2-1)\,dt$ の極値を求めなさい。
+
+<Steps>
+<Step reason="極値を調べるには、まず F の導関数を知る必要があるからです。">基本定理より $F'(x)=x^2-1$。</Step>
+<Step reason="増減の変わり目である導関数の零点を求めるためです。">$F'(x)=(x-1)(x+1)=0$ より $x=\pm 1$。</Step>
+<Step reason="導関数の符号から増減を判定するためです。">$x\lt -1$ で $F'\gt 0$、$-1\lt x\lt 1$ で $F'\lt 0$、$x\gt 1$ で $F'\gt 0$。</Step>
+<Step reason="極大は増から減へ、極小は減から増へ変わる点だからです。">$x=-1$ で極大、$x=1$ で極小。</Step>
+<Step reason="極値は F 自身の値なので、積分を計算して求めるためです。">$F(x)=\dfrac{x^3}{3}-x$ より $F(-1)=\dfrac23$、$F(1)=-\dfrac23$。</Step>
+</Steps>
+
+<Answer>
+$x=-1$ で極大値 $\dfrac23$、$x=1$ で極小値 $-\dfrac23$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 対称性を使って定積分を短縮する">
+$\displaystyle\int_{-1}^{1}\left(x^3+x^2+x+1\right)dx$ を求めなさい。
+
+<Steps>
+<Step reason="対称区間では、奇関数の積分が 0 になるからです。">$x^3$ と $x$ は奇関数なので $\displaystyle\int_{-1}^1 x^3\,dx=0$、$\displaystyle\int_{-1}^1 x\,dx=0$。</Step>
+<Step reason="残った偶関数 x² と定数 1 を、0 から 1 の2倍に直せるからです。">$\displaystyle\int_{-1}^{1}\left(x^2+1\right)dx=2\int_0^1\left(x^2+1\right)dx$。</Step>
+<Step reason="べき乗の公式で計算できるからです。">$2\Big[\dfrac{x^3}{3}+x\Big]_0^1=2\left(\dfrac13+1\right)=\dfrac83$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_{-1}^{1}\left(x^3+x^2+x+1\right)dx=\dfrac83$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 定積分方程式（入試頻出）">
+$f(x)=x+2\displaystyle\int_0^1 f(t)\,dt$ を満たす関数 $f(x)$ を求めなさい。
+
+<Steps>
+<Step reason="右辺の定積分は x を含まない定数だからです。">$k=\displaystyle\int_0^1 f(t)\,dt$ と置くと $f(x)=x+2k$。</Step>
+<Step reason="k の定義式に f(t)=t+2k を代入して、k だけの式にするためです。">$k=\displaystyle\int_0^1(t+2k)\,dt=\dfrac12+2k$。</Step>
+<Step reason="k について解けば、関数が1つに決まるからです。">$k-2k=\dfrac12$ より $k=-\dfrac12$。</Step>
+<Step reason="f(x)=x+2k に戻して答えを確定するためです。">$f(x)=x-1$。</Step>
+<Step reason="求めた f を定義式に代入して検算できるからです。">$\displaystyle\int_0^1(t-1)\,dt=\dfrac12-1=-\dfrac12$ となり、確かに $k=-1/2$ と一致する。</Step>
+</Steps>
+
+<Answer>
+$f(x)=x-1$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$F(x)=\displaystyle\int_a^x f(t)\,dt$ を $x$ で微分すると $f'(x)$ になる。
+</Wrong>
+<WhyWrong>
+$F$ は面積の蓄積で、その変化率は地点の高さ $f(x)$ です。$f$ をさらに微分した $f'$ ではありません。たとえば $f(t)=t^2$ なら $F(x)=\frac{x^3}{3}$、$F'(x)=x^2=f(x)$ となります。$f'=2x$ ではありません。
+</WhyWrong>
+<Right>
+$\dfrac{d}{dx}\displaystyle\int_a^x f(t)\,dt=f(x)$。積分してから微分すると、もとの関数に戻る。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int_{-a}^{a} f(x)\,dx=2\int_0^a f(x)\,dx$ は、どんな関数 $f$ でも成り立つ。
+</Wrong>
+<WhyWrong>
+この等式は $f$ が偶関数（$f(-x)=f(x)$）のときにだけ成り立ちます。奇関数（$f(-x)=-f(x)$）なら左右が打ち消し合って積分は $0$、偶関数でも奇関数でもない一般の関数ではどちらも成り立ちません。
+</WhyWrong>
+<Right>
+偶関数は $\int_{-a}^a f=2\int_0^a f$、奇関数は $\int_{-a}^a f=0$。対称性を使う前に、$f(-x)$ を計算して偶か奇かを確かめる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\dfrac{d}{dx}\displaystyle\int_0^{x^2}\sin t\,dt=\sin(x^2)$ と、上端の微分を掛けずに書いてよい。
+</Wrong>
+<WhyWrong>
+上端が $x^2$ のように $x$ の関数になっているときは、合成関数の微分が効きます。蓄積 $F(u)=\int_0^u\sin t\,dt$ に $u=x^2$ を合成した形なので、外側の微分 $\sin(x^2)$ に内側の微分 $2x$ を掛ける必要があります。
+</WhyWrong>
+<Right>
+$\dfrac{d}{dx}\displaystyle\int_0^{x^2}\sin t\,dt=\sin(x^2)\cdot 2x=2x\sin(x^2)$。上端や下端が関数のときは、その微分を掛ける。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\dfrac{d}{dx}\displaystyle\int_1^x \sqrt{1+t^2}\,dt$ を求めなさい。
+<Reveal label="答え">
+基本定理より $\sqrt{1+x^2}$。上端が $x$ なので、余分な係数は掛からない。
+</Reveal>
+
+（2）$\displaystyle\int_{-2}^{2}\left(x^5+x^3+x\right)dx$ を求めなさい。
+<Reveal label="答え">
+被積分関数は奇関数（各項の指数が奇数）なので、対称区間の積分は $0$。
+</Reveal>
+
+（3）$f(x)=x+\displaystyle\int_0^1 f(t)\,dt$ を満たす $f$ は存在するか、理由をつけて答えなさい。
+<Reveal label="答え">
+$k=\int_0^1 f(t)\,dt$ と置くと $f(x)=x+k$、$k=\int_0^1(t+k)\,dt=\frac12+k$ で $k$ が消え、$\frac12=0$ となり矛盾する。よってこの形の解は存在しない。定積分方程式は、係数によっては解なしになる例である。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（基本定理と対称性）">
+（1）$F(x)=\displaystyle\int_0^x (t-1)(t-3)\,dt$ の極値を求めよ。
+
+（2）$\displaystyle\int_{-2}^{2}\left(x^4\sin x+x^2\right)dx$ を計算せよ。
+
+（3）$f(x)=3x^2-2\displaystyle\int_0^1 f(t)\,dt$ を満たす $f(x)$ を求めよ。
+
+（4）$\dfrac{d}{dx}\displaystyle\int_1^{x^2}\sqrt{1+t^2}\,dt$ を求めよ。
+
+<Reveal label="解答">
+（1）$F'(x)=(x-1)(x-3)$。$x\lt 1$ で正、$1\lt x\lt 3$ で負、$x\gt 3$ で正。よって $x=1$ で極大、$x=3$ で極小。$F(x)=\frac{x^3}{3}-2x^2+3x$ より $F(1)=\frac43$、$F(3)=0$。
+
+（2）$x^4\sin x$ は奇関数で積分は $0$。$x^2$ は偶関数で $2\displaystyle\int_0^2 x^2\,dx=2\cdot\frac83=\frac{16}{3}$。よって $\frac{16}{3}$。
+
+（3）$k=\displaystyle\int_0^1 f(t)\,dt$ と置くと $f(x)=3x^2-2k$。$k=\displaystyle\int_0^1(3t^2-2k)\,dt=1-2k$ より $3k=1$、$k=\frac13$。よって $f(x)=3x^2-\frac23$。
+
+（4）上端 $x^2$ の微分 $2x$ を掛けて $2x\sqrt{1+x^4}$。
+</Reveal>
+</Practice>

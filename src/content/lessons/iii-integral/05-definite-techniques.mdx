@@ -1,0 +1,171 @@
+---
+title: "定積分の技法 — 対称性と漸化式で計算を短縮する"
+summary: "x→a+b−x の置換、偶奇の対称性、絶対値の場合分け、Wallis の漸化式を使い、入試の定積分を最短で処理する。"
+unit: "iii-integral"
+order: 5
+objectives:
+  - "x→a+b−x の置換を使って、対称な定積分を短縮できる"
+  - "絶対値を含む定積分を、符号の変わる点で区間を分けて計算できる"
+  - "$I_n=\\int_0^{\\pi/2}\\sin^n x\\,dx$ の漸化式を作り、偶数の定積分を求められる"
+prerequisites: ["iii-integral/04-definite"]
+tags: ["定積分", "対称性", "絶対値", "Wallis", "漸化式", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+入試の定積分には、素直に部分積分すると何行もかかるのに、視点を変えると数行で終わる問題が並びます。$\displaystyle\int_0^\pi x\sin x\,dx$ のような形も、対称性を使えば計算の見通しが立ちます。ここでは、計算を「短く、間違えにくく」する4つの道具をそろえます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\int_{-1}^{1} x^2\sin x\,dx$ の値はどれ？"
+  options={['0', '2∫₀¹x²sin x dx', '1']}
+  answer="0"
+  explanation="$x^2$ は偶関数、$\sin x$ は奇関数で、その積は奇関数です。奇関数を対称区間で積分すると、左右が打ち消し合って $0$ になります。$x^2$ が偶だからといって、積全体を偶関数と早合点してはいけません。"
+/>
+
+定積分の計算量を減らす鍵は、グラフの対称性と、区間の付け替えです。まず、よく使う道具を3つ整理します。
+
+<Theorem name="定積分の対称性と区間の置換">
+$a\gt 0$ とし、対称区間 $[-a,\ a]$ を考える。$f$ が偶関数（$f(-x)=f(x)$）のとき
+
+$$
+\int_{-a}^{a} f(x)\,dx=2\int_0^a f(x)\,dx
+$$
+
+であり、$f$ が奇関数（$f(-x)=-f(x)$）のとき
+
+$$
+\int_{-a}^{a} f(x)\,dx=0
+$$
+
+である。さらに、$x=a+b-t$ と置くと $dx=-dt$ で、区間の端が入れ替わることから
+
+$$
+\int_a^b f(x)\,dx=\int_a^b f(a+b-x)\,dx
+$$
+
+が成り立つ。この置換は、$\sin$ と $\cos$ が入れ替わる対称な形に有効である。
+</Theorem>
+
+<Theorem name="Wallis の漸化式">
+$n$ を $2$ 以上の整数とし、$I_n=\displaystyle\int_0^{\pi/2}\sin^n x\,dx$ と置くと
+
+$$
+I_n=\frac{n-1}{n}\,I_{n-2}
+$$
+
+が成り立つ。とくに $I_0=\dfrac{\pi}{2}$、$I_1=1$ であり、$I_2=\dfrac12\cdot\dfrac{\pi}{2}=\dfrac{\pi}{4}$、$I_4=\dfrac34\cdot\dfrac12\cdot\dfrac{\pi}{2}=\dfrac{3\pi}{16}$ となる。$\cos$ についても同じ値になる。
+</Theorem>
+
+絶対値を含む定積分は、絶対値の中身が $0$ になる点で区間を分けて、各部分で符号を外します。$|x-1|$ なら $x=1$ が境目です。面積の計算と同じで、負の部分をそのまま積分しないことが要点です。
+
+<Why>
+Wallis の漸化式が成り立つのは、$\sin^n x$ を $\sin^{n-1}x\cdot\sin x$ と分けて部分積分するからです。$\sin^{n-1}x$ を微分する側に選ぶと、$\cos x$ が現れて $\cos^2x=1-\sin^2x$ により $I_n$ と $I_{n-2}$ の関係が現れます。$\sin$ の高いべきを、2つ低いべきの積分へ移し替えることで、毎回の積分を避けて既知の値まで降りていけるのです。対称性や置換と同様、「知っている形へ帰着させる」のが短縮の共通原理です。
+</Why>
+
+<WorkedExample title="例題1: 部分積分と対称性">
+$\displaystyle\int_0^\pi x\sin x\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="x を微分して消すため、x を f に選んで部分積分するからです。">$f=x$、$g'=\sin x$ とすると $\Big[-x\cos x\Big]_0^\pi+\displaystyle\int_0^\pi\cos x\,dx$。</Step>
+<Step reason="第1項は上端と下端を代入して差をとるためです。">$\Big[-x\cos x\Big]_0^\pi=-\pi\cos\pi+0=\pi$。</Step>
+<Step reason="残った積分は基本公式で計算できるからです。">$\displaystyle\int_0^\pi\cos x\,dx=\Big[\sin x\Big]_0^\pi=0-0=0$。</Step>
+<Step reason="2つの項を合わせて答えを確定するためです。">$\pi+0=\pi$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^\pi x\sin x\,dx=\pi$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: x→a+b−x の置換">
+$\displaystyle\int_0^{\pi/2}\frac{\sin x}{\sin x+\cos x}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="sin と cos が対称に入れ替わる形なので、置換で同じ形を作れるからです。">$I$ と置き、$x=\dfrac{\pi}{2}-t$ と置換する。</Step>
+<Step reason="sin(π/2−t)=cos t、cos(π/2−t)=sin t だからです。">$I=\displaystyle\int_0^{\pi/2}\frac{\cos t}{\sin t+\cos t}\,dt$。</Step>
+<Step reason="同じ I を分母が同じ2つの式として足し合わせるためです。">もとの式と辺々加えると $2I=\displaystyle\int_0^{\pi/2}\frac{\sin x+\cos x}{\sin x+\cos x}\,dx$。</Step>
+<Step reason="被積分関数が 1 になり、幅 π/2 の積分になるからです。">$2I=\displaystyle\int_0^{\pi/2}1\,dx=\dfrac{\pi}{2}$。</Step>
+<Step reason="I について解けば目的の積分が求まるからです。">$I=\dfrac{\pi}{4}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^{\pi/2}\frac{\sin x}{\sin x+\cos x}\,dx=\dfrac{\pi}{4}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: Wallis の漸化式">
+$\displaystyle\int_0^{\pi/2}\sin^4 x\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="高次の sin は、漸化式で低次の積分に帰着させるのが速いからです。">$I_4=\dfrac{4-1}{4}I_2=\dfrac34 I_2$。</Step>
+<Step reason="I₂ も同じ漸化式でさらに下げられるからです。">$I_2=\dfrac{2-1}{2}I_0=\dfrac12 I_0$。</Step>
+<Step reason="I₀ は定数関数 1 の積分で、すぐ値が分かるからです。">$I_0=\displaystyle\int_0^{\pi/2}1\,dx=\dfrac{\pi}{2}$。</Step>
+<Step reason="順に代入して I₄ を求めるためです。">$I_4=\dfrac34\cdot\dfrac12\cdot\dfrac{\pi}{2}=\dfrac{3\pi}{16}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^{\pi/2}\sin^4 x\,dx=\dfrac{3\pi}{16}$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+絶対値を含む定積分は、絶対値をそのまま外して $\displaystyle\int_0^3 (x-2)\,dx$ のように計算してよい。
+</Wrong>
+<WhyWrong>
+絶対値は中身の符号によって外れ方が変わります。$0\le x\lt 2$ では $x-2\lt 0$ なので $|x-2|=2-x$、$2\le x\le 3$ では $x-2$ です。符号を無視してそのまま積分すると、負の部分が差し引かれて面積と一致しません。
+</WhyWrong>
+<Right>
+絶対値の中身が $0$ になる点で区間を分け、各区間で正しい符号で外す。$\displaystyle\int_0^3 |x-2|\,dx=\int_0^2(2-x)\,dx+\int_2^3(x-2)\,dx$。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int_0^{\pi/2}\sin^2 x\,dx=\dfrac{\pi}{2}$ である。
+</Wrong>
+<WhyWrong>
+$\frac{\pi}{2}$ は $\int_0^{\pi/2}1\,dx$、つまり長方形の面積です。$\sin^2x$ は $0$ と $1$ の間で、平均すると $\frac12$ 程度になるため、$\int_0^{\pi/2}\sin^2x\,dx=\frac12\cdot\frac{\pi}{2}=\frac{\pi}{4}$ となります。漸化式 $I_2=\frac12 I_0$ がこの結果を与えます。
+</WhyWrong>
+<Right>
+$\displaystyle\int_0^{\pi/2}\sin^2 x\,dx=\dfrac{\pi}{4}$。半角の公式 $\sin^2x=\frac{1-\cos2x}{2}$ で計算しても同じ値になる。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int_0^{\pi/2}\cos^2 x\,dx$ を求めなさい。
+<Reveal label="答え">
+$\sin^2$ と同じ値で $\dfrac{\pi}{4}$。$x\to\frac{\pi}{2}-x$ の置換で $\sin^2$ の積分に一致する。
+</Reveal>
+
+（2）$\displaystyle\int_{-2}^{2}\left(x^3+x^2\sin x\right)dx$ を求めなさい。
+<Reveal label="答え">
+$x^3$ も $x^2\sin x$ も奇関数なので、どちらの積分も $0$。和も $0$。
+</Reveal>
+
+（3）$I_n=\displaystyle\int_0^{\pi/2}\sin^n x\,dx$ について、$I_6$ を $I_4$ で表しなさい。
+<Reveal label="答え">
+漸化式より $I_6=\dfrac{6-1}{6}I_4=\dfrac56 I_4$。例題3の $I_4=\frac{3\pi}{16}$ を使えば $I_6=\frac{5}{6}\cdot\frac{3\pi}{16}=\frac{5\pi}{32}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（定積分の短縮技法）">
+（1）$\displaystyle\int_0^\pi x\cos x\,dx$ を計算せよ。
+
+（2）$\displaystyle\int_0^{\pi/2}\sin^3 x\,dx$ を計算せよ。
+
+（3）$\displaystyle\int_0^3 |x-2|\,dx$ を計算せよ。
+
+（4）$\displaystyle\int_0^{\pi/2}\frac{\cos x}{\sin x+\cos x}\,dx$ を計算せよ。
+
+<Reveal label="解答">
+（1）$f=x$、$g'=\cos x$ とすると $f'=1$、$g=\sin x$。部分積分より $\Big[x\sin x\Big]_0^\pi-\displaystyle\int_0^\pi\sin x\,dx=(0-0)-\Big[-\cos x\Big]_0^\pi=0-(1+1)=-2$。
+
+（2）$I_3=\dfrac{3-1}{3}I_1=\dfrac23\cdot1=\dfrac23$。
+
+（3）$\displaystyle\int_0^2(2-x)\,dx+\int_2^3(x-2)\,dx=\Big[2x-\frac{x^2}{2}\Big]_0^2+\Big[\frac{x^2}{2}-2x\Big]_2^3=2+\dfrac12=\dfrac52$。
+
+（4）例題2と同じ対称性により $\dfrac{\pi}{4}$。
+</Reveal>
+</Practice>

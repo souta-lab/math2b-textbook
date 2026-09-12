@@ -1,0 +1,176 @@
+---
+title: "行列のn乗と固有値 — 変換を対角化で一気に畳む"
+summary: "係数行列の固有値と固有ベクトルを求め、対角化で M^n を計算する。連立漸化式と3項間漸化式を同じ仕組みで解く時短の型。"
+unit: "uni-sequence-tools"
+order: 3
+objectives:
+  - "2×2 行列の固有値を特性方程式から求められる"
+  - "固有ベクトルを並べた行列で $M^n$ を対角化して計算できる"
+  - "連立漸化式や3項間漸化式を係数行列の $n$ 乗として解ける"
+prerequisites: ["uni-sequence-tools/02-prob-recurrence"]
+tags: ["行列のn乗", "固有値", "対角化", "連立漸化式"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+町の人口が毎年、隣町との間を行き来します。A町にいる人は翌年そのままA町に残るか、B町へ引っ越すかが決まった割合で入れ替わります。10年後の人口を出したいとき、毎年1年ずつ割合を掛けて回るのは大変です。しかし、この「1年分の変化」を行列で書いてしまえば、10年後はその行列を10乗したもの。行列の累乗を一気に計算する方法が、今日の道具です。
+</Hook>
+
+<Prediction
+  question="行列 $M=\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}$ の2乗 $M^{2}$ を計算すると、どうなるでしょう？"
+  options={['$\begin{pmatrix}5 & 4\\4 & 5\end{pmatrix}$', '$\begin{pmatrix}4 & 1\\1 & 4\end{pmatrix}$', '$\begin{pmatrix}2 & 2\\2 & 2\end{pmatrix}$']}
+  answer="$\begin{pmatrix}5 & 4\\4 & 5\end{pmatrix}$"
+  explanation="行列のかけ算は「行×列」で計算するので、成分ごとに2乗するのとは違います。右上と左下の成分は $2\cdot1+1\cdot2=4$、対角成分は $2\cdot2+1\cdot1=5$ です。成分ごとの2乗は $\begin{pmatrix}4 & 1\\1 & 4\end{pmatrix}$ で、これは誤りです。"
+/>
+
+<Note type="info">
+**入試での用途**：行列の $n$ 乗は数学Cの発展問題です。固有値を求めて対角化すると、$n$ 乗が「対角成分の $n$ 乗」に化けます。連立漸化式 $x_{n+1}=ax_n+by_n,\ y_{n+1}=cx_n+dy_n$ は係数行列の $n$ 乗に帰着し、3項間漸化式も同じ仕組みで解けます。
+</Note>
+
+## 向きが変わらない方向
+
+行列 $M$ と零ベクトルでない $\vec{v}$ について
+$$
+M\vec{v}=\lambda\vec{v}
+$$
+が成り立つとき、$\lambda$ を $M$ の**固有値**、$\vec{v}$ を固有値 $\lambda$ の**固有ベクトル**といいます。変換しても向きが変わらず、長さだけ $\lambda$ 倍になる特別な方向です。
+
+<Definition term="特性方程式（2×2行列）">
+2×2 行列 $M=\begin{pmatrix}a & b\\c & d\end{pmatrix}$ の固有値は
+$$
+\det(M-\lambda E)=0,\qquad \lambda^{2}-(a+d)\lambda+(ad-bc)=0
+$$
+の解として求まる。$a+d$ をトレース $\operatorname{tr}M$、$ad-bc$ を行列式 $\det M$ という。
+</Definition>
+
+<Why>
+行列の累乗が難しいのは、かけ算のたびに成分どうしが混ざるからです。ところが固有ベクトルの方向なら $M\vec{v}=\lambda\vec{v}$、繰り返せば $M^{n}\vec{v}=\lambda^{n}\vec{v}$ となり、ただの数の $n$ 乗になります。そこで、任意のベクトルを固有ベクトルの和に分解してから $M$ を掛ければ、混ざる計算が「各方向を $\lambda$ 倍するだけ」の計算に置き換わります。これが対角化の狙いです。
+</Why>
+
+## 対角化で累乗する
+
+相異なる2つの固有値 $\lambda_1,\lambda_2$ と、それぞれの固有ベクトル $\vec{v}_1,\vec{v}_2$ が求まったとします。固有ベクトルを列に並べた行列を $P=(\vec{v}_1\ \vec{v}_2)$、固有値を対角に並べた行列を $D=\begin{pmatrix}\lambda_1 & 0\\0 & \lambda_2\end{pmatrix}$ とすると
+$$
+M=PDP^{-1}
+$$
+と書けます。両辺を $n$ 乗すると、$P$ と $P^{-1}$ が隣どうしで打ち消し合い
+$$
+M^{n}=PD^{\,n}P^{-1},\qquad D^{\,n}=\begin{pmatrix}\lambda_1^{\,n} & 0\\0 & \lambda_2^{\,n}\end{pmatrix}
+$$
+となります。$D^n$ は対角成分を $n$ 乗するだけで、かけ算の混ざりが消えています。
+
+<KeyPoint>
+**対角化の手順**：① $\lambda^{2}-\operatorname{tr}M\,\lambda+\det M=0$ で固有値を出す。② 各固有値で $(M-\lambda E)\vec{v}=\vec{0}$ を解いて固有ベクトルを出す。③ $P=(\vec{v}_1\ \vec{v}_2)$、$D=\operatorname{diag}(\lambda_1,\lambda_2)$ を作る。④ $M^{n}=PD^{\,n}P^{-1}$ に代入する。
+</KeyPoint>
+
+<WorkedExample title="例題1: 2×2行列のn乗">
+$$
+M=\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}
+$$
+について $M^{n}$ を求めよ。
+
+<Steps>
+<Step reason="トレースと行列式を計算し、特性方程式を立てます。">$\operatorname{tr}M=4$、$\det M=2\cdot2-1\cdot1=3$ なので $\lambda^{2}-4\lambda+3=0$。</Step>
+<Step reason="因数分解して固有値を求めます。">$(\lambda-1)(\lambda-3)=0$ より $\lambda=1,3$。</Step>
+<Step reason="各固有値で $(M-\lambda E)\vec{v}=\vec{0}$ を解き、固有ベクトルを求めます。">$\lambda=1$ では $x+y=0$ より $\vec{v}_1=\begin{pmatrix}1\\-1\end{pmatrix}$。$\lambda=3$ では $-x+y=0$ より $\vec{v}_2=\begin{pmatrix}1\\1\end{pmatrix}$。</Step>
+<Step reason="固有ベクトルを列に並べて $P$ を作り、行列式から $P^{-1}$ を求めます。">$P=\begin{pmatrix}1 & 1\\-1 & 1\end{pmatrix}$、$\det P=2$ より $P^{-1}=\dfrac12\begin{pmatrix}1 & -1\\1 & 1\end{pmatrix}$。</Step>
+<Step reason="$M^{n}=PD^{\,n}P^{-1}$ に代入して成分を計算します。">$D^{\,n}=\begin{pmatrix}1 & 0\\0 & 3^{\,n}\end{pmatrix}$ なので $M^{n}=\frac12\begin{pmatrix}1 & 1\\-1 & 1\end{pmatrix} \begin{pmatrix}1 & 0\\0 & 3^{\,n}\end{pmatrix} \begin{pmatrix}1 & -1\\1 & 1\end{pmatrix} =\frac12\begin{pmatrix}3^{\,n}+1 & 3^{\,n}-1\\3^{\,n}-1 & 3^{\,n}+1\end{pmatrix}.$ </Step>
+</Steps>
+
+<Answer>
+$M^{n}=\dfrac12\begin{pmatrix}3^{\,n}+1 & 3^{\,n}-1\\3^{\,n}-1 & 3^{\,n}+1\end{pmatrix}$（$n=1$ で $M$、$n=0$ で $E$ に一致する）
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 連立漸化式を行列のn乗で解く">
+$x_0=1$、$y_0=0$ とし
+$$
+x_{n+1}=3x_n+y_n,\qquad y_{n+1}=x_n+3y_n
+$$
+で定まる数列の一般項を求めよ。
+
+<Steps>
+<Step reason="連立漸化式をベクトルの形にまとめ、係数行列 $M$ を特定します。">$\begin{pmatrix}x_{n+1}\\y_{n+1}\end{pmatrix}=\begin{pmatrix}3 & 1\\1 & 3\end{pmatrix}\begin{pmatrix}x_n\\y_n\end{pmatrix}$ より $M=\begin{pmatrix}3 & 1\\1 & 3\end{pmatrix}$。</Step>
+<Step reason="まず $M$ の固有値を特性方程式から求めます。">$\operatorname{tr}M=6$、$\det M=8$ より $\lambda^{2}-6\lambda+8=0$、$(\lambda-2)(\lambda-4)=0$、$\lambda=2,4$。</Step>
+<Step reason="各固有値の固有ベクトルを求めます。">$\lambda=4$ では $-x+y=0$ より $\begin{pmatrix}1\\1\end{pmatrix}$。$\lambda=2$ では $x+y=0$ より $\begin{pmatrix}1\\-1\end{pmatrix}$。</Step>
+<Step reason="$P$ と $P^{-1}$ を作り、$M^{n}=PD^{\,n}P^{-1}$ を計算します。">$P=\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}$、$\det P=-2$、$P^{-1}=\dfrac12\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}$。よって $M^{n}=\frac12\begin{pmatrix}4^{\,n}+2^{\,n} & 4^{\,n}-2^{\,n}\\4^{\,n}-2^{\,n} & 4^{\,n}+2^{\,n}\end{pmatrix}.$ </Step>
+<Step reason="初期ベクトルを掛けて成分を取り出します。$(x_n,y_n)^T=M^n(x_0,y_0)^T$ の第1列が答えです。">$\begin{pmatrix}x_n\\y_n\end{pmatrix}=M^{n}\begin{pmatrix}1\\0\end{pmatrix}$ より $x_n=\dfrac{4^{\,n}+2^{\,n}}{2}$、$y_n=\dfrac{4^{\,n}-2^{\,n}}{2}$。</Step>
+</Steps>
+
+<Answer>
+$x_n=\dfrac{4^{\,n}+2^{\,n}}{2}$、$y_n=\dfrac{4^{\,n}-2^{\,n}}{2}$（$x_1=3$、$y_1=1$ と元の漸化式で確かめられる）
+</Answer>
+</WorkedExample>
+
+<Note type="tip">
+**3項間漸化式とのつながり**：$a_{n+2}=p\,a_{n+1}+q\,a_n$ は、ベクトル $\begin{pmatrix}a_{n+1}\\a_n\end{pmatrix}$ を使うと係数行列
+$$
+M=\begin{pmatrix}p & q\\1 & 0\end{pmatrix}
+$$
+で書けます。この $M$ の特性方程式は $\lambda^{2}-p\lambda-q=0$ となり、第0章の特性方程式とぴたり一致します。固有値が指数の底面になる理由が、行列の言葉で見えてきます。フィボナッチ数列は $p=q=1$ の場合で、$M^{n}$ の成分に $a_n$ が現れます。
+</Note>
+
+<Misconception>
+<Wrong>
+$M^{n}$ は、行列 $M$ の各成分をそれぞれ $n$ 乗すればよい。
+</Wrong>
+<WhyWrong>
+行列のかけ算は「行×列」で成分が混ざり合うので、成分ごとの累乗とは一致しません。例題1の $M=\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}$ では $M^{2}=\begin{pmatrix}5 & 4\\4 & 5\end{pmatrix}$ ですが、成分ごとの2乗は $\begin{pmatrix}4 & 1\\1 & 4\end{pmatrix}$ で、まったく別の行列です。
+</WhyWrong>
+<Right>
+$M^{n}$ は対角化して $M^{n}=PD^{\,n}P^{-1}$ と計算する。$n$ 乗してよいのは対角行列 $D$ の成分だけで、一般の行列では混ざりを $P$ と $P^{-1}$ が担う。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+固有値が2つ求まれば、どんな2×2行列でも必ず対角化できる。
+</Wrong>
+<WhyWrong>
+固有値が重解で、対応する固有ベクトルが1本しかとれない行列は対角化できません。たとえば $\begin{pmatrix}1 & 1\\0 & 1\end{pmatrix}$ は固有値1（重解）ですが、$x$ 軸方向のベクトルしか向きが変わりません。この場合は対角化の代わりにケーリー・ハミルトンで次数を下げて $M^{n}$ を求めます。
+</WhyWrong>
+<Right>
+相異なる2つの固有値があれば対角化できる。重解のときは固有ベクトルが2本とれるかを確かめ、とれなければケーリー・ハミルトンや別の方法に切り替える。
+</Right>
+</Misconception>
+
+## 使える場面・手順・記述式での可否
+
+**使える場面**：行列の $n$ 乗、連立漸化式 $x_{n+1}=ax_n+by_n,\ y_{n+1}=cx_n+dy_n$ の一般項、3項間漸化式、確率遷移行列の $n$ 乗、人口移動や状態遷移の長期予測。
+
+**手順**：(1) 係数行列 $M$ を書き出す。(2) $\lambda^{2}-\operatorname{tr}M\,\lambda+\det M=0$ で固有値を求める。(3) 各固有値の固有ベクトルを求める。(4) $P$ と $P^{-1}$ を作り、$M^{n}=PD^{\,n}P^{-1}$ を計算する。(5) 初期ベクトルを掛けて成分を取り出す。(6) $n=0,1$ を代入して検算する。
+
+**記述式での可否**：行列は数学Cの内容なので、数学Cを履修していない答案では行列を表に出せず、特性方程式・連立漸化式の形で書く必要があります。数学C履修済みなら対角化と固有値の計算をそのまま答案に書けますが、「固有値・固有ベクトル」の定義を1行添えると安全です。ケーリー・ハミルトンで次数を下げる方法は対角化より計算が短く、検算にも向きます。
+
+<CheckUnderstanding>
+(1) $M=\begin{pmatrix}4 & 1\\2 & 3\end{pmatrix}$ の固有値を求めよ。
+<Reveal label="答え">
+$\operatorname{tr}M=7$、$\det M=10$ より $\lambda^{2}-7\lambda+10=0$、$(\lambda-2)(\lambda-5)=0$。よって $\lambda=2,5$。
+</Reveal>
+
+(2) 対角化の公式 $M^{n}=PD^{\,n}P^{-1}$ において、$D^{\,n}$ はどう計算するか。
+<Reveal label="答え">
+$D=\operatorname{diag}(\lambda_1,\lambda_2)$ なら $D^{\,n}=\operatorname{diag}(\lambda_1^{\,n},\lambda_2^{\,n})$。対角成分をそれぞれ $n$ 乗するだけ。
+</Reveal>
+
+(3) $x_{n+1}=2x_n$、$y_{n+1}=3y_n$ を係数行列の形に書け。
+<Reveal label="答え">
+$\begin{pmatrix}x_{n+1}\\y_{n+1}\end{pmatrix}=\begin{pmatrix}2 & 0\\0 & 3\end{pmatrix}\begin{pmatrix}x_n\\y_n\end{pmatrix}$。既に対角行列なので、$n$ 乗は対角成分をそれぞれ $n$ 乗すればよい。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（行列のn乗）">
+(1) $M=\begin{pmatrix}3 & 2\\2 & 3\end{pmatrix}$ の固有値を求め、$M^{n}$ を計算せよ。
+
+(2) $x_{n+1}=2x_n+y_n$、$y_{n+1}=x_n+2y_n$、$x_0=1$、$y_0=0$ の一般項を求めよ。
+
+(3) $a_{n+2}=5a_{n+1}-6a_n$ の係数行列 $\begin{pmatrix}5 & -6\\1 & 0\end{pmatrix}$ の固有値を求め、第0章の特性方程式と一致することを確かめよ。
+
+<Reveal label="解答">
+(1) $\operatorname{tr}M=6$、$\det M=5$ より $\lambda^{2}-6\lambda+5=0$、$\lambda=1,5$。$\lambda=5$ の固有ベクトルは $\begin{pmatrix}1\\1\end{pmatrix}$、$\lambda=1$ は $\begin{pmatrix}1\\-1\end{pmatrix}$。$P=\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}$、$P^{-1}=\dfrac12\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}$ より $M^{n}=\dfrac12\begin{pmatrix}5^{\,n}+1 & 5^{\,n}-1\\5^{\,n}-1 & 5^{\,n}+1\end{pmatrix}$。
+
+(2) 係数行列は $\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}$。固有値は $\lambda=1,3$ で、固有ベクトルは $\begin{pmatrix}1\\-1\end{pmatrix}$ と $\begin{pmatrix}1\\1\end{pmatrix}$。$M^{n}=\dfrac12\begin{pmatrix}3^{\,n}+1 & 3^{\,n}-1\\3^{\,n}-1 & 3^{\,n}+1\end{pmatrix}$ より $x_n=\dfrac{3^{\,n}+1}{2}$、$y_n=\dfrac{3^{\,n}-1}{2}$。
+
+(3) $\lambda^{2}-5\lambda-(-6)=\lambda^{2}-5\lambda+6=0$ より $\lambda=2,3$。第0章の特性方程式 $t^{2}-5t+6=0$ と一致する。
+</Reveal>
+</Practice>

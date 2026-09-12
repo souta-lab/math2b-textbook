@@ -1,0 +1,189 @@
+---
+title: "数列の極限 — n を限りなく大きくした先"
+summary: "数列が収束・発散するとはどういうことかを定義し、最高次で割る型とはさみうちで極限を求める。"
+unit: "iii-limits"
+order: 0
+objectives:
+  - "数列の収束・発散を、極限値の有無として説明できる"
+  - "分数型の数列の極限を、分子分母を最高次の項で割って求められる"
+  - "はさみうちの原理で、直接計算できない数列の極限を求められる"
+prerequisites: ["b-sequences", "ii-exponential", "ii-trigonometric"]
+tags: ["数列の極限", "収束", "発散", "はさみうちの原理"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+1、$\dfrac12$、$\dfrac13$、$\dfrac14$ と、項がどんどん小さくなる数列があります。この数列の項を、順番に数直線上に打っていくと、点は 0 という一点に吸い寄せられていきます。では、$1$、$-1$、$1$、$-1$、$\dots$ のように符号を変えながら進む数列は、どこかへ落ち着くのでしょうか。それとも、いつまでも行き先を決めずにさまよい続けるのでしょうか。「限りなく大きくする」という操作を、数列の行き先を問う道具として使えるようにしましょう。
+</Hook>
+
+<Prediction
+  question="数列 $a_n = \dfrac{(-1)^n}{n}$ は、$n$ を限りなく大きくするとどうなるでしょう？"
+  options={['$0$ に収束する', '振動して収束しない', '$-1$ に収束する']}
+  answer="$0$ に収束する"
+  explanation="項は $-\dfrac11,\ \dfrac12,\ -\dfrac13,\ \dfrac14,\ \dots$ と符号を交互に変えますが、絶対値 $\dfrac1n$ は $0$ に近づきます。符号の振動より振幅の縮小が勝つので、$0$ に収束します。"
+/>
+
+<Note type="info">
+**入試での用途**：極限の計算は数学IIIの全単元の下請けです。分数型の数列の極限は「分子分母を最高次の項で割る」、それで処理できない形は「はさみうち」が型として問われます。まずこの2つを自動化することが、微分・積分・無限級数へ進むための最短ルートになります。
+</Note>
+
+## 収束と発散
+
+数列 $\{a_n\}$ を、$n$ を1つずつ増やしながら眺めます。このとき $a_n$ が、ある一定の値 $\alpha$ にどこまでも近づいていくなら、「数列は $\alpha$ に落ち着いた」とみなせます。この状態を収束、$\alpha$ を極限値とよびます。
+
+<Definition term="数列の極限">
+数列 $\{a_n\}$ において、$n$ を限りなく大きくするとき $a_n$ がある一定の値 $\alpha$ に限りなく近づくならば、$\{a_n\}$ は $\alpha$ に**収束**するといい、$\alpha$ をその**極限値**という。このことを
+$$
+\lim_{n\to\infty} a_n = \alpha
+$$
+と書く。収束しない数列は**発散**するという。特に $a_n$ が限りなく大きくなるときは
+$$
+\lim_{n\to\infty} a_n = \infty
+$$
+と書く。
+</Definition>
+
+$\lim$ の記号は「$n$ を限りなく大きくしたときの行き先」を表すだけで、$n$ に $\infty$ を代入しているわけではありません。ここが直感を数式へ変える最初のポイントです。
+
+## 極限は四則で分解できる
+
+極限の計算が機械的にできるのは、収束する数列どうしなら、和・差・積・商を極限値の計算に置き換えられるからです。
+
+<Theorem name="数列の極限の四則">
+$\displaystyle\lim_{n\to\infty} a_n = \alpha$、$\displaystyle\lim_{n\to\infty} b_n = \beta$ とする。このとき
+$$
+\lim_{n\to\infty} (a_n \pm b_n) = \alpha \pm \beta,\qquad
+\lim_{n\to\infty} a_n b_n = \alpha\beta,\qquad
+\lim_{n\to\infty} \frac{a_n}{b_n} = \frac{\alpha}{\beta}\ (\beta \ne 0)
+$$
+が成り立つ。また $c$ を定数とすると $\displaystyle\lim_{n\to\infty} c\,a_n = c\alpha$ である。
+</Theorem>
+
+ここで $\dfrac1n \to 0$ は、すべての計算の土台です。$\dfrac{1}{n^2}$ や $\dfrac{1}{n^3}$ のように、分母の次数が大きいほど速く $0$ へ縮みます。
+
+<Figure caption="初項1、公比1/2の等比数列。n を増やすと項は0に収束し、点が横軸に吸い寄せられていく。">
+<SequencePlot kind="geometric" a={1} r={0.5} maxN={8} n={4} mode="term" interactive />
+</Figure>
+
+## 分数型は最高次の項で割る
+
+入試で最も多いのが、$n$ の多項式どうしの分数の極限です。分子も分母も $n$ とともに大きくなるので、そのままでは大きさの勝負が見えません。
+
+<Why>
+分子分母を最高次の項で割るのは、$\dfrac1n \to 0$ という既知の事実だけを残すためです。分子の次数と分母の次数が同じなら、最高次の項どうしの比が極限値になり、分母の次数が大きければ全体は $0$ へ、分子の次数が大きければ $\infty$ へ向かいます。掛け算や足し算のままでは「どちらが速く増えるか」を数える必要がありますが、最高次で割れば $0$ に収束する項だけが消え、残りは定数になります。
+</Why>
+
+<WorkedExample title="例題1: 最高次の項で割る">
+$$
+\lim_{n\to\infty} \frac{2n^2 - 3n + 1}{4n^2 + 5}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="分子分母で最も強い項はどちらも $n^2$ です。この $n^2$ で両方を割れば、$\frac1n$ や $\frac{1}{n^2}$ の形を作れます。">分子分母を $n^2$ で割ると $\frac{2 - \dfrac3n + \dfrac{1}{n^2}}{4 + \dfrac{5}{n^2}}.$ </Step>
+<Step reason="$\frac1n \to 0$、$\frac{1}{n^2} \to 0$ なので、$n$ を含む項はすべて $0$ に消えます。">$n\to\infty$ とすると、分子は $2$、分母は $4$ に近づく。</Step>
+<Step reason="残った定数どうしの比が極限値です。約分すれば答えます。">したがって極限値は $\dfrac{2}{4} = \dfrac12$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac12$
+</Answer>
+</WorkedExample>
+
+## 直接計算できないときは はさみうち
+
+$\sin$ や $(-1)^n$ のように、値が振動して確定しない部分を含むときは、四則では処理できません。しかし振動の**振幅**が $0$ へ縮むなら、上下から定数で挟んで押しつぶせます。
+
+<Theorem name="はさみうちの原理">
+数列 $\{a_n\}$、$\{b_n\}$、$\{c_n\}$ について、十分大きいすべての $n$ で
+$$
+a_n \le c_n \le b_n
+$$
+が成り立ち、$\displaystyle\lim_{n\to\infty} a_n = \lim_{n\to\infty} b_n = \alpha$ ならば
+$$
+\lim_{n\to\infty} c_n = \alpha
+$$
+である。
+</Theorem>
+
+<WorkedExample title="例題2: はさみうちで振動を押しつぶす">
+$$
+\lim_{n\to\infty} \frac{\cos n}{n}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$\cos n$ は $n$ が整数のときどんな値でも $-1$ 以上 $1$ 以下です。この上下限が、そのまま分数全体の上下限を与えます。">すべての $n$ で $-1 \le \cos n \le 1$。$n \ge 1$ なので、各辺を正の $n$ で割って $-\frac1n \le \frac{\cos n}{n} \le \frac1n.$ </Step>
+<Step reason="両端はどちらも $\frac1n$ の定数倍で、$n\to\infty$ で $0$ に収束します。挟む準備が整いました。">$\displaystyle\lim_{n\to\infty}\left(-\frac1n\right) = \lim_{n\to\infty}\frac1n = 0$。</Step>
+<Step reason="上と下が同じ値に近づくので、間にある数列も同じ値に収束します。">はさみうちの原理より $\displaystyle\lim_{n\to\infty}\frac{\cos n}{n} = 0$。</Step>
+</Steps>
+
+<Answer>
+$0$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+数列の極限は、①分数型なら分子分母を最高次の項で割る ②振動する部分は上下を $0$ へ縮む式で挟む、の2つの型でほとんど処理できる。どちらも $\dfrac1n \to 0$ に帰着させるのが狙い。
+</KeyPoint>
+
+<Note type="tip">
+**検算**：分数型の極限では、答えの分母分子の次数関係を確かめる。分子の次数が分母より小さければ $0$、等しければ係数比、大きければ $\infty$（符号に注意）になる。この見取り図と計算結果が食い違ったら、割る相手の次数を疑う。
+</Note>
+
+<Misconception>
+<Wrong>
+分子も分母も $\infty$ に発散するなら、$\dfrac{\infty}{\infty} = 1$ としてよい。
+</Wrong>
+<WhyWrong>
+$\infty$ は数ではないので、$\dfrac{\infty}{\infty}$ のままでは値を決められない。これを**不定形**という。実際、例題1は分子も分母も最高次の項が $n^2$ で、増える速さは同じように見えるが、比は $1$ ではなく $\dfrac12$ である。増え方の違いが比に残るので、最高次の項で割って初めて値が定まる。
+</WhyWrong>
+<Right>
+不定形は代入で片づけず、変形してから極限をとる。分数型なら分子分母を最高次の項で割るのが基本操作。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$n$ を大きくすれば、数列はいつかは有限の値か $\infty$ のどちらかに落ち着く。
+</Wrong>
+<WhyWrong>
+$(-1)^n$ は $1$ と $-1$ を行き来し続け、どちらにも近づかない。$a_n = (-1)^n$ や $a_n = \sin\dfrac{n\pi}{2}$ のように、値が振動して定まらない数列も発散に含まれる。行き先が「有限の値」または「$\infty$」だけとは限らない。
+</WhyWrong>
+<Right>
+収束とは「1つの値に限りなく近づく」こと。振動して一点に近づかない場合は、収束せず発散する。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{n\to\infty} \frac{5n+3}{2n-1}$ を求めよ。
+<Reveal label="答え">
+分子分母を $n$ で割ると $\dfrac{5 + \frac3n}{2 - \frac1n} \to \dfrac{5}{2}$。次数が等しいので係数比 $5:2$ が答え。
+</Reveal>
+
+(2) $\displaystyle\lim_{n\to\infty} \frac{n^2-1}{3n^2+n}$ を求めよ。
+<Reveal label="答え">
+分子分母を $n^2$ で割ると $\dfrac{1 - \frac{1}{n^2}}{3 + \frac1n} \to \dfrac13$。
+</Reveal>
+
+(3) 数列 $a_n = (-1)^n$ は収束するか。理由をつけて答えよ。
+<Reveal label="答え">
+収束しない。項は $1$ と $-1$ を交互にとり続け、1つの値に近づかないから（振動して発散）。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（数列の極限）">
+(1) $\displaystyle\lim_{n\to\infty} \frac{3n^2+2n}{n^2+5}$ を求めよ。
+
+(2) $\displaystyle\lim_{n\to\infty} \frac{\cos n}{n^2}$ を求めよ。
+
+(3) $1+2+\cdots+n = \dfrac{n(n+1)}{2}$ を用いて、$\displaystyle\lim_{n\to\infty} \frac{1+2+\cdots+n}{n^2}$ を求めよ。
+
+<Reveal label="解答">
+(1) $n^2$ で割ると $\dfrac{3 + \frac2n}{1 + \frac{5}{n^2}} \to 3$。
+
+(2) $-1 \le \cos n \le 1$ より $-\dfrac{1}{n^2} \le \dfrac{\cos n}{n^2} \le \dfrac{1}{n^2}$。両端は $0$ に収束するから、はさみうちの原理より $0$。
+
+(3) 分子は $\dfrac{n(n+1)}{2} = \dfrac{n^2+n}{2}$。$n^2$ で割ると $\dfrac{1 + \frac1n}{2} \to \dfrac12$。
+</Reveal>
+</Practice>

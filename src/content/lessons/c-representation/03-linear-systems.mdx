@@ -1,0 +1,143 @@
+---
+title: "連立一次方程式を行列で解く"
+summary: "連立方程式を行列の形に表し、逆行列で解く。行列式が0のときの解の個数を判定する。"
+unit: "c-representation"
+order: 3
+objectives:
+  - "連立一次方程式を係数行列とベクトルの積の形に表せる"
+  - "行列式が0でないとき逆行列で解を求められる"
+  - "行列式が0のとき、解なしの場合と無数解の場合を判別できる"
+prerequisites: ["c-representation/02-inverse"]
+tags: ["連立方程式", "逆行列", "解の個数", "行列式"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+2本の直線の交点を求める、という中学からの問題があります。交点の座標は、2つの式を同時に満たす $(x,y)$ です。この連立方程式は、行列を使って $\begin{pmatrix}a & b\\c & d\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}p\\q\end{pmatrix}$ と1本の式にまとめられます。まとめると何がうれしいのでしょうか。答えは、解が存在するかどうかや個数が、係数行列のたった1つの数で判定できるようになることです。
+</Hook>
+
+<Prediction
+  question="連立方程式の係数行列の行列式が $0$ のとき、解はどうなる？"
+  options={['解なしの場合も、無数解の場合もある', '必ず解なしになる', '必ず1組の解になる']}
+  answer="解なしの場合も、無数解の場合もある"
+  explanation="行列式が0でも、右辺しだいで2直線が平行（解なし）にも一致（無数解）にもなります。解の有無は行列式だけでは決まらず、右辺も見る必要があります。"
+/>
+
+## 連立方程式の行列表示
+
+連立一次方程式
+$$
+\begin{cases}
+ax+by=p\\
+cx+dy=q
+\end{cases}
+$$
+は、行列とベクトルを使って次のように書けます。
+
+$$
+\begin{pmatrix}a & b\\c & d\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}
+=
+\begin{pmatrix}p\\q\end{pmatrix}
+$$
+
+$A=\begin{pmatrix}a & b\\c & d\end{pmatrix}$、$\vec{x}=\begin{pmatrix}x\\y\end{pmatrix}$、$\vec{b}=\begin{pmatrix}p\\q\end{pmatrix}$ とおけば、$A\vec{x}=\vec{b}$ です。
+
+<Theorem name="行列による連立方程式の解法">
+$A\vec{x}=\vec{b}$ について、$\det A\ne 0$ なら逆行列が使えて
+$$
+\vec{x}=A^{-1}\vec{b}
+$$
+というただ1組の解をもつ。$\det A=0$ のときは、解をもたないか、無数に解をもつかのいずれかである。
+</Theorem>
+
+<Why>
+逆行列を使うのは、場合分けや式の引き算をせずに、係数だけで解を決められるからです。$\det A\ne 0$ なら2直線が必ず1点で交わり、その交点は $A^{-1}\vec{b}$ に固定されます。$\det A=0$ は2直線の傾きが等しい状態で、右辺によって「平行」か「同じ直線」かに分かれます。解の個数の議論を、図形の位置関係ではなく行列式という1つの数に翻訳できるのが、行列表示の強みです。
+</Why>
+
+<WorkedExample title="例題: 逆行列で解く">
+連立方程式
+$$
+\begin{cases}
+2x+3y=7\\
+x-y=1
+\end{cases}
+$$
+を、逆行列を使って解きなさい。
+
+<Steps>
+<Step reason="係数を行列にまとめ、未知数をベクトルとして取り出します。">$\begin{pmatrix}2 & 3\\1 & -1\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}7\\1\end{pmatrix}$ と表せる。</Step>
+<Step reason="逆行列が使えるかどうかを行列式で先に判定します。0 ならこの方法は使えません。">$\det A=2\cdot(-1)-3\cdot1=-5\ne 0$ なので逆行列が存在する。</Step>
+<Step reason="公式に従って逆行列を計算します。対角を入れ替え、非対角の符号を変え、行列式で割ります。">$A^{-1}=\dfrac{1}{-5}\begin{pmatrix}-1 & -3\\-1 & 2\end{pmatrix}=\begin{pmatrix}\dfrac{1}{5} & \dfrac{3}{5}\\\dfrac{1}{5} & -\dfrac{2}{5}\end{pmatrix}$。</Step>
+<Step reason="解は A の逆行列を右辺のベクトルに掛けて得られます。">$\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}\dfrac{1}{5} & \dfrac{3}{5}\\\dfrac{1}{5} & -\dfrac{2}{5}\end{pmatrix}\begin{pmatrix}7\\1\end{pmatrix}=\begin{pmatrix}\dfrac{7+3}{5}\\\dfrac{7-2}{5}\end{pmatrix}=\begin{pmatrix}2\\1\end{pmatrix}$。</Step>
+</Steps>
+
+<Answer>
+$x=2$、$y=1$。もとの式に代入すると $2\cdot2+3\cdot1=7$、$2-1=1$ となり正しい。
+</Answer>
+</WorkedExample>
+
+## 行列式が0のとき
+
+$\det A=0$ の場合を、2直線の関係で読みます。次の2つはどちらも係数行列の行列式が $0$ です。
+
+$$
+\begin{cases}
+x+2y=1\\
+2x+4y=3
+\end{cases}
+\qquad
+\begin{cases}
+x+2y=1\\
+2x+4y=2
+\end{cases}
+$$
+
+前者は左辺が2倍の関係にあり、右辺は $1$ と $3$ で2倍になっていません。2直線は平行で交わらず、**解なし**です。後者は右辺も2倍の関係にあり、2つの式は同じ直線を表します。よって**無数解**です。行列式が $0$ というだけでは解なしと決まらず、右辺ベクトルとの整合性で分かれるのです。
+
+<Misconception>
+<Wrong>
+係数行列の行列式が $0$ であれば、連立方程式は必ず解をもたない。
+</Wrong>
+<WhyWrong>
+行列式が $0$ なのは「2つの式が独立でない（一方が他方の定数倍）」ことしか意味しません。右辺も同じ比率なら2式は同じ直線になり、無数解をもちます。解なしになるのは、右辺の比率が左辺と食い違うときだけです。行列式だけで結論を急ぐと、無数解のケースを落としてしまいます。
+</WhyWrong>
+<Right>
+$\det A=0$ を見つけたら、2つの式が本当に同値かを右辺まで含めて確認します。左辺の比と右辺の比が一致すれば無数解、一致しなければ解なしです。この確認は、行列式の値だけを見て結論する危険を避けるための必須の一手です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\begin{cases}2x+y=5\\x+3y=5\end{cases}$ を逆行列を使って解きなさい。
+
+(2) $\begin{cases}x+2y=1\\2x+4y=3\end{cases}$ と $\begin{cases}x+2y=1\\2x+4y=2\end{cases}$ について、それぞれの解の個数を答えなさい。
+
+(3) 連立方程式の解がただ1つであるための、係数行列に関する条件を1行で答えなさい。
+
+<Reveal label="答え">
+(1) 係数行列 $A=\begin{pmatrix}2 & 1\\1 & 3\end{pmatrix}$ は $\det A=5$、$A^{-1}=\dfrac{1}{5}\begin{pmatrix}3 & -1\\-1 & 2\end{pmatrix}$。よって $\begin{pmatrix}x\\y\end{pmatrix}=\dfrac{1}{5}\begin{pmatrix}3 & -1\\-1 & 2\end{pmatrix}\begin{pmatrix}5\\5\end{pmatrix}=\begin{pmatrix}2\\1\end{pmatrix}$。
+
+(2) 前者は解なし、後者は無数解。
+
+(3) 係数行列の行列式が $0$ でないこと（$\det A\ne 0$）。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="パラメータと解の個数">
+(1) $\begin{cases}x+2y=5\\2x+3y=8\end{cases}$ を逆行列を使って解きなさい。
+
+(2) $\begin{cases}ax+2y=1\\2x+ay=1\end{cases}$ がただ1つの解をもつための $a$ の条件を求めなさい。
+
+(3) (2) で、解が無数にある場合と解なしになる場合の $a$ の値と、それぞれの右辺の条件を調べなさい。
+
+<Reveal label="解答">
+(1) $A=\begin{pmatrix}1 & 2\\2 & 3\end{pmatrix}$、$\det A=-1$、$A^{-1}=\begin{pmatrix}-3 & 2\\2 & -1\end{pmatrix}$。よって $\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}-3 & 2\\2 & -1\end{pmatrix}\begin{pmatrix}5\\8\end{pmatrix}=\begin{pmatrix}-15+16\\10-8\end{pmatrix}=\begin{pmatrix}1\\2\end{pmatrix}$。
+
+(2) $\det A=a^{2}-4=(a-2)(a+2)$。ただ1つの解をもつには $\det A\ne 0$、すなわち $a\ne\pm2$。
+
+(3) $a=2$ のとき、2式はどちらも $2x+2y=1$ となり、同じ直線を表すので解は無数にある。$a=-2$ のとき、2式は $-2x+2y=1$ と $2x-2y=1$、すなわち $2x-2y=-1$ と $2x-2y=1$ となり、平行で交わらないので解なし。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+連立方程式と行列の組合せは、入試では「行列 $A$ の逆行列を求め、それを使って解け」という一連の流れで出ます。差がつくのは $\det A=0$ の分岐です。$a$ を含む係数行列では、$\det A=0$ となる $a$ を求めてから、その値ごとに右辺との整合性を確かめるという場合分けが定番の型になります。逆行列の公式を暗記しておけば、次の一手は機械的に進みます。解の個数を行列式で判定する視点は、後の一次変換で「情報がつぶれるかどうか」として再登場します。

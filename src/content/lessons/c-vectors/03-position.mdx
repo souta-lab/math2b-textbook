@@ -1,0 +1,134 @@
+---
+title: "位置ベクトル — 点をベクトルで表す"
+summary: "基準点から見たベクトルで点を表し、内分・外分・重心の位置ベクトルを求める。"
+unit: "c-vectors"
+order: 3
+objectives:
+  - "位置ベクトルの意味と、それが基準点に依存することを説明できる"
+  - "内分点・外分点・中点の位置ベクトルを求められる"
+  - "重心の位置ベクトルを導き、係数の和が1になる形を読み取れる"
+prerequisites: ["c-vectors/02-dot"]
+tags: ["位置ベクトル", "内分点", "重心", "係数比較"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+学校の地図で「校門から見て体育館はどこか」を言うには、基準になる点が要ります。基準を変えれば、同じ点の表し方も変わります。しかし「A から B への移動」そのものは、基準をどこに取っても変わりません。点の位置と、点の間の移動を分けて考えるのが位置ベクトルです。
+</Hook>
+
+<Prediction
+  question="線分 AB を $2:1$ に内分する点を P とすると、$\vec{p}$ の式で $\vec{a}$ に掛かる重みはどれ？"
+  options={['$\dfrac{1}{3}$', '$\dfrac{2}{3}$', '$2$']}
+  answer="$\dfrac{1}{3}$"
+  explanation="AP:PB=2:1 なので、P は A と B の間で B 寄りです。したがって A の重みが小さく、$\vec{p}=\dfrac{1}{3}\vec{a}+\dfrac{2}{3}\vec{b}$ となり、A に掛かるのは $\dfrac{1}{3}$ です。"
+/>
+
+## 位置ベクトル
+
+平面上に基準点 O を1つ決めます。点 P に対して $\vec{p}=\vec{OP}$ を、O を基準とする点 P の**位置ベクトル**といいます。点 A、B の位置ベクトルを $\vec{a}$、$\vec{b}$ とすると
+
+$$
+\vec{AB}=\vec{b}-\vec{a}
+$$
+
+です。点そのものは $\vec{p}$ で表せますが、$\vec{AB}$ のように2点の差で作ったベクトルは基準点 O の取り方に依存しません。
+
+<Why>
+点を位置ベクトルで表すのは、図形を「基準点からの矢印のつり合い」という式に翻訳するためです。たとえば「P が線分 AB 上の点」という条件は、$\vec{p}$ が $\vec{a}$ と $\vec{b}$ を重み付きで混ぜた形になる、と式で書けます。図形の条件を数式に変えれば、あとは係数を比べるだけで点の位置が決まります。入試のベクトル問題の多くは、この翻訳と係数比較で解けます。
+</Why>
+
+## 内分・外分・重心
+
+定理としてまとめます。分点の式は、移動 $\vec{AB}$ を割合で按分する形から出てきます。
+
+<Theorem name="分点と重心の位置ベクトル">
+点 A、B、C の位置ベクトルを $\vec{a}$、$\vec{b}$、$\vec{c}$ とする。
+
+- $AB$ を $m:n$ に内分する点 P：
+  $$
+  \vec{p}=\frac{n\vec{a}+m\vec{b}}{m+n}
+  $$
+- $AB$ を $m:n$ に外分する点 Q（$m\ne n$）：
+  $$
+  \vec{q}=\frac{-n\vec{a}+m\vec{b}}{m-n}
+  $$
+- $AB$ の中点 M は $\vec{m}=\dfrac{\vec{a}+\vec{b}}{2}$。
+- $\triangle ABC$ の重心 G は
+  $$
+  \vec{g}=\frac{\vec{a}+\vec{b}+\vec{c}}{3}
+  $$
+</Theorem>
+
+内分の式で、A に掛かる重みが $n$、B に掛かる重みが $m$ であることに注意してください。A に近い点ほど、A 側の重みは小さくなります。
+
+<WorkedExample title="例題: 内分点と重心">
+$\triangle ABC$ の位置ベクトルを $\vec{a}$、$\vec{b}$、$\vec{c}$ とする。
+
+(1) 辺 BC の中点 M の位置ベクトルを求めなさい。
+
+(2) 重心 G の位置ベクトルを求めなさい。
+
+(3) 線分 AB を $3:1$ に内分する点 P の位置ベクトルを求めなさい。
+
+<Steps>
+<Step reason="中点は 1:1 の内分点なので、内分公式に m=n=1 を代入します。">(1) $\vec{m}=\dfrac{1\cdot\vec{b}+1\cdot\vec{c}}{1+1}=\dfrac{\vec{b}+\vec{c}}{2}$。</Step>
+<Step reason="重心は中線を 2:1 に内分する点なので、A と M を 2:1 に内分する形で求めます。">(2) $\vec{g}=\dfrac{1\cdot\vec{a}+2\cdot\vec{m}}{2+1}$ に (1) を代入して $\vec{g}=\dfrac{\vec{a}+\vec{b}+\vec{c}}{3}$。</Step>
+<Step reason="AP:PB=3:1 なので、A の重みが 1、B の重みが 3 になります。">(3) $\vec{p}=\dfrac{1\cdot\vec{a}+3\cdot\vec{b}}{3+1}=\dfrac{\vec{a}+3\vec{b}}{4}$。</Step>
+</Steps>
+
+<Answer>
+(1) $\vec{m}=\dfrac{\vec{b}+\vec{c}}{2}$　(2) $\vec{g}=\dfrac{\vec{a}+\vec{b}+\vec{c}}{3}$　(3) $\vec{p}=\dfrac{\vec{a}+3\vec{b}}{4}$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+$s\vec{a}+t\vec{b}$ の形で、$s+t=1$ かつ $s,t\ge 0$ なら、その点は線分 AB 上にある。$s+t=1$ が係数の和の条件、$s,t$ の比が内分の比に対応する。この形を見たら「分点だ」と読む。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+$AB$ を $m:n$ に内分する点は $\vec{p}=\dfrac{m\vec{a}+n\vec{b}}{m+n}$ である。
+</Wrong>
+<WhyWrong>
+A の重みと B の重みを取り違えています。内分点は「A から B へ $m/(m+n)$ だけ進んだ点」なので、A を基準にすると $\vec{p}=\vec{a}+\dfrac{m}{m+n}(\vec{b}-\vec{a})$ です。これを整理すると $\vec{p}=\dfrac{n\vec{a}+m\vec{b}}{m+n}$ となり、A の重みは $n$ です。$m:n$ で A に近いほど A の重み $n$ が小さくなる、と確かめられます。
+</WhyWrong>
+<Right>
+迷ったら、A と B の中点で試します。$m=n=1$ ならどちらの式も $\dfrac{\vec{a}+\vec{b}}{2}$ で一致します。次に $A$ に近い $m:n=1:3$ を入れると、正しい式は $\vec{p}=\dfrac{3\vec{a}+\vec{b}}{4}$ となり、A が強く効きます。具体例で向きを確かめてから公式を使います。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) 2点 A、B の位置ベクトルが $\vec{a}=(1,2)$、$\vec{b}=(4,5)$ のとき、線分 AB を $2:1$ に内分する点 P の位置ベクトルを成分で求めなさい。
+
+(2) $\triangle ABC$ の重心 G について、$\vec{a}+\vec{b}+\vec{c}=3\vec{g}$ が成り立つことを、重心の定義から説明しなさい。
+
+(3) $\vec{p}=(1-t)\vec{a}+t\vec{b}$ で $t$ を $0$ から $1$ まで動かすと、点 P はどのような図形を描くか。
+
+<Reveal label="答え">
+(1) $\vec{p}=\dfrac{1\cdot\vec{a}+2\cdot\vec{b}}{2+1}=\dfrac{(1,2)+2(4,5)}{3}=\dfrac{(9,12)}{3}=(3,4)$。
+
+(2) 重心は中線を $2:1$ に内分するので $\vec{g}=\dfrac{\vec{a}+2\vec{m}}{3}$、$\vec{m}=\dfrac{\vec{b}+\vec{c}}{2}$。代入して $\vec{g}=\dfrac{\vec{a}+\vec{b}+\vec{c}}{3}$。両辺を3倍して $\vec{a}+\vec{b}+\vec{c}=3\vec{g}$。
+
+(3) 係数の和が $(1-t)+t=1$ で、$0\le t\le1$ なので、P は線分 AB 上を A から B まで動く。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="合成した点を読む">
+(1) $\triangle ABC$ の辺 AB、AC の中点をそれぞれ M、N とする。$\vec{MN}$ を $\vec{BC}$ で表しなさい。
+
+(2) $\vec{p}=\dfrac{2\vec{a}+\vec{b}}{3}$ で表される点 P は、線分 AB をどのような比に内分するか。
+
+(3) $\triangle ABC$ について、$\vec{a}+\vec{b}+\vec{c}=\vec{0}$ が成り立つとき、点 G はどこにあるか（G を原点とする）。
+
+<Reveal label="解答">
+(1) $\vec{m}=\dfrac{\vec{a}+\vec{b}}{2}$、$\vec{n}=\dfrac{\vec{a}+\vec{c}}{2}$ なので $\vec{MN}=\vec{n}-\vec{m}=\dfrac{\vec{c}-\vec{b}}{2}=\dfrac{1}{2}\vec{BC}$。中点連結定理に対応する。
+
+(2) $\vec{p}=\dfrac{2\vec{a}+\vec{b}}{3}$ で A の重みが 2、B の重みが 1。よって AP:PB=1:2 に内分する。
+
+(3) G を原点とすると $\vec{g}=\vec{0}$ なので $\vec{a}+\vec{b}+\vec{c}=3\vec{g}=\vec{0}$。このとき G は重心であり、原点が重心に一致する。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+位置ベクトルは、図形の問題を「係数比較」に持ち込む入口です。入試では、まず基準点 O を決めて各点を $\vec{a}$、$\vec{b}$、$\vec{c}$ で表し、条件を $\vec{p}=s\vec{a}+t\vec{b}$ の形に書きます。係数の和が $1$ なら分点、$s$ と $t$ の比が線分の比、という読み替えがそのまま得点になります。重心 $\vec{g}=\dfrac{\vec{a}+\vec{b}+\vec{c}}{3}$ は公式として覚えつつ、中線を $2:1$ に内分する、という由来も一緒に持っておくと、応用問題で復元できます。

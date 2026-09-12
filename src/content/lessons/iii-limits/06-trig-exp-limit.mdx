@@ -1,0 +1,159 @@
+---
+title: "三角関数・指数関数の極限 — sin x/x と e の速度"
+summary: "sin x/x → 1 と (e^x-1)/x → 1 という2大公式を、面積の比較と置き換えから導き、入試の極限計算に使う。"
+unit: "iii-limits"
+order: 6
+objectives:
+  - "lim sin x/x = 1 を、面積の大小とはさみうちから説明できる"
+  - "(e^x-1)/x → 1 と log(1+x)/x → 1 を、置き換えで使いこなせる"
+  - "ネイピア数 e を (1+x)^(1/x) の極限として定義できる"
+prerequisites: ["iii-limits/05-one-sided"]
+tags: ["三角関数の極限", "指数関数の極限", "ネイピア数", "はさみうちの原理"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$x$ が $0$ に近いとき、$\sin x$ の値は $x$ とほとんど同じになります。たとえば $x = 0.01$ のとき $\sin 0.01 \approx 0.0099998$ で、比 $\dfrac{\sin x}{x}$ はほぼ $1$ です。この「角とサインの速さが等しい」という事実は、微分の入口になるだけでなく、入試の極限計算で最もよく使う道具です。指数関数でも $e^x - 1$ が $x$ と同じ速さで $0$ に近づきます。この2つの速さを、今日は正確に押さえます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\lim_{x\to 0} \frac{\sin x}{x}$ の値はどれでしょう？"
+  options={['$0$', '$1$', '$\infty$']}
+  answer="$1$"
+  explanation="$\sin 0 = 0$ なので $\dfrac00$ の不定形に見えますが、$x$ が $0$ に近いとき $\sin x$ は $x$ と同じ速さで $0$ に近づきます。比は $1$ に収束します。"
+/>
+
+<Note type="info">
+**入試での用途**：$\displaystyle\lim_{x\to 0}\frac{\sin x}{x} = 1$ と $\displaystyle\lim_{x\to 0}\frac{e^x-1}{x} = 1$ は、数学IIIの微分公式（$\sin$、$e^x$、$\log$ の導関数）を導く根拠です。極限の問題でも、角や指数を公式の形にそろえる変形がそのまま問われます。
+</Note>
+
+## sin x / x を面積で挟む
+
+半径1の円の扇形と三角形の面積を比べると、$\sin x$、$x$、$\tan x$ の大小関係が得られます。これが $\dfrac{\sin x}{x} \to 1$ の根拠になります。
+
+<Why>
+面積を比べるのは、$\sin x$ を多項式で近似するのではなく、図形の大小という確かな不等式から極限を導けるからです。$0 \lt x \lt \dfrac{\pi}{2}$ で「三角形 OAP の面積 $\lt$ 扇形 OAP の面積 $\lt$ 三角形 OAT の面積」を書き下すと $\sin x \lt x \lt \tan x$ となり、各辺を正の $\sin x$ で割って逆数をとると $\cos x \lt \dfrac{\sin x}{x} \lt 1$ になります。両端が $1$ に近づくので、はさみうちの原理で中央も $1$ になります。$x \lt 0$ のときは $\dfrac{\sin x}{x}$ が偶関数なので、同じ結論が使えます。
+</Why>
+
+<Theorem name="三角関数・指数関数の極限">
+$$
+\lim_{x\to 0} \frac{\sin x}{x} = 1
+$$
+が成り立つ。またネイピア数 $e$ を
+$$
+e = \lim_{x\to 0} (1+x)^{\frac1x} = \lim_{x\to\pm\infty} \left(1+\frac1x\right)^x
+$$
+で定める（$e \approx 2.718$）。このとき
+$$
+\lim_{x\to 0} \frac{e^x - 1}{x} = 1,\qquad \lim_{x\to 0} \frac{\log(1+x)}{x} = 1
+$$
+が成り立つ。
+</Theorem>
+
+ここで $e$ は、指数関数の底として選ぶと微分が最も簡単になる特別な数です。$e$ を底とする指数関数 $e^x$ を、今後は自然対数 $\log$ とセットで使います。
+
+## 角や指数を公式の形にそろえる
+
+公式は $\dfrac{\sin x}{x}$ の形でしか使えません。分子の角と分母がずれているときは、そろえるための定数を掛け算で外へ出します。
+
+<WorkedExample title="例題1: 角をそろえる">
+$$
+\lim_{x\to 0} \frac{\sin 3x}{x}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="公式の分母は角と同じ $3x$ でなければなりません。分母を $3x$ にするために、$3$ を外から補います。">$\dfrac{\sin 3x}{x} = 3 \cdot \dfrac{\sin 3x}{3x}$ と変形する。</Step>
+<Step reason="$t = 3x$ とおくと、$x \to 0$ のとき $t \to 0$ となり、公式の形に一致します。">$t = 3x$ とおくと、$t \to 0$。（$x \ne 0$ なら $t \ne 0$。）</Step>
+<Step reason="$\frac{\sin t}{t} \to 1$ をそのまま使えます。外に出した $3$ を掛けて終わりです。">$3 \cdot \dfrac{\sin t}{t} \to 3 \cdot 1 = 3$。</Step>
+</Steps>
+
+<Answer>
+$3$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 指数を公式の形にそろえる">
+$$
+\lim_{x\to 0} \frac{e^{2x}-1}{x}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="公式は分母が指数と同じ $2x$ の形です。分母を $2x$ にするため、分子分母に $2$ を掛けて調整します。">$\dfrac{e^{2x}-1}{x} = 2 \cdot \dfrac{e^{2x}-1}{2x}$ と変形する。</Step>
+<Step reason="$t = 2x$ とおくと、$x \to 0$ のとき $t \to 0$ です。">$t = 2x$ とおくと、$t \to 0$。</Step>
+<Step reason="$\frac{e^t-1}{t} \to 1$ を使い、外の $2$ を掛けます。">$2 \cdot \dfrac{e^t-1}{t} \to 2 \cdot 1 = 2$。</Step>
+</Steps>
+
+<Answer>
+$2$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+$\displaystyle\lim_{x\to 0}\frac{\sin x}{x} = 1$、$\displaystyle\lim_{x\to 0}\frac{e^x-1}{x} = 1$、$\displaystyle\lim_{x\to 0}\frac{\log(1+x)}{x} = 1$。使うときは、分子の角・指数と分母を同じ文字にそろえる。$e$ は $(1+x)^{1/x}$ の極限として定義される。
+</KeyPoint>
+
+<Note type="tip">
+**誘導付きの利用**：$(1-\cos x)/x^2$ のように $\cos$ が絡むときは、$1-\cos x = \dfrac{\sin^2 x}{1+\cos x}$ と変形する。すると $\dfrac{\sin^2 x}{x^2} \cdot \dfrac{1}{1+\cos x} \to 1 \cdot \dfrac12 = \dfrac12$ と、$\sin x/x$ の公式に帰着できる。
+</Note>
+
+<Misconception>
+<Wrong>
+$\displaystyle\lim_{x\to 0}\frac{\sin x}{x}$ は、$\sin 0 = 0$ だから $\dfrac00 = 0$ である。
+</Wrong>
+<WhyWrong>
+$\dfrac00$ は不定形で、$0$ ではない。$x=0.001$ のとき $\dfrac{\sin 0.001}{0.001} \approx 0.9999998$ であり、値は $0$ ではなく $1$ に近づく。$\sin x$ は $x$ よりわずかに小さいものの、同じ速さで $0$ に向かうため、比は $1$ に収束する。
+</WhyWrong>
+<Right>
+$\dfrac{\sin x}{x}$ は約分できないが、面積の比較と はさみうち によって極限 $1$ が求まる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\displaystyle\lim_{x\to\infty}\left(1+\frac1x\right)^x$ は、$\dfrac1x$ と指数の $x$ が打ち消し合って $1$ になる。
+</Wrong>
+<WhyWrong>
+$1+\dfrac1x$ の底と、指数の $x$ は独立に動いており、約分のような操作はできない。実際 $x=100$ のとき $\left(1.01\right)^{100} \approx 2.70$ で、$1$ ではなく $e \approx 2.718$ に近づく。底は $1$ に近づくが、そのわずかな超過を指数の $x$ が増幅するため、値は $e$ に落ち着く。
+</WhyWrong>
+<Right>
+$\displaystyle\lim_{x\to\infty}\left(1+\frac1x\right)^x = e$。$1$ ではなく、ネイピア数 $e$ に収束する。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{x\to 0} \frac{\sin 5x}{x}$ を求めよ。
+<Reveal label="答え">
+$5 \cdot \dfrac{\sin 5x}{5x} \to 5 \cdot 1 = 5$。
+</Reveal>
+
+(2) $\displaystyle\lim_{x\to 0} \frac{1-\cos x}{x^2}$ を求めよ。
+<Reveal label="答え">
+$1-\cos x = \dfrac{\sin^2 x}{1+\cos x}$ より
+$$
+\frac{1-\cos x}{x^2} = \frac{\sin^2 x}{x^2} \cdot \frac{1}{1+\cos x} \to 1 \cdot \frac12 = \frac12.
+$$
+</Reveal>
+
+(3) $\displaystyle\lim_{x\to 0} \frac{\tan x}{x}$ を求めよ。
+<Reveal label="答え">
+$\tan x = \dfrac{\sin x}{\cos x}$ より $\dfrac{\tan x}{x} = \dfrac{\sin x}{x} \cdot \dfrac{1}{\cos x} \to 1 \cdot 1 = 1$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（三角・指数の極限）">
+(1) $\displaystyle\lim_{x\to 0} \frac{\sin 2x}{3x}$ を求めよ。
+
+(2) $\displaystyle\lim_{x\to 0} \frac{e^{3x}-1}{x}$ を求めよ。
+
+(3) $\displaystyle\lim_{x\to 0} \frac{\log(1+2x)}{x}$ を求めよ。
+
+<Reveal label="解答">
+(1) $\dfrac{\sin 2x}{3x} = \dfrac{2}{3} \cdot \dfrac{\sin 2x}{2x} \to \dfrac{2}{3}$。
+
+(2) $3 \cdot \dfrac{e^{3x}-1}{3x} \to 3$。
+
+(3) $2 \cdot \dfrac{\log(1+2x)}{2x} \to 2$。
+</Reveal>
+</Practice>

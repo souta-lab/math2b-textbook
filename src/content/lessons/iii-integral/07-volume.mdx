@@ -1,0 +1,152 @@
+---
+title: "体積 — 断面を積み重ねる"
+summary: "回転体を断面が円である立体ととらえ、断面積を積分して体積を求める。2曲線の回転体と非回転体の断面積も扱う。"
+unit: "iii-integral"
+order: 7
+objectives:
+  - "x 軸まわりの回転体の体積を $V=\\pi\\int y^2\\,dx$ で求められる"
+  - "2曲線の間の回転体を、外側²−内側² の積分で求められる"
+  - "回転体でない立体も、断面積を積分して体積を求められる"
+prerequisites: ["iii-integral/06-area"]
+tags: ["体積", "回転体", "断面積", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+平面図形を回転させると立体ができます。この立体の体積は、面積のときと同じ発想で求められます。立体を薄い円盤にスライスすると、各断面は円です。断面の面積を足し上げれば体積になる、というのが今回の考え方です。球の体積公式も、この方法で自分で導けます。
+</Hook>
+
+<Prediction
+  question="曲線 $y=\sqrt{r^2-x^2}$ を $x$ 軸まわりに回転してできる球の体積はどれ？（$r\gt 0$）"
+  options={['4πr³/3', 'πr³', '2πr³']}
+  answer="4πr³/3"
+  explanation="断面は半径 $\sqrt{r^2-x^2}$ の円なので、断面積は $\pi(r^2-x^2)$。これを $-r$ から $r$ まで積分すると $\frac{4}{3}\pi r^3$ になります。球の体積公式が積分から導けます。"
+/>
+
+回転体の体積は、断面積を積分して求めます。$x$ 軸まわりに回転するとき、位置 $x$ での断面は半径 $y$ の円です。その面積は $\pi y^2$ なので、これを $x$ について積み重ねます。
+
+<Theorem name="回転体と断面積の体積">
+曲線 $y=f(x)$ と $x$ 軸、および $x=a$、$x=b$ で囲まれた部分を $x$ 軸まわりに回転してできる立体の体積は
+
+$$
+V=\pi\int_a^b \{f(x)\}^2\,dx
+$$
+
+である。区間 $[a,\ b]$ で $f(x)\ge g(x)\ge 0$ のとき、2曲線の間の部分を回転してできる立体は外側の半径 $f$、内側の半径 $g$ の輪なので
+
+$$
+V=\pi\int_a^b \left(\{f(x)\}^2-\{g(x)\}^2\right)dx
+$$
+
+となる。一般に、$x$ における断面積が $A(x)$ の立体では $V=\displaystyle\int_a^b A(x)\,dx$ である。
+</Theorem>
+
+立体を位置 $x$ で切った断面が円でない場合でも、断面積 $A(x)$ が分かれば $\int A(x)\,dx$ で体積を求められます。断面の形（正方形、三角形など）を読み取り、辺の長さを $x$ の式で表すのがコツです。回転軸が $y$ 軸のときは、$y$ で積分し、断面の半径を $x$ で表します。
+
+<Why>
+回転体の体積で $y^2$ を積分するのは、断面が半径 $y$ の円だからです。円の面積は半径の2乗に $\pi$ を掛けたもので、半径が $y$ なら $\pi y^2$ になります。ここで $y$ と $y^2$ を取り違えると、面積ではなく長さを足し上げることになり、答えの次元がずれます。2曲線の間の回転体で外側²−内側² とするのも、輪の面積が外円から内円を引いたものになるからで、半径の差を2乗するのではありません。
+</Why>
+
+<WorkedExample title="例題1: 球の体積を導く">
+半径 $r$ の球は、半円 $y=\sqrt{r^2-x^2}$（$-r\le x\le r$）を $x$ 軸まわりに回転した立体である。体積 $V$ を求めなさい。
+
+<Steps>
+<Step reason="回転体の体積公式 V=π∫y²dx を使うためです。">$V=\pi\displaystyle\int_{-r}^{r}(r^2-x^2)\,dx$。</Step>
+<Step reason="被積分関数は偶関数なので、対称性で 0 から r の2倍にできるからです。">$V=2\pi\displaystyle\int_0^r(r^2-x^2)\,dx$。</Step>
+<Step reason="各項の原始関数を求めて計算するためです。">$2\pi\Big[r^2x-\dfrac{x^3}{3}\Big]_0^r$。</Step>
+<Step reason="上端を代入して値を求めるためです。">$2\pi\left(r^3-\dfrac{r^3}{3}\right)=\dfrac{4}{3}\pi r^3$。</Step>
+</Steps>
+
+<Answer>
+$V=\dfrac{4}{3}\pi r^3$。球の体積公式が積分から導かれた。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 2曲線の間の回転体">
+2曲線 $y=x$ と $y=x^2$ で囲まれた部分を $x$ 軸まわりに回転してできる立体の体積 $V$ を求めなさい。
+
+<Steps>
+<Step reason="囲まれた部分の範囲は交点の x 座標で決まるからです。">$x=x^2$ より交点は $x=0,\ 1$。</Step>
+<Step reason="(0,1) では x のほうが大きいので、外側の半径が x、内側の半径が x² だからです。">外側 $x$、内側 $x^2$ の輪になる。</Step>
+<Step reason="2曲線の回転体は外側²−内側² を積分するためです。">$V=\pi\displaystyle\int_0^1\left(x^2-x^4\right)dx$。</Step>
+<Step reason="各項の原始関数を求めるためです。">$\pi\Big[\dfrac{x^3}{3}-\dfrac{x^5}{5}\Big]_0^1$。</Step>
+<Step reason="上端と下端を代入して差をとるためです。">$\pi\left(\dfrac13-\dfrac15\right)=\dfrac{2\pi}{15}$。</Step>
+</Steps>
+
+<Answer>
+$V=\dfrac{2\pi}{15}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 回転体でない立体（断面が正方形）">
+曲線 $y=x^2$ と直線 $y=4$ で囲まれた部分を底面とし、$y$ 軸に垂直な断面がすべて正方形である立体の体積 $V$ を求めなさい。
+
+<Steps>
+<Step reason="断面は y 軸に垂直なので、y を積分変数にするのが自然だからです。">高さ $y$ での断面を考える。$0\le y\le 4$。</Step>
+<Step reason="断面の正方形の一辺は、その高さでの底面の横幅だからです。">$x^2=y$ より $x=\pm\sqrt y$。横幅は $2\sqrt y$。</Step>
+<Step reason="断面積は一辺の2乗で求まるからです。">$A(y)=(2\sqrt y)^2=4y$。</Step>
+<Step reason="断面積を積分すれば体積になるからです。">$V=\displaystyle\int_0^4 4y\,dy=\Big[2y^2\Big]_0^4$。</Step>
+<Step reason="上端と下端を代入して値を求めるためです。">$2\cdot 16=32$。</Step>
+</Steps>
+
+<Answer>
+$V=32$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+2曲線で囲まれた部分を回転させるとき、体積は $\pi\displaystyle\int (f-g)^2\,dx$ と、半径の差を2乗して積分すればよい。
+</Wrong>
+<WhyWrong>
+輪の断面積は、外円の面積から内円の面積を引いた $\pi f^2-\pi g^2$ です。半径の差 $f-g$ を2乗すると $\pi(f^2-2fg+g^2)$ となり、交差項 $-2fg$ が余計に入ります。$f=x$、$g=x^2$ で試すと値が合いません。
+</WhyWrong>
+<Right>
+$V=\pi\displaystyle\int_a^b\left(f^2-g^2\right)dx$。外側の半径と内側の半径をそれぞれ2乗してから引く。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+回転体の体積は $V=\pi\displaystyle\int y\,dx$ で求められる。
+</Wrong>
+<WhyWrong>
+断面は半径 $y$ の円で、その面積は $\pi y^2$ です。$\pi y$ は円周であり、面積ではありません。$y$ のまま積分すると長さを足し上げることになり、体積になりません。
+</WhyWrong>
+<Right>
+断面は円だから面積は $\pi y^2$。よって $V=\pi\displaystyle\int_a^b y^2\,dx$。半径を2乗するのを忘れない。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）曲線 $y=x^2$（$0\le x\le 2$）と $x$ 軸で囲まれた部分を $x$ 軸まわりに回転してできる体積を求めなさい。
+<Reveal label="答え">
+$V=\pi\displaystyle\int_0^2 x^4\,dx=\pi\Big[\frac{x^5}{5}\Big]_0^2=\frac{32\pi}{5}$。
+</Reveal>
+
+（2）曲線 $y=\sqrt x$（$0\le x\le 4$）と $x$ 軸で囲まれた部分を $x$ 軸まわりに回転してできる体積を求めなさい。
+<Reveal label="答え">
+$y^2=x$ なので $V=\pi\displaystyle\int_0^4 x\,dx=\pi\Big[\frac{x^2}{2}\Big]_0^4=8\pi$。
+</Reveal>
+
+（3）回転軸が $y$ 軸のとき、体積の公式はどう書けるか。
+<Reveal label="答え">
+断面は $y$ における半径 $x$ の円だから、$y$ で積分して $V=\pi\displaystyle\int_c^d x^2\,dy$。半径を $x$（$y$ の式）で表し、区間も $y$ の値にする。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（体積）">
+（1）2曲線 $y=x^2$ と $y=2x$ で囲まれた部分を $x$ 軸まわりに回転してできる体積を求めよ。
+
+（2）曲線 $y=\sin x$（$0\le x\le\pi$）と $x$ 軸で囲まれた部分を $x$ 軸まわりに回転してできる体積を求めよ。
+
+（3）曲線 $y=x^2$ と $y=1$ で囲まれた部分を底面とし、$x$ 軸に垂直な断面がすべて正方形である立体の体積を求めよ。
+
+<Reveal label="解答">
+（1）交点は $x=0,\ 2$。外側 $2x$、内側 $x^2$ より $V=\pi\displaystyle\int_0^2(4x^2-x^4)\,dx=\pi\Big[\frac{4x^3}{3}-\frac{x^5}{5}\Big]_0^2=\pi\left(\frac{32}{3}-\frac{32}{5}\right)=\frac{64\pi}{15}$。
+
+（2）$V=\pi\displaystyle\int_0^\pi\sin^2x\,dx$。半角の公式より $\int_0^\pi\frac{1-\cos2x}{2}\,dx=\Big[\frac{x}{2}-\frac{\sin2x}{4}\Big]_0^\pi=\frac{\pi}{2}$。よって $V=\frac{\pi^2}{2}$。
+
+（3）位置 $x$（$-1\le x\le 1$）での断面の一辺は $1-x^2$。$A(x)=(1-x^2)^2$。$V=\displaystyle\int_{-1}^1(1-x^2)^2\,dx=2\int_0^1(1-2x^2+x^4)\,dx=2\left(1-\frac23+\frac15\right)=\frac{16}{15}$。
+</Reveal>
+</Practice>

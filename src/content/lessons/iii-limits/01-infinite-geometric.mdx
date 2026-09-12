@@ -1,0 +1,155 @@
+---
+title: "無限等比数列 — r^n の行き先は公比で決まる"
+summary: "公比 r の値によって r^n が 0・1・∞・振動のどれに向かうかを整理し、底をそろえて極限を求める。"
+unit: "iii-limits"
+order: 1
+objectives:
+  - "公比 r と r^n の極限の関係を、4つの場合に分けて言える"
+  - "底が異なる等比の和を、最大の底で割って極限を求められる"
+  - "公比に文字を含む数列の極限を、場合分けして求められる"
+prerequisites: ["iii-limits/00-sequence-limit"]
+tags: ["無限等比数列", "公比", "場合分け", "r^n"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+同じ「$n$ 乗」でも、底が $0.5$ なら項はどんどん $0$ に近づき、底が $2$ なら爆発的に大きくなります。底が $-0.5$ なら符号を交互に変えながら $0$ へ縮み、底が $-1$ なら $1$ と $-1$ を行き来したまま止まりません。指数関数のグラフで見た「底の違い」が、そのまま数列の行き先の違いになります。$r^n$ の行き先を、公比 $r$ の値だけで言い切れるようにしましょう。
+</Hook>
+
+<Prediction
+  question="公比 $r = -\dfrac12$ の等比数列 $r^n$ は、$n$ を限りなく大きくするとどうなるでしょう？"
+  options={['$0$ に収束する', '振動して収束しない', '$1$ に収束する']}
+  answer="$0$ に収束する"
+  explanation="項は $-\dfrac12,\ \dfrac14,\ -\dfrac18,\ \dots$ と符号を交互に変えますが、絶対値は $\left(\dfrac12\right)^n$ で $0$ に近づきます。$0$ への近づき方に符号は影響しないので、$0$ に収束します。"
+/>
+
+<Note type="info">
+**入試での用途**：入試では、等比数列の和や無限級数の収束条件として $r^n$ の極限が繰り返し現れます。「$|r| \lt 1$ なら $r^n \to 0$、$r = 1$ なら $1$、$r \gt 1$ なら $\infty$、$r \le -1$ なら振動」は、答案の冒頭で場合分けを書くための定型です。ここで場合を落とすと、その後の計算が全部ずれます。
+</Note>
+
+<Definition term="無限等比数列">
+初項 $a$、公比 $r$ の等比数列は $a r^{\,n-1}$ と表される。$a$ は行き先を定数倍するだけなので、収束・発散を決めるのは本質的に $r^n$ の部分である。そこで $a=1$ の数列 $\{r^n\}$ の極限を先に整理する。
+</Definition>
+
+<Theorem name="r^n の極限">
+公比 $r$ について、$\{r^n\}$ の極限は次のように決まる。
+- $|r| \lt 1$ のとき
+$$
+\lim_{n\to\infty} r^n = 0
+$$
+- $r = 1$ のとき $\displaystyle\lim_{n\to\infty} r^n = 1$
+- $r \gt 1$ のとき $\displaystyle\lim_{n\to\infty} r^n = \infty$
+- $r \le -1$ のとき $\{r^n\}$ は振動して発散する（極限は存在しない）
+</Theorem>
+
+<Why>
+$r$ が負でも、$r^n$ の大きさを測っているのは絶対値 $|r|^n$ だからです。$|r| \lt 1$ なら $|r|^n \to 0$ となり、値そのものも $0$ に挟まれて $0$ へ向かいます。一方 $r \le -1$ では $|r|^n$ が $1$ 以上にとどまるか $\infty$ へ育つため、符号の反転が消えず、1つの値に落ち着きません。$r^n$ の行き先は「符号」ではなく「絶対値がどうなるか」で決まると考えるのが核心です。
+</Why>
+
+## 底が混ざったら最大の底で割る
+
+$2^n$ と $3^n$ のように底が異なる項が混ざるときは、増え方が最も速い**最大の底**で分子分母を割ります。すると、その底より小さい項はすべて $\left(\dfrac23\right)^n$ や $\left(\dfrac13\right)^n$ のように、1より小さい公比の $n$ 乗となり、$0$ へ消えます。例題1の形は入試の頻出パターンです。
+
+<WorkedExample title="例題1: 底の異なる等比の比">
+$$
+\lim_{n\to\infty} \frac{2^n + 3^n}{3^n - 2^n}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$2^n$ と $3^n$ では $3^n$ の増え方が速いので、分子分母を $3^n$ で割ります。（分母を0にしないため、$3^n$ で割る操作は安全です。）">分子分母を $3^n$ で割ると $\frac{\left(\dfrac23\right)^n + 1}{1 - \left(\dfrac23\right)^n}.$ </Step>
+<Step reason="$\frac23$ は1より小さいので、$\left(\frac23\right)^n \to 0$ です。これで $n$ を含む項が消えます。">$n\to\infty$ とすると、分子は $0+1=1$、分母は $1-0=1$ に近づく。</Step>
+<Step reason="残った定数の比が極限値です。">したがって極限値は $1$。</Step>
+</Steps>
+
+<Answer>
+$1$
+</Answer>
+</WorkedExample>
+
+## 公比に文字が入ったら場合分け
+
+公比が文字 $r$ のままのときは、$r$ の値によって行き先が4通りに変わります。まず $r$ の範囲を決め、その範囲で使える式（$\left(\frac{1}{r}\right)^n$ を $0$ にする、など）を選ぶのが答案の流れです。
+
+<WorkedExample title="例題2: 文字公比の場合分け">
+$r \gt 0$ とする。数列
+$$
+a_n = \frac{r^n - 1}{r^n + 1}
+$$
+の極限を、$r$ の値で場合分けして求めよ。
+
+<Steps>
+<Step reason="$0 \lt r \lt 1$ では $r^n \to 0$ なので、そのまま $0$ を代入した形で極限が読めます。分子も分母も有限の値に収束します。">$0 \lt r \lt 1$ のとき、$r^n \to 0$ より $a_n \to \dfrac{0-1}{0+1} = -1$。</Step>
+<Step reason="$r = 1$ のときは $r^n = 1$ がすべての $n$ で成り立つので、数列は値が変化しない定数列になります。">$r = 1$ のとき、$a_n = \dfrac{1-1}{1+1} = 0$ で、極限は $0$。</Step>
+<Step reason="$r \gt 1$ では $r^n \to \infty$ の不定形になるので、最大の底 $r^n$ で分子分母を割って $\left(\frac1r\right)^n \to 0$ の形を作ります。">$r \gt 1$ のとき、分子分母を $r^n$ で割ると $a_n = \frac{1 - \left(\dfrac1r\right)^n}{1 + \left(\dfrac1r\right)^n} \to \frac{1-0}{1+0} = 1.$ </Step>
+</Steps>
+
+<Answer>
+$0 \lt r \lt 1$ のとき $-1$、$r = 1$ のとき $0$、$r \gt 1$ のとき $1$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+$r^n$ の極限は、$|r| \lt 1$ なら $0$、$r = 1$ なら $1$、$r \gt 1$ なら $\infty$、$r \le -1$ なら振動。底が混ざる式は最大の底で割り、公比が文字なら範囲で場合分けする。
+</KeyPoint>
+
+<Note type="tip">
+**時短**：場合分けの問題では、$|r| \lt 1$、$r = 1$、$r \gt 1$、$r \le -1$ の境界を先に答案へ書き出しておく。境界を書いてから各場合を計算すると、$r = -1$ や $r = 1$ の入れ忘れがなくなる。
+</Note>
+
+<Misconception>
+<Wrong>
+公比が負のとき、$|r| \lt 1$ でも振動するので収束しない。
+</Wrong>
+<WhyWrong>
+$r = -\dfrac12$ の項は $-\dfrac12,\ \dfrac14,\ -\dfrac18,\ \dots$ と符号を変えるが、絶対値は $\left(\dfrac12\right)^n \to 0$。$-\left(\dfrac12\right)^n \le r^n \le \left(\dfrac12\right)^n$ とはさむと、両端とも $0$ に収束する。振動しながら振幅が $0$ へ縮むので、極限は $0$ になる。
+</WhyWrong>
+<Right>
+$|r| \lt 1$ なら、$r$ の符号にかかわらず $r^n \to 0$。収束するかどうかは絶対値で決まる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$r = -1$ のとき、$r^n$ は $1$ と $-1$ を交互にとるので、その中間の $0$ に収束する。
+</Wrong>
+<WhyWrong>
+極限は「$n$ を大きくしたとき、値が1つの数にどこまでも近づくか」で判定する。$(-1)^n$ は $1$ と $-1$ のどちらからも距離 $1$ を保ち続け、$0$ に近づいてはいない。2つの異なる値の平均をとる操作は、極限の定義には含まれない。
+</WhyWrong>
+<Right>
+$r \le -1$ では $|r|^n$ が $0$ へ向かわないので振動して発散する。$r = -1$ はその代表例。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{n\to\infty} \left(-\frac13\right)^n$ を求めよ。
+<Reveal label="答え">
+$\left|-\dfrac13\right| = \dfrac13 \lt 1$ なので、符号が交互に変わっても絶対値が $0$ へ向かう。よって $0$。
+</Reveal>
+
+(2) $\displaystyle\lim_{n\to\infty} 2^n$ を求めよ。
+<Reveal label="答え">
+底 $2 \gt 1$ なので、項は限りなく大きくなる。よって $+\infty$。
+</Reveal>
+
+(3) 数列 $(-1)^n$ は収束するか。
+<Reveal label="答え">
+収束しない。$1$ と $-1$ を交互にとり続け、1つの値に近づかないから（振動して発散）。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（無限等比数列）">
+(1) $\displaystyle\lim_{n\to\infty} \frac{2^n - 1}{2^n + 1}$ を求めよ。
+
+(2) $\displaystyle\lim_{n\to\infty} \left(\frac34\right)^n$ を求めよ。
+
+(3) $r \gt 0$ のとき、$\displaystyle\lim_{n\to\infty} \frac{r^n}{1 + r^n}$ を $r$ の値で場合分けして求めよ。
+
+<Reveal label="解答">
+(1) 分子分母を $2^n$ で割ると $\dfrac{1 - \left(\frac12\right)^n}{1 + \left(\frac12\right)^n} \to 1$。
+
+(2) $\left|\dfrac34\right| = \dfrac34 \lt 1$ なので $0$。
+
+(3) $0 \lt r \lt 1$ のとき $r^n \to 0$ より $0$。$r = 1$ のときは $\dfrac{1}{1+1} = \dfrac12$。$r \gt 1$ のときは分子分母を $r^n$ で割って $\dfrac{1}{\left(\frac1r\right)^n + 1} \to 1$。
+</Reveal>
+</Practice>

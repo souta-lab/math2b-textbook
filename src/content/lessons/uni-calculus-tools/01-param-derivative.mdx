@@ -1,0 +1,162 @@
+---
+title: "媒介変数の微分 — t のまま傾きを出す"
+summary: "x=x(t)、y=y(t) で与えられた曲線の接線の傾きを、dy/dt と dx/dt の割り算で求める。楕円・サイクロイド・2階導関数まで扱う。"
+unit: "uni-calculus-tools"
+order: 1
+objectives:
+  - "媒介変数表示の曲線で $\\dfrac{dy}{dx}$ を $\\dfrac{dy/dt}{dx/dt}$ として計算できる"
+  - "媒介変数表示の楕円・サイクロイドの接線を $t$ のまま求められる"
+  - "2階導関数 $\\dfrac{d^2y}{dx^2}$ を、$\\dfrac{dy}{dx}$ を $t$ で微分して $\\dfrac{dx}{dt}$ で割って求められる"
+prerequisites: ["uni-calculus-tools/00-implicit"]
+tags: ["媒介変数", "接線", "サイクロイド", "時短"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+自転車のタイヤに付けた小さなランプは、走りながら地面すれすれで大きく弧を描きます。この軌跡（サイクロイド）や、楕円のように横に長い図形は、$x$ と $y$ の関係を1本の式で書くのがとても面倒です。ところが、回転角のような文字を1つ用意して $x$ と $y$ を別々に表すと、式は驚くほど簡単になります。問題は、その形のまま接線の傾きを出せるかどうかです。
+</Hook>
+
+<Prediction
+  question="$x=t^2$、$y=t^3$ で定まる曲線の $\\dfrac{dy}{dx}$ はどれ？"
+  options={['$\\dfrac{3t}{2}$', '$\\dfrac{2}{3t}$', '$3t^2$']}
+  answer="$\\dfrac{3t}{2}$"
+  explanation="$\\dfrac{dy}{dx}$ は、$t$ で微分した変化率の比 $\\dfrac{dy/dt}{dx/dt}$ です。$\\dfrac{dy}{dt}=3t^2$、$\\dfrac{dx}{dt}=2t$ なので $\\dfrac{3t^2}{2t}=\\dfrac{3t}{2}$。逆数にしたり、$\\dfrac{dy}{dt}$ をそのまま答えにしたりするのは誤りです。"
+/>
+
+曲線が $x=f(t)$、$y=g(t)$ の形で与えられると、$x$ も $y$ も $t$ の関数です。$t$ が動けば $x$ が動き、それに連れて $y$ も動きます。したがって、$x$ の変化に対する $y$ の変化、すなわち傾きは、それぞれの $t$ についての変化率の比として取り出せます。
+
+<Definition term="媒介変数表示">
+$x=f(t)$、$y=g(t)$ のように、1つの文字 $t$ を介して点 $(x,y)$ の座標を表すことを**媒介変数表示**といい、$t$ を**媒介変数**という。この $t$ を消去すれば $x$ と $y$ の関係式になるが、消去すると式が複雑になることのほうが多い。
+</Definition>
+
+<Theorem name="媒介変数の微分法">
+$x=f(t)$、$y=g(t)$ のとき、$f'(t)\ne 0$ で
+$$
+\frac{dy}{dx}=\frac{dy/dt}{dx/dt}=\frac{g'(t)}{f'(t)}
+$$
+である。さらに $y$ の $x$ に関する2階導関数は
+$$
+\frac{d^2y}{dx^2}=\frac{1}{dx/dt}\cdot\frac{d}{dt}\left(\frac{dy}{dx}\right)
+$$
+で求まる。
+</Theorem>
+
+<Why>
+傾きが割り算で出るのは、$t$ を介した連鎖のためです。チェーンルールより $\dfrac{dy}{dx}=\dfrac{dy}{dt}\cdot\dfrac{dt}{dx}$ で、$\dfrac{dt}{dx}$ は $\dfrac{dx}{dt}$ の逆数だから、$\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$ となります。$t$ を消去してから微分するより、各成分を $t$ で微分して割るほうが、面倒な消去も逆関数も避けられます。2階導関数で $\dfrac{dt}{dx}$ を掛ける（$\dfrac{dx}{dt}$ で割る）のは、$\dfrac{dy}{dx}$ を「$x$ で」もう一度微分するためです。$t$ で微分しただけでは不十分なので、変化率の変換をもう一度行います。
+</Why>
+
+## 使える場面
+- サイクロイド・楕円・リサージュ曲線など、媒介変数で簡単に書ける曲線の接線・法線を求めるとき。
+- 媒介変数表示のまま面積 $\displaystyle\int y\,dx=\int y\,\frac{dx}{dt}\,dt$ や曲線の長さを立式するとき。その前に傾き $\dfrac{dy}{dx}$ が必要になる。
+- $t$ を消去すると根号や逆三角関数が現れる曲線で、凹凸や極値を調べるとき。
+
+## 手順
+1. $\dfrac{dx}{dt}$ と $\dfrac{dy}{dt}$ をそれぞれ計算する。
+2. $\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$ で傾きを出す。
+3. 接点に対応する $t$ を代入し、接点の座標も求める。
+4. 2階導関数が必要なら、$\dfrac{dy}{dx}$ を $t$ で微分し、$\dfrac{dx}{dt}$ で割る。
+
+## 記述式での可否
+媒介変数の微分は数学IIIの標準内容で、**答案でそのまま使える**。注意点は2つ。$\dfrac{dx}{dt}=0$ となる点ではこの公式の分母が0になり、垂直接線として別に調べる必要がある。また2階導関数を $\dfrac{d^2y/dt^2}{d^2x/dt^2}$ としないこと。$\dfrac{dy}{dx}$ を $t$ で微分して $\dfrac{dx}{dt}$ で割る、と手順どおりに書けば減点されない。
+
+<WorkedExample title="例題1: 楕円の接線">
+楕円 $x=2\cos t$、$y=3\sin t$ の $t=\dfrac{\pi}{4}$ における接線の方程式を求めなさい。
+
+<Steps>
+<Step reason="媒介変数の微分は、まず各成分を $t$ で微分するからです。">$\dfrac{dx}{dt}=-2\sin t$、$\dfrac{dy}{dt}=3\cos t$。</Step>
+<Step reason="傾きは $dt$ あたりの変化率の比だからです。">$\dfrac{dy}{dx}=\dfrac{3\cos t}{-2\sin t}=-\dfrac32\cot t$。</Step>
+<Step reason="接点に対応する $t$ を代入して傾きを確定するためです。">$t=\dfrac{\pi}{4}$ で $\dfrac{dy}{dx}=-\dfrac32$。</Step>
+<Step reason="接点の座標も同じ $t$ から求めるためです。">接点は $x=\sqrt2$、$y=\dfrac{3\sqrt2}{2}$。</Step>
+<Step reason="点と傾きから接線の式を立て、整数に整理するためです。">$y-\dfrac{3\sqrt2}{2}=-\dfrac32(x-\sqrt2)$ より $3x+2y=6\sqrt2$。</Step>
+</Steps>
+
+<Answer>
+接線の方程式は $3x+2y=6\sqrt2$。傾きは $-\dfrac32$ である。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: サイクロイドの接線">
+サイクロイド $x=t-\sin t$、$y=1-\cos t$ の $t=\dfrac{\pi}{2}$ における接線の傾きを求めなさい。また、$t=0$ で傾きがどうなるかを調べなさい。
+
+<Steps>
+<Step reason="各成分を $t$ で微分して変化率をそろえるためです。">$\dfrac{dx}{dt}=1-\cos t$、$\dfrac{dy}{dt}=\sin t$。</Step>
+<Step reason="傾きは変化率の比だからです。">$\dfrac{dy}{dx}=\dfrac{\sin t}{1-\cos t}$。</Step>
+<Step reason="求める接点の $t$ を代入するためです。">$t=\dfrac{\pi}{2}$ で $\dfrac{dy}{dx}=\dfrac{1}{1-0}=1$。</Step>
+<Step reason="$t=0$ では分母が $0$ になり、傾きの公式が使えないからです。">$t=0$ では $\dfrac{dx}{dt}=0$ で、接線は垂直（$x$ 軸に垂直）になる。</Step>
+</Steps>
+
+<Answer>
+$t=\dfrac{\pi}{2}$ で傾きは $1$。$t=0$ では $\dfrac{dx}{dt}=0$ となり、公式の分母が消えるので、接線は垂直になる。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 2階導関数を求める">
+$x=t^2$、$y=t^3$ で定まる曲線について、$\dfrac{dy}{dx}$ と $\dfrac{d^2y}{dx^2}$ を求めなさい。
+
+<Steps>
+<Step reason="まず1階の傾きを $t$ の式で表すためです。">$\dfrac{dy}{dx}=\dfrac{3t^2}{2t}=\dfrac{3t}{2}$（$t\ne 0$）。</Step>
+<Step reason="2階導関数は $\\dfrac{dy}{dx}$ をさらに $x$ で微分したものだからです。">$\dfrac{dy}{dx}$ を $t$ で微分すると $\dfrac{d}{dt}\left(\dfrac{3t}{2}\right)=\dfrac32$。</Step>
+<Step reason="$t$ での微分を $x$ での微分に変換するため、$\\dfrac{dx}{dt}$ で割ります。">$\dfrac{d^2y}{dx^2}=\dfrac{3/2}{2t}=\dfrac{3}{4t}$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac{dy}{dx}=\dfrac{3t}{2}$、$\dfrac{d^2y}{dx^2}=\dfrac{3}{4t}$。$\dfrac{d^2y}{dx^2}$ は $\dfrac{d^2y/dt^2}{d^2x/dt^2}$ ではない。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\dfrac{dy}{dx}=\dfrac{dx/dt}{dy/dt}$ と、分母と分子を逆にして計算する。
+</Wrong>
+<WhyWrong>
+チェーンルールは $\dfrac{dy}{dx}=\dfrac{dy}{dt}\cdot\dfrac{dt}{dx}$ で、$\dfrac{dt}{dx}$ は $\dfrac{dx}{dt}$ の逆数である。よって分子が $dy/dt$、分母が $dx/dt$ でなければならない。$x=t^2$、$y=t^3$ で確かめると、$y=x^{3/2}$ より本来は $\dfrac{dy}{dx}=\dfrac32\sqrt{x}=\dfrac{3t}{2}$ だが、逆数 $\dfrac{2}{3t}$ はこれと一致しない。
+</WhyWrong>
+<Right>
+$\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$。上を $dy/dt$、下を $dx/dt$ と覚えて、成分ごとに $t$ で微分してから割る。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+2階導関数は $\dfrac{d^2y}{dx^2}=\dfrac{d^2y/dt^2}{d^2x/dt^2}$ と、2回微分どうしを割ればよい。
+</Wrong>
+<WhyWrong>
+2階導関数は $\dfrac{dy}{dx}$ という $x$ の関数を、もう一度 $x$ で微分したものである。$t$ で2回微分したものを割るのではない。$x=t^2$、$y=t^3$ で試すと、$\dfrac{d^2y}{dx^2}=\dfrac{3}{4t}$ が正しいのに、$\dfrac{6t}{2}=3t$ となって食い違う。
+</WhyWrong>
+<Right>
+$\dfrac{dy}{dx}$ を計算したあと、それを $t$ で微分して $\dfrac{dx}{dt}$ で割る。$\dfrac{d^2y}{dx^2}=\dfrac{1}{dx/dt}\cdot\dfrac{d}{dt}\left(\dfrac{dy}{dx}\right)$。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$x=t^2+1$、$y=t^3-t$ について $\dfrac{dy}{dx}$ を求めなさい。
+<Reveal label="答え">
+$\dfrac{dx}{dt}=2t$、$\dfrac{dy}{dt}=3t^2-1$ より $\dfrac{dy}{dx}=\dfrac{3t^2-1}{2t}$。
+</Reveal>
+
+（2）$x=\cos t$、$y=\sin t$ について $\dfrac{dy}{dx}$ を求めなさい。
+<Reveal label="答え">
+$\dfrac{dx}{dt}=-\sin t$、$\dfrac{dy}{dt}=\cos t$ より $\dfrac{dy}{dx}=-\dfrac{\cos t}{\sin t}=-\cot t$。単位円上の点の傾きとして妥当。
+</Reveal>
+
+（3）媒介変数表示の2階導関数を求めるとき、どの順で計算するか説明しなさい。
+<Reveal label="答え">
+まず $\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}$ を求める。次にそれを $t$ で微分し、最後に $\dfrac{dx}{dt}$ で割る。$t$ で微分した時点で止めず、$x$ に関する微分に直す変換を忘れない。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（媒介変数の微分）">
+（1）$x=t^3$、$y=t^2+1$ について $\dfrac{dy}{dx}$ を求めよ。
+
+（2）楕円 $x=3\cos t$、$y=2\sin t$ の $t=\dfrac{\pi}{6}$ における接線の方程式を求めよ。
+
+（3）$x=t^2$、$y=t^4$ について $\dfrac{d^2y}{dx^2}$ を求めよ。
+
+<Reveal label="解答">
+（1）$\dfrac{dx}{dt}=3t^2$、$\dfrac{dy}{dt}=2t$ より $\dfrac{dy}{dx}=\dfrac{2t}{3t^2}=\dfrac{2}{3t}$（$t\ne0$）。
+
+（2）$\dfrac{dx}{dt}=-3\sin t$、$\dfrac{dy}{dt}=2\cos t$ より $\dfrac{dy}{dx}=-\dfrac23\cot t$。$t=\dfrac{\pi}{6}$ で傾きは $-\dfrac{2\sqrt3}{3}$、接点は $\left(\dfrac{3\sqrt3}{2},\ 1\right)$。接線は $y-1=-\dfrac{2\sqrt3}{3}\left(x-\dfrac{3\sqrt3}{2}\right)$ より $2\sqrt3\,x+3y=12$。
+
+（3）$\dfrac{dy}{dx}=\dfrac{4t^3}{2t}=2t^2$。これを $t$ で微分すると $4t$。$\dfrac{dx}{dt}=2t$ で割って $\dfrac{d^2y}{dx^2}=\dfrac{4t}{2t}=2$。
+</Reveal>
+</Practice>

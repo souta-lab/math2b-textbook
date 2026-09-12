@@ -1,0 +1,193 @@
+---
+title: "空間の外積と体積 — 法線と体積を一撃で作る"
+summary: "2つの空間ベクトルから、垂直な法線ベクトルと平行四辺形の面積を同時に作り出す外積。空間の体積・三角形の面積・平面の方程式を一気に短縮する。"
+unit: "uni-geometry-tools"
+order: 0
+objectives:
+  - '外積 $\vec a\times\vec b$ を成分で計算し、$\vec a$、$\vec b$ の両方に垂直なベクトルを求められる'
+  - '$|\vec a\times\vec b|$ が平行四辺形の面積、その半分が三角形の面積であることを説明できる'
+  - 'スカラー三重積 $(\vec a\times\vec b)\cdot\vec c$ から平行六面体・四面体の体積を求められる'
+prerequisites: ["c-vectors", "a-geometry"]
+tags: ["外積", "法線ベクトル", "体積", "空間ベクトル", "時短"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+空間に3点 A、B、C があり、この3点を通る平面に垂直なベクトル（法線ベクトル）を求めたいとします。教科書どおりなら、求めるベクトルを $\vec n=(x,y,z)$ とおき、$\overrightarrow{AB}\cdot\vec n=0$ と $\overrightarrow{AC}\cdot\vec n=0$ の連立方程式を立てて解きます。文字が3つで式が2つ、次数の条件もないので、答えは「ひとつに決まらないが比例するもの」として手間がかかります。ところが、2つのベクトルを「掛け算」するだけで、この法線を一発で作る計算があります。それが**外積**です。しかもこの計算は、面積や体積まで同時に教えてくれます。
+</Hook>
+
+<Prediction
+  question="2つの空間ベクトル $\vec a$、$\vec b$ の両方に垂直なベクトルを1つ作りたい。最初に何を計算する？"
+  options={['内積 $\\vec a\\cdot\\vec b$ を計算する', '外積 $\\vec a\\times\\vec b$ を計算する', '2つを足して $\\vec a+\\vec b$ を作る']}
+  answer="外積 $\\vec a\\times\\vec b$ を計算する"
+  explanation="内積は垂直かどうかを判定する量で、垂直なベクトルそのものは作れません。外積 $\vec a\times\vec b$ は、定義から常に $\vec a$ とも $\vec b$ とも垂直なベクトルになります。足し算では垂直になる保証はありません。"
+/>
+
+<Note type="info">
+**入試での用途**：① 空間の平面の法線ベクトルを求める（平面の方程式・点と平面の距離）、② 三角形や平行四辺形の面積を座標から出す、③ 四面体・平行六面体の体積を座標から出す、の3つで効きます。答案に外積の記号を書けるかは別として、**計算の近道・検算**として最強の道具の1つです。
+</Note>
+
+## 内積は「平行」を測り、外積は「垂直」を作る
+
+空間の2つのベクトル
+$$
+\vec a=(a_1,a_2,a_3),\qquad \vec b=(b_1,b_2,b_3)
+$$
+を考えます。数学Cで学んだ内積
+$$
+\vec a\cdot\vec b=a_1b_1+a_2b_2+a_3b_3
+$$
+は、2つのベクトルがどれだけ同じ向きか（平行成分がどれだけあるか）を測る量でした。$\vec a\cdot\vec b=0$ なら2つは垂直です。しかし内積は「垂直である」ことの判定はできても、垂直なベクトルそのものを出力してはくれません。
+
+出力してくれるのが外積です。
+
+<Definition term="外積（ベクトル積）">
+2つの空間ベクトル $\vec a=(a_1,a_2,a_3)$、$\vec b=(b_1,b_2,b_3)$ に対して
+$$
+\vec a\times\vec b=\bigl(a_2b_3-a_3b_2,\ a_3b_1-a_1b_3,\ a_1b_2-a_2b_1\bigr)
+$$
+で定まるベクトルを**外積**（ベクトル積）という。**内積はスカラーを返し、外積はベクトルを返す**、という違いをまず押さえる。
+</Definition>
+
+第1成分は「$a$ の2番目と3番目」と「$b$ の2番目と3番目」のたすき掛けの差、第2成分は添字を1つずらした同様の差、第3成分は1番目と2番目で同じことをしています。この添字の巡回の規則さえ覚えれば、定義は機械的に使えます。
+
+<Theorem name="外積の性質">
+空間ベクトル $\vec a$、$\vec b$ と実数 $k$ について、次が成り立つ。
+
+(1) $\vec a\times\vec b$ は $\vec a$ にも $\vec b$ にも垂直である。すなわち $\vec a\cdot(\vec a\times\vec b)=0$、$\vec b\cdot(\vec a\times\vec b)=0$。
+
+(2) $|\vec a\times\vec b|=|\vec a|\,|\vec b|\sin\theta$（$\theta$ は $\vec a$ と $\vec b$ のなす角）。これは $\vec a$、$\vec b$ が張る**平行四辺形の面積**に等しい。
+
+(3) $\vec a\times\vec b=\vec 0$ となるのは、$\vec a$ と $\vec b$ が平行なときに限る。
+
+(4) $\vec b\times\vec a=-\,(\vec a\times\vec b)$（順序を入れ替えると符号が逆になる）。
+</Theorem>
+
+<Why>
+内積 $\vec a\cdot\vec b$ は2つのベクトルの「重なり具合」を1つの数にしますが、どの向きのベクトルが垂直かは捨ててしまいます。外積は、2つのベクトルが張る平面に垂直な**向き**と、その平面が広がる**面積**を同時に1つのベクトルに詰め込みます。だから連立方程式を解かなくても法線が手に入り、法線さえあれば平面の方程式・点と平面の距離・体積がすべてその先で機械的に出ます。1回の計算で「向き」と「大きさ」の2つを取れるのが、外積が時短になる理由です。
+</Why>
+
+## 面積と体積は外積から直接読める
+
+$\vec a\times\vec b$ の大きさが面積になることを使うと、体積も自然に作れます。底面積が $|\vec a\times\vec b|$ で、高さは残りのベクトル $\vec c$ を法線方向に射影した長さです。射影の長さは内積で測れるので、平行六面体の体積は次のように書けます。
+
+<Theorem name="面積・体積の公式">
+$\vec a$、$\vec b$、$\vec c$ を空間ベクトルとする。
+
+(1) $\vec a$、$\vec b$ が張る平行四辺形の面積は $|\vec a\times\vec b|$。三角形の面積はその半分 $\dfrac12|\vec a\times\vec b|$。
+
+(2) $\vec a$、$\vec b$、$\vec c$ が張る平行六面体の体積は
+$$
+V_{\text{六面体}}=\bigl|(\vec a\times\vec b)\cdot\vec c\bigr|
+=\left|\det\begin{pmatrix}a_1&a_2&a_3\\ b_1&b_2&b_3\\ c_1&c_2&c_3\end{pmatrix}\right|.
+$$
+（$(\vec a\times\vec b)\cdot\vec c$ を**スカラー三重積**という。）
+
+(3) 4点 O、A、B、C を頂点とする四面体の体積は、$\overrightarrow{OA}$、$\overrightarrow{OB}$、$\overrightarrow{OC}$ を使って
+$$
+V_{\text{四面体}}=\frac16\bigl|(\overrightarrow{OA}\times\overrightarrow{OB})\cdot\overrightarrow{OC}\bigr|.
+$$
+</Theorem>
+
+<WorkedExample title="例題1: 外積と三角形の面積">
+$\vec a=(1,2,3)$、$\vec b=(2,0,1)$ のとき、$\vec a\times\vec b$ を求め、この2つのベクトルが張る平行四辺形と三角形の面積を求めよ。
+
+<Steps>
+<Step reason="外積の第1成分は $a_2b_3-a_3b_2$ です。添字の巡回に従って、まず2番目・3番目の成分のたすき掛けの差を取ります。">第1成分は $a_2b_3-a_3b_2=2\cdot1-3\cdot0=2.$ </Step>
+<Step reason="第2成分は添字を1つずらし、$a_3b_1-a_1b_3$ の順で取ります。順番を逆にすると符号が変わるので注意します。">第2成分は $a_3b_1-a_1b_3=3\cdot2-1\cdot1=5.$ </Step>
+<Step reason="第3成分は $a_1b_2-a_2b_1$ です。これで3成分がそろいます。">第3成分は $a_1b_2-a_2b_1=1\cdot0-2\cdot2=-4.$ </Step>
+<Step reason="求めたベクトルが本当に垂直かを内積で確かめます。性質(1)の確認であり、符号ミスの検出にもなります。">よって $\vec a\times\vec b=(2,5,-4).$ $\vec a\cdot(2,5,-4)=2+10-12=0$、$\vec b\cdot(2,5,-4)=4+0-4=0$ なので、確かに両方に垂直である。</Step>
+<Step reason="外積の大きさが平行四辺形の面積、三角形はその半分です。">大きさは $|\vec a\times\vec b|=\sqrt{2^2+5^2+(-4)^2}=\sqrt{45}=3\sqrt5.$ よって平行四辺形の面積は $3\sqrt5$、三角形の面積は $\dfrac{3\sqrt5}{2}$。</Step>
+</Steps>
+
+<Answer>
+$\vec a\times\vec b=(2,5,-4)$。平行四辺形の面積は $3\sqrt5$、三角形の面積は $\dfrac{3\sqrt5}{2}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 四面体の体積を座標から">
+4点 O$(0,0,0)$、A$(1,2,3)$、B$(2,0,1)$、C$(0,1,0)$ を頂点とする四面体の体積を求めよ。
+
+<Steps>
+<Step reason="四面体 OABC の3辺 $\overrightarrow{OA}$、$\overrightarrow{OB}$、$\overrightarrow{OC}$ は、例題1の $\vec a$、$\vec b$ と $\overrightarrow{OC}=(0,1,0)$ に対応します。まず $\overrightarrow{OA}\times\overrightarrow{OB}$ を再利用します。">例題1より $\overrightarrow{OA}\times\overrightarrow{OB}=(2,5,-4)$。</Step>
+<Step reason="平行六面体の体積は、底面積 $|\overrightarrow{OA}\times\overrightarrow{OB}|$ に、$\overrightarrow{OC}$ の法線方向の成分（内積）を掛けたものです。内積を取れば高さの情報が1つの数にまとまります。">スカラー三重積は $(\overrightarrow{OA}\times\overrightarrow{OB})\cdot\overrightarrow{OC}=(2,5,-4)\cdot(0,1,0)=5.$ </Step>
+<Step reason="この5は平行六面体の体積です。四面体は平行六面体を対角線で6等分した形なので、体積は $\dfrac16$ 倍になります。">よって四面体の体積は $V=\frac16\cdot5=\frac56.$ </Step>
+</Steps>
+
+<Answer>
+体積は $\dfrac56$。
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+空間の2ベクトル $\vec a$、$\vec b$ に対し、$\vec a\times\vec b$ は**両方に垂直な法線**で、その大きさ $|\vec a\times\vec b|$ は**平行四辺形の面積**。三重積 $(\vec a\times\vec b)\cdot\vec c$ の絶対値が**平行六面体の体積**、その $\dfrac16$ が**四面体の体積**。法線が要る場面・面積体積が要る場面は、まず外積を疑う。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+外積 $\vec a\times\vec b$ の大きさは、内積 $\vec a\cdot\vec b$ と同じように「2つのベクトルの重なり」を表す数である。
+</Wrong>
+<WhyWrong>
+内積の値は $\vec a\cdot\vec b=|\vec a||\vec b|\cos\theta$ で、$\theta=90^\circ$ のとき $0$ になります。一方、外積の大きさは $|\vec a\times\vec b|=|\vec a||\vec b|\sin\theta$ で、$\theta=90^\circ$ のとき**最大**になります。垂直のとき内積は最小（$0$）、外積は最大で、振る舞いが正反対です。$\sin$ と $\cos$ を混同すると、面積の計算で $0$ になるはずのない値が $0$ になります。
+</WhyWrong>
+<Right>
+内積は「平行成分の大きさ」、外積は「垂直方向への広がり（面積）」を与える。$\vec a\cdot\vec b$ はスカラー、$\vec a\times\vec b$ はベクトルで、返すものの種類そのものが違う。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\vec a\times\vec b$ と $\vec b\times\vec a$ は同じベクトルである。
+</Wrong>
+<WhyWrong>
+定義で成分を確かめると、たとえば第1成分は $a_2b_3-a_3b_2$ と $b_2a_3-b_3a_2$ で、符号がちょうど逆になります。したがって $\vec b\times\vec a=-(\vec a\times\vec b)$ です。順序を入れ替えると向きが逆になるので、法線の向きや立体の表裏を扱うときに効いてきます。
+</WhyWrong>
+<Right>
+$\vec b\times\vec a=-(\vec a\times\vec b)$。面積や体積のように絶対値を取る場面では符号は消えるが、法線の向きを答える場面では順序が本質的である。
+</Right>
+</Misconception>
+
+## 使える場面・手順・記述式での可否
+
+**使える場面**：空間の平面の法線ベクトルが欲しいとき、座標から三角形・平行四辺形の面積を出すとき、4点の座標から四面体の体積を出すとき。特に「平面の方程式」「点と平面の距離」「四面体の体積」は、外積→三重積の型にはめれば計算が一列に並びます。
+
+**手順**：(1) 平面上の2本のベクトル $\overrightarrow{AB}$、$\overrightarrow{AC}$ を作る。(2) 外積を取って法線 $\vec n$ を作る。(3) 必要に応じて $|\vec n|$ を面積に、$(\vec n\cdot\overrightarrow{AD})$ を高さ・体積に使う。法線が決まれば平面の方程式は $\vec n\cdot(\vec x-\overrightarrow{OA})=0$ と書ける。
+
+**記述式での可否**：外積は高校の指導要領にない記号・概念なので、**答案に $\vec a\times\vec b$ と書くのは避ける**のが安全です。記述式では、外積で求めた結果だけを「法線ベクトルの1つは $(2,5,-4)$ である」と書き、必要なら「$\overrightarrow{AB}\cdot\vec n=\overrightarrow{AC}\cdot\vec n=0$ を満たす」と検証を1行添えます。マーク式・穴埋め・検算・下書きでは制限なく使ってよく、体積の $\dfrac16$ 公式は答えの候補を一瞬で出す検算に最適です。
+
+<CheckUnderstanding>
+(1) 外積 $\vec a\times\vec b$ が満たす2つの性質を、式で述べよ。
+<Reveal label="答え">
+$\vec a\cdot(\vec a\times\vec b)=0$、$\vec b\cdot(\vec a\times\vec b)=0$（両方に垂直）。また $|\vec a\times\vec b|=|\vec a||\vec b|\sin\theta$ で、これは平行四辺形の面積に等しい。
+</Reveal>
+
+(2) $\vec a=(2,1,0)$、$\vec b=(0,3,1)$ のとき、$\vec a\times\vec b$ を求めよ。
+<Reveal label="答え">
+第1成分 $1\cdot1-0\cdot3=1$、第2成分 $0\cdot0-2\cdot1=-2$、第3成分 $2\cdot3-1\cdot0=6$。よって $\vec a\times\vec b=(1,-2,6)$。検算として $\vec a\cdot(1,-2,6)=2-2+0=0$、$\vec b\cdot(1,-2,6)=0-6+6=0$。
+</Reveal>
+
+(3) 4点 O$(0,0,0)$、A$(1,0,0)$、B$(0,2,0)$、C$(0,0,3)$ を頂点とする四面体の体積を求めよ。
+<Reveal label="答え">
+$\overrightarrow{OA}\times\overrightarrow{OB}=(0,0,2)$ なので、三重積は $(0,0,2)\cdot(0,0,3)=6$。体積は $\dfrac16\cdot6=1$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（外積と体積）">
+(1) $\vec a=(1,0,2)$、$\vec b=(0,1,1)$ のとき、$\vec a\times\vec b$ と、この2ベクトルが張る三角形の面積を求めよ。
+
+(2) 3点 A$(1,0,0)$、B$(0,1,0)$、C$(0,0,1)$ を通る平面の法線ベクトルを外積で1つ求めよ。
+
+(3) 4点 A$(0,0,0)$、B$(1,2,0)$、C$(2,0,1)$、D$(0,1,3)$ を頂点とする四面体の体積を求めよ。
+
+<Reveal label="解答">
+(1) $\vec a\times\vec b=(0\cdot1-2\cdot1,\ 2\cdot0-1\cdot1,\ 1\cdot1-0\cdot0)=(-2,-1,1)$。大きさは $\sqrt{4+1+1}=\sqrt6$ なので、三角形の面積は $\dfrac{\sqrt6}{2}$。
+
+(2) $\overrightarrow{AB}=(-1,1,0)$、$\overrightarrow{AC}=(-1,0,1)$ より
+$$
+\overrightarrow{AB}\times\overrightarrow{AC}=\bigl(1\cdot1-0\cdot0,\ 0\cdot(-1)-(-1)\cdot1,\ (-1)\cdot0-1\cdot(-1)\bigr)=(1,1,1).
+$$
+法線ベクトルの1つは $(1,1,1)$（平面 $x+y+z=1$ の法線）。
+
+(3) $\overrightarrow{AB}=(1,2,0)$、$\overrightarrow{AC}=(2,0,1)$、$\overrightarrow{AD}=(0,1,3)$。$\overrightarrow{AC}\times\overrightarrow{AD}=(-1,-6,2)$ より、三重積は $\overrightarrow{AB}\cdot(-1,-6,2)=-1-12+0=-13$。体積は $\dfrac{13}{6}$。
+</Reveal>
+</Practice>

@@ -1,0 +1,132 @@
+---
+title: "行列の積 — 行と列の掛け合わせ"
+summary: "積の定義と計算、結合法則と非可換性、単位行列と行列の累乗を学ぶ。"
+unit: "c-representation"
+order: 1
+objectives:
+  - "行列の積が定義できる型の条件（左の列数と右の行数の一致）を判定できる"
+  - "2×2 行列の積を計算し、積が一般に非可換であることを具体例で示せる"
+  - "単位行列と行列の累乗を計算できる"
+prerequisites: ["c-representation/00-matrix-basics"]
+tags: ["行列の積", "非可換", "単位行列", "行列の累乗"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+同じ写真を2回加工したとします。まず左右を反転し、次に90°回転する。この2つの操作を1つの手順としてまとめたいとき、それぞれの操作を行列で表しておけば、まとめた操作はどうやら「掛け算」で得られそうです。ところが数の掛け算と違い、順序を入れ替えると結果が変わります。反転してから回すのと、回してから反転するのでは、写真の向きが違ってしまうのです。この「順序で結果が変わる掛け算」の正体から見ていきましょう。
+</Hook>
+
+<Prediction
+  question="2つの操作を行列で表し、順番を入れ替えて掛けたとき、結果はどうなる？"
+  options={['一般には等しくなく、順序を変えると別の変換になる', '必ず等しくなる', '順序を変えると計算できなくなる']}
+  answer="一般には等しくなく、順序を変えると別の変換になる"
+  explanation="行列の積は一般に非可換です。たとえば入れ替えると成分が変わる例が簡単に作れます。順序が意味をもつのは、積が変換の合成を表しているからです。"
+/>
+
+## 積の定義
+
+行列の積は、左の行列の**行**と右の行列の**列**を掛け合わせて作ります。$A$ が $m\times l$ 型、$B$ が $l\times n$ 型のときだけ積 $AB$ が定義され、結果は $m\times n$ 型になります。$A$ の列数と $B$ の行数が一致していることが条件です。
+
+$$
+(AB)_{ij}=\sum_{k=1}^{l} a_{ik}b_{kj}
+$$
+
+2×2 行列では、次のように書けます。
+
+$$
+\begin{pmatrix}a & b\\c & d\end{pmatrix}
+\begin{pmatrix}e & f\\g & h\end{pmatrix}
+=
+\begin{pmatrix}ae+bg & af+bh\\ce+dg & cf+dh\end{pmatrix}
+$$
+
+たとえば左上の成分 $ae+bg$ は、「左の1行目」と「右の1列目」を、前から順に掛けて足したものです。この「行と列の内積」が積の心臓部です。
+
+<Definition term="単位行列">
+対角成分がすべて $1$、それ以外がすべて $0$ の正方行列を**単位行列**といい、$E$ で表す。2×2 では
+$$
+E=\begin{pmatrix}1 & 0\\0 & 1\end{pmatrix}
+$$
+であり、任意の2×2 行列 $A$ に対して $AE=EA=A$ が成り立つ。
+</Definition>
+
+<Why>
+積を行と列の内積で定義するのは、連立方程式の代入と、変換の合成を同時に表せるからです。たとえば変換 $B$ で点を動かし、その結果を変換 $A$ でさらに動かすとします。$B$ で $x$ が行き先の成分に置き換わり、それを $A$ の各行に入れて足し合わせる。この手続きがちょうど「$A$ の行と $B$ の列」の掛け合わせになります。成分ごとの掛け算では合成にならないので、積の規則はこの形でなければならないのです。
+</Why>
+
+<WorkedExample title="例題: 積の計算と非可換性">
+$$
+A=\begin{pmatrix}2 & 1\\1 & 3\end{pmatrix},\qquad
+B=\begin{pmatrix}1 & -1\\2 & 1\end{pmatrix}
+$$
+とする。次の行列を求めなさい。
+
+(1) $AB$　(2) $BA$　(3) $A^{2}$
+
+<Steps>
+<Step reason="AB の (i,j) 成分は A の i 行と B の j 列の内積なので、左上から順に4成分を計算します。">(1) $AB=\begin{pmatrix}2\cdot1+1\cdot2 & 2\cdot(-1)+1\cdot1\\1\cdot1+3\cdot2 & 1\cdot(-1)+3\cdot1\end{pmatrix}=\begin{pmatrix}4 & -1\\7 & 2\end{pmatrix}$。</Step>
+<Step reason="BA では A と B の役割が入れ替わるので、行と列の相手が変わります。">(2) $BA=\begin{pmatrix}1\cdot2+(-1)\cdot1 & 1\cdot1+(-1)\cdot3\\2\cdot2+1\cdot1 & 2\cdot1+1\cdot3\end{pmatrix}=\begin{pmatrix}1 & -2\\5 & 5\end{pmatrix}$。</Step>
+<Step reason="A^2 は A 自身との積で、A の各行と A の各列を掛けます。">(3) $A^{2}=\begin{pmatrix}2\cdot2+1\cdot1 & 2\cdot1+1\cdot3\\1\cdot2+3\cdot1 & 1\cdot1+3\cdot3\end{pmatrix}=\begin{pmatrix}5 & 5\\5 & 10\end{pmatrix}$。</Step>
+</Steps>
+
+<Answer>
+(1) $\begin{pmatrix}4 & -1\\7 & 2\end{pmatrix}$　(2) $\begin{pmatrix}1 & -2\\5 & 5\end{pmatrix}$　(3) $\begin{pmatrix}5 & 5\\5 & 10\end{pmatrix}$。$AB\ne BA$ である。
+</Answer>
+</WorkedExample>
+
+積について、次が成り立ちます。$E$ は単位行列です。
+
+- 結合法則 $(AB)C=A(BC)$
+- 分配法則 $A(B+C)=AB+AC$、$(A+B)C=AC+BC$
+- 実数倍 $(kA)B=k(AB)=A(kB)$
+- 一般に $AB\ne BA$（交換法則は成り立たない）
+
+結合法則が成り立つおかげで、行列の累乗 $A^{n}$ は $A$ の積を順に重ねるだけで定義できます。
+
+<Misconception>
+<Wrong>
+行列の積は、同じ位置の成分どうしを掛ければよいので、$AB$ は $A$ と $B$ の成分ごとの積で計算できる。
+</Wrong>
+<WhyWrong>
+成分ごとの掛け算は「アダマール積」と呼ばれる別の演算で、行列の積ではありません。行列の積は行と列の内積、つまり $a_{i1}b_{1j}+a_{i2}b_{2j}+\cdots$ の形で計算します。上の例で成分ごとに掛けると $\begin{pmatrix}2 & -1\\2 & 3\end{pmatrix}$ になりますが、正しい $AB$ は $\begin{pmatrix}4 & -1\\7 & 2\end{pmatrix}$ で別物です。
+</WhyWrong>
+<Right>
+積を計算するときは「左の何行目」と「右の何列目」を指でなぞり、掛けて足すことを繰り返します。慣れるまでは、結果の行列の各マスに入る計算を1つずつ声に出して確認しましょう。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}1 & 2\\3 & 4\end{pmatrix}$、$B=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}$ のとき、$AB$ と $BA$ を求め、等しいかどうかを答えなさい。
+
+(2) $A=\begin{pmatrix}1 & 1\\0 & 1\end{pmatrix}$ について、$A^{n}$ を推測し、$n=1,2,3$ で確かめなさい。
+
+(3) 2×3 型の $A$ と 3×2 型の $B$ に対して、$AB$ は何型か。また $BA$ は何型か。
+
+<Reveal label="答え">
+(1) $AB=\begin{pmatrix}2 & 1\\4 & 3\end{pmatrix}$、$BA=\begin{pmatrix}3 & 4\\1 & 2\end{pmatrix}$。$AB\ne BA$。
+
+(2) $A^{2}=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}$、$A^{3}=\begin{pmatrix}1 & 3\\0 & 1\end{pmatrix}$ より、$A^{n}=\begin{pmatrix}1 & n\\0 & 1\end{pmatrix}$ と考えられる。
+
+(3) $AB$ は 2×2 型、$BA$ は 3×3 型。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="積と累乗の入試型">
+(1) $A=\begin{pmatrix}2 & 1\\0 & 1\end{pmatrix}$ について、$A^{2}$、$A^{3}$ を計算し、$A^{n}$ の形を予想しなさい。
+
+(2) $A=\begin{pmatrix}1 & 2\\3 & 6\end{pmatrix}$ について、$A^{2}$ を計算し、$A^{2}=7A$ が成り立つことを確かめなさい。
+
+(3) $E$ を単位行列とするとき、$A=\begin{pmatrix}1 & 1\\0 & 1\end{pmatrix}$ に対して $(A+E)^{2}$ を計算しなさい。
+
+<Reveal label="解答">
+(1) $A^{2}=\begin{pmatrix}4 & 3\\0 & 1\end{pmatrix}$、$A^{3}=\begin{pmatrix}8 & 7\\0 & 1\end{pmatrix}$。対角成分は $2^{n}$ と $1$、右上は $2^{n}-1$ と予想できる。
+
+(2) $A^{2}=\begin{pmatrix}1\cdot1+2\cdot3 & 1\cdot2+2\cdot6\\3\cdot1+6\cdot3 & 3\cdot2+6\cdot6\end{pmatrix}=\begin{pmatrix}7 & 14\\21 & 42\end{pmatrix}$。一方 $7A=\begin{pmatrix}7 & 14\\21 & 42\end{pmatrix}$ なので確かに $A^{2}=7A$。
+
+(3) $(A+E)^{2}=A^{2}+AE+EA+E^{2}=A^{2}+2A+E$。ここで $A^{2}=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}$ なので、$(A+E)^{2}=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}+2\begin{pmatrix}1 & 1\\0 & 1\end{pmatrix}+\begin{pmatrix}1 & 0\\0 & 1\end{pmatrix}=\begin{pmatrix}4 & 4\\0 & 4\end{pmatrix}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+入試で行列の積が単独で問われることは少なく、多くは「行列の $n$ 乗」や「一次変換の合成」、「連立方程式の係数」として現れます。なかでも $A^{n}$ は頻出で、$A^{2}=pA+qE$ の関係（ケーリー・ハミルトン）を使って次数を下げる型、対角化できる型、$A^{n}$ を予想して帰納法で示す型の3つを押さえると見通しが立ちます。まずは積の計算そのものを、行と列を間違えずに速く回せるようにしておきましょう。順序を入れ替えると結果が変わることも、合成の章で効いてきます。

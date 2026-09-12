@@ -1,0 +1,156 @@
+---
+title: "複素数の極形式 — 積が回転になる"
+summary: "複素数を $r(\\cos\\theta+i\\sin\\theta)$ の形に表し、積・商が回転と拡大として働くことを学ぶ。"
+unit: "c-curves-complex"
+order: 6
+objectives:
+  - "複素数を極形式 $r(\\cos\\theta+i\\sin\\theta)$ で表せる"
+  - "積・商の絶対値と偏角の関係を述べ、計算に使える"
+  - "複素数の積を原点中心の回転と拡大として説明できる"
+prerequisites: ["c-curves-complex/05-complex-plane"]
+tags: ["極形式", "偏角", "複素数の積", "回転"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+複素数 $i$ を掛けると、点は原点を中心に $90^\circ$ 回転します。$1+i$ を掛けると、長さが $\sqrt{2}$ 倍になりながら $45^\circ$ 回転します。複素数の掛け算には、ただ数を大きくするだけでなく、点を回す働きがあります。この「回転」を式で読めるようにするのが、これからの目標です。
+</Hook>
+
+<Prediction
+  question="複素数 $z_1$、$z_2$ の積 $z_1z_2$ の偏角はどうなる？"
+  options={['2つの偏角の和', '2つの偏角の積', '偏角は変わらない']}
+  answer="2つの偏角の和"
+  explanation="積では絶対値が掛け算され、偏角は足し算されます。だから $i$（偏角 $\\pi/2$）を掛ける操作は、点を $\\pi/2$ だけ回転させることになるのです。"
+/>
+
+## 極形式とは
+
+原点からの距離 $r$ と偏角 $\theta$ を使って複素数を表すと、点の位置が回転と拡大の情報に分かれます。
+
+<Definition term="極形式">
+$0$ でない複素数 $z$ は、絶対値 $r=|z|$ と偏角 $\theta$ を用いて
+$$
+z=r(\cos\theta+i\sin\theta)
+$$
+と表せる。この形を**極形式**といい、$r$ を絶対値、$\theta$ を**偏角**という。偏角は $2\pi$ の整数倍の違いを除いて定まり、$\arg z=\theta+2n\pi$（$n$ は整数）と書く。
+</Definition>
+
+たとえば $1+i$ は、$r=\sqrt{2}$、$\theta=\frac{\pi}{4}$ なので
+
+$$
+1+i=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)
+$$
+
+となります。$z=a+bi$ から極形式へは、$\cos\theta=\frac{a}{r}$、$\sin\theta=\frac{b}{r}$ を満たす $\theta$ を探します。象限に注意して偏角を決めるのがコツです。
+
+<Why>
+$z=a+bi$ のまま積を計算すると、展開と $i^2=-1$ の処理で式が長くなり、図形的な意味も見えません。極形式にすると、積は「絶対値の積、偏角の和」という2つの独立な操作に分解されます。回転と拡大という図形の動きがそのまま式に現れるので、複素数の積を図形感覚で扱えるようになります。
+</Why>
+
+## 積と商の公式
+
+2つの複素数
+
+$$
+z_1=r_1(\cos\theta_1+i\sin\theta_1),\qquad z_2=r_2(\cos\theta_2+i\sin\theta_2)
+$$
+
+の積を加法定理で整理すると、次の公式が得られます。
+
+<Theorem name="極形式の積と商">
+$$
+z_1z_2=r_1r_2\{\cos(\theta_1+\theta_2)+i\sin(\theta_1+\theta_2)\}
+$$
+$$
+\frac{z_1}{z_2}=\frac{r_1}{r_2}\{\cos(\theta_1-\theta_2)+i\sin(\theta_1-\theta_2)\}\qquad(z_2\ne 0)
+$$
+すなわち $\arg(z_1z_2)=\arg z_1+\arg z_2$、$\arg\dfrac{z_1}{z_2}=\arg z_1-\arg z_2$。
+</Theorem>
+
+積では**絶対値は積、偏角は和**、商では**絶対値は商、偏角は差**です。特に $z_2$ の絶対値が $1$ のとき、$z_2$ を掛ける操作は原点中心の回転そのものになります。
+
+<Figure caption="複素数 z に i（偏角 π/2）を掛けると、点は原点中心に 90° 回転して iz に移る。">
+<CoordinatePlane
+  xMin={-3}
+  xMax={3}
+  yMin={-1}
+  yMax={3}
+  points={[{ x: 0, y: 0, label: 'O' }, { x: 1, y: 1.732, label: 'z' }, { x: -1.732, y: 1, label: 'iz' }]}
+  segments={[
+    { x1: 0, y1: 0, x2: 1, y2: 1.732 },
+    { x1: 0, y1: 0, x2: -1.732, y2: 1 }
+  ]}
+  showGrid={false}
+  label="z に i を掛けると 90 度回転する"
+/>
+</Figure>
+
+<WorkedExample title="例題: 極形式で積と商を計算する">
+次の計算をしなさい。
+
+(1) 複素数 $1+\sqrt{3}i$ を極形式で表す。
+
+(2) $i(1+\sqrt{3}i)$ を計算し、極形式で表す。
+
+(3) $\dfrac{1+i}{1-i}$ を計算する。
+
+<Steps>
+<Step reason="絶対値は実部と虚部の2乗和の平方根。偏角は cosθ、sinθ がそれぞれ a/r、b/r になる角を探します。">(1) $r=\sqrt{1+3}=2$。$\cos\theta=\frac{1}{2}$、$\sin\theta=\frac{\sqrt{3}}{2}$ より $\theta=\frac{\pi}{3}$。よって $2\left(\cos\frac{\pi}{3}+i\sin\frac{\pi}{3}\right)$。</Step>
+<Step reason="i の極形式は偏角 π/2。積の公式で絶対値は積、偏角は和にすれば回転が計算できます。">(2) $i=\cos\frac{\pi}{2}+i\sin\frac{\pi}{2}$。積の偏角は $\frac{\pi}{3}+\frac{\pi}{2}=\frac{5\pi}{6}$、絶対値は $2$。よって $2\left(\cos\frac{5\pi}{6}+i\sin\frac{5\pi}{6}\right)=-\sqrt{3}+i$。</Step>
+<Step reason="分子・分母をそれぞれ極形式にすれば、商は絶対値の商・偏角の差という1回の計算になります。">(3) $1+i=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)$、$1-i=\sqrt{2}\left(\cos\left(-\frac{\pi}{4}\right)+i\sin\left(-\frac{\pi}{4}\right)\right)$。商の絶対値は $1$、偏角は $\frac{\pi}{4}-\left(-\frac{\pi}{4}\right)=\frac{\pi}{2}$。よって $\cos\frac{\pi}{2}+i\sin\frac{\pi}{2}=i$。</Step>
+</Steps>
+
+<Answer>
+(1) $2\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{3}\right)$
+(2) $-\sqrt{3}+i=2\left(\cos\dfrac{5\pi}{6}+i\sin\dfrac{5\pi}{6}\right)$
+(3) $i$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\arg(z_1z_2)=\arg z_1\cdot\arg z_2$。たとえば偏角 $\frac{\pi}{4}$ と $\frac{\pi}{4}$ の積の偏角は $\frac{\pi^2}{16}$ になる。
+</Wrong>
+<WhyWrong>
+積で足し算されるのは偏角であって、絶対値と偏角を取り違えているわけではありません。角度は積ではなく和で合成されます。$\frac{\pi}{4}$ と $\frac{\pi}{4}$ の積なら偏角は $\frac{\pi}{4}+\frac{\pi}{4}=\frac{\pi}{2}$ です。実際 $(1+i)(1+i)=2i$ となり、偏角は確かに $\frac{\pi}{2}$ です。
+</WhyWrong>
+<Right>
+積では絶対値が掛け算、偏角が足し算。$\arg(z_1z_2)=\arg z_1+\arg z_2$、$\arg\frac{z_1}{z_2}=\arg z_1-\arg z_2$。回転の合成は角度の足し算です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) 複素数 $-1+i$ を極形式で表しなさい。
+
+(2) $i(1+i)$ を計算しなさい。またその偏角を答えなさい。
+
+(3) $|z_1|=2$、$|z_2|=3$ のとき、$|z_1z_2|$ と $\left|\dfrac{z_1}{z_2}\right|$ を求めなさい。
+
+<Reveal label="答え">
+(1) $r=\sqrt{2}$。$-1+i$ は第2象限で、$\cos\theta=-\frac{1}{\sqrt{2}}$、$\sin\theta=\frac{1}{\sqrt{2}}$ より $\theta=\frac{3\pi}{4}$。よって $\sqrt{2}\left(\cos\frac{3\pi}{4}+i\sin\frac{3\pi}{4}\right)$。
+
+(2) $i(1+i)=i+i^2=-1+i$。偏角は $\frac{3\pi}{4}$。
+
+(3) $|z_1z_2|=2\cdot 3=6$、$\left|\dfrac{z_1}{z_2}\right|=\dfrac{2}{3}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="回転と拡大">
+(1) 複素数 $-\sqrt{3}-i$ を極形式で表しなさい。
+
+(2) $z=2\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{3}\right)$ を、原点を中心に $\dfrac{\pi}{2}$ だけ回転した複素数を極形式で表しなさい。
+
+(3) $\left(\cos\dfrac{\pi}{6}+i\sin\dfrac{\pi}{6}\right)$ と $\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{3}\right)$ の積を計算しなさい。
+
+<Reveal label="解答">
+(1) $r=\sqrt{3+1}=2$。第3象限で $\theta=\frac{7\pi}{6}$。よって $2\left(\cos\frac{7\pi}{6}+i\sin\frac{7\pi}{6}\right)$。
+
+(2) 偏角に $\frac{\pi}{2}$ を足して $2\left(\cos\left(\frac{\pi}{3}+\frac{\pi}{2}\right)+i\sin\left(\frac{\pi}{3}+\frac{\pi}{2}\right)\right)=2\left(\cos\frac{5\pi}{6}+i\sin\frac{5\pi}{6}\right)$。
+
+(3) 絶対値は $1\cdot 1=1$、偏角は $\frac{\pi}{6}+\frac{\pi}{3}=\frac{\pi}{2}$。よって $\cos\frac{\pi}{2}+i\sin\frac{\pi}{2}=i$。
+</Reveal>
+</Practice>
+
+## 入試での使いどころ
+
+極形式は、回転と拡大がからむ問題で威力を発揮します。$z_1z_2$ の絶対値と偏角を、それぞれ積・和で出す。逆に $z$ を $\alpha$ 倍する操作は「偏角 $\arg\alpha$ だけ回転し、$|\alpha|$ 倍に拡大する」と読む。この2つを往復できるようにしておけば、正三角形・正方形・回転移動の問題が一気に見通せます。偏角を求めるときは象限の確認を忘れずに。

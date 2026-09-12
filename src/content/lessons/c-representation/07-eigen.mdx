@@ -1,0 +1,130 @@
+---
+title: "固有値と固有ベクトル — 向きが変わらない方向（発展）"
+summary: "一次変換で向きの変わらない方向と倍率を求め、行列のn乗・漸化式への応用につなげる。"
+unit: "c-representation"
+order: 7
+objectives:
+  - "固有値・固有ベクトルの定義を説明できる"
+  - "2×2 行列の固有値を特性方程式で計算し、固有ベクトルを求められる"
+  - "ケーリー・ハミルトンを利用して行列の累乗を計算できる（発展）"
+prerequisites: ["c-representation/06-composition"]
+tags: ["固有値", "固有ベクトル", "特性方程式", "ケーリー・ハミルトン", "行列の累乗"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+ゴムの膜に方眼を写し、ぐにゃりと引き伸ばします。ほとんどの線は向きが変わりますが、よく見ると、引き伸ばした後も同じ向きのままの線が何本かあります。長さだけが変わり、方向は変わらない特別な方向です。一次変換にも、こんな「向きを変えない方向」が存在します。それは変換の性質を最もよく表す軸であり、行列の累乗や漸化式を一気に解くための鍵になります。
+</Hook>
+
+<Prediction
+  question="$A=\begin{pmatrix}2 & 0\\0 & 3\end{pmatrix}$ の固有値はどれ？"
+  options={['$2$ と $3$', '$1$ と $6$', '$2$ のみ']}
+  answer="$2$ と $3$"
+  explanation="対角行列では、各座標軸の方向が固有ベクトルになり、対角成分がそのまま固有値です。$(1,0)$ は2倍、$(0,1)$ は3倍のまま向きが変わりません。"
+/>
+
+## 固有値と固有ベクトル
+
+行列 $A$ の表す一次変換 $f$ について、$\vec{v}\ne\vec{0}$ が
+$$
+A\vec{v}=\lambda\vec{v}
+$$
+を満たすとき、$\lambda$ を $A$ の**固有値**、$\vec{v}$ を固有値 $\lambda$ に属する**固有ベクトル**といいます。これは「変換しても向きが変わらず、長さだけ $\lambda$ 倍になる方向」を意味します。
+
+<Definition term="特性方程式">
+固有値 $\lambda$ は、ベクトル方程式 $(A-\lambda E)\vec{v}=\vec{0}$ が $\vec{v}\ne\vec{0}$ という解をもつ条件として求まる。すなわち
+$$
+\det(A-\lambda E)=0
+$$
+である。これを**特性方程式**（固有方程式）という。2×2 行列 $A=\begin{pmatrix}a & b\\c & d\end{pmatrix}$ では
+$$
+\lambda^{2}-(a+d)\lambda+(ad-bc)=0
+$$
+となる。$a+d$ を $A$ の**トレース**といい、$\operatorname{tr}A$ で表す。
+</Definition>
+
+<Why>
+固有値が役に立つのは、固有ベクトルの方向では変換が単なる伸縮になるからです。ふつうのベクトルは変換で向きも大きさも変わり、$A^{n}$ を計算しようとすると膨大になります。ところが固有ベクトル $\vec{v}$ なら $A^{n}\vec{v}=\lambda^{n}\vec{v}$ と一発です。任意のベクトルを固有ベクトルの和に分解できれば、行列の累乗も等比数列の計算に帰着します。これが、入試の「行列の $n$ 乗」や連立漸化式を短時間で解くための核心です。
+</Why>
+
+<WorkedExample title="例題: 固有値と固有ベクトルを求める">
+$$
+A=\begin{pmatrix}4 & 1\\2 & 3\end{pmatrix}
+$$
+の固有値と固有ベクトルを求めなさい。
+
+<Steps>
+<Step reason="トレースと行列式を計算し、特性方程式を作ります。">$\operatorname{tr}A=4+3=7$、$\det A=4\cdot3-1\cdot2=10$ なので、特性方程式は $\lambda^{2}-7\lambda+10=0$。</Step>
+<Step reason="因数分解して固有値を求めます。">$(\lambda-2)(\lambda-5)=0$ より $\lambda=2,\ 5$。</Step>
+<Step reason="各固有値を A−λE に代入し、連立方程式を解いて固有ベクトルを決定します。">$\lambda=2$ のとき $A-2E=\begin{pmatrix}2 & 1\\2 & 1\end{pmatrix}$ で、$2x+y=0$。固有ベクトルは $\begin{pmatrix}1\\-2\end{pmatrix}$ の実数倍。</Step>
+<Step reason="もう一方の固有値でも同じ手順を繰り返します。">$\lambda=5$ のとき $A-5E=\begin{pmatrix}-1 & 1\\2 & -2\end{pmatrix}$ で、$-x+y=0$。固有ベクトルは $\begin{pmatrix}1\\1\end{pmatrix}$ の実数倍。</Step>
+</Steps>
+
+<Answer>
+固有値は $\lambda=2,\ 5$。$\lambda=2$ の固有ベクトルは $k\begin{pmatrix}1\\-2\end{pmatrix}$、$\lambda=5$ の固有ベクトルは $k\begin{pmatrix}1\\1\end{pmatrix}$（$k\ne0$）。
+</Answer>
+</WorkedExample>
+
+## ケーリー・ハミルトンと行列の累乗
+
+2×2 行列 $A$ は、自分自身の特性方程式を満たします。すなわち
+$$
+A^{2}-(\operatorname{tr}A)A+(\det A)E=O
+$$
+です。これを**ケーリー・ハミルトンの定理**といいます。この等式を使うと、$A^{2}$ を $A$ と $E$ の1次式に置き換えられ、$A^{n}$ の次数を下げられます。上の例の $A$ では $\operatorname{tr}A=7$、$\det A=10$ なので
+$$
+A^{2}=7A-10E
+$$
+が成り立ちます。さらに
+$$
+A^{3}=A\cdot A^{2}=7A^{2}-10A=7(7A-10E)-10A=39A-70E
+$$
+と、$A^{3}$ も $A$ と $E$ で表せます。対角化が使える場合は $A=P\begin{pmatrix}\lambda_1 & 0\\0 & \lambda_2\end{pmatrix}P^{-1}$ と書けて、$A^{n}=P\begin{pmatrix}\lambda_1^{n} & 0\\0 & \lambda_2^{n}\end{pmatrix}P^{-1}$ が成り立ちます。
+
+<Misconception>
+<Wrong>
+2×2 行列の固有値は、必ず2つの実数として求まる。
+</Wrong>
+<WhyWrong>
+特性方程式は2次方程式なので、重解になったり、実数解をもたず複素数解になったりします。たとえば原点中心90°の回転行列 $A=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$ の特性方程式は $\lambda^{2}+1=0$ で、固有値は $\pm i$ となり、実数の固有ベクトルは存在しません。回転がどんな向きも変えてしまうので、当然と言えます。
+</WhyWrong>
+<Right>
+特性方程式の判別式を確認し、実数解をもたない場合は「実数の固有値・固有ベクトルは存在しない」と結論します。入試で固有値を問われたら、まず判別式を見る癖をつけましょう。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}3 & 0\\0 & -1\end{pmatrix}$ の固有値と固有ベクトルを求めなさい。
+
+(2) $A=\begin{pmatrix}2 & 2\\0 & 4\end{pmatrix}$ の固有値を求めなさい。
+
+(3) (本文の) $A=\begin{pmatrix}4 & 1\\2 & 3\end{pmatrix}$ について、$A^{2}$ を $A$ と $E$ を用いて表し、$A^{2}$ を求めなさい。
+
+<Reveal label="答え">
+(1) 固有値は $3$ と $-1$。固有ベクトルはそれぞれ $\begin{pmatrix}1\\0\end{pmatrix}$ と $\begin{pmatrix}0\\1\end{pmatrix}$ の実数倍。
+
+(2) $\operatorname{tr}A=6$、$\det A=8$ より $\lambda^{2}-6\lambda+8=0$、$(\lambda-2)(\lambda-4)=0$。よって $\lambda=2,\ 4$。
+
+(3) $A^{2}=7A-10E$ より $A^{2}=\begin{pmatrix}28 & 7\\14 & 21\end{pmatrix}-\begin{pmatrix}10 & 0\\0 & 10\end{pmatrix}=\begin{pmatrix}18 & 7\\14 & 11\end{pmatrix}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="固有値から累乗へ">
+(1) $A=\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}$ の固有値と固有ベクトルを求めなさい。
+
+(2) (1) の $A$ について $\operatorname{tr}A$ と $\det A$ を求め、ケーリー・ハミルトンの定理を使って $A^{2}$ を $A$ と $E$ で表しなさい。
+
+(3) $A=\begin{pmatrix}1 & 2\\0 & 3\end{pmatrix}$ の固有値を求めなさい。
+
+<Reveal label="解答">
+(1) $\operatorname{tr}A=4$、$\det A=3$ より $\lambda^{2}-4\lambda+3=0$、$\lambda=1,\ 3$。$\lambda=1$ では $x+y=0$ より $\begin{pmatrix}1\\-1\end{pmatrix}$ の実数倍。$\lambda=3$ では $-x+y=0$ より $\begin{pmatrix}1\\1\end{pmatrix}$ の実数倍。
+
+(2) $\operatorname{tr}A=4$、$\det A=3$ なので $A^{2}=4A-3E$。
+
+(3) $\operatorname{tr}A=4$、$\det A=3$ より $\lambda^{2}-4\lambda+3=0$、$\lambda=1,\ 3$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+固有値・固有ベクトルは数学Cの発展内容ですが、入試では「行列の $n$ 乗」「連立漸化式 $x_{n+1}=ax_n+by_n,\ y_{n+1}=cx_n+dy_n$ の一般項」という形で出題されます。手順は決まっていて、係数行列の固有値 $\lambda_1$、$\lambda_2$ を求め、固有ベクトルで初期値を分解し、$A^{n}=P\operatorname{diag}(\lambda_1^{n},\lambda_2^{n})P^{-1}$ に代入するだけです。ケーリー・ハミルトンで次数を下げる方法は、対角化の計算を省略できるため検算にも使えます。固有値が複素数のときは実数列としては振動する漸化式に対応し、実数の範囲では解けないことに注意しましょう。

@@ -1,0 +1,177 @@
+---
+title: "積分法への導入 — 微分の逆を武器に変える"
+summary: "数学IIの積分を、三角・指数・対数まで広げる。微分公式を逆向きに読み、章全体の技法の見取り図をつかむ。"
+unit: "iii-integral"
+order: 0
+objectives:
+  - "基本関数の不定積分を、微分公式を逆に読んで求められる"
+  - "定積分を原始関数の差として計算できる"
+  - "この章で新たに学ぶ置換・部分積分などの技法の役割を説明できる"
+prerequisites: ["iii-differential", "ii-calculus"]
+tags: ["積分", "原始関数", "不定積分", "定積分", "基本公式"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+数学IIで扱った積分は、主に多項式の積分でした。しかし入試の主戦場である数学IIIでは、$\displaystyle\int e^{2x}\,dx$ や $\displaystyle\int x\cos x\,dx$、$\displaystyle\int \dfrac{dx}{x^2-1}$ のように、基本公式をそのまま当てはめられない形が次々と現れます。公式集を丸暗記するのではなく、微分の公式を逆向きに読む力が問われます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\int e^{2x}\,dx$ を計算すると、どれになるでしょう？"
+  options={['e^{2x}+C', '1/2·e^{2x}+C', '2·e^{2x}+C']}
+  answer="1/2·e^{2x}+C"
+  explanation="微分して $e^{2x}$ に戻る関数は $\frac12 e^{2x}$ です。$\frac12 e^{2x}$ を微分すると合成関数の微分で $2$ が前に出るため、ちょうど $e^{2x}$ になります。$e^{2x}$ をそのまま積分すると微分したとき $2e^{2x}$ になってしまいます。"
+/>
+
+ここで問われたのは「微分すると $e^{2x}$ になる関数は何か」という一点です。微分の結果からもとの関数を復元する操作が積分であり、この逆向きの読み方が数学IIIの積分の出発点になります。まずは数学IIで学んだ定義と公式を、三角・指数・対数まで一気に広げておきましょう。
+
+<Definition term="不定積分">
+$f(x)$ に対して $F'(x)=f(x)$ を満たす関数 $F(x)$ を $f(x)$ の**原始関数**といい、任意の定数 $C$ を用いて
+
+$$
+\int f(x)\,dx=F(x)+C
+$$
+
+と表す。これを $f(x)$ の**不定積分**、$C$ を**積分定数**という。
+</Definition>
+
+<Theorem name="基本の積分公式">
+微分の基本公式を逆に読むと、次の積分公式が得られる（$C$ は積分定数、$a\neq 0$ は定数）。
+
+$$
+\int x^n\,dx=\frac{x^{n+1}}{n+1}+C\quad(n\neq -1),\qquad
+\int \frac{1}{x}\,dx=\log|x|+C
+$$
+
+$$
+\int \sin x\,dx=-\cos x+C,\qquad
+\int \cos x\,dx=\sin x+C,\qquad
+\int \frac{1}{\cos^2 x}\,dx=\tan x+C
+$$
+
+$$
+\int e^{ax}\,dx=\frac{1}{a}e^{ax}+C,\qquad
+\int e^x\,dx=e^x+C
+$$
+</Theorem>
+
+表にして、微分と積分の対応を確認しておきます。各行の積分結果を微分すれば、左の関数に戻ることが見て取れます。
+
+| $f(x)$ | $\displaystyle\int f(x)\,dx$ |
+| --- | --- |
+| $x^n$ | $\dfrac{x^{n+1}}{n+1}+C$ |
+| $\dfrac1x$ | $\log\lvert x\rvert+C$ |
+| $e^{ax}$ | $\dfrac1a e^{ax}+C$ |
+| $\sin x$ | $-\cos x+C$ |
+| $\cos x$ | $\sin x+C$ |
+
+<Why>
+公式 $\int x^n\,dx=\frac{x^{n+1}}{n+1}+C$ は、べき乗の微分 $(\frac{x^{n+1}}{n+1})'=x^n$ をそのまま逆さまに読んだものです。$1/x$ だけが仲間外れなのも、微分の公式 $(\log|x|)'=1/x$ を思い出せば納得できます。$x^{-1}$ をべき乗の積分公式に当てはめると分母が $0$ になってしまうため、これだけは対数が担当します。公式は暗記対象ではなく、微分の結果を逆算した記録だと考えてください。
+</Why>
+
+<Theorem name="定積分と基本定理">
+$f(x)$ の原始関数の1つを $F(x)$ とすると
+
+$$
+\int_a^b f(x)\,dx=\Big[F(x)\Big]_a^b=F(b)-F(a)
+$$
+
+が成り立つ。また $F(x)=\displaystyle\int_a^x f(t)\,dt$ とおくと $F'(x)=f(x)$ である。
+</Theorem>
+
+定積分では、積分定数は上端と下端の差をとる途中で必ず打ち消し合います。だから計算では $C$ を省いた都合のよい原始関数を1つ選べば十分です。また後半の等式は「面積の蓄積を $x$ で微分すると、その地点の高さ $f(x)$ に戻る」という関係を表しています。この基本定理が、面積・体積・曲線の長さを積分で計算できる根拠になります。
+
+<WorkedExample title="例題1: 不定積分を計算して微分で検算する">
+$\displaystyle\int\left(3x^2-4x+2+\frac1x\right)dx$ を求めなさい。
+
+<Steps>
+<Step reason="和の不定積分は項ごとに分けて計算できるからです。">$3\displaystyle\int x^2\,dx-4\int x\,dx+2\int 1\,dx+\int\frac1x\,dx$ と分ける。</Step>
+<Step reason="べき乗の公式 ∫xⁿdx=xⁿ⁺¹/(n+1) を n=2, 1, 0 に順に使います。">$3\cdot\dfrac{x^3}{3}-4\cdot\dfrac{x^2}{2}+2x+\log\lvert x\rvert$。</Step>
+<Step reason="$1/x$ だけはべき乗の公式の例外で、対数の積分になるからです。">整理して $x^3-2x^2+2x+\log\lvert x\rvert+C$。</Step>
+<Step reason="得た式を微分して、もとの関数に戻ることを確かめるためです。">微分すると $3x^2-4x+2+\dfrac1x$ となり、確かに一致する。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int\left(3x^2-4x+2+\frac1x\right)dx=x^3-2x^2+2x+\log\lvert x\rvert+C$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 定積分を計算する">
+$\displaystyle\int_0^1\left(e^x+1\right)dx$ を求めなさい。
+
+<Steps>
+<Step reason="和の定積分は項ごとに分けられるからです。">$\displaystyle\int_0^1 e^x\,dx+\int_0^1 1\,dx$ と分ける。</Step>
+<Step reason="$e^x$ の原始関数は $e^x$ 自身、$1$ の原始関数は $x$ だからです。">$\Big[e^x+x\Big]_0^1$。</Step>
+<Step reason="上端と下端をそれぞれ代入して差をとるためです。">$(e+1)-(1+0)=e$。</Step>
+<Step reason="定積分で $+C$ が現れないのは、差をとるときに消えるからです。">$C$ を付ける必要はなく、答えは $e$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^1\left(e^x+1\right)dx=e$。
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+この章で身につける技法は4つの型に集約される。①置換積分：中身を1文字に置き、微分形を探す。②部分積分：積の微分を逆に読む。③部分分数分解：分数を対数の和に分ける。④定積分の技法：対称性と漸化式で計算を短縮する。面積・体積・曲線の長さはこれらの応用である。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int e^{2x}\,dx=e^{2x}+C$ である。
+</Wrong>
+<WhyWrong>
+右辺を微分すると、合成関数の微分で $2e^{2x}$ となり、もとの $e^{2x}$ に戻りません。積分は「微分して元に戻る関数を探す」操作なので、係数がつじつまの合うように調整する必要があります。
+</WhyWrong>
+<Right>
+$\displaystyle\int e^{2x}\,dx=\frac12 e^{2x}+C$。$\frac12$ を補っておくと、微分したとき $2$ と $\frac12$ が打ち消し合い、ちょうど $e^{2x}$ になる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int \frac1x\,dx=\log x+C$ と、絶対値を付けずに書いてよい。
+</Wrong>
+<WhyWrong>
+$1/x$ は $x<0$ でも定義されます。$x<0$ のとき $\log x$ は定義されないため、この式は負の範囲で意味をもちません。原始関数は定義域全体で考えなければなりません。
+</WhyWrong>
+<Right>
+$\displaystyle\int \frac1x\,dx=\log\lvert x\rvert+C$。絶対値を付けることで、正負どちらの範囲でも $(\log\lvert x\rvert)'=1/x$ が成り立つ。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int\left(2x^3-\frac{1}{x^2}\right)dx$ を求めなさい。
+<Reveal label="答え">
+$2\cdot\dfrac{x^4}{4}-\displaystyle\int x^{-2}\,dx=\dfrac{x^4}{2}-\dfrac{x^{-1}}{-1}+C=\dfrac{x^4}{2}+\dfrac1x+C$。$x^{-2}$ はべき乗の公式（$n=-2$）が使える。
+</Reveal>
+
+（2）$\displaystyle\int_1^2\left(3x^2+\frac1x\right)dx$ を求めなさい。
+<Reveal label="答え">
+$\Big[x^3+\log\lvert x\rvert\Big]_1^2=(8+\log2)-(1+0)=7+\log2$。
+</Reveal>
+
+（3）$\displaystyle\int e^{ax}\,dx=\frac1a e^{ax}+C$ となる理由を、微分を通して説明しなさい。
+<Reveal label="答え">
+微分して $e^{ax}$ になる関数を探す。$\left(\frac1a e^{ax}\right)'=\frac1a\cdot a e^{ax}=e^{ax}$ となり、確かに戻る。係数 $1/a$ は、微分したときに合成関数の微分で $a$ が出ることを打ち消すための調整である。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（復習と基本公式）">
+（1）$\displaystyle\int\left(4x^3-6x+1\right)dx$ を計算せよ。
+
+（2）$\displaystyle\int_0^{\pi/2}\left(\sin x+\cos x\right)dx$ を計算せよ。
+
+（3）$\displaystyle\int\left(3e^{2x}-\frac{2}{x}\right)dx$ を計算せよ。
+
+（4）$F(x)=\displaystyle\int_0^x\left(t^2+1\right)dt$ を求め、$F'(x)=x^2+1$ であることを確かめよ。
+
+<Reveal label="解答">
+（1）$x^4-3x^2+x+C$。
+
+（2）$\Big[-\cos x+\sin x\Big]_0^{\pi/2}=(0+1)-(-1+0)=2$。
+
+（3）$\dfrac32 e^{2x}-2\log\lvert x\rvert+C$。
+
+（4）$F(x)=\Big[\dfrac{t^3}{3}+t\Big]_0^x=\dfrac{x^3}{3}+x$。微分すると $x^2+1$ でもとの被積分関数に一致する。
+</Reveal>
+</Practice>

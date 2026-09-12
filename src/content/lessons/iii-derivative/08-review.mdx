@@ -1,0 +1,125 @@
+---
+title: "章末まとめ — 微分計算の総仕上げ"
+summary: "式の構造から使う公式を選び、積・商・合成・指数対数・対数微分を組み合わせて微分する。"
+unit: "iii-differential"
+order: 8
+objectives:
+  - "関数の形を見て、べき乗・積・商・合成・対数微分のどれを使うか判断できる"
+  - "複数の公式を組み合わせた入試レベルの式を正確に微分できる"
+  - "微分した結果を別の方法で検算できる"
+prerequisites: ["iii-derivative/07-higher"]
+tags: ["微分の総復習", "入試計算", "公式の選択"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+入試の微分計算では「この問題は積の微分を使ってください」とは書いてくれません。問題文には関数が1つ示されるだけです。その式を一目見て、べき乗か、積か、商か、合成か、それとも対数微分かを判断する。この判断の速さが、そのまま得点につながります。この章では、これまで学んだ道具を問題の形から選び分ける練習をします。
+</Hook>
+
+<Prediction
+  question="y=x²eˣ を微分するとき、まず使う規則はどれ？"
+  options={['積の微分', '商の微分', '対数微分法']}
+  answer="積の微分"
+  explanation="x² と eˣ の積の形なので、f′g+fg′ が第一手です。両方とも既知の微分公式が使えるので、対数微分法までは不要です。"
+/>
+
+微分の前に、まず式の構造を見ます。構造が決まれば使う公式はほぼ自動的に決まります。
+
+<KeyPoint>
+**公式の選び方**
+
+- 単項のべき・根号・分数（分母が単項）→ べき乗の公式 $(x^n)'=n x^{n-1}$（指数の形に直す）
+- 2つの関数の**積** → $(fg)'=f'g+fg'$
+- 分数の形（分母が $x$ の式）→ $(f/g)'=(f'g-fg')/g^2$
+- $(\ \ )^n$、$\sqrt{\ \ }$、$\sin(\ \ )$、$\log(\ \ )$ のように**中に式が入る** → 連鎖律 $f'(g(x))g'(x)$
+- 底と指数の**両方**に変数 → 対数微分法
+- 積の**高次**導関数 → ライプニッツの公式
+</KeyPoint>
+
+<Why>
+複雑な式を見て「どの公式を使うか」を先に決めるのは、計算を速くするためだけではありません。微分の計算規則は、どれも「簡単な部品の微分」を組み合わせて複雑な式に到達する仕組みだからです。式の構造を分解して既知の部品に還元してから計算すれば、途中で何をしているかを見失わず、検算もできます。逆に、形を見ずに手当たり次第に展開・変形すると、計算量だけが増えて符号ミスが起こります。数学IIで多項式を項ごとに微分できたのも、和という構造を先に見抜いたからでした。同じ発想を、積・商・合成へ広げているのです。
+</Why>
+
+以下の公式は、この章で使う基本道具です。すべて説明できる状態にしてから演習に進みましょう。
+
+<Theorem name="微分公式まとめ">
+$$
+(x^n)'=n x^{n-1},\qquad (e^x)'=e^x,\qquad (a^x)'=a^x\log a,
+$$
+
+$$
+(\log x)'=\frac1x,\qquad (\sin x)'=\cos x,\qquad (\cos x)'=-\sin x,\qquad (\tan x)'=\frac{1}{\cos^2 x},
+$$
+
+$$
+\{f(g(x))\}'=f'(g(x))g'(x),\qquad \{f(x)g(x)\}'=f'(x)g(x)+f(x)g'(x),
+$$
+
+$$
+\left\{\frac{f(x)}{g(x)}\right\}'=\frac{f'(x)g(x)-f(x)g'(x)}{\{g(x)\}^2}.
+$$
+</Theorem>
+
+<WorkedExample title="例題: 有名関数 log(x+√(x²+1)) を微分する">
+$y=\log\left(x+\sqrt{x^2+1}\right)$ を微分しなさい。
+
+<Steps>
+<Step reason="log の中に式が入っているので、log の導関数 1/(中身) に、中身の微分を掛ける連鎖律を使います。">$\dfrac{dy}{dx}=\dfrac{1}{x+\sqrt{x^2+1}}\cdot\dfrac{d}{dx}\left(x+\sqrt{x^2+1}\right)$。</Step>
+<Step reason="中身の微分は、x の微分 1 と、√(x²+1) を (x²+1)^(1/2) とみた合成関数の微分の和です。">$\dfrac{d}{dx}\left(x+\sqrt{x^2+1}\right)=1+\dfrac{1}{2\sqrt{x^2+1}}\cdot 2x=1+\dfrac{x}{\sqrt{x^2+1}}$。</Step>
+<Step reason="1 と x/√(x²+1) を通分すると、分子に √(x²+1)+x が現れ、最初の分母と約分できます。">$= \dfrac{\sqrt{x^2+1}+x}{\sqrt{x^2+1}}$。</Step>
+<Step reason="元の 1/(x+√(x²+1)) を掛けると、分子と分母の x+√(x²+1) がちょうど約分されます。">$\dfrac{dy}{dx}=\dfrac{1}{x+\sqrt{x^2+1}}\cdot\dfrac{\sqrt{x^2+1}+x}{\sqrt{x^2+1}}=\dfrac{1}{\sqrt{x^2+1}}$。</Step>
+</Steps>
+
+<Answer>
+$y'=\dfrac{1}{\sqrt{x^2+1}}$。通分して約分する流れが見えると、この関数の微分は1行で書けます。入試ではこの形がそのまま出題されることも多いので、結果ごと覚えておくと検算に使えます。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$y=\log(x^2+1)$ を微分すると $y'=\dfrac{1}{x^2+1}$ である。$\log$ の中身をそのまま分母にすればよい。
+</Wrong>
+<WhyWrong>
+これは合成関数の内側の微分 $2x$ を掛け忘れています。$\log$ の微分は「中身の逆数」ではなく「中身の導関数 ÷ 中身」です。$x$ が動くと中身 $x^2+1$ も動くので、その変化の速さ $2x$ が係数として効きます。正しくは $y'=\dfrac{1}{x^2+1}\cdot 2x=\dfrac{2x}{x^2+1}$ です。
+</WhyWrong>
+<Right>
+$\{\log f(x)\}'=\dfrac{f'(x)}{f(x)}$。分子に必ず $f'(x)$ を書く。$\log$ に限らず、$\sin$、$e$、$\sqrt{\ }$ でも「外側の微分」に「内側の微分」を掛ける連鎖律を徹底する。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$y=x^2e^x$ を微分しなさい。
+<Reveal label="答え">
+積の微分より $y'=2xe^x+x^2e^x=e^x(x^2+2x)=xe^x(x+2)$。
+</Reveal>
+
+（2）$y=\log(x^2+1)$ を微分しなさい。
+<Reveal label="答え">
+連鎖律より $y'=\dfrac{2x}{x^2+1}$。
+</Reveal>
+
+（3）$y=\dfrac{\sin x}{x}$（$x\ne 0$）を微分しなさい。
+<Reveal label="答え">
+商の微分より $y'=\dfrac{\cos x\cdot x-\sin x\cdot 1}{x^2}=\dfrac{x\cos x-\sin x}{x^2}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="章末総合練習（微分計算）">
+（1）$y=(x^2+1)e^x$ を微分せよ。
+（2）$y=\dfrac{\sin x}{1+\cos x}$ を微分せよ。ただし $\cos x\ne -1$ とする。
+（3）$y=(x+2)^x$（$x>-2$）を微分せよ。
+（4）$y=x^2\log x$（$x>0$）の第2次導関数 $y''$ を求めよ。
+（5）$y=\dfrac{e^{2x}}{x^2+1}$ を微分せよ。
+
+<Reveal label="解答">
+（1）積の微分より $y'=2x e^x+(x^2+1)e^x=e^x(x^2+2x+1)=e^x(x+1)^2$。
+
+（2）商の微分より $y'=\dfrac{\cos x(1+\cos x)-\sin x\cdot(-\sin x)}{(1+\cos x)^2}=\dfrac{\cos x+\cos^2 x+\sin^2 x}{(1+\cos x)^2}=\dfrac{1+\cos x}{(1+\cos x)^2}=\dfrac{1}{1+\cos x}$。
+
+（3）対数微分法を使う。$\log y=x\log(x+2)$ より $\dfrac{y'}{y}=\log(x+2)+\dfrac{x}{x+2}$。よって $y'=(x+2)^x\left(\log(x+2)+\dfrac{x}{x+2}\right)$。
+
+（4）$y'=2x\log x+x^2\cdot\dfrac1x=2x\log x+x$。さらに微分して $y''=2\log x+2x\cdot\dfrac1x+1=2\log x+3$。
+
+（5）商の微分より $y'=\dfrac{2e^{2x}(x^2+1)-e^{2x}\cdot 2x}{(x^2+1)^2}=\dfrac{2e^{2x}(x^2-x+1)}{(x^2+1)^2}$。
+</Reveal>
+</Practice>

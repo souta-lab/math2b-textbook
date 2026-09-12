@@ -1,0 +1,167 @@
+---
+title: "テイラー近似で極限を読む — 多項式に置き換えて主要項を取る"
+summary: "e^x・sin・cos・log・(1+x)^α を必要な次数まで展開し、0/0 の極限を係数比で一瞬で読む。展開の次数の決め方と記述式での注意を押さえる。"
+unit: "uni-limits-tools"
+order: 1
+objectives:
+  - "主要な関数のマクローリン展開を、必要な次数まで書ける"
+  - "分子分母の最低次をそろえ、係数比から極限の値を読み取れる"
+  - "展開による結果が記述答案で使えるか検算専用かを、不等式評価との違いで判断できる"
+prerequisites: ["uni-limits-tools/00-lhopital"]
+tags: ["テイラー近似", "マクローリン展開", "主要項", "極限の時短"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$\displaystyle\lim_{x\to 0}\frac{\cos x-1+\frac{x^2}{2}}{x^4}$ は、$\cos x$ を定数 $1$ で置き換えると分子が $1-1=0$ に見えて、値が分からなくなります。しかし $\cos x$ を $2$ 次の項まで正しく近似すると、分子の主要項が $\dfrac{x^4}{24}$ であることが見えて、答えは $\dfrac{1}{24}$ と即座に分かります。極限の値を決めているのは、いつも**打ち消し合ったあとに残る最低次の項**です。関数を多項式に置き換えるこの読み方を身につけると、複雑な極限が単なる係数比の問題になります。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\lim_{x\to 0}\frac{\cos x-1+\frac{x^2}{2}}{x^4}$ の値はどれでしょう？"
+  options={['$0$', '$\dfrac{1}{24}$', '$\dfrac12$']}
+  answer="$\dfrac{1}{24}$"
+  explanation="$\cos x = 1-\dfrac{x^2}{2}+\dfrac{x^4}{24}-\cdots$ なので、分子は $\dfrac{x^4}{24}$ から始まります。$x^4$ で割った比は $\dfrac{1}{24}$ に収束します。"
+/>
+
+<Note type="info">
+**使える場面**：$\dfrac00$ の極限で、分子や分母の主要項が打ち消し合い、最低次の次数がずれるとき。三角・指数・対数・無理式が混ざっていて、くくり出しの工夫が見えない問題で効きます。
+
+**手順**：(1) 分子分母に現れる各関数を、必要な次数まで展開する → (2) 同次の項をまとめ、打ち消し合いを処理する → (3) 残った最低次の項の係数比を読む → (4) 分母の最低次と分子の最低次が一致しているか確かめる。
+
+**記述式での可否**：マクローリン展開は高校範囲外なので、答案に断りなく書くのは減点リスクがあります。原則は**検算・値の予想向き**です。ただし $e^x\ge 1+x$ のような不等式は証明に使えるので、答案では展開の代わりに「必要な次数までの不等式ではさむ」形に書き換えます。
+</Note>
+
+<Why>
+極限の激しい打ち消し合いは、多項式の計算では「同じ次数の項を引く」ことに対応します。そこで関数を次数ごとの係数に分解しておけば、どの次数まで残るかが一目で分かり、値は残った最低次の係数比だけで決まります。ロピタルを何度も当てるより、展開を一度書くほうが速く、しかも「どの次数を見ればよいか」という見通しまで手に入ります。
+</Why>
+
+<Theorem name="マクローリン展開の主要部">
+$x=0$ の近くで、次の展開が成り立つ（$\cdots$ はより高次の項）。
+$$
+\begin{aligned}
+e^x &= 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots \\
+\sin x &= x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots \\
+\cos x &= 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \cdots \\
+\log(1+x) &= x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots \\
+(1+x)^\alpha &= 1 + \alpha x + \frac{\alpha(\alpha-1)}{2!}x^2 + \cdots
+\end{aligned}
+$$
+必要な次数まで取れば、極限の値は最低次どうしの係数比で決まる。
+</Theorem>
+
+<WorkedExample title="例題1: 打ち消し合いのあとを読む">
+$$
+\lim_{x\to 0}\frac{e^x-1-x}{x^2}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$e^x$ を2次まで展開します。$1+x$ の部分が引かれるので、残るのは2次以上の項です。">$e^x = 1+x+\dfrac{x^2}{2!}+\cdots$ より、分子は $\dfrac{x^2}{2}+\cdots$。</Step>
+<Step reason="分母は $x^2$ です。分子の最低次も $x^2$ なので、次数がそろい、高次の項は $x\to0$ で消えます。">$\dfrac{e^x-1-x}{x^2}=\dfrac{\frac{x^2}{2}+O(x^3)}{x^2}\to\dfrac12$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac12$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 奇関数どうしの差">
+$$
+\lim_{x\to 0}\frac{\sin x-x}{x^3}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$\sin x$ は $x$ をくくり出せる形で展開されます。$x$ を引くと1次の項が消え、残るのは3次の項です。">$\sin x = x-\dfrac{x^3}{3!}+\cdots$ より、分子は $-\dfrac{x^3}{6}+\cdots$。</Step>
+<Step reason="分母 $x^3$ と次数がそろったので、係数比を読みます。">$\dfrac{\sin x-x}{x^3}=\dfrac{-\frac{x^3}{6}+\cdots}{x^3}\to-\dfrac16$。</Step>
+</Steps>
+
+<Answer>
+$-\dfrac16$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 分母が高次でも読める">
+$$
+\lim_{x\to 0}\frac{1-\cos x}{x^2}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$\cos x$ は定数項 $1$ と2次の項をもちます。$1$ を引くと定数項が消え、2次の項が残ります。">$\cos x = 1-\dfrac{x^2}{2!}+\cdots$ より、分子は $\dfrac{x^2}{2}+\cdots$。</Step>
+<Step reason="分母 $x^2$ と同じ次数なので、係数比がそのまま極限になります。">$\dfrac{1-\cos x}{x^2}=\dfrac{\frac{x^2}{2}+\cdots}{x^2}\to\dfrac12$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac12$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+$\dfrac00$ の極限は、各関数を必要な次数まで展開し、打ち消し合ったあとに残る最低次の項の係数比を読む。分母と分子の最低次を必ずそろえて確認する。
+</KeyPoint>
+
+<Note type="tip">
+**次数の決め方**：分母の最低次が分かっていれば、分子はその次数まで展開すれば十分です。分母が $x^4$ なら、分子に現れるすべての関数を4次まで書けば、値は必ず読めます。逆に次数が足りないと、主要項を取り違えて誤答します。
+</Note>
+
+<Misconception>
+<Wrong>
+$\cos x$ は $0$ の近くでほぼ $1$ だから、$\dfrac{1-\cos x}{x^2}$ の分子は $1-1=0$ で、極限は $0$ である。
+</Wrong>
+<WhyWrong>
+近似の次数が足りません。$\cos x=1-\dfrac{x^2}{2}+\cdots$ なので、$1$ を引いたあとに残るのは $\dfrac{x^2}{2}$ です。$x^2$ で割れば $\dfrac12$ が残ります。定数項だけを見ると、値の本体である2次の項を捨ててしまい、極限を $0$ と誤ります。
+</WhyWrong>
+<Right>
+分母の最低次と同じ次数まで展開する。ここでは2次まで取り、$\cos x\approx 1-\dfrac{x^2}{2}$ とすることではじめて $\dfrac12$ が読める。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+展開は計算の近道なので、答案にそのまま書いても証明として通用する。
+</Wrong>
+<WhyWrong>
+マクローリン展開は高校の範囲外で、その成立を答案で使うと「理由なく大学の道具を使った」とみなされます。検算で展開して答えが分かっても、記述式では展開を消し、$e^x\ge 1+x$ のような範囲内の不等式や既習の公式で同じ結論を書き直す必要があります。
+</WhyWrong>
+<Right>
+展開は値の予想・検算に使い、答案では数学IIIの範囲内の不等式評価や変形に翻訳して書く。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{x\to 0}\frac{e^x-1-x}{x^2}$ を、$e^x$ の展開を使って求めよ。
+<Reveal label="答え">
+$e^x=1+x+\dfrac{x^2}{2}+\cdots$ より $\dfrac{e^x-1-x}{x^2}\to\dfrac12$。
+</Reveal>
+
+(2) $\displaystyle\lim_{x\to 0}\frac{1-\cos x}{x^2}$ を求めよ。
+<Reveal label="答え">
+$\cos x=1-\dfrac{x^2}{2}+\cdots$ より分子の主要項は $\dfrac{x^2}{2}$。よって $\dfrac12$。
+</Reveal>
+
+(3) $\displaystyle\lim_{x\to 0}\frac{\log(1+x)-x}{x^2}$ を求めよ。
+<Reveal label="答え">
+$\log(1+x)=x-\dfrac{x^2}{2}+\cdots$ より分子の主要項は $-\dfrac{x^2}{2}$。よって $-\dfrac12$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（展開で極限を読む）">
+(1) $\displaystyle\lim_{x\to 0}\frac{e^{2x}-1-2x}{x^2}$ を求めよ。
+
+(2) $\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x^3}$ を求めよ。
+
+(3) $\displaystyle\lim_{x\to 0}\frac{1-\cos 2x}{x^2}$ を求めよ。
+
+(4) $\displaystyle\lim_{x\to 0}\frac{\sqrt{1+x}-1}{x}$ を求めよ。
+
+<Reveal label="解答">
+(1) $e^{2x}=1+2x+\dfrac{(2x)^2}{2}+\cdots=1+2x+2x^2+\cdots$ より、分子は $2x^2+\cdots$。よって $2$。
+
+(2) $\sin x=x-\dfrac{x^3}{6}+\cdots$ より、分子は $\dfrac{x^3}{6}+\cdots$。よって $\dfrac16$。
+
+(3) $\cos 2x=1-\dfrac{(2x)^2}{2}+\cdots=1-2x^2+\cdots$ より、分子は $2x^2+\cdots$。よって $2$。
+
+(4) $(1+x)^{\frac12}=1+\dfrac12 x+\cdots$ より、分子は $\dfrac{x}{2}+\cdots$。よって $\dfrac12$。
+</Reveal>
+</Practice>

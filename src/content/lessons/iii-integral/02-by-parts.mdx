@@ -1,0 +1,162 @@
+---
+title: "部分積分 — 積の微分を逆に読む"
+summary: "積の微分法則を積分に翻訳し、多項式×指数・三角、対数などの入試頻出形を処理する。"
+unit: "iii-integral"
+order: 2
+objectives:
+  - "積の微分法則から部分積分の公式を導ける"
+  - "どちらの因数を微分する側に選ぶかを、優先度に従って判断できる"
+  - "循環する部分積分で $\\int e^x\\sin x\\,dx$ を求められる"
+prerequisites: ["iii-integral/01-substitution"]
+tags: ["部分積分", "積の微分", "対数", "循環型", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+積 $\displaystyle\int x e^x\,dx$ は、置換積分では処理できません。指数の中身を置いても、外に残る $x$ が消えないからです。ここで使うのが積の微分法則です。$(fg)'=f'g+fg'$ という1本の等式を積分の形に書き直すと、難しい積分を簡単な積分へ移し替える公式が現れます。入試では、この移し替えを一瞬で選べるかが勝負になります。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\int x e^x\,dx$ を部分積分で計算するとき、微分する側（$f$ のほう）に選ぶべきはどちら？"
+  options={['x', 'e^x', 'どちらでも同じ手間']}
+  answer="x"
+  explanation="$x$ を微分すると $1$ になって次数が下がり、次の積分が簡単になります。$e^x$ を微分しても $e^x$ のままで、複雑さが変わりません。微分して「簡単になる側」を選ぶのがコツです。"
+/>
+
+積の微分法則 $(f g)'=f'g+fg'$ の両辺を $x$ で積分します。左辺の積分は $fg$ に戻るので、$fg=\displaystyle\int f'g\,dx+\int fg'\,dx$ です。移項すると、次の部分積分の公式が得られます。
+
+<Theorem name="部分積分法">
+$f(x)$、$g(x)$ を微分可能な関数とすると
+
+$$
+\int f(x)\,g'(x)\,dx=f(x)g(x)-\int f'(x)g(x)\,dx
+$$
+
+が成り立つ。定積分では
+
+$$
+\int_a^b f(x)g'(x)\,dx=\Big[f(x)g(x)\Big]_a^b-\int_a^b f'(x)g(x)\,dx
+$$
+
+となる。
+</Theorem>
+
+公式は「$f g'$ の積分」を「$f' g$ の積分」に移し替えます。移し替え先が簡単になるように $f$ を選ぶのが核心です。微分して次数が下がる多項式や、微分すると $1/x$ になって積分しやすくなる対数は、$f$ の側に置きます。一方、何度微分しても形が変わらない指数・三角は、積分する側 $g'$ に回します。
+
+| $f$（微分する側）の優先度 | 例 |
+| --- | --- |
+| 1. 対数 | $\log x$ |
+| 2. 多項式 | $x$、$x^2$ |
+| 3. 三角関数 | $\sin x$、$\cos x$ |
+| 4. 指数関数 | $e^x$ |
+
+<Why>
+部分積分で対数を微分する側に選ぶのは、$\log x$ を微分すると $1/x$ になり、多項式と組み合わせた積分に変わるからです。たとえば $\int\log x\,dx$ は、$g'=1$ と見なして部分積分すると $\int x\cdot\frac1x\,dx=\int 1\,dx$ になり、一気に解決します。逆に $\log x$ を積分する側に置くと、$\int\log x\,dx$ 自体が分からないので行き詰まります。微分すると簡単になる関数を前に出す、という一点が選択の基準です。
+</Why>
+
+<WorkedExample title="例題1: 多項式×指数">
+$\displaystyle\int x e^x\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="x を微分すると 1 になり、次の積分が簡単になるからです。">$f=x$、$g'=e^x$ と選ぶ。$f'=1$、$g=e^x$。</Step>
+<Step reason="部分積分の公式 ∫fg′dx = fg − ∫f′g dx に当てはめるためです。">$x e^x-\displaystyle\int 1\cdot e^x\,dx$。</Step>
+<Step reason="残った積分は基本公式で計算できるからです。">$x e^x-e^x+C$。</Step>
+<Step reason="共通因数でくくり、検算しやすい形に整えるためです。">$(x-1)e^x+C$。微分すると $e^x+(x-1)e^x=x e^x$ に戻る。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int x e^x\,dx=(x-1)e^x+C$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 対数の積分">
+$\displaystyle\int \log x\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="log x は微分すると 1/x になり、積分しやすい形へ変わるので f に選ぶためです。">$f=\log x$、$g'=1$ と選ぶ。$f'=\dfrac1x$、$g=x$。</Step>
+<Step reason="部分積分の公式に当てはめるためです。">$x\log x-\displaystyle\int x\cdot\frac1x\,dx$。</Step>
+<Step reason="$x\cdot\frac1x=1$ に約分され、積分が簡単になるからです。">$x\log x-\displaystyle\int 1\,dx$。</Step>
+<Step reason="原始関数を求めて積分定数を添えるためです。">$x\log x-x+C$。定義域は $x\gt 0$ なので絶対値は不要。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int \log x\,dx=x\log x-x+C$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 循環する部分積分（入試頻出）">
+$\displaystyle\int e^x\sin x\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="どちらも微分で形が循環するので、まず片方を f に選んで進めるためです。">$f=\sin x$、$g'=e^x$ として部分積分すると、$e^x\sin x-\displaystyle\int e^x\cos x\,dx$。</Step>
+<Step reason="残った積分も部分積分で処理するためです。">$f=\cos x$、$g'=e^x$ とすると $\displaystyle\int e^x\cos x\,dx=e^x\cos x+\int e^x\sin x\,dx$。</Step>
+<Step reason="もとの積分 I が右辺にも現れ、方程式として解けるからです。">$I=e^x\sin x-\left(e^x\cos x+I\right)$ と置く。</Step>
+<Step reason="I について解けば、積分が求まるからです。">$2I=e^x(\sin x-\cos x)$ より $I=\dfrac{e^x(\sin x-\cos x)}{2}+C$。</Step>
+<Step reason="時間があるときは微分して元に戻るか確かめられます。">右辺を微分すると $e^x\sin x$ に戻り、正しい。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int e^x\sin x\,dx=\dfrac{e^x(\sin x-\cos x)}{2}+C$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int f(x)g(x)\,dx=\left(\int f(x)\,dx\right)\left(\int g(x)\,dx\right)$ と、積の積分を積分の積に分けられる。
+</Wrong>
+<WhyWrong>
+積の微分法則は $(fg)'=f'g+fg'$ で、$(fg)'$ と $f'g'$ は一致しません。たとえば $\int x\cdot 1\,dx=\frac{x^2}{2}$ ですが、$(\int x\,dx)(\int 1\,dx)=\frac{x^2}{2}\cdot x$ で別物です。積の積分に「分ける」公式は存在せず、代わりに部分積分で片方を微分する側へ移します。
+</WhyWrong>
+<Right>
+積の積分は部分積分 $\displaystyle\int f g'\,dx=fg-\int f'g\,dx$ で処理する。和の積分は分けられるが、積の積分は分けられない。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+部分積分の公式は $\displaystyle\int f g'\,dx=fg+\int f'g\,dx$ と、符号はプラスである。
+</Wrong>
+<WhyWrong>
+$(fg)'=f'g+fg'$ を移項すると $fg'=(fg)'-f'g$ です。両辺を積分すると $\int fg'\,dx=fg-\int f'g\,dx$ となり、移項したときに符号がマイナスになります。符号をプラスにすると、検算で微分したときにもとに戻りません。
+</WhyWrong>
+<Right>
+$\displaystyle\int f g'\,dx=fg-\int f'g\,dx$。マイナスを忘れないよう、導出の $fg'=(fg)'-f'g$ と一緒に覚えるとよい。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int x\cos x\,dx$ を求めなさい。
+<Reveal label="答え">
+$f=x$、$g'=\cos x$ とすると $f'=1$、$g=\sin x$。$x\sin x-\displaystyle\int\sin x\,dx=x\sin x+\cos x+C$。
+</Reveal>
+
+（2）$\displaystyle\int x\log x\,dx$ を求めなさい。
+<Reveal label="答え">
+$f=\log x$、$g'=x$ とすると $f'=\frac1x$、$g=\frac{x^2}{2}$。$\dfrac{x^2}{2}\log x-\displaystyle\int\frac{x^2}{2}\cdot\frac1x\,dx=\dfrac{x^2}{2}\log x-\dfrac{x^2}{4}+C$。
+</Reveal>
+
+（3）部分積分で $f$ を選ぶ基準を、一言で述べなさい。
+<Reveal label="答え">
+微分したときに、より簡単な形（次数が下がる、または積分しやすい形）になるほうを $f$ に選ぶ。対数は最優先、多項式が次、指数・三角は積分する側に回す。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（部分積分）">
+（1）$\displaystyle\int x\sin x\,dx$ を計算せよ。
+
+（2）$\displaystyle\int x^2 e^x\,dx$ を計算せよ（部分積分を2回使う）。
+
+（3）$\displaystyle\int (\log x)^2\,dx$ を計算せよ。
+
+（4）$\displaystyle\int_0^1 x e^{-x}\,dx$ を計算せよ。
+
+<Reveal label="解答">
+（1）$f=x$、$g'=\sin x$ とすると $-x\cos x+\displaystyle\int\cos x\,dx=-x\cos x+\sin x+C$。
+
+（2）1回目で $x^2e^x-2\displaystyle\int x e^x\,dx$。例題1より $\int x e^x\,dx=(x-1)e^x$ だから、$x^2e^x-2(x-1)e^x+C=e^x(x^2-2x+2)+C$。
+
+（3）$f=(\log x)^2$、$g'=1$ とすると $x(\log x)^2-2\displaystyle\int\log x\,dx=x(\log x)^2-2x\log x+2x+C$。
+
+（4）$f=x$、$g'=e^{-x}$ とすると $\Big[-x e^{-x}\Big]_0^1+\displaystyle\int_0^1 e^{-x}\,dx=-e^{-1}+\Big[-e^{-x}\Big]_0^1=-e^{-1}+(1-e^{-1})=1-\dfrac{2}{e}$。
+</Reveal>
+</Practice>

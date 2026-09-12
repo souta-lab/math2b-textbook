@@ -1,0 +1,165 @@
+---
+title: "部分分数分解 — 分数を対数の和に分ける"
+summary: "有理式を1次式の和に分解し、対数の積分へ持ち込む。分子が分母の微分になっている形は即座に対数化する。"
+unit: "iii-integral"
+order: 3
+objectives:
+  - "分母が1次式の積に分解できるとき、部分分数分解できる"
+  - "分子が分母の微分になっている形を $\\log|f(x)|$ と積分できる"
+  - "部分分数分解と $f'/f$ の見分け方を、分母の形から判断できる"
+prerequisites: ["iii-integral/02-by-parts"]
+tags: ["部分分数分解", "有理式", "対数積分", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$\displaystyle\int \frac{dx}{x^2-1}$ は、置換でも部分積分でもありません。しかし分母が $(x-1)(x+1)$ と因数分解できることに気づけば、分数を2つの簡単な分数の差に分けられます。それぞれの積分は対数です。入試の有理式の積分は、まず分母を因数分解する。この一手から始まります。
+</Hook>
+
+<Prediction
+  question="$\dfrac{1}{x(x+1)}$ を $\dfrac{A}{x}+\dfrac{B}{x+1}$ の形に分けるとき、$A$ はいくつ？"
+  options={['1', '−1', '0']}
+  answer="1"
+  explanation="両辺に $x(x+1)$ を掛けると $1=A(x+1)+Bx$。$x=0$ を代入すると $A=1$、$x=-1$ を代入すると $B=-1$。したがって $\frac{1}{x(x+1)}=\frac1x-\frac{1}{x+1}$ です。$A=1$ が正しい符号になります。"
+/>
+
+部分分数分解は、1つの分数を複数の簡単な分数の和に書き直す操作です。分解した各項は $\dfrac{1}{x-a}$ の形なので、積分すると対数 $\log|x-a|$ になります。つまり部分分数分解は、有理式の積分を対数の積分へ持ち込むための入口です。まず、分解の手順を確認します。
+
+<Theorem name="部分分数分解（1次因数への分解）">
+分数式 $\dfrac{P(x)}{(x-a)(x-b)}$（$a\neq b$、$P$ は1次以下）は、定数 $A$、$B$ を用いて
+
+$$
+\frac{P(x)}{(x-a)(x-b)}=\frac{A}{x-a}+\frac{B}{x-b}
+$$
+
+と表せる。$A$、$B$ は両辺に $(x-a)(x-b)$ を掛けて $x=a$、$x=b$ を代入すれば求められる。とくに
+
+$$
+\frac{1}{x(x+1)}=\frac1x-\frac{1}{x+1}
+$$
+
+が成り立つ。
+</Theorem>
+
+<Theorem name="分子が分母の微分になっている場合">
+$f(x)$ が微分可能で $f(x)\neq 0$ のとき
+
+$$
+\int \frac{f'(x)}{f(x)}\,dx=\log\lvert f(x)\rvert+C
+$$
+
+が成り立つ。これは置換積分 $u=f(x)$ から得られ、$\displaystyle\int \frac{1}{x}\,dx=\log\lvert x\rvert+C$ の一般形である。
+</Theorem>
+
+分母を因数分解すると、分子がちょうど分母の微分になっていることがあります。そのときは部分分数分解をせず、そのまま $\log|f(x)|$ と積分するのが最短です。$f'/f$ の形を見抜く鍵は、分母の微分を頭の中で計算し、分子と比べることです。
+
+<Why>
+部分分数分解でわざわざ分数を分けるのは、$\int\frac{1}{x-a}\,dx=\log|x-a|+C$ という基本形に帰着させるためです。分子が分母の微分になっている場合は、その必要がありません。$\int f'/f\,dx=\log|f|+C$ が直接使えるからです。分解に進むかどうかは、まず分母を微分して分子と一致するかを確かめることで判断します。一致すれば1行、一致しなければ分解です。
+</Why>
+
+<WorkedExample title="例題1: 分母が1次式の積">
+$\displaystyle\int \frac{dx}{x^2-1}$ を求めなさい。
+
+<Steps>
+<Step reason="分母を因数分解して、1次式の積の形に直すためです。">$\dfrac{1}{x^2-1}=\dfrac{1}{(x-1)(x+1)}$。</Step>
+<Step reason="分解した各項を別々に積分できるようにするためです。">$\dfrac{1}{(x-1)(x+1)}=\dfrac{A}{x-1}+\dfrac{B}{x+1}$ と置き、$1=A(x+1)+B(x-1)$。</Step>
+<Step reason="x に都合のよい値を代入すると、係数が1つずつ決まるからです。">$x=1$ で $A=\dfrac12$、$x=-1$ で $B=-\dfrac12$。</Step>
+<Step reason="各項の積分が対数になるからです。">$\displaystyle\int\left(\frac{1/2}{x-1}-\frac{1/2}{x+1}\right)dx=\frac12\log\lvert x-1\rvert-\frac12\log\lvert x+1\rvert+C$。</Step>
+<Step reason="対数の差は商の対数にまとめられるため、答案として整えるためです。">$\dfrac12\log\left\lvert\dfrac{x-1}{x+1}\right\rvert+C$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int \frac{dx}{x^2-1}=\dfrac12\log\left\lvert\dfrac{x-1}{x+1}\right\rvert+C$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 分子が分母の微分">
+$\displaystyle\int \frac{2x+3}{x^2+3x+2}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="分母を微分すると 2x+3 となり、分子と完全に一致するからです。">分母 $f(x)=x^2+3x+2$ と置くと $f'(x)=2x+3$。</Step>
+<Step reason="公式 ∫f′/f dx = log|f|+C をそのまま使えるからです。">$\displaystyle\int\frac{f'(x)}{f(x)}\,dx=\log\lvert f(x)\rvert+C$。</Step>
+<Step reason="分母は (x+1)(x+2) と分解でき、絶対値がそのまま必要だからです。">$\log\lvert x^2+3x+2\rvert+C$。</Step>
+<Step reason="時間があるときは微分して確かめられるからです。">微分すると $\dfrac{2x+3}{x^2+3x+2}$ に戻り、正しい。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int \frac{2x+3}{x^2+3x+2}\,dx=\log\lvert x^2+3x+2\rvert+C$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 分子が分母の微分でない場合">
+$\displaystyle\int \frac{2x+5}{x^2+x-2}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="分母の微分は 2x+1 で分子の 2x+5 と一致しないため、分解で進めるからです。">分母は $(x+2)(x-1)$、分子は $2x+5$。</Step>
+<Step reason="1次式の積なので部分分数分解できるからです。">$\dfrac{2x+5}{(x+2)(x-1)}=\dfrac{A}{x+2}+\dfrac{B}{x-1}$ と置き、$2x+5=A(x-1)+B(x+2)$。</Step>
+<Step reason="それぞれの係数を決定するためです。">$x=-2$ で $1=-3A$ より $A=-\dfrac13$、$x=1$ で $7=3B$ より $B=\dfrac73$。</Step>
+<Step reason="分解後の各項は対数積分になるからです。">$\displaystyle\int\left(-\frac{1/3}{x+2}+\frac{7/3}{x-1}\right)dx=-\frac13\log\lvert x+2\rvert+\frac73\log\lvert x-1\rvert+C$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int \frac{2x+5}{x^2+x-2}\,dx=-\dfrac13\log\lvert x+2\rvert+\dfrac73\log\lvert x-1\rvert+C$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\dfrac{1}{x(x+1)}=\dfrac1x+\dfrac{1}{x+1}$ である。
+</Wrong>
+<WhyWrong>
+右辺を通分すると $\dfrac{(x+1)+x}{x(x+1)}=\dfrac{2x+1}{x(x+1)}$ となり、分子に $2x+1$ が残ります。正しくは符号がマイナスの項が必要で、$\frac1x-\frac{1}{x+1}$ です。分解した後は、必ず1つに通分して元に戻るか確かめます。
+</WhyWrong>
+<Right>
+$\dfrac{1}{x(x+1)}=\dfrac1x-\dfrac{1}{x+1}$。差にすることで分子の $x$ が打ち消し合い、$1$ だけが残る。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+分母が2次式なら、いつでも部分分数分解できる。
+</Wrong>
+<WhyWrong>
+部分分数分解は分母が1次式の積に因数分解できるときに使えます。$x^2+1$ のように実数範囲で因数分解できない2次式は $\frac{A}{x-a}+\frac{B}{x-b}$ の形にできません。その場合は平方完成して置換するなど、別の方法が必要です。
+</WhyWrong>
+<Right>
+分母が実数範囲で1次式の積に分解できるかを先に確認する。分解できないときは $f'/f$ の形か、平方完成＋置換を検討する。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int \frac{2x}{x^2+1}\,dx$ を求めなさい。
+<Reveal label="答え">
+分母の微分は $2x$ で分子と一致する。$\displaystyle\int\frac{f'}{f}\,dx=\log(x^2+1)+C$（$x^2+1\gt 0$）。
+</Reveal>
+
+（2）$\displaystyle\int \frac{dx}{x^2-4}$ を求めなさい。
+<Reveal label="答え">
+$\dfrac{1}{(x-2)(x+2)}=\dfrac14\left(\dfrac{1}{x-2}-\dfrac{1}{x+2}\right)$ と分解できる。積分すると $\dfrac14\log\left\lvert\dfrac{x-2}{x+2}\right\rvert+C$。
+</Reveal>
+
+（3）分母を微分して分子と一致するかどうかを、最初に確かめるのはなぜか。
+<Reveal label="答え">
+一致すれば分解をせずに $\log|f(x)|$ と1行で積分でき、計算量が最も少なくなるから。一致しなければ部分分数分解や置換に進む。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（部分分数分解と対数積分）">
+（1）$\displaystyle\int \frac{2x-1}{x^2-x+1}\,dx$ を計算せよ。
+
+（2）$\displaystyle\int \frac{dx}{x^2-9}$ を計算せよ。
+
+（3）$\displaystyle\int \frac{3x+4}{x^2+x-2}\,dx$ を計算せよ。
+
+（4）$\displaystyle\int_2^3 \frac{dx}{x(x-1)}$ を計算せよ。
+
+<Reveal label="解答">
+（1）分母の微分は $2x-1$ で分子と一致する。$\log(x^2-x+1)+C$（$x^2-x+1=\left(x-\frac12\right)^2+\frac34\gt 0$）。
+
+（2）$\dfrac{1}{(x-3)(x+3)}=\dfrac16\left(\dfrac{1}{x-3}-\dfrac{1}{x+3}\right)$ より、$\dfrac16\log\left\lvert\dfrac{x-3}{x+3}\right\rvert+C$。
+
+（3）$\dfrac{3x+4}{(x+2)(x-1)}=\dfrac{A}{x+2}+\dfrac{B}{x-1}$ と置くと、$x=-2$ で $-2=-3A$、$A=\frac23$。$x=1$ で $7=3B$、$B=\frac73$。よって $\dfrac23\log\lvert x+2\rvert+\dfrac73\log\lvert x-1\rvert+C$。
+
+（4）$\dfrac{1}{x(x-1)}=\dfrac{1}{x-1}-\dfrac1x$ より、$\Big[\log\lvert x-1\rvert-\log\lvert x\rvert\Big]_2^3=\log2-\log\dfrac32=\log\dfrac43$。
+</Reveal>
+</Practice>

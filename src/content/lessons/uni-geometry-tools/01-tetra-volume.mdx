@@ -1,0 +1,163 @@
+---
+title: "四面体の体積と垂線 — 高さを求めずに距離を出す"
+summary: "法線ベクトルへの射影で、垂線の足を求めずに点と平面の距離＝高さを出す。四面体の体積を底面積×高さと行列式の両方で一撃にする。"
+unit: "uni-geometry-tools"
+order: 1
+objectives:
+  - '法線ベクトルを使い、点と平面の距離 $d=\dfrac{|\overrightarrow{AP}\cdot\vec n|}{|\vec n|}$ を計算できる'
+  - '垂線の足の座標を $\vec p-\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}\vec n$ で求められる'
+  - '底面の面積と高さから四面体の体積を出す流れを、行列表現と結びつけられる'
+prerequisites: ["uni-geometry-tools/00-cross-product"]
+tags: ["四面体", "体積", "垂線", "点と平面の距離", "時短"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+四面体の体積は「底面積×高さ÷3」で求まります。ところが座標が与えられた四面体では、底面積はまだしも、**頂点から底面に下ろした垂線の足**を求める計算が重くのしかかります。$\overrightarrow{AB}\cdot\vec n=0$ を満たす点をパラメータで追い、連立方程式を解き、その座標から距離を計算する——。実はこの垂線の足を求めなくても、高さの長さだけなら内積1つで出せます。しかもその高さは、そのまま体積に使えます。
+</Hook>
+
+<Prediction
+  question="点 P から平面 $\alpha$ までの距離を求めるとき、垂線の足の座標は必要？"
+  options={['必ず求める必要がある', '法線ベクトルがあれば足の座標は不要', '底面の面積が必要']}
+  answer="法線ベクトルがあれば足の座標は不要"
+  explanation="距離は、$\overrightarrow{AP}$ を法線 $\vec n$ の向きに射影した長さ $\dfrac{|\overrightarrow{AP}\cdot\vec n|}{|\vec n|}$ です。射影の長さは内積だけで決まるので、足の座標を経由しません。足が必要なのは、その座標そのものを答えるときだけです。"
+/>
+
+<Note type="info">
+**入試での用途**：① 点と平面の距離（＝高さ）を求める、② 座標付き四面体の体積を求める、③ 垂線の足の座標を求める、の3つ。特に「体積を求めよ」に対して、底面積と高さを別々に出す従来の流れを、法線1本で短縮できます。
+</Note>
+
+## 高さは法線への射影で測る
+
+前のレッスンで、平面上の2本のベクトルの外積から法線ベクトル $\vec n$ が作れることを見ました。高さ、つまり点から平面までの距離は、この法線 $\vec n$ の向きへの**射影の長さ**として測れます。
+
+<Theorem name="点と平面の距離">
+平面 $\alpha$ が点 A を通り、法線ベクトルが $\vec n$ であるとする。点 P から平面 $\alpha$ までの距離は
+$$
+d=\frac{\bigl|\overrightarrow{AP}\cdot\vec n\bigr|}{|\vec n|}.
+$$
+また、P から $\alpha$ に下ろした垂線の足 H の位置ベクトルは
+$$
+\vec h=\vec p-\frac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}\,\vec n
+$$
+である。
+</Theorem>
+
+<Theorem name="四面体の体積">
+4点 O、A、B、C を頂点とする四面体について、$\triangle$OAB を底面と見れば
+$$
+V=\frac13\cdot\underbrace{\frac12|\overrightarrow{OA}\times\overrightarrow{OB}|}_{\text{底面積}}\cdot\underbrace{\frac{\bigl|\overrightarrow{OC}\cdot\vec n\bigr|}{|\vec n|}}_{\text{高さ}}
+$$
+であり、前レッスンのスカラー三重積と一致して
+$$
+V=\frac16\bigl|(\overrightarrow{OA}\times\overrightarrow{OB})\cdot\overrightarrow{OC}\bigr|.
+$$
+</Theorem>
+
+<Why>
+距離を出すのに垂線の足を求めるのは、目的に対して遠回りです。足 H を求めるには「P から法線方向にどれだけ進めば平面に乗るか」を未知数で置いて方程式を解きますが、その「どれだけ」こそが距離そのものです。法線 $\vec n$ への正射影は、$\overrightarrow{AP}$ と $\vec n$ の内積を $|\vec n|$ で割れば直接出ます。つまり方程式を解く手間を、内積1回に置き換えているのがこの公式の正体です。面積や体積も、法線さえ作れば同じ射影の一部として片付きます。
+</Why>
+
+<WorkedExample title="例題1: 点と平面の距離・垂線の足">
+3点 A$(1,0,0)$、B$(0,1,0)$、C$(0,0,1)$ を通る平面を $\alpha$ とする。点 P$(2,3,4)$ から $\alpha$ までの距離と、垂線の足 H の座標を求めよ。
+
+<Steps>
+<Step reason="まず平面上の2本のベクトルを作り、外積で法線を作ります。法線が決まれば平面の式も距離も一気に決まります。">$\overrightarrow{AB}=(-1,1,0)$、$\overrightarrow{AC}=(-1,0,1)$ より $\vec n=\overrightarrow{AB}\times\overrightarrow{AC}=(1,1,1).$ </Step>
+<Step reason="平面は A を通り法線が $\vec n$ なので、$\vec n\cdot(\vec x-\overrightarrow{OA})=0$ と書けます。式にしておくと距離の符号が読めます。">平面の方程式は $(x-1)+y+z=0,\qquad \text{すなわち}\quad x+y+z=1.$ </Step>
+<Step reason="距離は $\overrightarrow{AP}$ の法線方向の成分です。$\overrightarrow{AP}=(1,3,4)$ を作り、$\vec n$ との内積を $|\vec n|$ で割ります。">$\overrightarrow{AP}=(1,3,4)$ で $\overrightarrow{AP}\cdot\vec n=1+3+4=8,\qquad |\vec n|=\sqrt3$ より、距離は $d=\frac{8}{\sqrt3}=\frac{8\sqrt3}{3}.$ </Step>
+<Step reason="垂線の足は、P から法線方向に距離ぶんだけ引き戻した点です。係数 $\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}$ を使うと成分で計算できます。">$\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}=\dfrac83$ より $\vec h=\vec p-\frac83\vec n=(2,3,4)-\frac83(1,1,1)=\left(-\frac23,\frac13,\frac43\right).$ </Step>
+<Step reason="足が本当に平面上にあるかを確かめます。$x+y+z$ に代入して1になれば整合しています。">検算：$-\dfrac23+\dfrac13+\dfrac43=1$ となり、確かに $\alpha$ 上にある。</Step>
+</Steps>
+
+<Answer>
+距離は $\dfrac{8\sqrt3}{3}$、垂線の足は $\left(-\dfrac23,\dfrac13,\dfrac43\right)$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 底面と高さから体積を出す">
+例題1と同じ4点 A$(1,0,0)$、B$(0,1,0)$、C$(0,0,1)$、P$(2,3,4)$ を頂点とする四面体 PABC の体積を求めよ。
+
+<Steps>
+<Step reason="$\triangle$ABC の面積は、例題1で求めた法線の大きさの半分です。外積の大きさが平行四辺形の面積でした。">$\triangle\mathrm{ABC}$ の面積は $S=\frac12|\vec n|=\frac{\sqrt3}{2}.$ </Step>
+<Step reason="高さは P から平面 ABC までの距離で、例題1で求めた $\dfrac{8}{\sqrt3}$ をそのまま使えます。垂線の足を改めて求める必要はありません。">底面 ABC から P までの高さは $h=\frac{8}{\sqrt3}.$ </Step>
+<Step reason="体積は底面積×高さ÷3。$\sqrt3$ が約分されてきれいな値になります。">よって $V=\frac13\cdot\frac{\sqrt3}{2}\cdot\frac{8}{\sqrt3}=\frac43.$ </Step>
+<Step reason="前レッスンの三重積でも同じ値になることを確かめます。検算として実行します。">検算：$\overrightarrow{AB}\times\overrightarrow{AC}=(1,1,1)$、$\overrightarrow{AP}=(1,3,4)$ より三重積は $8$。$\dfrac16\cdot8=\dfrac43$ で一致する。</Step>
+</Steps>
+
+<Answer>
+体積は $\dfrac43$。
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+点 P と平面（A を通り法線 $\vec n$）の距離は $d=\dfrac{|\overrightarrow{AP}\cdot\vec n|}{|\vec n|}$。垂線の足は $\vec p-\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}\vec n$。四面体の体積は「底面積×高さ÷3」で、高さにこの距離をそのまま使える。行列式 $\dfrac16|(\vec a\times\vec b)\cdot\vec c|$ と必ず一致するので、検算に使える。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+底面が三角形なら、四面体の体積は「底面積×高さ÷3」ではなく「底面積×高さ÷6」で求める。
+</Wrong>
+<WhyWrong>
+角錐・円錐の体積は $\dfrac13\times$底面積$\times$高さで、四面体も角錐の一種だから $\dfrac13$ です。$\dfrac16$ は、平行六面体を対角線で6等分したときの「平行六面体に対する比」として出てくる係数で、底面積×高さに対しては $\dfrac13$ です。$\dfrac16$ 公式は平行六面体の体積 $|(\vec a\times\vec b)\cdot\vec c|$ に $\dfrac16$ を掛ける形で、底面積×高さ÷3と同じ値になります。2つの $\dfrac16$ を混同すると、体積が半分になったり2倍になったりします。
+</WhyWrong>
+<Right>
+四面体の体積は底面積 $S$、高さ $h$ に対して $V=\dfrac13Sh$。三重積を使うときは平行六面体の体積 $\bigl|(\vec a\times\vec b)\cdot\vec c\bigr|$ の $\dfrac16$ として同じ値になる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+垂線の足 H を求めてから PH の長さを計算しないと、点と平面の距離は求められない。
+</Wrong>
+<WhyWrong>
+距離は $\overrightarrow{AP}$ を法線方向に射影した長さで、射影の長さは内積と $|\vec n|$ だけで決まります。H の座標は距離の計算に一切登場しません。H を先に求めると、連立方程式を解く手間が増えるだけで、距離の値は同じです。
+</WhyWrong>
+<Right>
+距離は $d=\dfrac{|\overrightarrow{AP}\cdot\vec n|}{|\vec n|}$ で直接求める。H の座標が問われたときだけ、$\vec h=\vec p-\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}\vec n$ を追加で計算する。
+</Right>
+</Misconception>
+
+## 使える場面・手順・記述式での可否
+
+**使える場面**：座標付きの四面体の体積、点から平面までの距離、三角錐の高さ、垂線の足の座標。特に「体積を求めよ」で高さが自明でないとき、この射影の公式が効きます。
+
+**手順**：(1) 平面を作る2本のベクトルから外積で法線 $\vec n$ を作る。(2) 距離は $\dfrac{|\overrightarrow{AP}\cdot\vec n|}{|\vec n|}$、足が要るなら $\vec p-\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}\vec n$。(3) 体積は底面積 $\dfrac12|\vec n|$ と高さの積の $\dfrac13$。検算は三重積の $\dfrac16$ で。
+
+**記述式での可否**：点と平面の距離の公式は、数学Cの空間ベクトルで導出つきで扱えるため、答案で使って構いません。ただし答案では「射影」という言葉や外積を前面に出さず、平面の方程式を出してから「点と平面の距離の公式より」と書くのが安全です。垂線の足は「H は平面 $\alpha$ 上にあり、$\overrightarrow{PH}$ が法線と平行」と書いて連立法で示すのが記述向きです。外積そのものは前レッスン同様、下書き・検算専用に留めます。
+
+<CheckUnderstanding>
+(1) 平面 $x+y+z=1$ と点 P$(3,1,2)$ の距離を求めよ。
+<Reveal label="答え">
+法線は $\vec n=(1,1,1)$、$|\vec n|=\sqrt3$。平面上の点 A$(1,0,0)$ を使うと $\overrightarrow{AP}=(2,1,2)$ で $\overrightarrow{AP}\cdot\vec n=5$。距離は $\dfrac{5}{\sqrt3}=\dfrac{5\sqrt3}{3}$。
+</Reveal>
+
+(2) 点と平面の距離の公式を、$\overrightarrow{AP}$ と法線 $\vec n$ の言葉で説明せよ。
+<Reveal label="答え">
+$\overrightarrow{AP}$ を法線 $\vec n$ の向きに正射影した長さが距離。射影の長さは $\dfrac{|\overrightarrow{AP}\cdot\vec n|}{|\vec n|}$ で与えられる。垂線の足の座標は必要ない。
+</Reveal>
+
+(3) 4点 O$(0,0,0)$、A$(2,0,0)$、B$(0,1,0)$、C$(0,0,4)$ を頂点とする四面体の体積を求めよ。
+<Reveal label="答え">
+$\overrightarrow{OA}\times\overrightarrow{OB}=(0,0,2)$、$\overrightarrow{OC}=(0,0,4)$ より三重積は $8$。体積は $\dfrac16\cdot8=\dfrac43$。底面積 $\dfrac12\cdot2\cdot1=1$、高さ $4$ として $\dfrac13\cdot1\cdot4=\dfrac43$ でも一致。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（体積と距離）">
+(1) 3点 A$(1,0,0)$、B$(0,2,0)$、C$(0,0,1)$ を通る平面の方程式を求め、点 P$(2,2,3)$ からの距離を計算せよ。
+
+(2) 4点 O$(0,0,0)$、A$(1,1,0)$、B$(1,0,1)$、C$(0,1,1)$ を頂点とする四面体の体積を求めよ。
+
+(3) (1) の平面への P の垂線の足の座標を求めよ。
+
+<Reveal label="解答">
+(1) $\overrightarrow{AB}=(-1,2,0)$、$\overrightarrow{AC}=(-1,0,1)$、$\overrightarrow{AB}\times\overrightarrow{AC}=(2,1,2)$。平面は $2(x-1)+y+2z=0$、すなわち $2x+y+2z=2$。法線は $\vec n=(2,1,2)$、$|\vec n|=\sqrt{4+1+4}=3$。$\overrightarrow{AP}=(1,2,3)$ より $\overrightarrow{AP}\cdot\vec n=2+2+6=10$ で、距離は $\dfrac{10}{3}$。
+
+(2) $\overrightarrow{OA}\times\overrightarrow{OB}=(1,-1,-1)$、$\overrightarrow{OC}=(0,1,1)$ より三重積は $0-1-1=-2$。体積は $\dfrac{|-2|}{6}=\dfrac13$。
+
+(3) $\dfrac{\overrightarrow{AP}\cdot\vec n}{|\vec n|^2}=\dfrac{10}{9}$ より
+$$
+\vec h=(2,2,3)-\frac{10}{9}(2,1,2)=\left(-\frac29,\frac89,\frac79\right).
+$$
+検算：$2\cdot\left(-\dfrac29\right)+\dfrac89+2\cdot\dfrac79=\dfrac{-4+8+14}{9}=\dfrac{18}{9}=2$ となり、確かに平面上にある。
+</Reveal>
+</Practice>

@@ -1,0 +1,161 @@
+---
+title: "無限級数 — 部分和の行き先で収束を判定する"
+summary: "無限に足す操作を部分和の極限として定義し、収束の必要条件と、部分分数分解による和の求め方を学ぶ。"
+unit: "iii-limits"
+order: 2
+objectives:
+  - "無限級数の収束を、部分和の数列の収束として定義できる"
+  - "収束する無限級数では一般項が 0 に収束することを、発散判定に使える"
+  - "一般項を部分分数分解して部分和を計算し、無限級数の和を求められる"
+prerequisites: ["iii-limits/01-infinite-geometric"]
+tags: ["無限級数", "部分和", "収束条件", "部分分数分解"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$\dfrac12 + \dfrac14 + \dfrac18 + \cdots$ と、限りなく足し続けても、合計は $1$ を超えません。一方で $\dfrac12 + \dfrac13 + \dfrac14 + \cdots$ は、各項が小さくなっていくのに、足し続けるといくらでも大きくなります。どちらも項は $0$ へ近づくのに、一方は収束し、他方は発散します。「無限に足す」の行き先を、どうやって判断すればよいのでしょうか。
+</Hook>
+
+<Prediction
+  question="無限級数で、各項 $a_n$ が $0$ に収束するなら、その級数は必ず収束するでしょうか？"
+  options={['必ず収束する', '0に近づいても発散することがある']}
+  answer="0に近づいても発散することがある"
+  explanation="$\dfrac12 + \dfrac13 + \dfrac14 + \cdots$ は項が $0$ に近づきますが、和は限りなく大きくなり発散します。項が $0$ に近づくことは収束の必要条件であり、十分条件ではありません。"
+/>
+
+<Note type="info">
+**入試での用途**：無限級数の問題は、①部分和を求めてその極限をとる ②一般項を部分分数分解して途中を消す ③項が $0$ に収束しないことを示して発散を言う、の3つが定型です。特に「項が $0$ に収束しなければ発散」は、難しい計算をせずに発散を判定できる強力な入口になります。
+</Note>
+
+## 無限級数を「部分和の極限」と定義する
+
+無限に足す操作をそのまま扱うと、足す順序や無限の意味があいまいになります。そこで、まず有限個だけ足した値（部分和）を考え、その数列がどこへ向かうかで無限級数の行き先を定めます。
+
+<Definition term="無限級数">
+数列 $\{a_n\}$ に対して、$a_1 + a_2 + a_3 + \cdots$ を**無限級数**といい、$\displaystyle\sum_{n=1}^{\infty} a_n$ と書く。初項から第 $n$ 項までの和
+$$
+S_n = \sum_{k=1}^{n} a_k = a_1 + a_2 + \cdots + a_n
+$$
+を**第 $n$ 部分和**という。$n \to \infty$ としたとき $S_n$ がある値 $S$ に収束するならば、無限級数は**収束**し、その和は $S$ であるという。$S_n$ が収束しないとき、無限級数は**発散**するという。
+</Definition>
+
+<Theorem name="収束の必要条件">
+無限級数 $\displaystyle\sum_{n=1}^{\infty} a_n$ が収束するならば
+$$
+\lim_{n\to\infty} a_n = 0
+$$
+である。対偶をとると、$\displaystyle\lim_{n\to\infty} a_n \ne 0$ または極限が存在しないならば、無限級数は発散する。
+</Theorem>
+
+<Why>
+$a_n = S_n - S_{n-1}$ と書けることに気づくと、必要条件が自然に見えてきます。級数が収束して $S_n \to S$、$S_{n-1} \to S$ なら、その差である一般項は $a_n = S_n - S_{n-1} \to S - S = 0$ とならざるを得ません。つまり「項が $0$ に近づく」は、部分和が落ち着くために自動的に満たされる条件であり、逆にこの条件を満たさない級数は、部分和が落ち着きようがなく発散します。ただし逆は成り立ちません。項が $0$ に近づいても、その縮み方が遅すぎれば部分和は発散します。
+</Why>
+
+## 部分和を計算して極限をとる
+
+一般項が $\dfrac{1}{n(n+1)}$ のような形のときは、部分分数分解すると途中の項が打ち消し合い、部分和が簡単になります。この「途中が消える」構造が、無限級数の和を求める最も速い型です。
+
+<WorkedExample title="例題1: 部分分数分解で和を求める">
+$$
+\sum_{n=1}^{\infty} \frac{1}{n(n+1)}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="分母が連続する2つの整数の積なので、差の形 $\frac1n - \frac{1}{n+1}$ に分けられます。途中で打ち消し合う形を作るのが目的です。">$\dfrac{1}{n(n+1)} = \dfrac1n - \dfrac{1}{n+1}$ と分解する。</Step>
+<Step reason="第 $n$ 部分和を書くと、$-\frac12$ と $+\frac12$、$-\frac13$ と $+\frac13$ のように隣り合う項が順に消え、端だけが残ります。"> $S_n = \left(1 - \frac12\right) + \left(\frac12 - \frac13\right) + \cdots + \left(\frac1n - \frac{1}{n+1}\right) = 1 - \frac{1}{n+1}.$ </Step>
+<Step reason="残った部分和で $n\to\infty$ とすると、$\frac{1}{n+1} \to 0$ です。">$\displaystyle\lim_{n\to\infty} S_n = \lim_{n\to\infty}\left(1 - \frac{1}{n+1}\right) = 1$。</Step>
+</Steps>
+
+<Answer>
+$1$
+</Answer>
+</WorkedExample>
+
+## 部分和から一般項を逆算する
+
+逆に部分和 $S_n$ が与えられ、一般項や和を問われることもあります。このときは $a_n = S_n - S_{n-1}$（$n \ge 2$）と $a_1 = S_1$ を使います。$n=1$ だけは $S_{n-1}$ が使えないので別に確かめる、という点が答案の急所です。
+
+<WorkedExample title="例題2: 部分和から一般項と和を求める">
+第 $n$ 部分和が
+$$
+S_n = \frac{n}{n+1}
+$$
+である無限級数について、一般項 $a_n$ と級数の和を求めよ。
+
+<Steps>
+<Step reason="第1項だけは $S_0$ が定義できないため、$S_1$ から直接読み取ります。">$a_1 = S_1 = \dfrac{1}{1+1} = \dfrac12$。</Step>
+<Step reason="$n \ge 2$ では、$S_n$ は第 $n$ 項までの和、$S_{n-1}$ は第 $n-1$ 項までの和なので、差が第 $n$ 項になります。">$n \ge 2$ のとき $a_n = S_n - S_{n-1} = \frac{n}{n+1} - \frac{n-1}{n} = \frac{n^2 - (n-1)(n+1)}{n(n+1)} = \frac{1}{n(n+1)}.$ </Step>
+<Step reason="$n=1$ を代入すると $\frac{1}{1\cdot2} = \frac12$ となり、別に求めた $a_1$ と一致します。場合分けは不要でした。">$n=1$ でも $a_1 = \dfrac{1}{1\cdot2} = \dfrac12$ で一致する。</Step>
+<Step reason="級数の和は部分和の極限そのものです。">$\displaystyle\sum_{n=1}^{\infty} a_n = \lim_{n\to\infty} S_n = \lim_{n\to\infty}\frac{n}{n+1} = 1$。</Step>
+</Steps>
+
+<Answer>
+$a_n = \dfrac{1}{n(n+1)}$、級数の和は $1$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+無限級数の収束は、部分和 $S_n$ の収束で定義する。収束するなら $a_n \to 0$（必要条件）。部分分数分解や $a_n = S_n - S_{n-1}$ で部分和を計算し、その極限をとる。
+</KeyPoint>
+
+<Note type="tip">
+**発散の判定**：複雑な級数を見たら、まず一般項の極限を確かめる。$a_n$ が $0$ に収束しない、または振動するなら、部分和を計算する前に発散と分かる。$\displaystyle\sum_{n=1}^{\infty} \frac{n}{n+1}$ は $a_n \to 1 \ne 0$ なので即発散。
+</Note>
+
+<Misconception>
+<Wrong>
+各項が $0$ に近づくなら、無限級数は必ず収束する。
+</Wrong>
+<WhyWrong>
+調和級数 $1 + \dfrac12 + \dfrac13 + \dfrac14 + \cdots$ は項が $0$ に近づくが発散する。$1 + \dfrac12 + \left(\dfrac13+\dfrac14\right) + \left(\dfrac15+\cdots+\dfrac18\right) + \cdots$ と区切ると、$\dfrac13+\dfrac14 \gt \dfrac12$、$\dfrac15+\cdots+\dfrac18 \gt \dfrac12$ のように、各かたまりが $\dfrac12$ 以上になる。$\dfrac12$ を無限に足すので、部分和は限りなく大きくなる。項が $0$ に近づく速さが足りないと、和は収束しない。
+</WhyWrong>
+<Right>
+$a_n \to 0$ は収束の必要条件にすぎない。収束を言うには、部分和が収束することを別に示す必要がある。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+無限級数では足す順序を自由に変えてよいので、項を並べ替えてから足せばよい。
+</Wrong>
+<WhyWrong>
+今回扱うのは、部分和の極限として定義された和である。足す順序を変えると部分和の作り方が変わり、極限が変わったり収束しなくなったりすることがある。一般項の極限を確かめずに順序を入れ替えると、存在しない和を計算していることになりかねない。
+</WhyWrong>
+<Right>
+和は「$a_1$ から順に足した部分和の極限」として計算する。まず収束を確かめ、そのうえで部分分数分解などで部分和を求める。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n(n+2)}$ を求めよ。ただし $\dfrac{1}{n(n+2)} = \dfrac12\left(\dfrac1n - \dfrac{1}{n+2}\right)$ を用いてよい。
+<Reveal label="答え">
+部分和は $\dfrac12\left(1 + \dfrac12 - \dfrac{1}{n+1} - \dfrac{1}{n+2}\right) \to \dfrac12 \cdot \dfrac32 = \dfrac34$。
+</Reveal>
+
+(2) 収束する無限級数について、一般項 $a_n$ はどんな値に収束するか。
+<Reveal label="答え">
+$0$。収束するなら $a_n = S_n - S_{n-1} \to S - S = 0$ となる。
+</Reveal>
+
+(3) $\displaystyle\sum_{n=1}^{\infty} \frac{n}{n+1}$ は収束するか、発散するか。
+<Reveal label="答え">
+発散する。$a_n = \dfrac{n}{n+1} \to 1 \ne 0$ なので、収束の必要条件を満たさない。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（無限級数）">
+(1) $\displaystyle\sum_{n=1}^{\infty} \frac{1}{(2n-1)(2n+1)}$ を求めよ。
+
+(2) 第 $n$ 部分和が $S_n = \dfrac{n}{n+2}$ である無限級数の一般項 $a_n$ と和を求めよ。
+
+(3) $1 + \dfrac12 + \dfrac13 + \cdots$ が発散することを、かたまりに分ける方法で説明せよ。
+
+<Reveal label="解答">
+(1) $\dfrac{1}{(2n-1)(2n+1)} = \dfrac12\left(\dfrac{1}{2n-1} - \dfrac{1}{2n+1}\right)$。部分和は $\dfrac12\left(1 - \dfrac{1}{2n+1}\right) \to \dfrac12$。
+
+(2) $a_1 = S_1 = \dfrac13$。$n \ge 2$ では $a_n = \dfrac{n}{n+2} - \dfrac{n-1}{n+1} = \dfrac{2}{(n+1)(n+2)}$。$n=1$ でも $\dfrac{2}{2\cdot3} = \dfrac13$ で一致する。和は $\displaystyle\lim_{n\to\infty}\frac{n}{n+2} = 1$。
+
+(3) $1 + \dfrac12 + \left(\dfrac13+\dfrac14\right) + \left(\dfrac15+\cdots+\dfrac18\right) + \cdots$ と区切ると、$\dfrac13+\dfrac14 \gt \dfrac12$、$\dfrac15+\cdots+\dfrac18 \gt \dfrac12$ のように各かたまりが $\dfrac12$ 以上。$\dfrac12$ を無限に足すので、部分和は発散する。
+</Reveal>
+</Practice>

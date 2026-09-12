@@ -1,0 +1,160 @@
+---
+title: "ド・モアブルと回転 — 掛け算ひとつで回して伸ばす"
+summary: "複素数の積を回転と伸縮の合成と捉え、ド・モアブルで累乗・回転の合成・回転後の座標を一気に処理する時短の型。"
+unit: "uni-complex-matrix-tools"
+order: 0
+objectives:
+  - "複素数の積が偏角の和と絶対値の積になることを用いて、回転を掛け算で表せる"
+  - "1+i やルート3+i などの複素数を極形式に直し、ド・モアブルで累乗を速く計算できる"
+  - "回転の合成や回転後の座標を、複素数の掛け算で回転行列より短く求められる"
+prerequisites: ["c-curves-complex", "c-representation"]
+tags: ["ド・モアブル", "回転", "複素数平面", "極形式", "時短"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+複素平面上の点を原点のまわりに回したい。$90^\circ$ 回してから $45^\circ$ 回す、という2段階の操作を、三角比の表を引きながら座標で行うと、角度が重なるほど計算ミスが増える。ところが複素数では、回転は「ある数を掛ける」ことにすぎない。回転の合成は掛け算の合成になり、2段階の回転が1回の掛け算にまとまる。
+</Hook>
+
+<Prediction
+  question="複素数 $1+i$ を掛けることは、複素平面上の点をどう動かすことでしょう？"
+  options={['原点のまわりに 45 度回転し、原点からの距離をルート2倍する', '原点のまわりに 90 度回転し、距離を2倍する', '実軸に関して対称移動する']}
+  answer="原点のまわりに 45 度回転し、原点からの距離をルート2倍する"
+  explanation="$1+i$ の絶対値は $\\sqrt{2}$、偏角は $\\pi/4$ です。積は絶対値が掛け算、偏角が足し算になるので、掛けることは「$45^\\circ$ 回転して $\\sqrt{2}$ 倍」に当たります。"
+/>
+
+## 複素数の積は回転と伸縮
+
+2つの複素数を極形式で
+$$
+z_1=r_1(\cos\theta_1+i\sin\theta_1),\qquad z_2=r_2(\cos\theta_2+i\sin\theta_2)
+$$
+と書きます。積を計算して加法定理を使うと
+$$
+z_1z_2=r_1r_2\{\cos(\theta_1+\theta_2)+i\sin(\theta_1+\theta_2)\}
+$$
+となります。つまり、積の絶対値は絶対値の積、積の偏角は偏角の和です。このことは「掛け算は回転と伸縮を同時に行う操作」だと教えてくれます。
+
+<Definition term="複素数の積と回転">
+絶対値 $r$、偏角 $\theta$ の複素数 $r(\cos\theta+i\sin\theta)$ を掛ける操作は、複素平面上の点を原点のまわりに角 $\theta$ だけ回転させ、原点からの距離を $r$ 倍する操作である。特に $r=1$ のときは回転だけが起こる。
+</Definition>
+
+<Why>
+なぜ回転を「掛け算」で表すのか。座標で回転を書くと、$x'=x\cos\theta-y\sin\theta$、$y'=x\sin\theta+y\cos\theta$ という連立の計算が必要で、回転を2回重ねると加法定理を自分で適用しなければならない。複素数なら偏角を $\theta_1+\theta_2$ と足すだけで、回転の合成が掛け算1回に自動でまとまる。特に単位複素数 $\cos\theta+i\sin\theta$ を掛けると、絶対値が $1$ なので回転だけが起きる。
+</Why>
+
+<Theorem name="ド・モアブルの定理">
+整数 $n$ に対し
+$$
+(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta
+$$
+が成り立つ。複素数 $z=r(\cos\theta+i\sin\theta)$ なら
+$$
+z^n=r^n(\cos n\theta+i\sin n\theta)
+$$
+である。絶対値は $n$ 乗、偏角は $n$ 倍になる。
+</Theorem>
+
+<KeyPoint>
+**時短の型**：(1) 複素数を極形式 $r(\cos\theta+i\sin\theta)$ に直す。(2) 累乗はド・モアブルで「絶対値は $n$ 乗、偏角は $n$ 倍」。(3) 偏角が $2\pi$ を超えたら $2\pi$ の整数倍を引く。(4) 頻出の形 $1+i=\sqrt{2}(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4})$、$\sqrt{3}+i=2(\cos\frac{\pi}{6}+i\sin\frac{\pi}{6})$、$1+\sqrt{3}i=2(\cos\frac{\pi}{3}+i\sin\frac{\pi}{3})$ は覚えておくと速い。
+</KeyPoint>
+
+<WorkedExample title="例題1: 累乗をド・モアブルで一気に計算する">
+$$
+(1+i)^{20}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="まず累乗の対象を極形式に直します。絶対値と偏角が分かれば、累乗はこの2つを別々に処理できます。">$|1+i|=\sqrt{2}$、$\arg(1+i)=\frac{\pi}{4}$ より $1+i=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)$。</Step>
+<Step reason="ド・モアブルを適用します。絶対値は20乗、偏角は20倍になります。">$(1+i)^{20}=(\sqrt{2})^{20}\left(\cos\frac{20\pi}{4}+i\sin\frac{20\pi}{4}\right)=2^{10}(\cos 5\pi+i\sin 5\pi)$。</Step>
+<Step reason="$5\pi$ は $2\pi$ の整数倍を引いて整理します。$5\pi-4\pi=\pi$ なので三角関数の値が簡単になります。">$\cos 5\pi=-1$、$\sin 5\pi=0$ より、$(1+i)^{20}=1024\cdot(-1)=-1024$。</Step>
+</Steps>
+
+<Answer>
+$(1+i)^{20}=-1024$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 2段階の回転を1つにまとめる">
+点 $P(1,1)$ を原点のまわりに $30^\circ$ 回転させ、続けて $15^\circ$ 回転させた点 $P'$ を求めよ。
+
+<Steps>
+<Step reason="点を複素数で表し、極形式に直します。回転は複素数の掛け算として扱えます。">$P$ は $z=1+i=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)$。</Step>
+<Step reason="2つの回転を表す単位複素数の積を作り、1つの回転にまとめます。偏角は足し算になるので、$30^\circ+15^\circ=45^\circ$ です。">$\left(\cos\frac{\pi}{6}+i\sin\frac{\pi}{6}\right)\left(\cos\frac{\pi}{12}+i\sin\frac{\pi}{12}\right)=\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}$。</Step>
+<Step reason="まとめた回転を $z$ に掛けます。偏角は $\frac{\pi}{4}+\frac{\pi}{4}=\frac{\pi}{2}$ となります。">$z'=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)=\sqrt{2}\left(\cos\frac{\pi}{2}+i\sin\frac{\pi}{2}\right)=\sqrt{2}\,i$。</Step>
+<Step reason="複素数を座標に戻して答えにします。実部が $x$ 座標、虚部が $y$ 座標です。">$z'=0+\sqrt{2}\,i$ より $P'(0,\sqrt{2})$。</Step>
+</Steps>
+
+<Answer>
+$P'(0,\sqrt{2})$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+複素数の積の絶対値は、絶対値の和になる。$|z_1z_2|=|z_1|+|z_2|$。
+</Wrong>
+<WhyWrong>
+偏角が足し算になるので、絶対値も足し算だと混同しやすいが、絶対値は掛け算である。$z_1=z_2=1+i$ で確かめると、$z_1z_2=(1+i)^2=2i$ で $|z_1z_2|=2$ だが、$|z_1|+|z_2|=2\sqrt{2}$ となり一致しない。
+</WhyWrong>
+<Right>
+積では絶対値は積、偏角は和。$|z_1z_2|=|z_1|\,|z_2|$、$\arg(z_1z_2)=\arg z_1+\arg z_2$。片方だけ足し算だと覚えない。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+複素数を掛けて回転させると、原点からの距離は必ず変わらない。
+</Wrong>
+<WhyWrong>
+距離が変わらないのは、掛ける複素数の絶対値が $1$ のときだけである。$1+i$ を掛けると距離は $\sqrt{2}$ 倍になり、回転と同時に伸縮する。回転だけをしたいのに $1+i$ を使うと、図形全体が大きくなってしまう。
+</WhyWrong>
+<Right>
+回転だけなら絶対値 $1$ の複素数 $\cos\theta+i\sin\theta$ を掛ける。伸縮も同時に行いたいときは絶対値 $r$ の複素数を掛け、距離が $r$ 倍になることを意識する。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $(1-i)^{10}$ を求めよ。
+
+(2) 点 $(0,2)$ を原点中心に $90^\circ$ 回転させた点を求めよ。
+
+(3) なぜ複素数の掛け算が回転を表すのか、偏角の言葉で説明せよ。
+
+<Reveal label="答え">
+(1) $1-i=\sqrt{2}\left(\cos\left(-\frac{\pi}{4}\right)+i\sin\left(-\frac{\pi}{4}\right)\right)$。10乗すると $(\sqrt{2})^{10}\left(\cos\left(-\frac{5\pi}{2}\right)+i\sin\left(-\frac{5\pi}{2}\right)\right)=2^{5}\left(\cos\left(-\frac{\pi}{2}\right)+i\sin\left(-\frac{\pi}{2}\right)\right)=-32i$。
+
+(2) $(0,2)$ は $z=2i$。$90^\circ$ 回転は $i$ を掛けることなので $z'=2i\cdot i=-2$。よって点 $(-2,0)$。
+
+(3) 積の偏角は偏角の和になる。だから $\cos\theta+i\sin\theta$ を掛けると偏角が $\theta$ だけ増え、絶対値が $1$ なら距離は変わらない。これが回転である。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（ド・モアブルで回す）">
+(1) $(1+i)^{6}$ を求めよ。
+
+(2) $(\sqrt{3}+i)^{6}$ を求めよ。
+
+(3) 点 $(\sqrt{3},1)$ を原点中心に $90^\circ$ 回転させた点を求めよ。
+
+(4) 点 $(1,0)$ を原点中心に $120^\circ$ 回転させた点を求めよ。
+
+<Reveal label="解答">
+(1) $1+i=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)$ より $(1+i)^{6}=(\sqrt{2})^{6}\left(\cos\frac{3\pi}{2}+i\sin\frac{3\pi}{2}\right)=8(-i)=-8i$。
+
+(2) $\sqrt{3}+i=2\left(\cos\frac{\pi}{6}+i\sin\frac{\pi}{6}\right)$ より $(\sqrt{3}+i)^{6}=2^{6}(\cos\pi+i\sin\pi)=64(-1)=-64$。
+
+(3) $z=\sqrt{3}+i$ に $i$ を掛けると $z'=(\sqrt{3}+i)i=\sqrt{3}i+i^{2}=-1+\sqrt{3}i$。よって点 $(-1,\sqrt{3})$。
+
+(4) $z=1$ に $\cos\frac{2\pi}{3}+i\sin\frac{2\pi}{3}=-\frac{1}{2}+\frac{\sqrt{3}}{2}i$ を掛ける。よって点 $\left(-\frac{1}{2},\frac{\sqrt{3}}{2}\right)$。
+</Reveal>
+</Practice>
+
+## 使える場面・手順・記述式での可否
+
+**使える場面**：複素数の累乗、回転の合成、回転後の座標、$(1+i)^n$ などの頻出累乗、図形の回転移動、三角関数の倍角・三倍角の確認。
+
+**手順**：(1) 対象を極形式 $r(\cos\theta+i\sin\theta)$ に直す。(2) 回転だけなら絶対値 $1$、回転と伸縮なら絶対値 $r$ の複素数を掛ける。(3) 累乗はド・モアブルで絶対値を $n$ 乗、偏角を $n$ 倍する。(4) 偏角が $2\pi$ を超えたら $2\pi$ の整数倍を引く。(5) 実部・虚部を座標に戻す。(6) 回転行列で同じ計算をして検算する。
+
+**記述式での可否**：複素数平面とド・モアブルは数学Cの範囲なので、履修していれば答案でそのまま使える。ただし「極形式に直す」「ド・モアブルの定理より」の一言を添えると安全である。複素数平面を使わない指定の答案では回転行列で書き直す。得られた座標は回転行列の式に代入すれば検算でき、答案で使える確認にもなる。

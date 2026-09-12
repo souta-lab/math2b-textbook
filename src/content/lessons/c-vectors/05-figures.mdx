@@ -1,0 +1,118 @@
+---
+title: "ベクトルで図形を解く — 共線・交点・面積比"
+summary: "係数比較を軸に、3点共線条件・2直線の交点・面積比をベクトルで処理する。"
+unit: "c-vectors"
+order: 5
+objectives:
+  - "3点が一直線上にある条件をベクトルで表せる"
+  - "一次独立な基底をとって係数を比較できる"
+  - "ベクトルで交点や面積比を求められる"
+prerequisites: ["c-vectors/04-line"]
+tags: ["共線条件", "係数比較", "一次独立", "面積比"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+入試のベクトル問題の多くは、図形をにらんで補助線を引くのではなく、2本の基準ベクトルを決めて、すべての点をその実数倍の和で書きます。そして「同じ点を2通りに表して係数を比べる」という一手で決着します。この型を使いこなせると、図形問題が連立方程式に変わります。
+</Hook>
+
+<Prediction
+  question="3点 A、B、P が一直線上にある条件はどれ？（$\vec{a}$、$\vec{b}$ は点の位置ベクトル）"
+  options={['$\vec{AP}=k\vec{AB}$（$k$ は実数）', '$\vec{AP}\cdot\vec{AB}=0$', '$\vec{AP}=\vec{AB}$']}
+  answer="$\vec{AP}=k\vec{AB}$（$k$ は実数）"
+  explanation="A から P へのベクトルが、A から B へのベクトルの実数倍になっていれば、P は直線 AB 上にあります。内積が 0 は垂直、等しいは同じ点を表すので条件が違います。"
+/>
+
+## 共線条件と一次独立
+
+<Definition term="3点の共線条件">
+3点 A、B、P が一直線上にあるための条件は、$\vec{0}$ でない $\vec{AB}$ を用いて
+
+$$
+\vec{AP}=k\vec{AB}\quad(k\ \text{は実数})
+$$
+
+と書けることである。位置ベクトルでは $\vec{p}=(1-k)\vec{a}+k\vec{b}$ となり、係数の和が $1$ になる。
+</Definition>
+
+2つのベクトル $\vec{a}$、$\vec{b}$ が平行でなく $\vec{0}$ でないとき、これらは**一次独立**であるといいます。このとき
+
+$$
+s\vec{a}+t\vec{b}=s'\vec{a}+t'\vec{b}\ \Longrightarrow\ s=s',\ t=t'
+$$
+
+が成り立ちます。同じベクトルを2通りに表したら、基底が一次独立なら係数をひとつずつ比べてよい、というのが係数比較です。入試の交点問題はこの一手に集約されます。
+
+<Why>
+係数比較が使えるのは、一次独立な2つのベクトルが座標軸のような役割を果たすからです。平面上のどんなベクトルも $\vec{a}$、$\vec{b}$ の実数倍の和として一通りに書けます。表し方が一通りしかないので、2つの表し方が同じベクトルを指すなら、それぞれの係数も一致します。逆に $\vec{a}$、$\vec{b}$ が平行だと、同じベクトルを何通りにも書けてしまい、係数を比べても正しい情報が出ません。
+</Why>
+
+<WorkedExample title="例題: 交点を係数比較で求める">
+$\triangle OAB$ で $\vec{OA}=\vec{a}$、$\vec{OB}=\vec{b}$ とする。辺 OA を $2:1$ に内分する点を C、辺 OB の中点を D とし、直線 AD と直線 BC の交点を P とする。
+
+(1) $\vec{OP}$ を $\vec{a}$、$\vec{b}$ で表しなさい。
+
+(2) $AP:PD$ を求めなさい。
+
+<Steps>
+<Step reason="C は OA を 2:1 に内分するので、O の位置ベクトルを 0 として内分公式を使います。">$\vec{c}=\dfrac{2}{3}\vec{a}$、また D は OB の中点なので $\vec{d}=\dfrac{1}{2}\vec{b}$。</Step>
+<Step reason="P は直線 AD 上にあるので、A から D へ向かうベクトルの実数倍で表せます。">直線 AD 上より $\vec{p}=\vec{a}+t\left(\dfrac{1}{2}\vec{b}-\vec{a}\right)=(1-t)\vec{a}+\dfrac{t}{2}\vec{b}$。</Step>
+<Step reason="同じ P は直線 BC 上にもあるので、こちらでも実数倍で表します。">直線 BC 上より $\vec{p}=\vec{b}+s\left(\dfrac{2}{3}\vec{a}-\vec{b}\right)=\dfrac{2s}{3}\vec{a}+(1-s)\vec{b}$。</Step>
+<Step reason="a、b は一次独立なので、同じ p の2通りの表し方で係数をそれぞれ等しいと置きます。">$1-t=\dfrac{2s}{3}$ かつ $\dfrac{t}{2}=1-s$。</Step>
+<Step reason="2つ目の式から s を消去して t を求めます。">$s=1-\dfrac{t}{2}$ を第1式に代入して $1-t=\dfrac{2}{3}-\dfrac{t}{3}$。両辺を3倍して $3-3t=2-t$、よって $t=\dfrac{1}{2}$。</Step>
+<Step reason="t を AD 上の式に戻せば、P の位置ベクトルが確定します。">$\vec{p}=\left(1-\dfrac{1}{2}\right)\vec{a}+\dfrac{1}{4}\vec{b}=\dfrac{1}{2}\vec{a}+\dfrac{1}{4}\vec{b}$。</Step>
+<Step reason="t は AP = t·AD の割合なので、t=1/2 は中点を意味します。">(2) $\vec{p}=\vec{a}+\dfrac{1}{2}(\vec{d}-\vec{a})$ より $AP:PD=1:1$。</Step>
+</Steps>
+
+<Answer>
+(1) $\vec{OP}=\dfrac{1}{2}\vec{a}+\dfrac{1}{4}\vec{b}$　(2) $AP:PD=1:1$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+同じ高さをもつ三角形の面積比は、底辺の長さの比に等しい。たとえば点 P が線分 AB 上にあり $AP:PB=m:n$ なら、$\triangle OAP:\triangle OPB=m:n$。ベクトルで面積比を出すときは、まず底辺の内分比に言い換えるのが速い。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+$\vec{a}$、$\vec{b}$ が平行であっても、$s\vec{a}+t\vec{b}=s'\vec{a}+t'\vec{b}$ から $s=s'$、$t=t'$ としてよい。
+</Wrong>
+<WhyWrong>
+$\vec{a}$ と $\vec{b}$ が平行なとき、たとえば $\vec{b}=2\vec{a}$ なら $1\cdot\vec{a}+0\cdot\vec{b}=0\cdot\vec{a}+\dfrac{1}{2}\cdot\vec{b}$ が成り立ちます。係数は一致しません。平行な場合は基底が1本分しか情報をもたず、表し方が一通りに決まらないからです。
+</WhyWrong>
+<Right>
+係数比較の前に、使う2つのベクトルが一次独立（平行でなく、どちらも $\vec{0}$ でない）であることを確認します。三角形の2辺のように一直線上にないベクトルを選べば安全です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) 3点 $A(-1,1)$、$B(2,4)$、$P(4,6)$ は一直線上にあるか、$\vec{AP}=k\vec{AB}$ を調べて判定しなさい。
+
+(2) $\triangle OAB$ で辺 AB を $2:1$ に内分する点を P とする。$\triangle OAP$ と $\triangle OPB$ の面積比を求めなさい。
+
+(3) なぜ係数比較には一次独立が必要か、$\vec{b}=2\vec{a}$ の例を挙げて説明しなさい。
+
+<Reveal label="答え">
+(1) $\vec{AB}=(3,3)$、$\vec{AP}=(5,5)$ なので $\vec{AP}=\dfrac{5}{3}\vec{AB}$。実数倍で表せるから3点は一直線上にある。
+
+(2) 高さが共通なので面積比は底辺の比 $AP:PB=2:1$。よって $2:1$。
+
+(3) $\vec{a}$、$\vec{b}$ が平行だと、同じベクトルを複数の係数の組で表せる。$\vec{b}=2\vec{a}$ のとき $1\cdot\vec{a}+0\cdot\vec{b}$ と $0\cdot\vec{a}+\dfrac{1}{2}\cdot\vec{b}$ は等しいのに係数は違う。表し方が一通りでないと係数を比べても意味がない。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="面積比まで踏み込む">
+(1) $\triangle OAB$ で $\vec{OA}=\vec{a}$、$\vec{OB}=\vec{b}$ とする。辺 OA の中点を M、辺 OB を $1:2$ に内分する点を N とする。直線 AN と直線 BM の交点を P とし、$\vec{OP}$ を求めなさい。
+
+(2) 三角形の面積をベクトルで表す式 $S=\dfrac{1}{2}|a_1b_2-a_2b_1|$ が、$a=(2,0)$、$b=(1,3)$ のとき何を表すか確認しなさい。
+
+<Reveal label="解答">
+(1) $\vec{m}=\dfrac{1}{2}\vec{a}$、$\vec{n}=\dfrac{1}{3}\vec{b}$。直線 AN：$\vec{p}=(1-t)\vec{a}+\dfrac{t}{3}\vec{b}$。直線 BM：$\vec{p}=\dfrac{s}{2}\vec{a}+(1-s)\vec{b}$。係数比較して $1-t=\dfrac{s}{2}$、$\dfrac{t}{3}=1-s$。第2式より $s=1-\dfrac{t}{3}$。代入して $1-t=\dfrac{1}{2}-\dfrac{t}{6}$。両辺6倍して $6-6t=3-t$、よって $t=\dfrac{3}{5}$。$\vec{p}=\dfrac{2}{5}\vec{a}+\dfrac{1}{5}\vec{b}$。
+
+(2) $a=(2,0)$、$b=(1,3)$ で $a_1b_2-a_2b_1=2\cdot3-0\cdot1=6$。$S=\dfrac{1}{2}\cdot6=3$。底辺を OA（長さ2、x 軸上）とみると高さは 3 なので、面積 $3$ と一致する。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+入試のベクトルは「基底を決めて、すべてをその和で表し、係数を比べる」という同じ型で解けます。共線・交点・面積比・重心はこの型の特別な場合です。答案では、(1) 一次独立な2ベクトルを宣言する、(2) 交点を2通りに表す、(3) 係数比較、という流れを明記すると減点されません。面積比を問われたら、まず共通の高さをもつ三角形に分けて底辺の比に直す。この一手が計算量を大きく減らします。

@@ -1,0 +1,150 @@
+---
+title: "章末まとめ — 技法の選択と入試演習"
+summary: "置換・部分積分・部分分数分解・定積分の技法を、形から瞬時に選べるようにする。面積・体積・曲線の長さを横断する入試型の問題で総仕上げする。"
+unit: "iii-integral"
+order: 9
+objectives:
+  - "被積分関数の形から、使うべき技法を判断できる"
+  - "面積・体積・曲線の長さの立式を、それぞれの公式に従って実行できる"
+  - "複数の技法を組み合わせた入試型の問題を最後まで計算できる"
+prerequisites: ["iii-integral/08-curve-length"]
+tags: ["まとめ", "入試演習", "技法選択", "面積", "体積", "曲線の長さ"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+入試の積分は、計算そのものより「どの技法を選ぶか」で差がつきます。置換すべき形、部分積分すべき形、部分分数分解すべき形は、それぞれ見た目に特徴があります。最後にその見分け方を一枚の表にまとめ、面積・体積・曲線の長さを横断する問題で仕上げます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\int x\log x\,dx$ に最も適した技法はどれ？"
+  options={['部分積分', '置換積分', '部分分数分解']}
+  answer="部分積分"
+  explanation="$x$ と $\log x$ の積で、対数を含みます。対数は微分すると $1/x$ になって簡単になるので、部分積分で $\log x$ を微分する側に選ぶのが定石です。置換や部分分数分解の形ではありません。"
+/>
+
+<Theorem name="積分技法の選択マップ">
+被積分関数の形と、選ぶ技法の対応は次のとおり。
+
+| 見た形 | 使う技法 |
+| --- | --- |
+| 塊 $g(x)$ とその微分 $g'(x)$ の積 | 置換積分（$u=g(x)$） |
+| 多項式×指数・三角、$\log x$ 単独・多項式×$\log$ | 部分積分 |
+| 有理式（分母が1次式の積に分解できる） | 部分分数分解 |
+| $\dfrac{f'(x)}{f(x)}$ | $\log\lvert f(x)\rvert$ |
+| 対称区間 $[-a,a]$ | 偶関数は2倍、奇関数は0 |
+| $\displaystyle\int_0^{\pi/2}\sin^n x\,dx$ | Wallis の漸化式 |
+| 絶対値を含む | $0$ になる点で区間を分割 |
+| 媒介変数表示 | 面積は $\int y\,x'\,dt$、長さは $\int\sqrt{(x')^2+(y')^2}\,dt$ |
+</Theorem>
+
+<Why>
+技法を形で選ぶのは、どの公式も「微分の逆」または「微小量の足し上げ」という同じ源から来ているからです。塊とその微分がそろっていれば合成関数の微分の逆、積の形なら積の微分の逆、有理式なら対数の逆と、被積分関数の形がどの微分公式の痕跡かを読み取ります。面積・体積・曲線の長さは、足し上げる微小量が違うだけで原理は共通です。だから「何の逆か」を一瞬で見分けられれば、試行錯誤せずに最短の技法へ進めます。
+</Why>
+
+面積・体積・曲線の長さの公式は、いずれも「微小な量を積み重ねる」という同じ原理から出ています。面積は縦の幅 $f-g$、体積は断面積 $\pi y^2$、長さは微小線分 $\sqrt{1+(y')^2}$ を足し上げます。立式の段階で、何を足し上げているのかを意識すると、公式の取り違えを防げます。
+
+<WorkedExample title="例題1: 置換積分と定積分">
+$\displaystyle\int_1^e \frac{(\log x)^2}{x}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="log x の微分 1/x が分母にあり、置換の形がそろっているからです。">$u=\log x$ と置くと $du=\dfrac{dx}{x}$、範囲は $x=1$ で $u=0$、$x=e$ で $u=1$。</Step>
+<Step reason="積分変数を u に変えて、u だけの定積分にするためです。">$\displaystyle\int_0^1 u^2\,du$。</Step>
+<Step reason="べき乗の公式で計算できるからです。">$\Big[\dfrac{u^3}{3}\Big]_0^1=\dfrac13$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_1^e \frac{(\log x)^2}{x}\,dx=\dfrac13$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 面積と回転体を続けて求める">
+曲線 $y=\sin x$（$0\le x\le\pi$）と $x$ 軸で囲まれた部分について、（1）面積 $S$ と（2）この部分を $x$ 軸まわりに回転してできる立体の体積 $V$ を求めなさい。
+
+<Steps>
+<Step reason="面積は上ひく下、ここでは x 軸との差 sin x を積分するためです。">$S=\displaystyle\int_0^\pi\sin x\,dx=\Big[-\cos x\Big]_0^\pi=1-(-1)=2$。</Step>
+<Step reason="回転体の体積は断面積 πy² を積分するためです。">$V=\pi\displaystyle\int_0^\pi\sin^2x\,dx$。</Step>
+<Step reason="sin² は半角の公式で次数を下げて積分するためです。">$\sin^2x=\dfrac{1-\cos2x}{2}$ より $V=\pi\Big[\dfrac{x}{2}-\dfrac{\sin2x}{4}\Big]_0^\pi$。</Step>
+<Step reason="上端と下端を代入して値を求めるためです。">$V=\pi\left(\dfrac{\pi}{2}-0\right)=\dfrac{\pi^2}{2}$。</Step>
+</Steps>
+
+<Answer>
+（1）$S=2$。（2）$V=\dfrac{\pi^2}{2}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 部分分数分解と定積分">
+$\displaystyle\int_0^1 \frac{dx}{x^2+3x+2}$ を求めなさい。
+
+<Steps>
+<Step reason="分母を因数分解して、部分分数分解できる形にするためです。">$x^2+3x+2=(x+1)(x+2)$。</Step>
+<Step reason="分母が1次式の積なので、分解して各項を対数に持ち込むためです。">$\dfrac{1}{(x+1)(x+2)}=\dfrac{1}{x+1}-\dfrac{1}{x+2}$（$x=-2$ と $x=-1$ の代入で確認できる）。</Step>
+<Step reason="各項の不定積分が対数になるからです。">$\displaystyle\int_0^1\left(\frac{1}{x+1}-\frac{1}{x+2}\right)dx=\Big[\log|x+1|-\log|x+2|\Big]_0^1$。</Step>
+<Step reason="上端と下端を代入して対数の差をまとめるためです。">$(\log2-\log3)-(\log1-\log2)=2\log2-\log3=\log\dfrac43$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^1 \frac{dx}{x^2+3x+2}=\log\dfrac43$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+積分の技法はどれを使っても同じ答えになるので、考えずに手近な方法で計算してよい。
+</Wrong>
+<WhyWrong>
+どの技法も正しく使えば同じ答えになりますが、使えるかどうかと計算量が異なります。$\int x\log x\,dx$ を置換で処理しようとすると行き詰まり、$\int\frac{dx}{x^2-1}$ を部分積分で処理すると泥沼にはまります。形に合わない技法を選ぶと、計算が終わらないか、途中で誤りを生みます。
+</WhyWrong>
+<Right>
+被積分関数の形を最初に確認し、選択マップに従って技法を決める。まず「塊とその微分」「積か、有理式か、単独の対数か」を判定する。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+この章の公式はすべて暗記するしかなく、導出は不要である。
+</Wrong>
+<WhyWrong>
+置換積分は合成関数の微分、部分積分は積の微分、面積・体積・曲線の長さは微小量の足し上げから導かれます。導出の見通しをもっていれば、公式を忘れたときも自力で作れますし、適用条件（同じ変数で積分する、範囲も変換する、2乗する）も同時に思い出せます。
+</WhyWrong>
+<Right>
+各公式を、対応する微分公式や微小量のイメージと結びつけて覚える。とくに置換積分の範囲変換と、回転体の $y^2$、弧長の根号は導出から自然に理解できる。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int \frac{3x^2}{x^3+1}\,dx$ に最も適した技法は何か。また、答えを求めなさい。
+<Reveal label="答え">
+分母の微分が分子 $3x^2$ に一致するので $f'/f$ の形。$\log|x^3+1|+C$。$x^3+1=0$ となる $x=-1$ を除き、必要に応じて絶対値を付ける。
+</Reveal>
+
+（2）回転体の体積で、2曲線の間の部分を回すときの公式を書きなさい。
+<Reveal label="答え">
+$V=\pi\displaystyle\int_a^b\left(\{f(x)\}^2-\{g(x)\}^2\right)dx$。$f$ が外側、$g$ が内側の半径。半径の差を2乗しない。
+</Reveal>
+
+（3）媒介変数表示の曲線の長さの公式を書き、$dx$、$dy$ がどこから来るか説明しなさい。
+<Reveal label="答え">
+$L=\displaystyle\int_\alpha^\beta\sqrt{(x')^2+(y')^2}\,dt$。$dx=x'(t)dt$、$dy=y'(t)dt$ を微小線分 $ds=\sqrt{dx^2+dy^2}$ に代入し、$dt$ でくくると得られる。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="章末演習（入試型の総合問題）">
+（1）$\displaystyle\int x e^{-x}\,dx$ を計算せよ。
+
+（2）$\displaystyle\int_1^2 \frac{2x+1}{x^2+x}\,dx$ を計算せよ。
+
+（3）2曲線 $y=x^2$ と $y=2x+3$ で囲まれた部分の面積を求めよ。
+
+（4）曲線 $y=\dfrac1x$（$1\le x\le 2$）と $x$ 軸、および2直線 $x=1$、$x=2$ で囲まれた部分を $x$ 軸まわりに回転してできる立体の体積を求めよ。
+
+<Reveal label="解答">
+（1）$f=x$、$g'=e^{-x}$ とすると $g=-e^{-x}$。$-x e^{-x}+\displaystyle\int e^{-x}\,dx=-x e^{-x}-e^{-x}+C=-(x+1)e^{-x}+C$。
+
+（2）分母は $x(x+1)$、その微分は $2x+1$ で分子に一致する。よって $\displaystyle\int_1^2\frac{2x+1}{x^2+x}\,dx=\Big[\log(x^2+x)\Big]_1^2=\log6-\log2=\log3$。
+
+（3）$x^2=2x+3$ より $x^2-2x-3=0$、交点は $x=-1,\ 3$。区間内では直線が上。$\displaystyle\int_{-1}^3(2x+3-x^2)\,dx=\Big[x^2+3x-\frac{x^3}{3}\Big]_{-1}^3=(9+9-9)-\left(1-3+\frac13\right)=9+\frac53=\frac{32}{3}$。1/6公式でも $\frac{(3-(-1))^3}{6}=\frac{32}{3}$。
+
+（4）$y^2=\dfrac{1}{x^2}$ より $V=\pi\displaystyle\int_1^2\frac{dx}{x^2}=\pi\Big[-\frac1x\Big]_1^2=\pi\left(1-\frac12\right)=\frac{\pi}{2}$。
+</Reveal>
+</Practice>

@@ -1,0 +1,152 @@
+---
+title: "曲線の長さ — 小さな線分を足し上げる"
+summary: "曲線を微小な線分に分け、三平方の定理から弧長公式を導く。媒介変数表示の曲線やサイクロイドの長さを求める。"
+unit: "iii-integral"
+order: 8
+objectives:
+  - "微小線分の三平方の定理から弧長公式 $\\sqrt{1+(y')^2}$ を導ける"
+  - "媒介変数表示の曲線の長さを、$\\sqrt{(x')^2+(y')^2}$ の積分で求められる"
+  - "対称性や半角の公式を使って、弧長の積分を実行できる"
+prerequisites: ["iii-integral/07-volume"]
+tags: ["曲線の長さ", "弧長", "媒介変数", "サイクロイド", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+曲がった道のりを測るとき、定規を当てて直線で測ると短すぎます。道に沿って細かく区切り、小さな線分の長さを足し上げれば、正確な長さに近づきます。この「細かく分けて足す」操作を極限まで進めたものが、曲線の長さの積分です。面積や体積と同じく、微小な量を積み重ねる発想です。
+</Hook>
+
+<Prediction
+  question="曲線上の微小な部分の長さ $ds$ は、横幅 $dx$ と高さ $dy$ を使ってどう表せる？"
+  options={['√(dx²+dy²)', 'dx+dy', '√(dx+dy)']}
+  answer="√(dx²+dy²)"
+  explanation="$dx$ と $dy$ を2辺とする微小な直角三角形の斜辺が $ds$ です。三平方の定理から $ds=\sqrt{dx^2+dy^2}$ となります。$dx+dy$ は斜辺ではなく2辺の和なので、長さを過大に評価してしまいます。"
+/>
+
+曲線上の2点を、水平方向に $dx$、垂直方向に $dy$ だけ離れた微小な直角三角形の斜辺で近似します。この斜辺の長さが $ds=\sqrt{dx^2+dy^2}$ です。ここで $dx$ をくくり出すと $ds=\sqrt{1+\left(\dfrac{dy}{dx}\right)^2}\,dx$ となり、$x$ について積分すれば曲線全体の長さになります。
+
+<Theorem name="曲線の長さ">
+$y=f(x)$ が $[a,\ b]$ で微分可能なとき、曲線の長さ $L$ は
+
+$$
+L=\int_a^b\sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx
+$$
+
+である。媒介変数表示 $x=x(t)$、$y=y(t)$（$\alpha\le t\le\beta$）の曲線では
+
+$$
+L=\int_\alpha^\beta\sqrt{\left(\frac{dx}{dt}\right)^2+\left(\frac{dy}{dt}\right)^2}\,dt
+$$
+
+となる。
+</Theorem>
+
+媒介変数の公式は、$dx=x'(t)\,dt$、$dy=y'(t)\,dt$ を $ds=\sqrt{dx^2+dy^2}$ に代入すれば得られます。$dt$ でくくると根号の中に $(x')^2+(y')^2$ が現れます。どちらの公式も、根号の中は「1＋傾きの2乗」または「2つの微分の2乗和」であり、長さを求めるときは根号が外れる形を探すのが実戦の鍵です。
+
+<Why>
+弧長の根号は、そのままでは積分しにくい形です。しかし入試で出題される曲線は、根号の中がきれいに2乗の形になるように選ばれています。$1+(y')^2$ が完全平方式になる、あるいは媒介変数で $(x')^2+(y')^2$ が三角関数の半角の形になる、といった場合です。根号の中を先に整理してから積分するという順序を守ると、$\sqrt{\sin^2}$ や $\sqrt{(e^x+e^{-x})^2/4}$ のように根号が外れ、基本公式で計算できます。面積・体積の立式と同じく、積分の前に形を整えるのが最短ルートです。
+</Why>
+
+<WorkedExample title="例題1: べき乗の曲線">
+曲線 $y=\dfrac{2}{3}x^{3/2}$（$0\le x\le 3$）の長さ $L$ を求めなさい。
+
+<Steps>
+<Step reason="弧長公式には y′ が必要なので、まず微分するためです。">$y'=x^{1/2}=\sqrt x$。</Step>
+<Step reason="公式に代入して根号の中を整理するためです。">$1+(y')^2=1+x$。$L=\displaystyle\int_0^3\sqrt{1+x}\,dx$。</Step>
+<Step reason="$u=1+x$ と置換すると $du=dx$、範囲は 1 から 4 だからです。">$\displaystyle\int_1^4 u^{1/2}\,du=\Big[\dfrac23 u^{3/2}\Big]_1^4$。</Step>
+<Step reason="上端と下端を代入して値を求めるためです。">$\dfrac23\left(4^{3/2}-1\right)=\dfrac23(8-1)=\dfrac{14}{3}$。</Step>
+</Steps>
+
+<Answer>
+$L=\dfrac{14}{3}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: サイクロイドの長さ（入試頻出）">
+サイクロイド $x=a(t-\sin t)$、$y=a(1-\cos t)$（$0\le t\le 2\pi$）の長さ $L$ を求めなさい。
+
+<Steps>
+<Step reason="媒介変数の弧長公式を使うため、まず x′、y′ を計算します。">$x'=a(1-\cos t)$、$y'=a\sin t$。</Step>
+<Step reason="根号の中が三角関数の恒等式で整理できるからです。">$(x')^2+(y')^2=a^2\left(1-2\cos t+\cos^2t+\sin^2t\right)=2a^2(1-\cos t)$。</Step>
+<Step reason="半角の公式 1−cos t=2sin²(t/2) で根号が外せる形にするためです。">$=4a^2\sin^2\dfrac t2$ より $\sqrt{(x')^2+(y')^2}=2a\sin\dfrac t2$（$0\le t\le 2\pi$ で $\sin\frac t2\ge 0$）。</Step>
+<Step reason="公式に代入して積分すれば長さが求まるからです。">$L=\displaystyle\int_0^{2\pi}2a\sin\frac t2\,dt=\Big[-4a\cos\frac t2\Big]_0^{2\pi}$。</Step>
+<Step reason="上端と下端を代入して値を求めるためです。">$-4a(\cos\pi-\cos0)=-4a(-1-1)=8a$。</Step>
+</Steps>
+
+<Answer>
+$L=8a$。サイクロイド1周期の長さは、円の直径の4倍になる。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 指数関数で表される曲線">
+曲線 $y=\dfrac{e^x+e^{-x}}{2}$（$0\le x\le 1$）の長さ $L$ を求めなさい。
+
+<Steps>
+<Step reason="弧長公式に y′ が必要なので微分するためです。">$y'=\dfrac{e^x-e^{-x}}{2}$。</Step>
+<Step reason="根号の中を計算して、2乗の形に整理できるか試すためです。">$1+(y')^2=1+\dfrac{e^{2x}-2+e^{-2x}}{4}=\dfrac{e^{2x}+2+e^{-2x}}{4}$。</Step>
+<Step reason="分子が (e^x+e^{-x})² と因数分解できるからです。">$1+(y')^2=\left(\dfrac{e^x+e^{-x}}{2}\right)^2$。</Step>
+<Step reason="正の平方根をとると、被積分関数がそのまま e^x+e^{-x} の形になるからです。">$L=\displaystyle\int_0^1\frac{e^x+e^{-x}}{2}\,dx=\Big[\dfrac{e^x-e^{-x}}{2}\Big]_0^1$。</Step>
+<Step reason="上端と下端を代入して値を求めるためです。">$\dfrac{e-e^{-1}}{2}-0=\dfrac{1}{2}\left(e-\dfrac1e\right)$。</Step>
+</Steps>
+
+<Answer>
+$L=\dfrac{1}{2}\left(e-\dfrac1e\right)$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+曲線の長さは $\displaystyle\int_a^b\left(1+\frac{dy}{dx}\right)dx$ で求められる。
+</Wrong>
+<WhyWrong>
+微小な線分の長さは、$dx$ と $dy$ を2辺とする直角三角形の斜辺 $\sqrt{dx^2+dy^2}$ です。$dx+dy$ は2辺の和で、斜辺より長くなります。曲線が縦に急なほど誤差が大きくなり、長さを過大に見積もってしまいます。
+</WhyWrong>
+<Right>
+$ds=\sqrt{dx^2+dy^2}=\sqrt{1+(y')^2}\,dx$ として積分する。三平方の定理から斜辺を取るのが正しい近似である。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+媒介変数表示の曲線の長さは $L=\displaystyle\int_\alpha^\beta\left|\frac{dx}{dt}\right|dt$ で求められる。
+</Wrong>
+<WhyWrong>
+曲線は横にも縦にも動くので、$x$ の変化だけでは長さを捉えられません。$t$ が少し進むときの変位は $(dx,\ dy)$ の2方向をもち、その長さは $\sqrt{(x')^2+(y')^2}\,dt$ です。$y$ の変化を無視すると、縦に動く分の長さが抜け落ちます。
+</WhyWrong>
+<Right>
+$L=\displaystyle\int_\alpha^\beta\sqrt{(x')^2+(y')^2}\,dt$。$x$ と $y$ の両方の変化を根号の中に入れる。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）直線 $y=2x$（$0\le x\le 1$）の長さを、弧長公式で求めなさい。
+<Reveal label="答え">
+$y'=2$ より $L=\displaystyle\int_0^1\sqrt{1+4}\,dx=\sqrt5$。2点 $(0,0)$、$(1,2)$ の距離 $\sqrt{1^2+2^2}=\sqrt5$ に一致する。
+</Reveal>
+
+（2）媒介変数 $x=\cos t$、$y=\sin t$（$0\le t\le \frac{\pi}{2}$）で表される曲線の長さを求めなさい。
+<Reveal label="答え">
+$x'=-\sin t$、$y'=\cos t$ より $(x')^2+(y')^2=1$。$L=\displaystyle\int_0^{\pi/2}1\,dt=\dfrac{\pi}{2}$。半径1の円の四分の一の弧の長さである。
+</Reveal>
+
+（3）弧長の計算で、積分の前に根号の中を整理するのはなぜか。
+<Reveal label="答え">
+根号の中が完全平方式や三角関数の2乗の形になっていれば、根号が外れて基本公式で積分できるから。整理せずに積分しようとすると、手が止まる形になる。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（曲線の長さ）">
+（1）曲線 $y=\dfrac{2}{3}x^{3/2}$（$0\le x\le 3$）の長さを求めよ。
+
+（2）曲線 $y=\dfrac12 x^2$（$0\le x\le 1$）の長さを求めよ。ただし $\displaystyle\int\sqrt{1+x^2}\,dx=\frac12\left(x\sqrt{1+x^2}+\log\left(x+\sqrt{1+x^2}\right)\right)+C$ を用いてよい。
+
+（3）媒介変数 $x=2\cos t$、$y=2\sin t$（$0\le t\le \pi$）で表される曲線の長さを求めよ。
+
+<Reveal label="解答">
+（1）例題1と同じ計算で $\dfrac{14}{3}$。
+
+（2）$y'=x$ より $L=\displaystyle\int_0^1\sqrt{1+x^2}\,dx=\dfrac12\Big[x\sqrt{1+x^2}+\log\left(x+\sqrt{1+x^2}\right)\Big]_0^1=\dfrac12\left(\sqrt2+\log(1+\sqrt2)\right)$。
+
+（3）$x'=-2\sin t$、$y'=2\cos t$ より $\sqrt{(x')^2+(y')^2}=2$。$L=\displaystyle\int_0^\pi 2\,dt=2\pi$。半径2の半円の弧の長さである。
+</Reveal>
+</Practice>

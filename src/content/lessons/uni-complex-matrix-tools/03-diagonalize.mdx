@@ -1,0 +1,162 @@
+---
+title: "対角化で漸化式を解く — 固有値を指数の底に変える"
+summary: "連立漸化式や3項間漸化式を行列の対角化で解き、固有値がそのまま n 乗の底になることを使う。固有値が複素数のときは実数列が三角関数で周期的になる。"
+unit: "uni-complex-matrix-tools"
+order: 3
+objectives:
+  - "連立漸化式を係数行列にして、対角化から一般項を求められる"
+  - "3項間漸化式を係数行列の対角化で解き、固有値を指数の底として使える"
+  - "固有値が複素数のとき、実数列が三角関数で表され周期的になることを説明できる"
+prerequisites: ["uni-complex-matrix-tools/02-cayley-hamilton"]
+tags: ["対角化", "漸化式", "固有値", "複素固有値", "時短"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+漸化式 $a_{n+2}=a_{n+1}-a_n$ で $a_0=0$、$a_1=1$ とすると、$0,1,1,0,-1,-1,0,\dots$ と6個で一巡する。なぜ突然繰り返すのか。係数行列の固有値を複素数の範囲で求めると、その仕組みが見えてくる。
+</Hook>
+
+<Prediction
+  question="$a_{n+2}=a_{n+1}-a_n$、$a_0=0$、$a_1=1$ で作った数列 $0,1,1,0,-1,-1,\dots$ はこのあとどうなる？"
+  options={['どんどん大きくなる', '振動しながら周期的に繰り返す', '0に収束する']}
+  answer="振動しながら周期的に繰り返す"
+  explanation="特性方程式が複素数解をもつため、実数列は三角関数の形になり、周期6で同じ値を繰り返します。"
+/>
+
+## 漸化式を行列の累乗にする
+
+連立漸化式
+$$
+x_{n+1}=ax_n+by_n,\qquad y_{n+1}=cx_n+dy_n
+$$
+は、ベクトル $\vec{v}_n=\begin{pmatrix}x_n\\y_n\end{pmatrix}$ を使えば
+$$
+\vec{v}_{n+1}=A\vec{v}_n,\qquad A=\begin{pmatrix}a & b\\c & d\end{pmatrix}
+$$
+と1本にまとまります。よって
+$$
+\vec{v}_n=A^{n}\vec{v}_0
+$$
+です。$A$ が対角化できて $A=PDP^{-1}$ と書けるなら、$A^{n}=PD^{n}P^{-1}$ となり、$D^{n}$ の対角成分は固有値の $n$ 乗です。これが「固有値が指数の底になる」仕組みです。
+
+<Theorem name="3項間漸化式と係数行列">
+3項間漸化式 $a_{n+2}=p\,a_{n+1}+q\,a_n$ は、ベクトル $\vec{v}_n=\begin{pmatrix}a_{n+1}\\a_n\end{pmatrix}$ を使うと係数行列
+$$
+A=\begin{pmatrix}p & q\\1 & 0\end{pmatrix}
+$$
+で $\vec{v}_n=A^{n}\vec{v}_0$ と書ける。$A$ の特性方程式は $\lambda^{2}-p\lambda-q=0$ であり、その解 $\lambda_1,\lambda_2$ は漸化式の特性方程式の解と一致する。相異なる2解なら
+$$
+a_n=A_1\lambda_1^{\,n}+A_2\lambda_2^{\,n}
+$$
+の形で表せる。
+</Theorem>
+
+<Why>
+なぜ対角化すると一般項が読めるのか。対角化は「行列の掛け算の混ざりを、各固有方向の $\lambda$ 倍に分離する」操作である。初期ベクトルを固有ベクトルの和に分解しておけば、$n$ 回の変換は各方向を $\lambda^n$ 倍するだけになり、和の形でそのまま $a_n$ が出る。1項ずつ代入して $a_1,a_2,\dots$ と並べる手間を、固有値の $n$ 乗の計算に置き換えられるのがこの道具の利点である。
+</Why>
+
+<KeyPoint>
+**対角化で漸化式を解く手順**：(1) 漸化式を行列 $A$ とベクトル $\vec{v}_n$ で書く。(2) $\lambda^{2}-\operatorname{tr}A\,\lambda+\det A=0$ で固有値を求める。(3) 各固有値の固有ベクトルを求め、$P=(\vec{v}_1\ \vec{v}_2)$、$D=\operatorname{diag}(\lambda_1,\lambda_2)$ を作る。(4) $A^{n}=PD^{n}P^{-1}$ を計算する。(5) 初期ベクトル $\vec{v}_0$ を掛けて成分を取り出す。(6) $n=0,1$ で初期値に戻るか確かめる。
+</KeyPoint>
+
+<WorkedExample title="例題1: 連立漸化式を対角化で解く">
+$$
+x_{n+1}=x_n+2y_n,\qquad y_{n+1}=2x_n+y_n,\qquad x_0=1,\ y_0=0
+$$
+で定まる数列の一般項を求めよ。
+
+<Steps>
+<Step reason="連立漸化式をベクトルと係数行列にまとめます。これで問題が行列の累乗に変わります。">$\vec{v}_n=\begin{pmatrix}x_n\\y_n\end{pmatrix}$、$A=\begin{pmatrix}1 & 2\\2 & 1\end{pmatrix}$ とすると $\vec{v}_n=A^{n}\begin{pmatrix}1\\0\end{pmatrix}$。</Step>
+<Step reason="特性方程式から固有値を求めます。トレースと行列式だけで計算できます。">$\operatorname{tr}A=2$、$\det A=1-4=-3$ より $\lambda^{2}-2\lambda-3=0$、$(\lambda-3)(\lambda+1)=0$、$\lambda=3,-1$。</Step>
+<Step reason="各固有値の固有ベクトルを求め、$P$ とその逆行列を作ります。$P$ は対称なので $P^{-1}$ が計算しやすい形です。">$\lambda=3$ の固有ベクトルは $\begin{pmatrix}1\\1\end{pmatrix}$、$\lambda=-1$ は $\begin{pmatrix}1\\-1\end{pmatrix}$。$P=\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}$、$P^{-1}=\frac{1}{2}\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix}$。</Step>
+<Step reason="$A^{n}=PD^{n}P^{-1}$ に代入し、対角成分の $n$ 乗を掛けます。">$D^{n}=\operatorname{diag}(3^{n},(-1)^{n})$ より $A^{n}=\frac{1}{2}\begin{pmatrix}1 & 1\\1 & -1\end{pmatrix} \begin{pmatrix}3^{n} & 0\\0 & (-1)^{n}\end{pmatrix} \begin{pmatrix}1 & 1\\1 & -1\end{pmatrix} =\frac{1}{2}\begin{pmatrix}3^{n}+(-1)^{n} & 3^{n}-(-1)^{n}\\3^{n}-(-1)^{n} & 3^{n}+(-1)^{n}\end{pmatrix}.$ </Step>
+<Step reason="初期ベクトルを掛けて、$x_n$ と $y_n$ を取り出します。$A^{n}$ の第1列が答えになります。">$\begin{pmatrix}x_n\\y_n\end{pmatrix}=A^{n}\begin{pmatrix}1\\0\end{pmatrix}$ より $x_n=\frac{3^{n}+(-1)^{n}}{2}$、$y_n=\frac{3^{n}-(-1)^{n}}{2}$。</Step>
+</Steps>
+
+<Answer>
+$x_n=\dfrac{3^{n}+(-1)^{n}}{2}$、$y_n=\dfrac{3^{n}-(-1)^{n}}{2}$（$n=1$ で $x_1=1$、$y_1=2$ となり、元の漸化式と一致する）
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 複素固有値と周期">
+$$
+a_{n+2}=a_{n+1}-a_n,\qquad a_0=0,\ a_1=1
+$$
+で定まる数列の一般項を求め、周期を調べよ。
+
+<Steps>
+<Step reason="3項間漸化式を状態ベクトルの形にし、係数行列を読み取ります。">$\vec{v}_n=\begin{pmatrix}a_{n+1}\\a_n\end{pmatrix}$ とすると $\vec{v}_n=A^{n}\begin{pmatrix}1\\0\end{pmatrix}$、$A=\begin{pmatrix}1 & -1\\1 & 0\end{pmatrix}$。</Step>
+<Step reason="特性方程式 $\lambda^{2}-p\lambda-q=0$ を立てて、複素数の範囲で解きます。ここでは $p=1$、$q=-1$ です。">$\lambda^{2}-\lambda+1=0$ より $\lambda=\frac{1\pm\sqrt{3}\,i}{2}=\cos\frac{\pi}{3}\pm i\sin\frac{\pi}{3}$。</Step>
+<Step reason="共役な複素固有値は、実数列を三角関数の形にします。ド・モアブルで $\lambda^{n}$ を角 $n\pi/3$ の形にできるからです。">$a_n=P\cos\frac{n\pi}{3}+Q\sin\frac{n\pi}{3}$ と表せる。</Step>
+<Step reason="初期値で $P,Q$ を決めます。$a_0$ と $a_1$ の2つの条件が必要です。">$a_0=P=0$、$a_1=P\cos\frac{\pi}{3}+Q\sin\frac{\pi}{3}=\frac{\sqrt{3}}{2}Q=1$ より $Q=\frac{2}{\sqrt{3}}$。</Step>
+<Step reason="角 $n\pi/3$ は $n$ が6増えると $2\pi$ 増えるので、同じ値に戻ります。周期性を確認します。">$a_n=\frac{2}{\sqrt{3}}\sin\frac{n\pi}{3}$ で、$a_{n+6}=a_n$。数列は $0,1,1,0,-1,-1,0,\dots$ と周期 $6$ で繰り返す。</Step>
+</Steps>
+
+<Answer>
+$a_n=\dfrac{2}{\sqrt{3}}\sin\dfrac{n\pi}{3}$、周期は $6$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+固有値が複素数になったら、実数の数列の一般項は求められない。
+</Wrong>
+<WhyWrong>
+固有値が複素数でも実数列は存在し、共役な2つの固有値を組にすると三角関数で表せる。例題2では $\lambda=\cos\frac{\pi}{3}\pm i\sin\frac{\pi}{3}$ から $a_n=\frac{2}{\sqrt{3}}\sin\frac{n\pi}{3}$ という実数の式が出た。複素固有値は「実数列が振動・周期運動をする」ことのサインであり、解けない印ではない。
+</WhyWrong>
+<Right>
+実数係数の漸化式で固有値が複素数のときは、共役な2解を $\lambda=r(\cos\theta\pm i\sin\theta)$ と書き、ド・モアブルで $a_n=r^{n}(P\cos n\theta+Q\sin n\theta)$ の形にする。初期値から $P,Q$ を決める。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+固有値が重解のときも、固有ベクトルが1本あれば対角化できる。
+</Wrong>
+<WhyWrong>
+対角化には固有ベクトルが2本必要である。重解で固有ベクトルが1本しかとれない行列は対角化できず、$A=PD P^{-1}$ の形に書けない。その場合は対角化をあきらめ、前のレッスンのケーリー・ハミルトンで次数を下げる。
+</WhyWrong>
+<Right>
+相異なる固有値が2つあれば対角化できる。重解のときは固有ベクトルの本数を確かめ、2本とれれば対角化、1本ならケーリー・ハミルトンに切り替える。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $a_{n+2}=3a_{n+1}-2a_n$、$a_0=0$、$a_1=1$ の一般項を求めよ。
+
+(2) $x_{n+1}=x_n+2y_n$、$y_{n+1}=2x_n+y_n$ の係数行列の固有値を求めよ。
+
+(3) 対角化できるとき、なぜ $a_n$ が固有値の $n$ 乗の和で書けるのか、一言で述べよ。
+
+<Reveal label="答え">
+(1) 特性方程式は $\lambda^{2}-3\lambda+2=0$ で $\lambda=1,2$。$a_n=A+B\,2^{n}$ とおくと $a_0=A+B=0$、$a_1=A+2B=1$ より $B=1$、$A=-1$。よって $a_n=2^{n}-1$。
+
+(2) 係数行列は $\begin{pmatrix}1 & 2\\2 & 1\end{pmatrix}$。$\operatorname{tr}=2$、$\det=-3$ より $\lambda^{2}-2\lambda-3=0$、$\lambda=3,-1$。
+
+(3) 対角化で $A^{n}$ の対角成分が固有値の $n$ 乗になり、行列の掛け算の混ざりが消えるから。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（対角化で漸化式を解く）">
+(1) $a_{n+2}=4a_{n+1}-3a_n$、$a_0=0$、$a_1=1$ の一般項を求めよ。
+
+(2) $x_{n+1}=3x_n+2y_n$、$y_{n+1}=2x_n+3y_n$、$x_0=1$、$y_0=0$ の一般項を求めよ。
+
+(3) $a_{n+2}=a_{n+1}-a_n$、$a_0=0$、$a_1=1$ のとき、$a_{2025}$ を求めよ。
+
+<Reveal label="解答">
+(1) 特性方程式は $\lambda^{2}-4\lambda+3=0$ で $\lambda=1,3$。$a_n=A+B\,3^{n}$ とおくと $a_0=A+B=0$、$a_1=A+3B=1$ より $B=\frac{1}{2}$、$A=-\frac{1}{2}$。よって $a_n=\frac{3^{n}-1}{2}$。
+
+(2) 係数行列は $\begin{pmatrix}3 & 2\\2 & 3\end{pmatrix}$。固有値は $5,1$、固有ベクトルは $\begin{pmatrix}1\\1\end{pmatrix}$、$\begin{pmatrix}1\\-1\end{pmatrix}$。$P^{-1}=\frac{1}{2}P$ より $A^{n}=\frac{1}{2}\begin{pmatrix}5^{n}+1 & 5^{n}-1\\5^{n}-1 & 5^{n}+1\end{pmatrix}$。よって $x_n=\frac{5^{n}+1}{2}$、$y_n=\frac{5^{n}-1}{2}$。
+
+(3) 一般項は $\frac{2}{\sqrt{3}}\sin\frac{n\pi}{3}$。$2025=6\cdot337+3$ より $\sin\frac{2025\pi}{3}=\sin(675\pi)=\sin\pi=0$。よって $a_{2025}=0$。
+</Reveal>
+</Practice>
+
+## 使える場面・手順・記述式での可否
+
+**使える場面**：連立漸化式、3項間漸化式、行列の $n$ 乗、確率遷移の長期予測、人口移動のように毎年一定割合で混ざる現象の $n$ 年後。固有値が複素数のときは周期的・振動的な数列になる。
+
+**手順**：(1) 漸化式を $\vec{v}_{n+1}=A\vec{v}_n$ の形にする。(2) 固有値と固有ベクトルを求める。(3) $P$、$D$、$P^{-1}$ を作り $A^{n}=PD^{n}P^{-1}$ を計算する。(4) 初期ベクトルを掛けて成分を取り出す。(5) 固有値が重解ならケーリー・ハミルトンに切り替え、複素数なら三角関数の形に書き直す。(6) $n=0,1$ を代入して初期値と一致するか確かめる。
+
+**記述式での可否**：行列と固有値は数学Cの範囲なので、履修していれば対角化を答案で使える。ただし「固有値・固有ベクトル」の定義と $A^{n}=PD^{n}P^{-1}$ の根拠を一行添えると安全である。数学Cを使えない答案では、漸化式の特性方程式と等比数列の和として書き直す。行列で解いた結果と特性方程式で解いた結果が一致することを、検算としても利用できる。

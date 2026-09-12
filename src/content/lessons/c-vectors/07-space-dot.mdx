@@ -1,0 +1,127 @@
+---
+title: "空間の内積 — なす角と垂直"
+summary: "3成分の内積で空間のなす角・垂直を判定し、三角形の面積に応用する。"
+unit: "c-vectors"
+order: 7
+objectives:
+  - "空間の内積を成分の積和で計算できる"
+  - "空間の2方向のなす角と垂直条件を求められる"
+  - "内積から三角形の面積を計算できる"
+prerequisites: ["c-vectors/06-space"]
+tags: ["空間の内積", "なす角", "垂直条件", "三角形の面積"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+正四面体の1つの角は $60^\circ$ である、と聞いたとき、図形の対称性から納得できるでしょうか。実はどの辺のなす角も $60^\circ$ で、その確かめは空間の内積で一発です。立体でも、角度は内積で数値として取り出せます。
+</Hook>
+
+<Prediction
+  question="$\vec{a}=(1,0,0)$、$\vec{b}=(0,1,0)$ の内積の値はどれ？"
+  options={['0', '1', '$\sqrt{2}$']}
+  answer="0"
+  explanation="空間の内積も成分の積和です。$1\cdot0+0\cdot1+0\cdot0=0$。x 軸と y 軸は垂直なので、内積が 0 になります。"
+/>
+
+## 空間の内積とその公式
+
+空間のベクトルでも、内積はなす角とコサインで定義されます。
+
+$$
+\vec{a}\cdot\vec{b}=|\vec{a}||\vec{b}|\cos\theta=a_1b_1+a_2b_2+a_3b_3
+$$
+
+成分が1つ増えるだけです。なす角と垂直条件も平面とまったく同じ形です。
+
+<Theorem name="空間のなす角と垂直">
+$\vec{0}$ でない $\vec{a}$、$\vec{b}$ について
+
+$$
+\cos\theta=\frac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|},\qquad
+\vec{a}\perp\vec{b}\iff\vec{a}\cdot\vec{b}=0
+$$
+
+また、$\vec{a}$、$\vec{b}$ を2辺とする三角形の面積は
+
+$$
+S=\frac{1}{2}\sqrt{|\vec{a}|^{2}|\vec{b}|^{2}-(\vec{a}\cdot\vec{b})^{2}}
+$$
+
+である。
+</Theorem>
+
+<Why>
+面積の式に $\sqrt{|\vec{a}|^2|\vec{b}|^2-(\vec{a}\cdot\vec{b})^2}$ が出るのは、$\sin^2\theta=1-\cos^2\theta$ を内積だけで書き直したものだからです。$\cos\theta$ を求めずに $\sin\theta$ の分を直接計算できるので、なす角が特別角でなくても面積が出せます。$\dfrac{1}{2}|\vec{a}||\vec{b}|\sin\theta$ と同じことを、内積の成分だけで計算する式だと考えてください。
+</Why>
+
+<WorkedExample title="例題: 正四面体のなす角と面積">
+4点 $O(0,0,0)$、$A(1,1,0)$、$B(1,0,1)$、$C(0,1,1)$ は1辺 $\sqrt{2}$ の正四面体の頂点である。
+
+(1) $\vec{OA}$ と $\vec{OB}$ のなす角 $\theta$ を求めなさい。
+
+(2) $\triangle OAB$ の面積 $S$ を求めなさい。
+
+<Steps>
+<Step reason="なす角は内積と大きさから cosθ を出します。まず内積を成分の積和で計算します。">(1) $\vec{OA}=(1,1,0)$、$\vec{OB}=(1,0,1)$ より $\vec{OA}\cdot\vec{OB}=1\cdot1+1\cdot0+0\cdot1=1$。</Step>
+<Step reason="分母に使う大きさをそれぞれ求めます。">(1) $|\vec{OA}|=|\vec{OB}|=\sqrt{2}$。</Step>
+<Step reason="cos の値を計算して、対応する角を読み取ります。">(1) $\cos\theta=\dfrac{1}{\sqrt{2}\cdot\sqrt{2}}=\dfrac{1}{2}$。よって $\theta=60^\circ$。</Step>
+<Step reason="面積の式に |a|^2、|b|^2、内積の2乗をそのまま代入すると、角を経由せずに面積が出ます。">(2) $|\vec{OA}|^2|\vec{OB}|^2-(\vec{OA}\cdot\vec{OB})^2=2\cdot2-1^2=3$。</Step>
+<Step reason="平方根の半分を取ります。">(2) $S=\dfrac{1}{2}\sqrt{3}=\dfrac{\sqrt{3}}{2}$。</Step>
+</Steps>
+
+<Answer>
+(1) $\theta=60^\circ$　(2) $S=\dfrac{\sqrt{3}}{2}$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+空間でも大きさの2乗は内積で $|\vec{a}+\vec{b}|^2=|\vec{a}|^2+2\vec{a}\cdot\vec{b}+|\vec{b}|^2$ と展開できる。ベクトルのなす角が分からないとき、まずこの展開で内積を求めるのが定石。垂直条件と組み合わせれば、未知の長さも決まる。
+</KeyPoint>
+
+<Misconception>
+<Wrong>
+空間の内積は $a_1b_1+a_2b_2$ で計算すればよく、$z$ 成分は使わない。
+</Wrong>
+<WhyWrong>
+z 成分も空間のベクトルの一部なので、内積に含めなければなりません。たとえば $\vec{a}=(1,1,0)$、$\vec{b}=(1,0,1)$ で $a_1b_1+a_2b_2=1$ ですが、正しい内積もたまたま $1+0+0=1$ です。しかし $\vec{a}=(1,0,1)$、$\vec{b}=(0,1,1)$ では、平面の式は $0$ を与えるのに正しい内積は $0+0+1=1$ です。z 成分を落とすと角度も垂直判定も狂います。
+</WhyWrong>
+<Right>
+空間の内積は必ず3つの成分すべての積を足します。$\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3$ を毎回書いてから計算します。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\vec{a}=(1,2,2)$、$\vec{b}=(2,-1,2)$ の内積と、なす角を求めなさい。
+
+(2) $\vec{a}=(1,1,1)$ と $\vec{b}=(2,-1,-1)$ は垂直かどうか判定しなさい。
+
+(3) $\vec{a}=(1,0,0)$、$\vec{b}=(0,1,0)$ のなす角と、$\vec{a}$、$\vec{b}$ を2辺とする三角形の面積を求めなさい。
+
+<Reveal label="答え">
+(1) $\vec{a}\cdot\vec{b}=2-2+4=4$。$|\vec{a}|=3$、$|\vec{b}|=3$ なので $\cos\theta=\dfrac{4}{9}$。よって $\theta=\arccos\dfrac{4}{9}$。
+
+(2) $\vec{a}\cdot\vec{b}=2-1-1=0$。内積が $0$ なので垂直。
+
+(3) 内積 $0$ なのでなす角は $90^\circ$。面積は $S=\dfrac{1}{2}\sqrt{1\cdot1-0}=\dfrac{1}{2}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="空間の角度を数値で押さえる">
+(1) 立方体の頂点 $O(0,0,0)$、$A(1,0,0)$、$B(1,1,0)$、$F(1,1,1)$ について、対角線 $OF$ と辺 $OA$ のなす角 $\alpha$ のコサインを求めなさい。
+
+(2) $\vec{a}=(1,1,0)$、$\vec{b}=(1,0,1)$ を2辺とする三角形の面積を求めなさい。
+
+(3) $|\vec{a}|=2$、$|\vec{b}|=3$、$|\vec{a}+\vec{b}|=4$ のとき、$\vec{a}\cdot\vec{b}$ を求めなさい。
+
+<Reveal label="解答">
+(1) $\vec{OF}=(1,1,1)$、$\vec{OA}=(1,0,0)$。内積は $1$、$|\vec{OF}|=\sqrt{3}$、$|\vec{OA}|=1$ なので $\cos\alpha=\dfrac{1}{\sqrt{3}}=\dfrac{\sqrt{3}}{3}$。
+
+(2) $\vec{a}\cdot\vec{b}=1$、$|\vec{a}|^2=|\vec{b}|^2=2$ なので $S=\dfrac{1}{2}\sqrt{2\cdot2-1}=\dfrac{\sqrt{3}}{2}$。
+
+(3) $|\vec{a}+\vec{b}|^2=|\vec{a}|^2+2\vec{a}\cdot\vec{b}+|\vec{b}|^2$ より $16=4+2\vec{a}\cdot\vec{b}+9$。よって $2\vec{a}\cdot\vec{b}=3$、$\vec{a}\cdot\vec{b}=\dfrac{3}{2}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+空間の内積は、立体の角度・垂直・面積・体積のすべてに使います。入試では、座標を与えられた立体で「辺のなす角を求めよ」「垂直を証明せよ」が頻出で、内積の計算に帰着します。特に $|\vec{a}+\vec{b}|^2$ の展開、$\vec{a}\cdot\vec{b}=0$、面積公式の3つは、空間の計算を平面と同じ速度で進める鍵です。立体が座標で与えられている場合は、図の把握より先に成分計算を始めるのが最短です。

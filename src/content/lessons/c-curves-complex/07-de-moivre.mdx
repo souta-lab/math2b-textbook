@@ -1,0 +1,127 @@
+---
+title: "ド・モアブルの定理 — 累乗と n 乗根"
+summary: "$(\\cos\\theta+i\\sin\\theta)^n=\\cos n\\theta+i\\sin n\\theta$ を使って複素数の累乗を計算し、1 の n 乗根を求める。"
+unit: "c-curves-complex"
+order: 7
+objectives:
+  - "ド・モアブルの定理を述べ、複素数の累乗を計算できる"
+  - "$z^n=r(\\cos\\theta+i\\sin\\theta)$ の解を偏角の $2k\\pi/n$ ずれで求められる"
+  - "1 の n 乗根が単位円上の正 n 角形の頂点になることを説明できる"
+prerequisites: ["c-curves-complex/06-polar-form"]
+tags: ["ド・モアブル", "累乗", "n乗根", "1のn乗根"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$(1+i)$ の $8$ 乗を、そのまま8回掛けて計算するのは大変です。ところが複素数を極形式で見ると、累乗は「絶対値を累乗し、偏角を $n$ 倍する」だけの操作になります。8回の掛け算が1行の計算に変わる。これがド・モアブルの定理です。
+</Hook>
+
+<Prediction
+  question="$(\\cos\\theta+i\\sin\\theta)^n$ は（$n$ は整数）次のどれに等しい？"
+  options={['$\\cos^n\\theta+i\\sin^n\\theta$', '$\\cos n\\theta+i\\sin n\\theta$', '$n(\\cos\\theta+i\\sin\\theta)$']}
+  answer="$\\cos n\\theta+i\\sin n\\theta$"
+  explanation="偏角が $n$ 倍されるのであって、$\\cos$ や $\\sin$ を $n$ 乗するのではありません。$n=2$、$\\theta=\\pi/4$ で試すと、$\\cos^2$ と $\\sin^2$ の式は $i$ にならず、$\\cos\\frac{\\pi}{2}+i\\sin\\frac{\\pi}{2}=i$ が正しいと分かります。"
+/>
+
+## ド・モアブルの定理
+
+<Theorem name="ド・モアブルの定理">
+$n$ を整数とすると
+$$
+(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta
+$$
+が成り立つ。
+</Theorem>
+
+積の公式で偏角が足し合わされることを、$n$ 回繰り返しただけがこの定理です。$z=r(\cos\theta+i\sin\theta)$ なら
+
+$$
+z^n=r^n\{\cos n\theta+i\sin n\theta\}
+$$
+
+となります。絶対値は $r^n$、偏角は $n\theta$ です。負の整数についても、$z^{-1}$ の偏角が $-\theta$ であることから同じ形が成り立ちます。
+
+<Why>
+極形式を経由するのは、累乗を2つの単純な操作に分けるためです。絶対値の累乗と偏角の倍角は互いに独立で、どちらも掛け算1回で済みます。展開して $i^2=-1$ を使う方法は項数が急増して計算ミスも増えますが、極形式なら $n$ が何であっても手間が一定です。倍角公式の導出にもそのまま使えます。
+</Why>
+
+## n 乗根
+
+$z^n=\alpha$ の形の方程式は、$n$ 個の解をもちます。$\alpha=r(\cos\theta+i\sin\theta)$ とすると、解は
+
+$$
+z=r^{1/n}\left(\cos\frac{\theta+2k\pi}{n}+i\sin\frac{\theta+2k\pi}{n}\right)\qquad(k=0,1,\dots,n-1)
+$$
+
+です。偏角を $\frac{2\pi}{n}$ ずつずらして並ぶので、複素数平面上では原点を中心とする半径 $r^{1/n}$ の円に内接する**正 $n$ 角形**の頂点になります。特に $\alpha=1$ のときの $n$ 個の解を**1 の n 乗根**といいます。
+
+<KeyPoint>
+$z^n=1$ の解は単位円上に等間隔で並ぶ。$\omega=\cos\frac{2\pi}{n}+i\sin\frac{2\pi}{n}$ とおくと、解は $1,\omega,\omega^2,\dots,\omega^{n-1}$ で、その総和は $0$ になる。
+</KeyPoint>
+
+<WorkedExample title="例題: 累乗と n 乗根">
+(1) $(1+i)^8$ を求めなさい。
+
+(2) 方程式 $z^3=1$ を解き、解を複素数平面上に図示するとどんな配置になるか述べなさい。
+
+<Steps>
+<Step reason="まず (1+i) を極形式にします。絶対値と偏角が分かれば、累乗は n 倍するだけになります。">(1) $1+i=\sqrt{2}\left(\cos\frac{\pi}{4}+i\sin\frac{\pi}{4}\right)$。</Step>
+<Step reason="ド・モアブルで絶対値は 8 乗、偏角は 8 倍。偏角が 2π の整数倍になれば三角関数の値が簡単になります。">$(1+i)^8=(\sqrt{2})^8\left(\cos\left(8\cdot\frac{\pi}{4}\right)+i\sin\left(8\cdot\frac{\pi}{4}\right)\right)=16(\cos 2\pi+i\sin 2\pi)=16$。</Step>
+<Step reason="(2) は z³=1 を z=r cisθ とおき、絶対値と偏角を別々に比べます。絶対値から r=1 が出ます。">(2) $z=r(\cos\theta+i\sin\theta)$ を $z^3=1$ に代入すると $r^3(\cos 3\theta+i\sin 3\theta)=1$。絶対値より $r=1$、偏角より $3\theta=2k\pi$。</Step>
+<Step reason="偏角は 3θ=2kπ から θ=2kπ/3。k=0,1,2 で3つの解が得られ、それ以上は同じ点の繰り返しです。">$\theta=\frac{2k\pi}{3}$（$k=0,1,2$）。よって $z=1$、$-\frac{1}{2}+\frac{\sqrt{3}}{2}i$、$-\frac{1}{2}-\frac{\sqrt{3}}{2}i$。</Step>
+<Step reason="3つの解は偏角が 2π/3 ずつ等間隔なので、単位円に内接する正三角形の頂点になります。">3つの解は単位円上に正三角形をなして並ぶ。</Step>
+</Steps>
+
+<Answer>
+(1) $16$
+(2) $z=1$、$-\dfrac{1}{2}\pm\dfrac{\sqrt{3}}{2}i$。単位円に内接する正三角形の3頂点。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$(\cos\theta+i\sin\theta)^n=\cos^n\theta+i\sin^n\theta$ である。
+</Wrong>
+<WhyWrong>
+ド・モアブルは偏角を $n$ 倍する定理であり、$\cos$ や $\sin$ の値を $n$ 乗するのではありません。$\theta=\frac{\pi}{4}$、$n=2$ で試すと、左辺は $\left(\frac{1}{\sqrt{2}}+\frac{i}{\sqrt{2}}\right)^2=i$ ですが、右辺は $\cos^2\frac{\pi}{4}+i\sin^2\frac{\pi}{4}=\frac{1}{2}+\frac{i}{2}$ で一致しません。$n$ 乗は角度の中に入ります。
+</WhyWrong>
+<Right>
+$(\cos\theta+i\sin\theta)^n=\cos n\theta+i\sin n\theta$。角度が $n$ 倍され、$\cos$・$\sin$ 自体は1乗のままです。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $(1-i)^6$ を求めなさい。
+
+(2) 方程式 $z^3=1$ の3つの解の和はいくらか。
+
+(3) $(\cos\theta+i\sin\theta)^2$ を計算して、$\cos 2\theta$ と $\sin 2\theta$ を $\cos\theta$、$\sin\theta$ で表しなさい。
+
+<Reveal label="答え">
+(1) $1-i=\sqrt{2}\left(\cos\left(-\frac{\pi}{4}\right)+i\sin\left(-\frac{\pi}{4}\right)\right)$。$6$ 乗すると $(\sqrt{2})^6\left(\cos\left(-\frac{3\pi}{2}\right)+i\sin\left(-\frac{3\pi}{2}\right)\right)=8i$。
+
+(2) 解は $1+\left(-\frac{1}{2}+\frac{\sqrt{3}}{2}i\right)+\left(-\frac{1}{2}-\frac{\sqrt{3}}{2}i\right)=0$。
+
+(3) $(\cos\theta+i\sin\theta)^2=\cos 2\theta+i\sin 2\theta$。左辺を展開して実部・虚部を比較すると $\cos 2\theta=\cos^2\theta-\sin^2\theta$、$\sin 2\theta=2\sin\theta\cos\theta$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="累乗と n 乗根">
+(1) $(\sqrt{3}+i)^3$ を求めなさい。
+
+(2) 方程式 $z^4=16$ の解をすべて求めなさい。
+
+(3) $\omega=\cos\dfrac{2\pi}{3}+i\sin\dfrac{2\pi}{3}$ のとき、$1+\omega+\omega^2$ の値を求めなさい。
+
+<Reveal label="解答">
+(1) $\sqrt{3}+i=2\left(\cos\frac{\pi}{6}+i\sin\frac{\pi}{6}\right)$。3乗すると $2^3\left(\cos\frac{\pi}{2}+i\sin\frac{\pi}{2}\right)=8i$。
+
+(2) $16=2^4$ を極形式で $16(\cos 0+i\sin 0)$。$z=2\left(\cos\frac{2k\pi}{4}+i\sin\frac{2k\pi}{4}\right)$（$k=0,1,2,3$）より $z=2,2i,-2,-2i$。
+
+(3) $\omega$ は $z^3=1$ の解で $\omega\ne 1$。$(z-1)(z^2+z+1)=z^3-1=0$ より $\omega^2+\omega+1=0$。よって $1+\omega+\omega^2=0$。
+</Reveal>
+</Practice>
+
+## 入試での使いどころ
+
+累乗の計算は、まず極形式に直すのが鉄則です。$(1\pm i)^n$、$(\sqrt{3}\pm i)^n$ のような頻出パターンは、絶対値と偏角を覚えてしまうと速いです。$n$ 乗根は $2k\pi/n$ のずれで機械的に並び、正 $n$ 角形の頂点になります。1 の n 乗根では $1+\omega+\cdots+\omega^{n-1}=0$ が使えることも多く、和や積を求める問題で計算を省けます。

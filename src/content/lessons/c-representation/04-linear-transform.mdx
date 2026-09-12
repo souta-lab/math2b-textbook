@@ -1,0 +1,136 @@
+---
+title: "一次変換 — 行列で点を動かす"
+summary: "行列を点を点へ写す規則としてとらえ、回転・対称・拡大の基本変換を見分ける。"
+unit: "c-representation"
+order: 4
+objectives:
+  - "一次変換の式を点の座標に適用し、像の座標を求められる"
+  - "回転・対称・拡大縮小の基本行列を見分けられる"
+  - "一次変換が原点を固定する線形写像であると説明できる"
+prerequisites: ["c-representation/03-linear-systems"]
+tags: ["一次変換", "回転行列", "対称移動", "線形性"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+スマートフォンで写真を回転させたり、鏡像にしたり、地図を拡大したりすると、画面上のすべての点が一斉に別の場所へ動きます。1点だけを動かすのではなく、平面全体が同じ規則で変形する。このとき、動かす規則を行列で書けると、点を1つずつ計算しなくても、図形全体の行き先が分かるようになります。実際、回転も対称も拡大も、たった2行2列の数字で完全に指定できます。
+</Hook>
+
+<Prediction
+  question="$A=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$ が表す変換はどれ？"
+  options={['原点を中心とする90°の回転', 'x軸に関する対称移動', '原点に関する対称移動']}
+  answer="原点を中心とする90°の回転"
+  explanation="$(1,0)$ は $(0,1)$ へ、$(0,1)$ は $(-1,0)$ へ移ります。x軸の正の向きがy軸の正の向きに回るので、反時計回りに90°の回転です。"
+/>
+
+## 一次変換の定義
+
+点 $(x,y)$ を点 $(x',y')$ へ移す規則が
+$$
+\begin{pmatrix}x'\\y'\end{pmatrix}
+=
+\begin{pmatrix}a & b\\c & d\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix},
+\qquad
+\begin{cases}
+x'=ax+by\\
+y'=cx+dy
+\end{cases}
+$$
+で与えられるとき、この変換を**一次変換**といいます。$x'$、$y'$ が $x$、$y$ の1次式（定数項なし）で書かれていることがポイントです。係数を並べた行列 $A$ が変換の正体で、$A$ が決まれば平面のすべての点の行き先が決まります。
+
+<Definition term="基本となる一次変換の行列">
+原点を中心とする角 $\theta$ の回転、対称移動、拡大縮小は次の行列で表される。
+$$
+R(\theta)=\begin{pmatrix}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{pmatrix}
+\quad(\text{回転})
+$$
+$$
+\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}
+\quad(\text{x軸対称}),
+\qquad
+\begin{pmatrix}-1 & 0\\0 & 1\end{pmatrix}
+\quad(\text{y軸対称}),
+\qquad
+\begin{pmatrix}-1 & 0\\0 & -1\end{pmatrix}
+\quad(\text{原点対称})
+$$
+$$
+\begin{pmatrix}k & 0\\0 & k\end{pmatrix}
+\quad(\text{原点中心の}k\text{倍拡大}),
+\qquad
+\begin{pmatrix}k & 0\\0 & 1\end{pmatrix}
+\quad(\text{x方向の}k\text{倍})
+$$
+</Definition>
+
+<Why>
+一次変換を考える鍵は「原点は必ず原点に移る」ことと、線形性にあります。変換が線形であるとは、任意のベクトル $\vec{u}$、$\vec{v}$ と実数 $\lambda$、$\mu$ に対して $f(\lambda\vec{u}+\mu\vec{v})=\lambda f(\vec{u})+\mu f(\vec{v})$ が成り立つことをいいます。この性質のおかげで、基本ベクトル $(1,0)$ と $(0,1)$ の行き先さえ決めておけば、どんな点の行き先もその行き先の実数倍の和として自動的に決まります。回転行列が $\cos\theta$、$\sin\theta$ で書けるのも、この線形性の帰結です。
+</Why>
+
+<WorkedExample title="例題: 基本変換を点に適用する">
+次の変換による点の像を求めなさい。
+
+(1) 原点を中心とする90°の回転 $R(90^\circ)=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$ による点 $(2,1)$ の像
+
+(2) x軸に関する対称移動による点 $(3,-2)$ の像
+
+(3) $A=\begin{pmatrix}2 & 0\\0 & 1\end{pmatrix}$ による点 $(1,2)$ の像
+
+<Steps>
+<Step reason="回転行列を点のベクトルに掛け、成分を計算します。">(1) $\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}\begin{pmatrix}2\\1\end{pmatrix}=\begin{pmatrix}0\cdot2+(-1)\cdot1\\1\cdot2+0\cdot1\end{pmatrix}=\begin{pmatrix}-1\\2\end{pmatrix}$。</Step>
+<Step reason="x軸対称はy成分の符号だけを反転させる変換です。">(2) $\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}3\\-2\end{pmatrix}=\begin{pmatrix}3\\2\end{pmatrix}$。</Step>
+<Step reason="x方向だけを2倍にし、y成分はそのまま通します。">(3) $\begin{pmatrix}2 & 0\\0 & 1\end{pmatrix}\begin{pmatrix}1\\2\end{pmatrix}=\begin{pmatrix}2\\2\end{pmatrix}$。</Step>
+</Steps>
+
+<Answer>
+(1) $(-1,2)$　(2) $(3,2)$　(3) $(2,2)$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+平行移動 $(x,y)\mapsto(x+a,\ y+b)$ も一次変換の一種である。
+</Wrong>
+<WhyWrong>
+$x'=x+a$、$y'=y+b$ には定数項 $a$、$b$ があり、行列の積（1次式）では表せません。また、平行移動は原点を原点に移さないので、一次変換の定義を満たしません。実際 $f(0,0)=(a,b)\ne(0,0)$ となり、線形性が壊れます。
+</WhyWrong>
+<Right>
+一次変換は「原点を動かさない、定数項のない1次式」による変換です。回転・対称・拡大縮小はすべて原点を固定します。平行移動まで含めたい場合は、次元を1つ増やすなど別の工夫が必要で、高校の一次変換の範囲外です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}0 & 1\\-1 & 0\end{pmatrix}$ はどのような変換か。基本ベクトルの行き先から説明しなさい。
+
+(2) 点 $(2,-3)$ を x軸に関して対称移動した点の座標を、行列を使って求めなさい。
+
+(3) 直線 $y=2x$ を、行列 $\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}$（直線 $y=x$ に関する対称移動）で移した直線の方程式を求めなさい。
+
+<Reveal label="答え">
+(1) $(1,0)$ は $(0,-1)$ へ、$(0,1)$ は $(1,0)$ へ移る。x軸の正の向きがy軸の負の向きに向かうので、原点中心に時計回り90°の回転。
+
+(2) $\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}2\\-3\end{pmatrix}=\begin{pmatrix}2\\3\end{pmatrix}$ より $(2,3)$。
+
+(3) $\begin{pmatrix}x'\\y'\end{pmatrix}=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}$ より $x'=y$、$y'=x$。もとの式 $y=2x$ に $x=y'$、$y=x'$ を代入すると $x'=2y'$、すなわち $y=\dfrac{x}{2}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="基本行列と像の決定">
+(1) 原点を中心に180°回転する行列を書き、点 $(-3,4)$ の像を求めなさい。
+
+(2) 点 $(1,0)$ が $(2,1)$ へ、点 $(0,1)$ が $(0,3)$ へ移る一次変換の行列を求めなさい。
+
+(3) 一次変換 $A=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}$ によって、直線 $x=1$ がどのような直線に移るか求めなさい。
+
+<Reveal label="解答">
+(1) 180°回転は $R(180^\circ)=\begin{pmatrix}-1 & 0\\0 & -1\end{pmatrix}$（原点対称に等しい）。$(-3,4)\mapsto(3,-4)$。
+
+(2) 基本ベクトルの像がそのまま行列の列になる。求める行列は $\begin{pmatrix}2 & 0\\1 & 3\end{pmatrix}$。
+
+(3) $x'=x+2y$、$y'=y$。$x=1$ のとき $x'=1+2y'$ なので、移る直線は $x=1+2y$、すなわち $x-2y-1=0$（傾き $\dfrac{1}{2}$ の直線）。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+一次変換は、入試では「行列が表す変換の名称を答えよ」「変換後の図形の方程式を求めよ」「変換によって不変な直線や点を求めよ」という形で出ます。変換の名前を答える問題は、基本行列を覚えておけば即答できます。変換後の図形を求める問題は、$x'=ax+by$、$y'=cx+dy$ を $x$、$y$ について解いてもとの式に代入するのが定石です。また、原点が動かないことと線形性は、後の合成変換・固有値の議論の土台になるので、ここで確実に押さえておきましょう。

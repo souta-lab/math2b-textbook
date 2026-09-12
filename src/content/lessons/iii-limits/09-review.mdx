@@ -1,0 +1,154 @@
+---
+title: "極限のまとめ — 入試の定型を一望する"
+summary: "数列・関数・級数・連続性・中間値の定理を横断し、入試の極限問題を型で見分けて最短で処理する総まとめ。"
+unit: "iii-limits"
+order: 9
+objectives:
+  - "極限の問題を見て、数列型・関数型・級数型・連続型のどれかを即座に判断できる"
+  - "複数の型が混ざった入試問題を、型ごとに分解して処理できる"
+  - "連続性と中間値の定理を、定数決定と解の存在の証明に使える"
+prerequisites: ["iii-limits/08-intermediate"]
+tags: ["総まとめ", "入試の定型", "極限", "中間値の定理"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+入試の極限問題は、見た目が毎回違っても、使う道具は数えるほどしかありません。数列の分数型なら最高次で割る、無限等比なら $|r| \lt 1$ を確かめる、関数の $\dfrac00$ なら因数分解か有理化、三角・指数なら公式の形にそろえる。どの型かを最初に見分けてしまえば、あとは手順をなぞるだけです。このレッスンでは、これまで学んだ型を一枚の地図にまとめ、入試の総合問題で迷わない状態をつくります。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\lim_{n\to\infty}\frac{2^n + 3^n}{3^n + 1}$ の値はどれでしょう？"
+  options={['$0$', '$1$', '$\infty$']}
+  answer="$1$"
+  explanation="底のうち最も大きい $3^n$ で分子分母を割ると、$\dfrac{\left(\frac23\right)^n + 1}{1 + \left(\frac13\right)^n}$。$n\to\infty$ でどちらの分数も $0$ になり、$\dfrac{1}{1} = 1$ です。"
+/>
+
+<Note type="info">
+**入試での用途**：極限の総合問題は、複数の型を1問の中で組み合わせます。たとえば「数列の極限で定数を決め、その値で無限級数の収束を判定し、最後に関数の連続性を問う」という流れです。型ごとに処理を分けて書けるかが得点を分けます。
+</Note>
+
+## 入試の型の地図
+
+これまでの8レッスンを、問われ方と第一手の対応表にまとめます。
+
+| 型 | 典型例 | 第一手 |
+|---|---|---|
+| 数列の極限（分数型） | $\dfrac{2n^2-3n+1}{4n^2+5}$ | 分子分母を最高次の項で割る |
+| 無限等比数列 | $r^n$ | 公比の絶対値で場合分けする |
+| 無限級数 | $\sum \dfrac{1}{n(n+1)}$ | 部分和を部分分数分解で計算する |
+| 無限等比級数 | $\sum a r^{\,n-1}$ | $\lvert r \rvert \lt 1$ を確かめ $\dfrac{a}{1-r}$ |
+| 関数の極限（$\dfrac00$） | $\dfrac{x^2-1}{x-1}$ | 因数分解または有理化で約分する |
+| 片側極限・無限大 | $\dfrac{1}{x-1}$、$\infty-\infty$ | 左右を別々に、差は有理化 |
+| 三角・指数の極限 | $\dfrac{\sin 3x}{x}$、$\dfrac{e^{2x}-1}{x}$ | 角と指数を公式の形にそろえる |
+| 連続性・中間値の定理 | 定数の決定、解の存在 | 3条件、$f(a)f(b) \lt 0$ |
+
+<Why>
+この地図を最初に思い出すのは、極限の計算が「どの既知の形に帰着させるか」の勝負だからです。新しい問題ほど、既知の型の組み合わせか、型へ帰着させるための変形が問われます。逆に、型を意識せずに思いつきで式をいじると、不定形のまま手が止まったり、収束条件の確認を飛ばしたりします。まず「この問題はどの型か」を名指しし、その型の第一手を打つ、という順序を固定することが、入試本番で手が止まらないための最短の準備になります。
+</Why>
+
+## 型を組み合わせた入試問題
+
+<WorkedExample title="例題1: 無限級数を2つに分ける">
+$$
+\sum_{n=1}^{\infty} \frac{2^n + 3^n}{4^n}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$4^n$ で各項を割ると、$\left(\frac24\right)^n$ と $\left(\frac34\right)^n$ に分かれます。どちらも公比が1より小さい等比級数なので、和を別々に計算できます。">$\dfrac{2^n+3^n}{4^n} = \left(\dfrac12\right)^n + \left(\dfrac34\right)^n$ と分ける。</Step>
+<Step reason="1つ目は初項 $\frac12$、公比 $\frac12$ の無限等比級数です。公式を当てはめます。">$\displaystyle\sum_{n=1}^{\infty}\left(\frac12\right)^n = \frac{\frac12}{1-\frac12} = 1$。</Step>
+<Step reason="2つ目は初項 $\frac34$、公比 $\frac34$ の無限等比級数です。こちらも収束します。">$\displaystyle\sum_{n=1}^{\infty}\left(\frac34\right)^n = \frac{\frac34}{1-\frac34} = 3$。</Step>
+<Step reason="2つの級数がともに収束するので、和を足し合わせられます。">和は $1 + 3 = 4$。</Step>
+</Steps>
+
+<Answer>
+$4$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 中間値の定理で定数の範囲を求める">
+$$
+x^3 - 3x + k = 0
+$$
+が $0 \lt x \lt 1$ の範囲に少なくとも1つの実数解をもつための、定数 $k$ の範囲を求めよ。
+
+<Steps>
+<Step reason="解の存在は、左辺を関数 $f(x)$ とみなし、$0 \lt x \lt 1$ で連続であることを確かめてから端点の符号を調べます。">$f(x) = x^3 - 3x + k$ とおくと、$f$ は多項式だから $[0,1]$ で連続。</Step>
+<Step reason="端点の値を $k$ で表します。ここで $k$ の条件が現れます。">$f(0) = k$、$f(1) = 1 - 3 + k = k - 2$。</Step>
+<Step reason="中間値の定理で解の存在を言うには、$f(0)$ と $f(1)$ の符号が異なることが十分です。その条件を $k$ について解きます。">$f(0)f(1) = k(k-2) \lt 0$ より $0 \lt k \lt 2$。</Step>
+<Step reason="この範囲では $f(0)$ と $f(1)$ の符号が異なるので、定理がそのまま使え、区間の内部に解が存在します。">$0 \lt k \lt 2$ のとき、$0 \lt x \lt 1$ に少なくとも1つの解が存在する。</Step>
+</Steps>
+
+<Answer>
+$0 \lt k \lt 2$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+極限の問題は、まず型を名指しする。分数型の数列は最高次で割る、$r^n$ は公比で場合分け、級数は部分和、関数の $\dfrac00$ は約分、三角・指数は形をそろえる、連続は3条件、解の存在は $f(a)f(b) \lt 0$。
+</KeyPoint>
+
+<Note type="tip">
+**見分けのコツ**：変数が $n$ なら数列・級数の型、変数が $x$ なら関数の型。$x \to a$ なら代入して不定形を探し、$x \to \infty$ なら最高次か有理化。迷ったら「代入して何になるか」を書くと、$\dfrac00$ か $\infty-\infty$ かが見えて、次の一手が自動的に決まる。
+</Note>
+
+<Misconception>
+<Wrong>
+総合問題でも、極限は「代入して値が出るまで式をいじる」だけでよい。
+</Wrong>
+<WhyWrong>
+代入できる形かどうかを確かめずに式を動かすと、不定形のまま計算した気になりやすい。たとえば $\dfrac{\infty}{\infty}$ を $1$ と書いたり、$\dfrac00$ を $0$ と書いたりする答案は、原因の変形をしていない。型によって使える第一手が違うので、まず不定形の種類を特定することが必要。
+</WhyWrong>
+<Right>
+最初に代入して形を確かめ、型を決めてから変形する。$\dfrac00$ は約分、$\infty-\infty$ は有理化、$r^n$ は場合分け、というように手順を使い分ける。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+中間値の定理を使うとき、関数が連続であることの確認は省いてよい。多項式や三角関数ならいつも連続だからである。
+</Wrong>
+<WhyWrong>
+多項式や三角関数が連続なのはその定義域においてであり、区間の端点や、分母が0になる点が絡むと仮定が崩れる。$\dfrac1x$ に $[-1,1]$ で定理を使おうとすると、$x=0$ で連続でないため結論は誤りになる。仮定を確かめずに使うと、存在しない解を「存在する」と証明したことになる。
+</WhyWrong>
+<Right>
+定理を使う前に、閉区間で連続であることと $f(a)f(b) \lt 0$ を必ず確認する。定義域に穴があれば、その区間では定理を使えない。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{n\to\infty}\frac{2^n + 3^n}{3^n + 1}$ を求めよ。
+<Reveal label="答え">
+$3^n$ で分子分母を割ると $\dfrac{\left(\frac23\right)^n + 1}{1 + \left(\frac13\right)^n} \to 1$。
+</Reveal>
+
+(2) $\displaystyle\sum_{n=1}^{\infty} \left(\frac14\right)^n$ を求めよ。
+<Reveal label="答え">
+初項 $\dfrac14$、公比 $\dfrac14$、$|r| \lt 1$。和は $\dfrac{\frac14}{1-\frac14} = \dfrac13$。
+</Reveal>
+
+(3) $f(x) = \cos x - \dfrac{x}{2}$ は $0 \lt x \lt \dfrac{\pi}{2}$ に実数解をもつことを示せ。
+<Reveal label="答え">
+$f$ は連続。$f(0) = 1 \gt 0$、$f\left(\dfrac{\pi}{2}\right) = 0 - \dfrac{\pi}{4} = -\dfrac{\pi}{4} \lt 0$。符号が異なるので、中間値の定理より $0 \lt x \lt \dfrac{\pi}{2}$ に解が存在する。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="章末練習（入試の総合問題）">
+(1) $\displaystyle\lim_{x\to 0} \frac{\sin 4x}{\sin 2x}$ を求めよ。
+
+(2) $\displaystyle\sum_{n=1}^{\infty} 3\left(\frac12\right)^{n-1}$ を求めよ。
+
+(3) $\displaystyle\lim_{n\to\infty}\left(\sqrt{n^2+2n} - n\right)$ を求めよ。
+
+(4) $x^3 - 2x + k = 0$ が $0 \lt x \lt 1$ に少なくとも1つの実数解をもつための $k$ の範囲を求めよ。
+
+<Reveal label="解答">
+(1) $\dfrac{\sin 4x}{\sin 2x} = \dfrac{4x}{2x} \cdot \dfrac{\frac{\sin 4x}{4x}}{\frac{\sin 2x}{2x}} \to 2 \cdot \dfrac11 = 2$。
+
+(2) 初項 $3$、公比 $\dfrac12$、$|r| \lt 1$。和は $\dfrac{3}{1-\frac12} = 6$。
+
+(3) 有理化すると $\dfrac{2n}{\sqrt{n^2+2n}+n} = \dfrac{2}{\sqrt{1+\frac2n}+1} \to \dfrac{2}{2} = 1$。
+
+(4) $f(x) = x^3 - 2x + k$ は連続。$f(0) = k$、$f(1) = k - 1$ より、$f(0)f(1) = k(k-1) \lt 0$ すなわち $0 \lt k \lt 1$ のとき解が存在する。
+</Reveal>
+</Practice>

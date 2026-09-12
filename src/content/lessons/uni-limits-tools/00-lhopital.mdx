@@ -1,0 +1,156 @@
+---
+title: "ロピタルの定理 — 不定形を微分で一撃する"
+summary: "0/0・∞/∞ の不定形を分子分母の微分で処理するロピタルの定理を、使える条件・繰り返し・記述式での可否まで押さえて入試の極限計算を時短する。"
+unit: "uni-limits-tools"
+order: 0
+objectives:
+  - '$\dfrac00$・$\dfrac{\infty}{\infty}$ の不定形を代入で見分け、ロピタルの定理を適用できる'
+  - '適用前に微分可能性と分母の導関数の条件を確かめ、必要なら繰り返し適用できる'
+  - 'ロピタルの定理が検算向きか答案で使えるかを、循環論法の危険とともに判断できる'
+prerequisites: ["iii-limits"]
+tags: ["ロピタルの定理", "不定形", "極限の時短", "検算"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x^3}$ を数学IIIの範囲だけで解こうとすると、$\sin x$ をうまくくくり出す工夫が必要で、初見では手が止まりがちです。ところが「分子と分母を別々に微分してから極限をとる」という大学数学の道具を知っていると、微分を繰り返すだけで $\dfrac16$ にたどり着きます。この近道がロピタルの定理です。ただし、この道具には**使いどころと書き方を間違えると答案では通用しない**という強いクセがあります。このレッスンでは、その境目をはっきりさせます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x^3}$ の値はどれでしょう？"
+  options={['$0$', '$\dfrac16$', '$\dfrac12$']}
+  answer="$\dfrac16$"
+  explanation="$\sin x$ を $x$ と同じとみなすと差は $0$ に見えますが、実際は $\sin x = x - \dfrac{x^3}{6} + \cdots$ なので、差の主要項は $\dfrac{x^3}{6}$ です。したがって比は $\dfrac16$ に収束します。"
+/>
+
+<Note type="info">
+**使える場面**：代入すると $\dfrac00$ または $\dfrac{\infty}{\infty}$ になる極限で、因数分解や有理化の発想が浮かびにくい複雑な式。とくに三角・指数・対数が混ざった式で、答えを素早く知りたいときに効きます。
+
+**手順**：(1) 代入して不定形であることを確かめる → (2) 分子と分母をそれぞれ微分する → (3) 新しい比の極限をとる → (4) まだ不定形なら繰り返す。
+
+**記述式での可否**：ロピタルの定理は高校の教科書にない**範囲外の道具**です。記述式の答案で断りなく使うと、減点や「定理を証明なしに使った」とみなされる危険があります。**検算・答えの予想専用**と考え、答案では因数分解・有理化・既知の公式で書くのが安全です。
+</Note>
+
+<Why>
+不定形とは「同じ $0$ や $\infty$ に向かう2つの量の比」で、その比を決めるのは、どちらがどれだけ速く $0$ や $\infty$ に向かうかという**速さの違い**です。微分はまさにその瞬間の増え方の速さを取り出す操作なので、分子と分母を微分すると、2つの速さの比が見えます。ロピタルの定理が成り立つのは、この「速さの比」が元の「値の比」を正しく置き換えるからです。だからこそ、速さの比の極限が存在しない場合には、この置き換えが失敗します。
+</Why>
+
+<Theorem name="ロピタルの定理（入試で使う形）">
+$x=a$ の近くで $f,g$ が微分可能で、その近くで $g'(x)\ne 0$ とする。さらに
+$$
+\lim_{x\to a}f(x)=0,\qquad \lim_{x\to a}g(x)=0
+$$
+であるか、または
+$$
+\lim_{x\to a}\lvert f(x)\rvert=\infty,\qquad \lim_{x\to a}\lvert g(x)\rvert=\infty
+$$
+であるとする。このとき
+$$
+\lim_{x\to a}\frac{f(x)}{g(x)}=\lim_{x\to a}\frac{f'(x)}{g'(x)}
+$$
+が成り立つ（右辺の極限が存在するか $\pm\infty$ に発散する場合に限る）。$x\to\infty$ の場合も同じ形で使える。
+</Theorem>
+
+<WorkedExample title="例題1: 繰り返し適用する">
+$$
+\lim_{x\to 0}\frac{x-\sin x}{x^3}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="まず代入して不定形かどうかを確かめます。$x=0$ で分子は $0-\sin 0=0$、分母も $0$ なので $\dfrac00$ の不定形です。ここで初めて定理を試す資格が得られます。">$x=0$ を代入すると $\dfrac00$ の不定形であることを確認する。</Step>
+<Step reason="不定形なので分子と分母をそれぞれ微分します。分子の導関数は $1-\cos x$、分母の導関数は $3x^2$ です。">分子・分母を微分すると $\dfrac{1-\cos x}{3x^2}$。$x\to 0$ で再び $\dfrac00$。</Step>
+<Step reason="まだ不定形なのでもう一度微分します。分子の導関数は $\sin x$、分母の導関数は $6x$ です。">もう一度微分すると $\dfrac{\sin x}{6x}$。ここは $\dfrac{\sin x}{x}\to 1$ を使ってもよい。</Step>
+<Step reason="最後にもう一度微分すると $\dfrac{\cos x}{6}$ となります。$x\to 0$ で $\cos x\to 1$ なので極限が確定します。">さらに微分すると $\dfrac{\cos x}{6}\to \dfrac16$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac16$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: ∞/∞ にも使える">
+$$
+\lim_{x\to \infty}\frac{\log x}{x}
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$x\to\infty$ で分子も分母も無限大に向かうので $\dfrac{\infty}{\infty}$ の不定形です。定理は $x\to\infty$ でも同じ形で使えます。">$\dfrac{\infty}{\infty}$ の不定形であることを確認する。</Step>
+<Step reason="分子と分母を微分します。$(\log x)'=\dfrac1x$、$(x)'=1$ です。">微分すると $\dfrac{\frac1x}{1}=\dfrac1x$。</Step>
+<Step reason="$x\to\infty$ で $\dfrac1x\to 0$ となり、極限が確定します。">$\displaystyle\lim_{x\to\infty}\frac1x=0$。</Step>
+</Steps>
+
+<Answer>
+$0$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+代入して $\dfrac00$ か $\dfrac{\infty}{\infty}$ を確かめてから、分子分母を微分して比の極限をとる。まだ不定形なら繰り返す。ただし高校範囲外の道具なので、答案では使わず**検算専用**と割り切る。
+</KeyPoint>
+
+<Note type="tip">
+**答えの予想に使う**：記述式の答案を書く前に、ロピタルで答えだけ先に求めておくと、その後の変形が正しい方向に進んでいるかを確認できます。検算で $\dfrac16$ と分かっていれば、途中で $\dfrac13$ などが出たら計算ミスに気づけます。
+</Note>
+
+<Misconception>
+<Wrong>
+$\dfrac00$ の形なら、どんな極限でもロピタルの定理が使える。
+</Wrong>
+<WhyWrong>
+定理には「導関数の比の極限が存在する」という前提があります。たとえば $\displaystyle\lim_{x\to\infty}\frac{x+\sin x}{x}$ は $\dfrac{\infty}{\infty}$ ですが、機械的にロピタルを当てると $\dfrac{1+\cos x}{1}$ となり、$\cos x$ が振動して極限をもちません。一方、元の式は $\dfrac{1+\frac{\sin x}{x}}{1}\to 1$ で収束します。前提が崩れると定理は何も言えず、存在する極限を見失います。
+</WhyWrong>
+<Right>
+使う前に、微分可能性・分母の導関数が $0$ でないこと・導関数の比の極限が存在することを確かめる。存在しない例では因数分解や既知の公式など別の手段を使う。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\displaystyle\lim_{x\to 0}\frac{\sin x}{x}=1$ や $\displaystyle\lim_{x\to 0}\frac{e^x-1}{x}=1$ は、ロピタルを使えば一発で証明できる。
+</Wrong>
+<WhyWrong>
+これは**循環論法**です。$\sin$ や $e^x$ の導関数を求める計算そのものが、$\dfrac{\sin x}{x}\to1$ や $\dfrac{e^x-1}{x}\to1$ を前提にしています。前提を結論に使っているので、証明にはなりません。大学の教科書でもこの2つは先に証明し、その後にロピタルを導入する順序になっています。
+</WhyWrong>
+<Right>
+この2つの基本極限は公式として使い、ロピタルはそれらとは別の複雑な極限の計算にだけ使う。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{x\to 0}\frac{x-\tan x}{x^3}$ を求めよ。
+<Reveal label="答え">
+代入すると $\dfrac00$。分子を微分すると $1-\dfrac{1}{\cos^2 x}$、分母は $3x^2$。$\dfrac{1-\frac{1}{\cos^2 x}}{3x^2}=-\dfrac{\tan^2 x}{3x^2}\to -\dfrac13$。
+</Reveal>
+
+(2) $\displaystyle\lim_{x\to \infty}\frac{x^2}{e^x}$ を求めよ。
+<Reveal label="答え">
+$\dfrac{\infty}{\infty}$ よりロピタルを2回使うと $\dfrac{2x}{e^x}\to\dfrac{2}{e^x}\to 0$。
+</Reveal>
+
+(3) 記述式の答案でロピタルを使う前に確認すべきことは何か。2つ挙げよ。
+<Reveal label="答え">
+第一に、そもそも $\dfrac00$ または $\dfrac{\infty}{\infty}$ の不定形であること。第二に、分子分母が微分可能で分母の導関数が $0$ にならず、導関数の比の極限が存在すること。加えて、範囲外の道具なので答案では使わないという判断も必要。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（ロピタルで時短）">
+(1) $\displaystyle\lim_{x\to 0}\frac{2^x-1}{x}$ を求めよ。
+
+(2) $\displaystyle\lim_{x\to 0}\frac{\log(1+2x)}{x}$ を求めよ。
+
+(3) $\displaystyle\lim_{x\to \infty}\frac{(\log x)^2}{x}$ を求めよ。
+
+(4) $\displaystyle\lim_{x\to 0}\frac{e^x-1-x}{x^2}$ を求めよ。
+
+<Reveal label="解答">
+(1) 微分すると $\dfrac{2^x\log 2}{1}\to \log 2$。
+
+(2) 微分すると $\dfrac{\frac{2}{1+2x}}{1}\to 2$。
+
+(3) 微分すると $\dfrac{2\log x\cdot\frac1x}{1}=\dfrac{2\log x}{x}\to 0$。
+
+(4) $\dfrac00$ より2回微分すると $\dfrac{e^x}{2}\to \dfrac12$。
+</Reveal>
+</Practice>

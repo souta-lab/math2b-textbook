@@ -1,0 +1,165 @@
+---
+title: "置換積分 — 中身を1文字に置き換える"
+summary: "合成関数の微分を逆に読み、微分形を探して置換する。定積分では範囲も一緒に変換する。"
+unit: "iii-integral"
+order: 1
+objectives:
+  - "合成関数の微分を逆に読んで、置換積分の公式を導ける"
+  - "被積分関数の中に微分形を見つけて $u=g(x)$ と置ける"
+  - "定積分で置換したとき、積分区間も $g(x)$ の値に変換できる"
+prerequisites: ["iii-integral/00-review"]
+tags: ["置換積分", "合成関数", "定積分", "三角置換", "入試頻出"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$\displaystyle\int 2x\cos(x^2)\,dx$ は、基本公式の表にはありません。しかし $x^2$ という塊を1文字 $u$ と見なすと、$2x$ がちょうどその塊の微分 $du/dx$ になっています。入試の積分は、この「塊とその微分形」を一瞬で見抜けるかどうかで計算量が何倍も変わります。今回は、その置き換えの仕組みを合成関数の微分から組み立てます。
+</Hook>
+
+<Prediction
+  question="$\displaystyle\int 2x\cos(x^2)\,dx$ で $u=x^2$ と置くと、$2x\,dx$ は $du$ になる。このとき積分はどれになる？"
+  options={['∫cos u du', '∫2cos u du', '∫cos(x²) du']}
+  answer="∫cos u du"
+  explanation="$u=x^2$ の両辺を微分すると $du=2x\,dx$ です。だから $2x\,dx$ を丸ごと $du$ に置き換えられ、$\int\cos u\,du$ になります。$x$ が残らないので、この関数は $u$ だけで積分できます。"
+/>
+
+置換積分の心は、合成関数の微分にあります。$F(u)$ を $u=g(x)$ として微分すると
+
+$$
+\frac{d}{dx}F(g(x))=F'(g(x))\,g'(x)
+$$
+
+です。この両辺を $x$ で積分すると $\displaystyle\int F'(g(x))\,g'(x)\,dx=F(g(x))+C$ が得られます。右辺は、$u=g(x)$ と置いて $\displaystyle\int F'(u)\,du$ と計算した結果にほかなりません。つまり、被積分関数の中に「塊 $g(x)$」と「その微分 $g'(x)$」の積が見えたら、塊を $u$ に置き換えてよいということです。
+
+<Theorem name="置換積分法">
+$x=g(t)$ と置く（あるいは $u=g(x)$ と置く）とき、次が成り立つ。
+
+$$
+\int f(g(x))\,g'(x)\,dx=\int f(u)\,du,\qquad u=g(x)
+$$
+
+定積分では、積分区間も置換後の値に変える。
+
+$$
+\int_a^b f(g(x))\,g'(x)\,dx=\int_{g(a)}^{g(b)} f(u)\,du
+$$
+</Theorem>
+
+定積分の範囲変換が重要なのは、置換した後で元の変数 $x$ に戻さずに計算を終えられるからです。$x=a$ のとき $u=g(a)$、$x=b$ のとき $u=g(b)$ と対応させ、そのまま新しい範囲で $u$ を動かします。置換の途中で範囲を書き換え忘れると、答えが別物になります。
+
+<Why>
+置換積分で「微分形を探す」のは、微分の連鎖律が生む余分な係数を回収するためです。合成関数を微分すると内側の微分 $g'(x)$ が掛け算で出てきます。逆に積分では、その $g'(x)$ が被積分関数に用意されていれば、塊 $g(x)$ を1文字に戻すだけで済みます。逆に $g'(x)$ が足りなければ、定数倍で帳尻を合わせてから置換します。$g'(x)$ の有無を見るのが、どの関数を $u$ にするかを決める最短の判断です。
+</Why>
+
+<WorkedExample title="例題1: 中身を置換する">
+$\displaystyle\int \frac{2x}{x^2+1}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="分母の微分は 2x で、分子の 2x とちょうど一致するからです。">$u=x^2+1$ と置くと $du=2x\,dx$。</Step>
+<Step reason="分子の 2x dx を丸ごと du に置き換えられるからです。">$\displaystyle\int\frac{1}{u}\,du$ となる。</Step>
+<Step reason="1/u の不定積分は対数になるからです。">$\log\lvert u\rvert+C=\log(x^2+1)+C$。</Step>
+<Step reason="x²+1 はつねに正なので、絶対値を外して答えられるからです。">$x^2+1\gt 0$ より $\log(x^2+1)+C$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int \frac{2x}{x^2+1}\,dx=\log(x^2+1)+C$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 定積分の置換と範囲変換">
+$\displaystyle\int_0^1 x e^{x^2}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="指数の中身 x² が塊で、その微分 2x が係数として現れているからです。">$u=x^2$ と置くと $du=2x\,dx$、すなわち $x\,dx=\dfrac{du}{2}$。</Step>
+<Step reason="x の範囲を u の範囲に置き換えるためです。">$x=0$ のとき $u=0$、$x=1$ のとき $u=1$。</Step>
+<Step reason="準備した du/2 と新しい範囲で、u だけの定積分に直せるからです。">$\displaystyle\int_0^1 e^u\cdot\frac{du}{2}=\frac12\Big[e^u\Big]_0^1$。</Step>
+<Step reason="上端と下端を代入して差をとるためです。">$\dfrac12(e^1-e^0)=\dfrac{e-1}{2}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^1 x e^{x^2}\,dx=\dfrac{e-1}{2}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 三角置換（入試頻出の型）">
+$\displaystyle\int_0^1 \sqrt{1-x^2}\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="$1-x^2$ の形は、x=sinθ と置くと 1-sin²θ=cos²θ になり根号が外れるからです。">$x=\sin\theta$ と置くと $dx=\cos\theta\,d\theta$。</Step>
+<Step reason="x の範囲を θ の範囲に変換するためです。">$x=0$ のとき $\theta=0$、$x=1$ のとき $\theta=\dfrac{\pi}{2}$。</Step>
+<Step reason="θ は [0, π/2] にあるので cosθ≥0 となり、√(cos²θ)=cosθ と外せるからです。">$\sqrt{1-\sin^2\theta}=\cos\theta$ より、$\displaystyle\int_0^{\pi/2}\cos^2\theta\,d\theta$。</Step>
+<Step reason="cos²θ は半角の公式で次数を下げて積分できる形にするからです。">$\dfrac{1+\cos2\theta}{2}$ を使って $\displaystyle\int_0^{\pi/2}\frac{1+\cos2\theta}{2}\,d\theta$。</Step>
+<Step reason="上端と下端を代入して差をとるためです。">$\Big[\dfrac{\theta}{2}+\dfrac{\sin2\theta}{4}\Big]_0^{\pi/2}=\dfrac{\pi}{4}+0=\dfrac{\pi}{4}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^1 \sqrt{1-x^2}\,dx=\dfrac{\pi}{4}$。これは半径1の円の四分の一の面積に一致する。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int x e^{x^2}\,dx=e^{x^2}+C$ である。
+</Wrong>
+<WhyWrong>
+右辺を微分すると、合成関数の微分で $2x e^{x^2}$ となり、係数 $2$ が余分に出ます。置換すると $x\,dx=\frac{du}{2}$ であり、$2x$ ではなく $x$ しか用意されていないので、$\frac12$ の調整が必要です。$2x$ がそろっているときだけ係数なしで置換できます。
+</WhyWrong>
+<Right>
+$u=x^2$ と置くと $x\,dx=\frac{du}{2}$。よって $\displaystyle\int x e^{x^2}\,dx=\frac12\int e^u\,du=\frac12 e^{x^2}+C$。微分形が定数倍だけ足りないときは、その定数で割って調整する。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+定積分で $u=x^2$ と置換したあとも、積分区間は $0$ から $1$ のままで計算してよい。
+</Wrong>
+<WhyWrong>
+置換すると積分の変数が $x$ から $u$ に変わります。同じ数値をそのまま使うと、$x$ の区間を $u$ の区間として読み替えたことになり、別の図形の面積を計算してしまいます。変数を変えたら、その変数の動く範囲も変える必要があります。
+</WhyWrong>
+<Right>
+$x=0$ なら $u=0$、$x=1$ なら $u=1$ のように、上端と下端を $u$ の値に変換してから計算する。変換した範囲で積分すれば、$x$ に戻す手間も省ける。
+</Right>
+</Misconception>
+
+<SelfExplanation
+  prompt="置換積分で、どの関数を u と置けばよいかはどう見つける？"
+  options={['塊 g(x) とその微分 g′(x) が被積分関数にそろっているかを見る', '最も次数が高い項を選ぶ', '分母を必ず u と置く']}
+  model="微分形 g′(x) が被積分関数の中に用意されている塊を探します。g′ がそろっていれば u=g(x) と置くだけで積分が簡単になり、足りないときは定数倍で調整します。次数の高さや分母かどうかは判断基準ではありません。"
+/>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int 2x(x^2+3)^4\,dx$ を求めなさい。
+<Reveal label="答え">
+$u=x^2+3$ と置くと $du=2x\,dx$。$\displaystyle\int u^4\,du=\frac{u^5}{5}+C=\frac{(x^2+3)^5}{5}+C$。
+</Reveal>
+
+（2）$\displaystyle\int_0^{\pi/2}\sin^2 x\cos x\,dx$ を求めなさい。
+<Reveal label="答え">
+$u=\sin x$ と置くと $du=\cos x\,dx$。$x=0$ で $u=0$、$x=\frac{\pi}{2}$ で $u=1$。$\displaystyle\int_0^1 u^2\,du=\Big[\frac{u^3}{3}\Big]_0^1=\frac13$。
+</Reveal>
+
+（3）$x=\tan\theta$ と置くのは、どのような被積分関数のときに有効か。
+<Reveal label="答え">
+$1+x^2$ を含む形、たとえば $\dfrac{1}{1+x^2}$ に有効。$1+\tan^2\theta=\dfrac{1}{\cos^2\theta}$ により、分母がきれいになる。三角置換は「$1-x^2$ なら $x=\sin\theta$、$1+x^2$ なら $x=\tan\theta$」と覚えると選びやすい。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（置換積分）">
+（1）$\displaystyle\int x(x^2+1)^3\,dx$ を計算せよ。
+
+（2）$\displaystyle\int_0^1 x\sqrt{x^2+1}\,dx$ を計算せよ。
+
+（3）$\displaystyle\int \frac{e^x}{e^x+1}\,dx$ を計算せよ。
+
+（4）$\displaystyle\int_0^{\pi/2}\sin^3 x\cos x\,dx$ を計算せよ。
+
+<Reveal label="解答">
+（1）$u=x^2+1$ と置くと $x\,dx=\frac{du}{2}$。$\frac12\cdot\frac{u^4}{4}+C=\dfrac{(x^2+1)^4}{8}+C$。
+
+（2）$u=x^2+1$ と置くと $x\,dx=\frac{du}{2}$、範囲は $1$ から $2$。$\frac12\displaystyle\int_1^2 u^{1/2}\,du=\frac12\Big[\frac{2}{3}u^{3/2}\Big]_1^2=\frac13\left(2\sqrt2-1\right)$。
+
+（3）$u=e^x+1$ と置くと $du=e^x\,dx$。$\displaystyle\int\frac{du}{u}=\log\lvert u\rvert+C=\log(e^x+1)+C$（$e^x+1\gt 0$）。
+
+（4）$u=\sin x$ と置くと $du=\cos x\,dx$、範囲は $0$ から $1$。$\displaystyle\int_0^1 u^3\,du=\frac14$。
+</Reveal>
+</Practice>

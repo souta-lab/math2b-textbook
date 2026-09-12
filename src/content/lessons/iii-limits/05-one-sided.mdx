@@ -1,0 +1,154 @@
+---
+title: "片側極限と無限大 — 近づき方と行き先を見分ける"
+summary: "右極限・左極限の一致で極限の存在を判定し、x を無限大へ飛ばしたときの分数関数・無理関数の極限を求める。"
+unit: "iii-limits"
+order: 5
+objectives:
+  - "右極限と左極限を区別し、極限が存在する条件を言える"
+  - "x が a に近づくときの無限大への発散を、符号とともに判定できる"
+  - "x を無限大へ飛ばした無理関数の極限を、有理化して求められる"
+prerequisites: ["iii-limits/04-function-limit"]
+tags: ["片側極限", "無限大", "漸近線", "有理化"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+関数 $f(x) = \dfrac1x$ を考えます。$x$ を右から $0$ に近づけると、値は $10$、$100$、$1000$ と限りなく大きくなります。ところが左から近づけると、値は $-10$、$-100$、$-1000$ と限りなく小さくなります。同じ「$0$ に近づく」でも、近づく向きによって行き先が正反対です。このように、近づき方によって変わる行き先を正確に扱うのが、片側極限です。
+</Hook>
+
+<Prediction
+  question="関数 $f(x) = \dfrac{|x|}{x}$ について、$x$ を $0$ に近づけたときの極限はどうなるでしょう？"
+  options={['$1$ に収束する', '$-1$ に収束する', '存在しない']}
+  answer="存在しない"
+  explanation="$x \gt 0$ では $\dfrac{|x|}{x} = 1$、$x \lt 0$ では $\dfrac{|x|}{x} = -1$ です。右から近づけると $1$、左から近づけると $-1$ で、左右の行き先が一致しないため極限は存在しません。"
+/>
+
+<Note type="info">
+**入試での用途**：入試では、絶対値・分数・場合分けを含む関数で「極限が存在するか」を問う問題が頻出です。$x \to a+0$ と $x \to a-0$ を別々に計算し、一致しなければ「存在しない」と答えるのが定型。また $x \to \infty$ の分数関数は、最高次の項で割る型がそのまま使えます。
+</Note>
+
+## 右極限と左極限
+
+$x$ が $a$ より大きい側から近づくか、小さい側から近づくかを区別した極限を、片側極限とよびます。両方向の行き先がそろって初めて、普通の極限が存在します。
+
+<Definition term="片側極限と極限の存在">
+$x$ が $a$ より大きい側から $a$ に近づくときの極限を**右極限**といい $\displaystyle\lim_{x\to a+0} f(x)$、小さい側から近づくときの極限を**左極限**といい $\displaystyle\lim_{x\to a-0} f(x)$ と書く。$\displaystyle\lim_{x\to a} f(x)$ が存在するための必要十分条件は
+$$
+\lim_{x\to a+0} f(x) = \lim_{x\to a-0} f(x)
+$$
+がともに存在して一致することである。
+</Definition>
+
+$\displaystyle\lim_{x\to a} f(x) = \infty$ と書くのは、$f(x)$ が限りなく大きくなるという意味であり、極限値という有限の数が存在するわけではありません。この場合も「収束」ではなく「発散」です。
+
+<Theorem name="x を無限大へ飛ばす極限">
+$$
+\lim_{x\to\infty} \frac1x = 0,\qquad \lim_{x\to-\infty} \frac1x = 0
+$$
+である。また、多項式の分数の $x \to \pm\infty$ での極限は、分子分母を最高次の項で割れば求められる。$\displaystyle\lim_{x\to\infty} f(x) = \alpha$ のとき、直線 $y = \alpha$ はグラフの漸近線になる。
+</Theorem>
+
+<Why>
+極限の有無を左右に分けて調べるのは、$x$ が $a$ に近づく向きによって、関数の値の振る舞いが変わりうるからです。$a$ の右では分母が正、左では負、というように向きが符号を決める場面では、片側だけを見ても全体は決まりません。また $x \to \infty$ で $\dfrac1x \to 0$ となるのは、$x$ が大きくなるほど $\dfrac1x$ が小さくなるからで、この事実が最高次の項で割る操作の土台になります。向きと大きさを分けて考えることが、このレッスンの計算の軸です。
+</Why>
+
+<WorkedExample title="例題1: 左右で行き先が食い違う">
+$$
+\lim_{x\to 1} \frac{x}{x-1}
+$$
+は存在するか。存在しないなら、左右の極限をそれぞれ求めよ。
+
+<Steps>
+<Step reason="分母が0になる点の近くでは、右から近づくか左から近づくかで分母の符号が変わります。まず式を「整数部分＋分数」に分けて符号の出所を見やすくします。">$\dfrac{x}{x-1} = 1 + \dfrac{1}{x-1}$ と変形する。</Step>
+<Step reason="$x$ が右から1に近づくと、$x-1$ は正のまま0に近づきます。正の小さい数で割ると、値は正の無限大へ向かいます。">$x \to 1+0$ のとき $x-1 \to +0$ なので、$\dfrac{1}{x-1} \to +\infty$。</Step>
+<Step reason="$x$ が左から1に近づくと、$x-1$ は負のまま0に近づきます。負の小さい数で割ると、値は負の無限大へ向かいます。">$x \to 1-0$ のとき $x-1 \to -0$ なので、$\dfrac{1}{x-1} \to -\infty$。</Step>
+<Step reason="右極限と左極限が一致しないので、普通の極限は存在しません。">左右の極限が異なるから、$\displaystyle\lim_{x\to 1}\frac{x}{x-1}$ は存在しない。</Step>
+</Steps>
+
+<Answer>
+存在しない。右極限は $+\infty$、左極限は $-\infty$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: x を無限大へ飛ばす無理関数">
+$$
+\lim_{x\to\infty} \left(\sqrt{x^2+x} - x\right)
+$$
+を求めよ。
+
+<Steps>
+<Step reason="$\sqrt{x^2+x}$ も $x$ も $\infty$ へ向かうので、差のままでは $\infty-\infty$ の不定形です。根号を含む差は、有理化して分子を整数の和に変えるのが定石です。">$\sqrt{x^2+x} + x$ を掛けて有理化すると $\sqrt{x^2+x} - x = \frac{(x^2+x) - x^2}{\sqrt{x^2+x} + x} = \frac{x}{\sqrt{x^2+x} + x}.$ </Step>
+<Step reason="分子分母を $x$（今は正の無限大へ向かうので $x \gt 0$）で割ると、分母の根号は $\sqrt{1+\frac1x}$ になります。">分子分母を $x$ で割ると $\frac{1}{\sqrt{1+\dfrac1x} + 1}.$ </Step>
+<Step reason="$\frac1x \to 0$ なので、分母は $\sqrt1 + 1 = 2$ に近づきます。">$x\to\infty$ とすると、分母は $\sqrt{1+0}+1 = 2$ に近づく。</Step>
+<Step reason="残った分数の値が極限値です。">したがって極限値は $\dfrac12$。</Step>
+</Steps>
+
+<Answer>
+$\dfrac12$
+</Answer>
+</WorkedExample>
+
+<KeyPoint>
+極限が存在するかは、右極限と左極限が一致するかで判定する。$\dfrac1x$ のように分母が $0$ に向かうときは、左右で符号が反転することに注意。$x \to \infty$ の無理関数は有理化して、分子分母を $x$ で割る。
+</KeyPoint>
+
+<Note type="tip">
+**時短**：$x \to \infty$ の分数関数は、最高次の項だけを残せば極限が見える。$\dfrac{2x^2+3x}{x^2-1}$ なら最高次どうし $\dfrac{2x^2}{x^2} = 2$。ただし根号が絡むときは、有理化してからでないと次数の見当が狂うので注意する。
+</Note>
+
+<Misconception>
+<Wrong>
+$x$ を無限大へ飛ばすと $\sqrt{x^2+x}$ と $x$ はどちらも $\infty$ だから、その差は $\infty - \infty = 0$ である。
+</Wrong>
+<WhyWrong>
+$\infty$ は数ではないので、$\infty - \infty$ のままでは値を決められない。実際 $\sqrt{x^2+x} = x\sqrt{1+\frac1x} \approx x\left(1+\frac{1}{2x}\right) = x + \dfrac12$ となり、$x$ との差は $0$ ではなく $\dfrac12$ に近づく。増え方がわずかに違う分が、差として残る。
+</WhyWrong>
+<Right>
+$\infty - \infty$ は不定形。有理化して分数の形に直し、分子分母を割ってから極限をとる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+右から近づけたときの極限を求めれば、それがそのまま $\displaystyle\lim_{x\to a} f(x)$ である。
+</Wrong>
+<WhyWrong>
+例題1では右極限が $+\infty$、左極限が $-\infty$ で、普通の極限は存在しない。片側だけを見て「極限は $+\infty$」と書くと誤りになる。左右で近づき方が異なる場合、両方を調べないと極限の有無を判定できない。
+</WhyWrong>
+<Right>
+$\displaystyle\lim_{x\to a} f(x)$ を問われたら、まず $a+0$ と $a-0$ の両方を計算し、一致するかどうかで判断する。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\lim_{x\to 0+0} \frac1x$ と $\displaystyle\lim_{x\to 0-0} \frac1x$ をそれぞれ求めよ。
+<Reveal label="答え">
+右極限は $+\infty$、左極限は $-\infty$。符号が反対なので $\displaystyle\lim_{x\to 0}\frac1x$ は存在しない。
+</Reveal>
+
+(2) $\displaystyle\lim_{x\to\infty} \frac{3x+1}{x-2}$ を求めよ。
+<Reveal label="答え">
+分子分母を $x$ で割ると $\dfrac{3+\frac1x}{1-\frac2x} \to 3$。
+</Reveal>
+
+(3) $\displaystyle\lim_{x\to 2+0} \frac{1}{x-2}$ を求めよ。
+<Reveal label="答え">
+$x \to 2+0$ では $x-2 \to +0$。正の小さい数で割るので $+\infty$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（片側極限・無限大）">
+(1) $\displaystyle\lim_{x\to 0} \frac{|x|}{x}$ は存在するか。存在するなら値を、しないなら理由を答えよ。
+
+(2) $\displaystyle\lim_{x\to\infty} \left(\sqrt{x^2+3x} - x\right)$ を求めよ。
+
+(3) $\displaystyle\lim_{x\to 1-0} \frac{1}{(x-1)^2}$ を求めよ。
+
+<Reveal label="解答">
+(1) 存在しない。$x \gt 0$ では値は $1$、$x \lt 0$ では値は $-1$ で、右極限と左極限が一致しない。
+
+(2) 有理化すると $\dfrac{3x}{\sqrt{x^2+3x}+x}$。分子分母を $x$ で割ると $\dfrac{3}{\sqrt{1+\frac3x}+1} \to \dfrac{3}{2}$。
+
+(3) $(x-1)^2 \to +0$（2乗なので常に正）だから、$\dfrac{1}{(x-1)^2} \to +\infty$。
+</Reveal>
+</Practice>

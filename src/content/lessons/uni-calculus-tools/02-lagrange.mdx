@@ -1,0 +1,164 @@
+---
+title: "ラグランジュの未定乗数法 — 条件つき最大・最小を機械的に"
+summary: "条件式が1本ある最大・最小を、勾配の平行条件に翻訳して候補点を出す。答えの予想と検算に強い時短道具。"
+unit: "uni-calculus-tools"
+order: 2
+objectives:
+  - "条件 $g=0$ のもとで、$\\nabla f=\\lambda\\nabla g$ の連立方程式を立てられる"
+  - "円・直線・対称な条件における最大最小の候補点を求め、値を比較できる"
+  - "ラグランジュの未定乗数法を答案でそのまま使うべきでない理由を説明できる"
+prerequisites: ["uni-calculus-tools/01-param-derivative"]
+tags: ["ラグランジュ", "条件つき極値", "最大最小", "検算"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+「周の長さが決まっている長方形の面積を最大にしたい」「曲線上を動く点から原点までの距離を最小にしたい」——入試では、条件が1つ付いた最大・最小が繰り返し問われます。1文字消去や相加相乗で解けることも多いですが、変数が増えたり条件が曲線だったりすると、式の整理で手が止まります。条件式と目的の式さえ書ければ、候補を機械的に絞り込める方法があります。
+</Hook>
+
+<Prediction
+  question="条件つきで最大を探すとき、目的関数 $f$ の停留点（$f_x=0$ かつ $f_y=0$）だけ調べればよい？"
+  options={['はい', 'いいえ', '条件による']}
+  answer="いいえ"
+  explanation="制約の曲線上しか動けないので、$f$ が最大になる点で必ずしも $\\nabla f=0$ とは限りません。円 $x^2+y^2=1$ 上の $x+2y$ は原点で $\\nabla f=(1,2)\\ne 0$ ですが、点 $(1/\\sqrt5,\\ 2/\\sqrt5)$ で最大 $\\sqrt5$ をとります。"
+/>
+
+条件 $g(x,y)=0$ の上を点が動くとき、$f(x,y)$ が極値をとる瞬間を考えます。その点で $f$ の等高線と制約曲線は接します。等高線の接線と制約曲線の接線が一致するとき、それぞれの法線も一致します。法線の向きは勾配 $\nabla f$ と $\nabla g$ なので、両者が平行になることが条件になります。
+
+<Definition term="条件つき極値">
+制約 $g(x,y)=0$ を満たす点のうちで、関数 $f(x,y)$ の最大値・最小値を求める問題を**条件つき極値問題**という。$g$ を制約条件、$f$ を目的関数という。
+</Definition>
+
+<Theorem name="ラグランジュの未定乗数法">
+$\nabla g\ne 0$ のもとで、条件 $g(x,y)=0$ における $f(x,y)$ の極値の候補は
+$$
+\nabla f=\lambda\nabla g,\qquad g(x,y)=0
+$$
+を満たす点である。成分で書けば
+$$
+f_x=\lambda g_x,\qquad f_y=\lambda g_y,\qquad g(x,y)=0
+$$
+の連立方程式を解く。ここで $\lambda$ を**未定乗数**という。候補点の中から $f$ の値を比較し、境界・端点も併せて最大最小を決める。
+</Theorem>
+
+<Why>
+$f_x=f_y=0$ を解くのではいけない理由は、動ける範囲が制約曲線に限られているからです。制約がなければ $f$ の勾配が $0$ になる点が候補ですが、曲線上では $f$ が増え続けていても勾配は $0$ になりません。極値では、$f$ の等高線が制約曲線に接します。等高線の法線は $\nabla f$、制約曲線の法線は $\nabla g$ なので、接することは $\nabla f$ と $\nabla g$ が平行、すなわち $\nabla f=\lambda\nabla g$ と表せます。$\lambda$ は2本の法線の長さの比で、「制約を少しゆるめたときに $f$ がどれだけ増えるか」を意味しますが、入試では $\lambda$ を消去するための文字として使えば十分です。
+</Why>
+
+## 使える場面
+- 円・楕円・直線・球面などの条件1本のもとで、別の1つの式を最大最小にする問題。
+- 変数が2つ以上あり、1文字消去すると根号や分数が入って計算が重くなるとき。
+- $x+y+z=$ 一定のような対称な条件での、$xyz$ や $x^2+y^2+z^2$ のような対称な式の最大最小。
+- 相加相乗・コーシー・判別式では見通しが立ちにくいときの、答えの予想と検算。
+
+## 手順
+1. 目的関数 $f$ と制約 $g=0$ を決める。
+2. $f_x=\lambda g_x$、$f_y=\lambda g_y$、$g=0$ を立てる。
+3. 各式から $\lambda$ を消去して、$x$ と $y$（必要なら $z$）の関係を得る。
+4. 制約式に代入して候補点をすべて出す。
+5. それぞれの $f$ の値を比較し、境界や端点と併せて最大最小を決める。
+
+## 記述式での可否
+ラグランジュの未定乗数法は高校の範囲外なので、**答案にそのまま書くのは避ける**。答案では候補点の予想や検算に使い、本解は1文字消去・相加相乗・判別式など高校の方法で書き直すのが安全である。定理の証明を添えずに使うと、根拠がないとして減点されうる。一方、マーク式や穴埋めでは、答えの候補を素早く出す道具として非常に有効である。
+
+<WorkedExample title="例題1: 円上での最大最小">
+条件 $x^2+y^2=1$ のもとで、$f=x+2y$ の最大値と最小値を求めなさい。
+
+<Steps>
+<Step reason="制約つきの候補は勾配の平行条件から出るからです。">$1=2\lambda x$、$2=2\lambda y$、$x^2+y^2=1$ を立てる。</Step>
+<Step reason="$\\lambda$ を消去して $x$ と $y$ の関係に持ち込むためです。">前2式の比をとると $\dfrac{1}{2}=\dfrac{x}{y}$、すなわち $y=2x$。</Step>
+<Step reason="制約式に代入して候補点を確定するためです。">$x^2+4x^2=1$ より $x=\pm\dfrac{1}{\sqrt5}$、$y=\pm\dfrac{2}{\sqrt5}$（同符号）。</Step>
+<Step reason="候補点での値を比べて最大最小を決めるためです。">$f=x+2y=\pm\dfrac{1}{\sqrt5}\pm\dfrac{4}{\sqrt5}$。</Step>
+</Steps>
+
+<Answer>
+最大値は $\sqrt5$（点 $\left(\dfrac{1}{\sqrt5},\ \dfrac{2}{\sqrt5}\right)$）、最小値は $-\sqrt5$（点 $\left(-\dfrac{1}{\sqrt5},\ -\dfrac{2}{\sqrt5}\right)$）。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 直線上での距離の最小">
+条件 $2x+y=3$ のもとで、$f=x^2+y^2$ の最小値を求めなさい。
+
+<Steps>
+<Step reason="距離の2乗を目的関数、直線を制約とみなすためです。">$2x=2\lambda$、$2y=\lambda$、$2x+y=3$ を立てる。</Step>
+<Step reason="2式から $\\lambda$ を消去して座標の関係を得るためです。">$x=\lambda$、$y=\dfrac{\lambda}{2}$ となる。</Step>
+<Step reason="制約式に代入して $\\lambda$ を決めるためです。">$2\lambda+\dfrac{\lambda}{2}=3$ より $\dfrac52\lambda=3$、$\lambda=\dfrac65$。</Step>
+<Step reason="原点から直線までの距離の2乗として値を求めるためです。">点は $\left(\dfrac65,\ \dfrac35\right)$、$f=\dfrac{36}{25}+\dfrac{9}{25}=\dfrac{45}{25}=\dfrac95$。</Step>
+</Steps>
+
+<Answer>
+最小値は $\dfrac95$。点 $\left(\dfrac65,\ \dfrac35\right)$ でとる。直線 $2x+y=3$ と原点の距離を2乗した値に一致する。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題3: 3変数の対称な条件">
+$x+y+z=1$、$x\gt 0$、$y\gt 0$、$z\gt 0$ のとき、$f=xyz$ の最大値を求めなさい。
+
+<Steps>
+<Step reason="3変数でも同じく勾配の平行条件を立てます。">$yz=\lambda$、$xz=\lambda$、$xy=\lambda$ を立てる。</Step>
+<Step reason="3式を比べると対称性から変数が等しいと分かるためです。">$yz=xz=xy$ より、正の範囲で $x=y=z$。</Step>
+<Step reason="制約式から各変数を決めるためです。">$x=y=z=\dfrac13$。</Step>
+<Step reason="候補点での値を計算して最大を決めるためです。">$f=\dfrac13\cdot\dfrac13\cdot\dfrac13=\dfrac{1}{27}$。</Step>
+</Steps>
+
+<Answer>
+最大値は $\dfrac{1}{27}$。相加相乗平均で $x+y+z\ge 3\sqrt[3]{xyz}$ からも同じ値が出る。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+条件つきの最大・最小でも、$f_x=0$、$f_y=0$ を解けば候補が出る。
+</Wrong>
+<WhyWrong>
+制約のもとでは動ける向きが制限されるため、極値の点で $\nabla f=0$ になるとは限らない。円 $x^2+y^2=1$ 上の $x+2y$ では原点で $\nabla f=(1,2)\ne 0$ であり、$f_x=f_y=0$ を解いても制約上の最大点は得られない。実際の最大点は $\nabla f$ が $\nabla g$ と平行になる点である。
+</WhyWrong>
+<Right>
+$f_x=\lambda g_x$、$f_y=\lambda g_y$、$g=0$ の連立を解く。$\nabla f=\lambda\nabla g$ の平行条件と制約式を同時に満たす点だけが候補になる。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+未定乗数法では、最後に $\lambda$ の値も答えとして書かなければならない。
+</Wrong>
+<WhyWrong>
+$\lambda$ は $x$ と $y$ の関係を導くための補助文字である。入試で問われるのは目的関数の最大最小と、それを与える座標であり、$\lambda$ の値ではない。$\lambda$ を消去して候補点さえ出れば、答えは完成する。$\lambda$ の値を求める作業に時間をかけないこと。
+</WhyWrong>
+<Right>
+$\lambda$ は3式から消去して、$x$ と $y$ の関係と制約式だけで候補点を決める。$\lambda$ の値は検算に使う程度でよい。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）条件 $x^2+y^2=4$ のもとで $f=xy$ の最大値と最小値を求めなさい。
+<Reveal label="答え">
+$y=2\lambda x$、$x=2\lambda y$ より $x^2=y^2$。制約から $x=\pm\sqrt2$、$y=\pm\sqrt2$。$f=xy=\pm 2$ で、最大 $2$、最小 $-2$。
+</Reveal>
+
+（2）未定乗数法で立てる連立方程式を、成分で書きなさい。
+<Reveal label="答え">
+$f_x=\lambda g_x$、$f_y=\lambda g_y$、$g(x,y)=0$。3本とも必要で、制約式を落とすと候補が絞れない。
+</Reveal>
+
+（3）未定乗数法を記述式の答案で使うときの注意を述べなさい。
+<Reveal label="答え">
+高校範囲外なのでそのまま答案に書くと減点されうる。答えの候補出しや検算に使い、本解は1文字消去・相加相乗・判別式など高校の方法で書き直す。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（条件つき最大・最小）">
+（1）条件 $x+2y=5$ のもとで、$x^2+y^2$ の最小値を求めよ。
+
+（2）楕円 $\dfrac{x^2}{9}+\dfrac{y^2}{4}=1$ 上で、$x+y$ の最大値を求めよ。
+
+（3）$x+y+z=1$、$x\gt 0$、$y\gt 0$、$z\gt 0$ のとき、$xyz$ の最大値を、未定乗数法とは別の方法でも確かめよ。
+
+<Reveal label="解答">
+（1）$2x=\lambda$、$2y=2\lambda$ より $x=\dfrac{\lambda}{2}$、$y=\lambda$。制約より $\dfrac{\lambda}{2}+2\lambda=5$、$\lambda=2$。点は $(1,\ 2)$ で最小値 $1+4=5$。
+
+（2）$1=\lambda\dfrac{2x}{9}$、$1=\lambda\dfrac{2y}{4}$ より $\dfrac{x}{9}=\dfrac{y}{4}$、すなわち $x=\dfrac{9y}{4}$。楕円に代入して $y^2=\dfrac{16}{13}$、$x=\dfrac{9}{\sqrt{13}}$（同符号）。$x+y=\pm\sqrt{13}$ で最大は $\sqrt{13}$。
+
+（3）相加相乗平均より $x+y+z\ge 3\sqrt[3]{xyz}$。$1\ge 3\sqrt[3]{xyz}$ なので $xyz\le\dfrac{1}{27}$。等号は $x=y=z=\dfrac13$ で成立し、未定乗数法の結果と一致する。
+</Reveal>
+</Practice>

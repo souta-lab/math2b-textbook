@@ -1,0 +1,113 @@
+---
+title: "三角関数の導関数"
+summary: "極限 lim(sin h/h)=1 から (sin x)′=cos x を導き、cos・tan・合成まで計算する。"
+unit: "iii-differential"
+order: 4
+objectives:
+  - "lim(h→0) sin h/h=1 を用いて (sin x)′=cos x を導ける"
+  - "(cos x)′=−sin x、(tan x)′=1/cos²x を導関数として使える"
+  - "角が1次式や多項式の三角関数を合成関数として微分できる"
+prerequisites: ["iii-derivative/03-composite"]
+tags: ["三角関数の導関数", "sinの微分", "tanの微分"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$\sin x$ のグラフは波のように上下します。その接線の傾きもまた、場所によって変化するはずです。実はその傾きは $\cos x$ という、波をちょうど4分の1周期ずらした曲線になります。微分すると三角関数が三角関数のまま出てくる——この美しい対応を、極限から確かめましょう。
+</Hook>
+
+<Prediction
+  question="(sin x)′ はどれ？"
+  options={['cos x', '−cos x', 'sin x']}
+  answer="cos x"
+  explanation="加法定理と lim(sin h/h)=1 を使うと (sin x)′=cos x が導けます。符号のつかない cos x です。"
+/>
+
+前の章で学んだ基本極限 $\displaystyle\lim_{h\to 0}\frac{\sin h}{h}=1$ と、$\displaystyle\lim_{h\to 0}\frac{\cos h-1}{h}=0$ が、ここで主役になります。加法定理で差を分解してから、この2つの極限に持ち込みます。
+
+$$
+\frac{\sin(x+h)-\sin x}{h}
+=\sin x\cdot\frac{\cos h-1}{h}+\cos x\cdot\frac{\sin h}{h}
+$$
+
+$h\to 0$ とすると、第1項は $\sin x\cdot 0=0$、第2項は $\cos x\cdot 1=\cos x$ となります。よって $(\sin x)'=\cos x$ です。
+
+<Why>
+加法定理を使って $\sin(x+h)$ を $\sin x$ と $\cos x$ の式に分けるのは、$x$ と $h$ の役割を分離するためです。$h\to 0$ の極限では $x$ は固定したままなので、$\sin x$ と $\cos x$ は係数として外に出すことができます。残った $h$ だけの極限 $\sin h/h$ と $(\cos h-1)/h$ は、すでに極限の章で求めた既知の値です。新しい定理を覚えるのではなく、既習の極限に帰着させているのです。
+</Why>
+
+<Theorem name="三角関数の導関数">
+$$
+(\sin x)'=\cos x,\qquad (\cos x)'=-\sin x,\qquad (\tan x)'=\frac{1}{\cos^2 x}.
+$$
+
+$\tan$ の式は、$\tan x=\dfrac{\sin x}{\cos x}$ を商の微分公式で計算しても得られる。
+</Theorem>
+
+$\cos$ は $\sin$ と加法定理の関係が符号違いなので、微分すると $-\sin x$ になります。$\tan$ は $\cos^2 x$ を分母に置く形です。
+
+<WorkedExample title="例題: 三角関数を微分する">
+次の関数を微分しなさい。
+
+（a）$y=\sin 3x$　　（b）$y=\tan x$　　（c）$y=x\cos x$
+
+<Steps>
+<Step reason="(a) は内側 3x の微分 3 を掛ける合成関数です。">（a）外側 $\sin$ の導関数は $\cos$。内側 $3x$ の微分は $3$ なので $y'=3\cos 3x$。</Step>
+<Step reason="(b) は tan=sin/cos と分数に直し、商の微分公式を使うと tan の公式が導けます。">（b）$y=\dfrac{\sin x}{\cos x}$ より</Step>
+<Step reason="商の公式の分子は (sin)′cos−sin(cos)′ で、cos の微分の符号が負なので +sin² になります。">$y'=\dfrac{\cos x\cdot\cos x-\sin x\cdot(-\sin x)}{\cos^2 x}$。</Step>
+<Step reason="分子は cos²x+sin²x=1 となる相互関係を使います。">$y'=\dfrac{\cos^2 x+\sin^2 x}{\cos^2 x}=\dfrac{1}{\cos^2 x}$。</Step>
+<Step reason="(c) は積の微分公式 f′g+fg′ を使います。">（c）$y'=1\cdot\cos x+x\cdot(-\sin x)=\cos x-x\sin x$。</Step>
+</Steps>
+
+<Answer>
+（a）$y'=3\cos 3x$　　（b）$y'=\dfrac{1}{\cos^2 x}$　　（c）$y'=\cos x-x\sin x$
+</Answer>
+</WorkedExample>
+
+（b）の導出は、公式を丸暗記するのではなく「$\tan$ は $\sin/\cos$」という定義と商の微分からいつでも再現できることを示しています。入試では $\tan$ の微分が積・商・合成と絡んで出るので、この導出を一度手で書いておくと安心です。
+
+<Misconception>
+<Wrong>
+$(\cos x)'=\sin x$ である。
+</Wrong>
+<WhyWrong>
+$\cos$ の微分にはマイナスが付きます。加法定理で $\cos(x+h)=\cos x\cos h-\sin x\sin h$ となるので、差分を $h$ で割って $h\to 0$ とすると $-\sin x$ が残ります。$x=0$ で確かめると、$\cos x$ のグラフは $x=0$ で傾きが $0$ から減少に転じるので、微分係数の符号は負でなければなりません。
+</WhyWrong>
+<Right>
+$(\sin x)'=\cos x$、$(\cos x)'=-\sin x$。微分の「順番」で $\sin\to\cos\to-\sin\to-\cos\to\sin$ と回り、2回目以降にマイナスが現れると覚えると安全です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$y=\sin 2x$ と $y=\cos 3x$ を微分しなさい。
+<Reveal label="答え">
+$(\sin 2x)'=2\cos 2x$。$(\cos 3x)'=3\cdot(-\sin 3x)=-3\sin 3x$。
+</Reveal>
+
+（2）$y=\sin^2 x$ を微分しなさい。
+<Reveal label="答え">
+$y=(\sin x)^2$ とみて合成関数の微分を使う。$y'=2\sin x\cdot\cos x=\sin 2x$。
+</Reveal>
+
+（3）$y=\tan 2x$ を微分しなさい。
+<Reveal label="答え">
+外側 $\tan$ の導関数 $1/\cos^2$、内側 $2x$ の微分 $2$ なので $y'=\dfrac{2}{\cos^2 2x}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（三角関数の微分）">
+（1）$y=\sin x\cos x$ を微分せよ。
+（2）$y=\sin(x^2+1)$ を微分せよ。
+（3）$y=\cos^3 x$ を微分せよ。
+（4）$y=\dfrac{\sin x}{1+\cos x}$ を微分せよ。ただし $\cos x\ne -1$ とする。
+
+<Reveal label="解答">
+（1）積の微分より $y'=\cos x\cdot\cos x+\sin x\cdot(-\sin x)=\cos^2 x-\sin^2 x=\cos 2x$。別解として $y=\dfrac12\sin 2x$ と合成して $y'=\cos 2x$ でもよい。
+
+（2）外側 $\sin$ と内側 $x^2+1$ の合成。$y'=\cos(x^2+1)\cdot 2x=2x\cos(x^2+1)$。
+
+（3）外側 $u^3$、内側 $\cos x$。$y'=3\cos^2 x\cdot(-\sin x)=-3\sin x\cos^2 x$。
+
+（4）商の微分より $y'=\dfrac{\cos x(1+\cos x)-\sin x\cdot(-\sin x)}{(1+\cos x)^2}=\dfrac{\cos x+\cos^2 x+\sin^2 x}{(1+\cos x)^2}=\dfrac{1+\cos x}{(1+\cos x)^2}=\dfrac{1}{1+\cos x}$。
+</Reveal>
+</Practice>

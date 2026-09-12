@@ -1,0 +1,116 @@
+---
+title: "逆行列 — 変換を巻き戻す"
+summary: "逆行列の定義と2×2の公式、行列式が0のとき逆行列が存在しないことを理解する。"
+unit: "c-representation"
+order: 2
+objectives:
+  - "逆行列の定義 $AA^{-1}=A^{-1}A=E$ を説明できる"
+  - "2×2 行列の逆行列を行列式から計算できる"
+  - "行列式が0の行列が逆行列をもたないと判定できる"
+prerequisites: ["c-representation/01-matrix-product"]
+tags: ["逆行列", "行列式", "正則", "特異"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+数では、$0$ 以外のどんな数にも逆数があり、掛ければ $1$ に戻せます。$3\times\dfrac{1}{3}=1$ です。では行列でも、掛けると単位行列になる「逆数のような行列」が見つかるでしょうか。すべての行列にあるのでしょうか。実は、数の世界で $0$ だけが逆数をもたないのと同じように、行列にも「巻き戻せない」ものが存在します。その境目が何で決まるかを考えましょう。
+</Hook>
+
+<Prediction
+  question="$A=\begin{pmatrix}1 & 2\\3 & 4\end{pmatrix}$ は逆行列をもつか？"
+  options={['もつ', 'もたない', '各成分の逆数を並べれば逆行列になる']}
+  answer="もつ"
+  explanation="$1\cdot4-2\cdot3=-2$ が $0$ でないので逆行列をもちます。逆行列は各成分の逆数を並べたものではなく、専用の公式で求まります。"
+/>
+
+## 逆行列の定義
+
+正方行列 $A$ に対して、
+$$
+AX=XA=E
+$$
+を満たす行列 $X$ が存在するとき、$X$ を $A$ の**逆行列**といい、$A^{-1}$ で表します。このとき $A$ は**正則**である、または**逆行列をもつ**といいます。逆行列が存在すれば、それはただ1つに定まります。
+
+$2\times 2$ 行列では、**行列式**（determinant）が決定的な役割を果たします。
+
+<Definition term="2×2 行列の逆行列">
+$A=\begin{pmatrix}a & b\\c & d\end{pmatrix}$ に対し、
+$$
+\det A=ad-bc,\qquad
+A^{-1}=\frac{1}{ad-bc}\begin{pmatrix}d & -b\\-c & a\end{pmatrix}
+$$
+である。このとき $\det A\ne 0$ が必要十分条件で、$\det A=0$ のとき $A^{-1}$ は存在しない。$\det A$ は $|A|$ とも書く。
+</Definition>
+
+<KeyPoint>
+行列式が $0$ でないことが「割り算ができる」条件。逆向きに言えば、少しでも情報がつぶれる変換（面積が $0$ になる変換）は巻き戻せない。
+</KeyPoint>
+
+<Why>
+逆行列を導入するのは、連立方程式を場合分けなしで一気に解くためです。数の世界で $ax=b$ を $x=\dfrac{b}{a}$ と解くように、行列でも $AX=B$ を $X=A^{-1}B$ と書けます。行列式が $0$ かどうかが、その割り算が使えるかどうかを教えてくれる判定条件になっています。この「割り算可能性」を先に確認する一手が、後の連立方程式の解の個数まで見通させてくれます。
+</Why>
+
+<WorkedExample title="例題: 逆行列を求めて確認する">
+$$
+A=\begin{pmatrix}1 & 2\\3 & 4\end{pmatrix}
+$$
+の逆行列を求め、$AA^{-1}=E$ が成り立つことを確かめなさい。
+
+<Steps>
+<Step reason="まず AD−BC を計算し、0 でないことを確認します。0 なら逆行列は存在しません。">$\det A=1\cdot4-2\cdot3=4-6=-2\ne 0$ なので逆行列をもつ。</Step>
+<Step reason="公式に従い、対角成分を入れ替え、非対角成分の符号を変えて、行列式で割ります。">$A^{-1}=\dfrac{1}{-2}\begin{pmatrix}4 & -2\\-3 & 1\end{pmatrix}=\begin{pmatrix}-2 & 1\\\dfrac{3}{2} & -\dfrac{1}{2}\end{pmatrix}$。</Step>
+<Step reason="定義どおり掛けて単位行列に戻るかを確かめます。">$AA^{-1}=\begin{pmatrix}1 & 2\\3 & 4\end{pmatrix}\begin{pmatrix}-2 & 1\\\dfrac{3}{2} & -\dfrac{1}{2}\end{pmatrix}=\begin{pmatrix}1 & 0\\0 & 1\end{pmatrix}=E$。</Step>
+</Steps>
+
+<Answer>
+$A^{-1}=\begin{pmatrix}-2 & 1\\\dfrac{3}{2} & -\dfrac{1}{2}\end{pmatrix}$。確かに $AA^{-1}=E$ となる。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+逆行列とは、各成分を逆数にした行列である。たとえば $A=\begin{pmatrix}1 & 2\\3 & 4\end{pmatrix}$ の逆行列は $\begin{pmatrix}1 & \dfrac{1}{2}\\\dfrac{1}{3} & \dfrac{1}{4}\end{pmatrix}$。
+</Wrong>
+<WhyWrong>
+各成分の逆数を並べた行列は、行列の積を使って $A$ を単位行列に戻せません。実際に掛けてみると単位行列になりませんし、そもそも一般的な行列の積は成分ごとではないので、成分ごとの逆数が打ち消し合う保証がありません。行列の逆は「積全体の逆」であって、成分単位の操作ではないのです。
+</WhyWrong>
+<Right>
+2×2 なら「対角を入れ替え、非対角の符号を反転し、行列式で割る」という手順を覚えます。どの計算でも、最後に $AA^{-1}=E$ を1回確かめれば符号ミスに気づけます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}3 & 1\\5 & 2\end{pmatrix}$ の逆行列を求めなさい。
+
+(2) $B=\begin{pmatrix}2 & 4\\1 & 2\end{pmatrix}$ は逆行列をもつか。理由をつけて答えなさい。
+
+(3) $\begin{pmatrix}2 & 1\\3 & 2\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}5\\8\end{pmatrix}$ を、逆行列を使って解きなさい。
+
+<Reveal label="答え">
+(1) $\det A=3\cdot2-1\cdot5=1$ なので、$A^{-1}=\begin{pmatrix}2 & -1\\-5 & 3\end{pmatrix}$。
+
+(2) $\det B=2\cdot2-4\cdot1=0$ なので逆行列をもたない。2行目が1行目の定数倍で、情報が重複しているため。
+
+(3) 係数行列の逆行列は $\begin{pmatrix}2 & -1\\-3 & 2\end{pmatrix}$。よって $\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}2 & -1\\-3 & 2\end{pmatrix}\begin{pmatrix}5\\8\end{pmatrix}=\begin{pmatrix}10-8\\-15+16\end{pmatrix}=\begin{pmatrix}2\\1\end{pmatrix}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="逆行列と検算">
+(1) $A=\begin{pmatrix}4 & 3\\1 & 1\end{pmatrix}$ の逆行列を求め、$AA^{-1}=E$ を確かめなさい。
+
+(2) 行列 $A=\begin{pmatrix}a & 2\\3 & 4\end{pmatrix}$ が逆行列をもたないとき、$a$ を求めなさい。
+
+(3) (1) の逆行列を使って $\begin{pmatrix}4 & 3\\1 & 1\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}1\\1\end{pmatrix}$ を解きなさい。
+
+<Reveal label="解答">
+(1) $\det A=4-3=1$ なので $A^{-1}=\begin{pmatrix}1 & -3\\-1 & 4\end{pmatrix}$。$AA^{-1}=\begin{pmatrix}4\cdot1+3\cdot(-1) & 4\cdot(-3)+3\cdot4\\1\cdot1+1\cdot(-1) & 1\cdot(-3)+1\cdot4\end{pmatrix}=\begin{pmatrix}1 & 0\\0 & 1\end{pmatrix}$。
+
+(2) $\det A=4a-6=0$ より $a=\dfrac{3}{2}$。
+
+(3) 逆行列を使って $\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}1 & -3\\-1 & 4\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix}=\begin{pmatrix}-2\\3\end{pmatrix}$。検算すると $4(-2)+3\cdot3=1$、$-2+3=1$ で正しい。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+逆行列は、連立方程式の解・一次変換の逆・行列方程式の主役です。入試では「逆行列を求めよ」より、「逆行列を使って連立方程式を解け」「行列 $A$ が逆行列をもたない条件を求めよ」という形で問われます。後者は $\det A=0$ を未知数の方程式として解くだけで、実質は1次式です。記述では $AA^{-1}=E$ の確認を1行添えると、計算の符号ミスを自分で発見できるうえ、採点者にも計算過程が伝わります。

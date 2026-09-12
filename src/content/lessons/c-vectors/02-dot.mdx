@@ -1,0 +1,130 @@
+---
+title: "内積 — 2つのベクトルの角度を測る"
+summary: "内積をなす角のコサインで定義し、成分の積和で計算して、垂直条件と角度を導く。"
+unit: "c-vectors"
+order: 2
+objectives:
+  - "内積を |a||b|cosθ で定義し、意味を説明できる"
+  - "成分の積和で内積を計算し、なす角を求められる"
+  - "垂直条件 a·b=0 を式で判定できる"
+prerequisites: ["c-vectors/01-components"]
+tags: ["内積", "なす角", "垂直条件", "コサイン"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+そりをロープで引くとき、ロープが進行方向にまっすぐ向いているほど楽に進みます。斜め後ろに引くと、力の一部はそりを浮かせる方向に逃げてしまいます。向きの違う2つのベクトルが「どれだけ同じ方向を向いているか」を1つの数で測るのが内積です。ここから、角度と垂直という図形の情報が式で扱えるようになります。
+</Hook>
+
+<Prediction
+  question="$\vec{a}$ と $\vec{b}$ がなす角が $90^\circ$ のとき、$\vec{a}\cdot\vec{b}$ の値はどれ？"
+  options={['0', '$|\vec{a}||\vec{b}|$', '$1$']}
+  answer="0"
+  explanation="内積は $|\vec{a}||\vec{b}|\cos\theta$ で、$\cos 90^\circ=0$ です。したがって内積は 0 になります。垂直を内積で判定できるのはこのためです。"
+/>
+
+## 内積の定義
+
+$\vec{0}$ でない2つのベクトル $\vec{a}$、$\vec{b}$ のなす角を $\theta$（$0^\circ\le\theta\le180^\circ$）とします。このとき
+
+$$
+\vec{a}\cdot\vec{b}=|\vec{a}||\vec{b}|\cos\theta
+$$
+
+を $\vec{a}$ と $\vec{b}$ の**内積**といいます。内積の結果はベクトルではなく、1つの**実数**です。$|\vec{b}|\cos\theta$ は $\vec{b}$ が $\vec{a}$ の向きに落とす影の長さなので、内積は「$\vec{a}$ の大きさ × $\vec{b}$ の影の長さ」と読めます。
+
+<Why>
+内積を $\cos\theta$ で定義するのは、「同じ方向をどれだけ向いているか」を測るのに、向きのずれをコサインで表すのが自然だからです。同じ向きなら $\cos\theta=1$ で最大、直角なら $0$、逆向きなら $-1$ になります。この1つの数が、あとで成分の積和という計算しやすい形にもつながり、長さと角度の両方を式で扱えるようになります。
+</Why>
+
+## 成分による内積
+
+$\vec{a}=(a_1,a_2)$、$\vec{b}=(b_1,b_2)$ のとき、内積は成分の積和で計算できます。
+
+$$
+\vec{a}\cdot\vec{b}=a_1b_1+a_2b_2
+$$
+
+導き方は余弦定理です。$\vec{b}-\vec{a}$ の大きさの2乗を、余弦定理と成分の2乗の2通りで表して等しいと置くと、$a_1b_1+a_2b_2$ が現れます。この式を使えば、なす角を図から測らなくても内積が出せます。
+
+<Theorem name="なす角と垂直">
+$\vec{0}$ でない $\vec{a}$、$\vec{b}$ について、なす角を $\theta$ とすると
+
+$$
+\cos\theta=\frac{\vec{a}\cdot\vec{b}}{|\vec{a}||\vec{b}|}
+$$
+
+また $\vec{a}\perp\vec{b}$ であることは、$\vec{a}\cdot\vec{b}=0$ であることと同値である。
+</Theorem>
+
+内積には次の性質があります。$\vec{a}\cdot\vec{a}=|\vec{a}|^2$ は大きさの2乗を与え、展開の計算でよく使います。
+
+- $\vec{a}\cdot\vec{b}=\vec{b}\cdot\vec{a}$
+- $(\vec{a}+\vec{b})\cdot\vec{c}=\vec{a}\cdot\vec{c}+\vec{b}\cdot\vec{c}$
+- $(k\vec{a})\cdot\vec{b}=k(\vec{a}\cdot\vec{b})$
+- $\vec{a}\cdot\vec{a}=|\vec{a}|^2$
+
+<WorkedExample title="例題: なす角と垂直条件">
+(1) $\vec{a}=(1,2)$、$\vec{b}=(3,1)$ のなす角 $\theta$ を求めなさい。
+
+(2) $\vec{a}=(2,-1)$ と $\vec{b}=(t,2)$ が垂直となる $t$ を求めなさい。
+
+<Steps>
+<Step reason="なす角は内積と大きさから cosθ を出せば分かります。まず内積を成分の積和で計算します。">(1) $\vec{a}\cdot\vec{b}=1\cdot3+2\cdot1=5$。</Step>
+<Step reason="分母に来る大きさをそれぞれ求めます。">(1) $|\vec{a}|=\sqrt{1+4}=\sqrt{5}$、$|\vec{b}|=\sqrt{9+1}=\sqrt{10}$。</Step>
+<Step reason="cosθ の式に代入して、特別角になるかを確認します。">(1) $\cos\theta=\dfrac{5}{\sqrt{5}\sqrt{10}}=\dfrac{5}{5\sqrt{2}}=\dfrac{1}{\sqrt{2}}$。よって $\theta=45^\circ$。</Step>
+<Step reason="垂直条件は内積が 0 になることなので、そのまま方程式にします。">(2) $\vec{a}\cdot\vec{b}=2t-2=0$ より $t=1$。</Step>
+</Steps>
+
+<Answer>
+(1) $\theta=45^\circ$。(2) $t=1$。
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+内積 $\vec{a}\cdot\vec{b}$ はベクトルであり、大きさは $|\vec{a}||\vec{b}|$ である。
+</Wrong>
+<WhyWrong>
+内積の定義 $|\vec{a}||\vec{b}|\cos\theta$ には $\cos\theta$ が掛かっているので、結果は向きをもたない実数です。また $|\vec{a}||\vec{b}|$ になるのは $\cos\theta=1$、つまり2つのベクトルが同じ向きのときに限られます。直角のときは $0$、鈍角のときは負になります。
+</WhyWrong>
+<Right>
+$\vec{a}\cdot\vec{b}$ は実数で、符号はなす角で決まります。同じ向きで正、直角で $0$、鈍角で負。成分で計算するときも $a_1b_1+a_2b_2$ というただの数になります。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\vec{a}=(3,4)$、$\vec{b}=(-4,3)$ の内積を求め、2つのベクトルのなす角を答えなさい。
+
+(2) $|\vec{a}|=2$、$|\vec{b}|=3$ で $\vec{a}\cdot\vec{b}=3$ のとき、なす角 $\theta$ を求めなさい。
+
+(3) $\vec{a}=(1,2)$ と $\vec{b}=(x,-1)$ が垂直となる $x$ を求めなさい。
+
+<Reveal label="答え">
+(1) $\vec{a}\cdot\vec{b}=3\cdot(-4)+4\cdot3=0$。内積が $0$ なのでなす角は $90^\circ$。
+
+(2) $\cos\theta=\dfrac{3}{2\cdot3}=\dfrac{1}{2}$ なので $\theta=60^\circ$。
+
+(3) 垂直条件 $1\cdot x+2\cdot(-1)=0$ より $x=2$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="内積を図形に使う">
+(1) $A(0,0)$、$B(2,2)$、$C(4,0)$ について、$\angle BAC$ を求めなさい。
+
+(2) $|\vec{a}|=3$、$|\vec{b}|=4$、$\vec{a}\cdot\vec{b}=-6$ のとき、なす角 $\theta$ を求めなさい。
+
+(3) $\vec{a}=(1,1)$、$\vec{b}=(2,k)$ のなす角が $45^\circ$ となる $k$ を求めなさい。
+
+<Reveal label="解答">
+(1) $\vec{AB}=(2,2)$、$\vec{AC}=(4,0)$ で $\vec{AB}\cdot\vec{AC}=8$。$|\vec{AB}|=2\sqrt{2}$、$|\vec{AC}|=4$ なので $\cos\angle BAC=\dfrac{8}{2\sqrt{2}\cdot4}=\dfrac{1}{\sqrt{2}}$。よって $45^\circ$。
+
+(2) $\cos\theta=\dfrac{-6}{3\cdot4}=-\dfrac{1}{2}$ なので $\theta=120^\circ$。
+
+(3) $\vec{a}\cdot\vec{b}=2+k$。$|\vec{a}|=\sqrt{2}$、$|\vec{b}|=\sqrt{4+k^2}$。なす角 $45^\circ$ より $\dfrac{2+k}{\sqrt{2}\sqrt{4+k^2}}=\dfrac{1}{\sqrt{2}}$。両辺を整理して $2+k=\sqrt{4+k^2}$。2乗して $(2+k)^2=4+k^2$、$4+4k+k^2=4+k^2$ より $k=0$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+内積は入試のベクトル問題で最も出番の多い道具です。角度・垂直・長さの3つが必要になったら、まず内積を考えます。特に「$\vec{a}\cdot\vec{b}=0$ を示せ」という垂直の証明、「なす角を求めよ」というコサインの計算は典型中の典型です。$|\vec{a}+\vec{b}|^2=|\vec{a}|^2+2\vec{a}\cdot\vec{b}+|\vec{b}|^2$ のように、大きさの2乗を内積に展開する変形も頻出なので、展開の形で覚えておくと速く動けます。

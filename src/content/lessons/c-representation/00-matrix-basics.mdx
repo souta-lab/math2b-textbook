@@ -1,0 +1,127 @@
+---
+title: "行列の基本 — 数の表に演算を入れる"
+summary: "行列を数の長方形として定義し、相等・和・差・実数倍を成分ごとに計算する。"
+unit: "c-representation"
+order: 0
+objectives:
+  - "行列の型（行数と列数）と成分 $a_{ij}$ を読み取れる"
+  - "行列の相等が型と全成分の一致を意味すると説明できる"
+  - "和・差・実数倍を成分ごとに計算できる"
+prerequisites: ["c-vectors", "ii-expressions"]
+tags: ["行列", "成分", "行列の和", "スカラー倍"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+体育祭の得点表を思い浮かべてください。赤組・白組の、玉入れ・リレー・綱引きの得点が、3行2列の表にまとまっています。2日目の得点表が別にあったとき、2日間の合計を知りたければ「同じ種目の点数どうし」を足します。この「数の表そのもの」を1つの対象として扱い、足し算や定数倍の規則を決めたものが行列です。表を量として動かせるようにすると、連立方程式も図形の変形も、同じ記号で書けるようになります。
+</Hook>
+
+<Prediction
+  question="同じ形の2つの得点表を足して「合計の得点表」を作るとき、正しい計算はどれ？"
+  options={['同じ位置にある数の組どうしを足して、同じ形の表を作る', '表に書かれた数をすべて足して1つの数にする', '行ごとに足し、列の数はそのまま残す']}
+  answer="同じ位置にある数の組どうしを足して、同じ形の表を作る"
+  explanation="種目が同じマスどうしを足します。すべて足して1つの数にしてしまうと、どの種目が何点かという情報が消えます。行列の和は形を保ったまま、成分ごとに足し合わせます。"
+/>
+
+## 行列は数の長方形
+
+数を長方形に並べ、括弧でくくったものを**行列**といいます。横の並びを**行**、縦の並びを**列**と呼びます。$m$ 行 $n$ 列の行列を $m\times n$ 型の行列といい、各数を**成分**といいます。
+
+$$
+A=\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22} & \cdots & a_{2n}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{pmatrix}
+$$
+
+$a_{ij}$ は「$i$ 行目の、$j$ 列目の成分」を表します。$i$ が行、$j$ が列で、この順序は最後まで変えません。行数と列数が等しい行列を**正方行列**、$1\times n$ 型を行ベクトル、$m\times 1$ 型を列ベクトルと呼ぶこともあります。
+
+<Definition term="行列の相等">
+2つの行列は、**型が同じ**で、**すべての成分が等しい**とき等しいといい、$A=B$ と書く。
+</Definition>
+
+<Definition term="行列の和・差・実数倍">
+2つの行列 $A$、$B$ の型が等しいとき、対応する成分どうしを足したものを $A+B$、引いたものを $A-B$ とする。実数 $k$ に対して、すべての成分を $k$ 倍したものを $kA$ とする。すなわち
+$$
+(A+B)_{ij}=a_{ij}+b_{ij},\qquad (A-B)_{ij}=a_{ij}-b_{ij},\qquad (kA)_{ij}=k\,a_{ij}
+$$
+である。
+</Definition>
+
+<KeyPoint>
+型が違う行列どうしの和は**定義されない**。行列の計算では、まず型を確認するのが出発点になる。
+</KeyPoint>
+
+<Why>
+なぜ「成分ごと」に足すのか。得点表の同じマスは「同じ種目」という同じ意味をもつからです。意味がそろっているものだけを合算できるので、和は同じ位置どうしの計算になります。もし全部の数を足して1つの数にしてしまうと、左の行列と右の行列で並べ方が違うだけで意味が変わるのに、結果が区別できません。成分ごとの規則は、表の情報を壊さずに合成するための最小の取り決めなのです。
+</Why>
+
+<WorkedExample title="例題: 和・差・実数倍をまとめて計算する">
+$$
+A=\begin{pmatrix}2 & -1\\3 & 4\end{pmatrix},\qquad
+B=\begin{pmatrix}1 & 5\\-2 & 0\end{pmatrix}
+$$
+とする。次の行列を求めなさい。
+
+(1) $A+B$　(2) $A-B$　(3) $2A-B$
+
+<Steps>
+<Step reason="両方とも2行2列で型がそろっているので、同じ位置どうしを足せます。">(1) $A+B=\begin{pmatrix}2+1 & -1+5\\3+(-2) & 4+0\end{pmatrix}=\begin{pmatrix}3 & 4\\1 & 4\end{pmatrix}$。</Step>
+<Step reason="差も同じ型どうしなので、同じ位置の成分を引きます。">(2) $A-B=\begin{pmatrix}2-1 & -1-5\\3-(-2) & 4-0\end{pmatrix}=\begin{pmatrix}1 & -6\\5 & 4\end{pmatrix}$。</Step>
+<Step reason="まず $2A$ を作ってから $B$ を引くと、実数倍と差の順序が整理できます。">(3) $2A=\begin{pmatrix}4 & -2\\6 & 8\end{pmatrix}$ より、$2A-B=\begin{pmatrix}4-1 & -2-5\\6-(-2) & 8-0\end{pmatrix}=\begin{pmatrix}3 & -7\\8 & 8\end{pmatrix}$。</Step>
+</Steps>
+
+<Answer>
+(1) $\begin{pmatrix}3 & 4\\1 & 4\end{pmatrix}$　(2) $\begin{pmatrix}1 & -6\\5 & 4\end{pmatrix}$　(3) $\begin{pmatrix}3 & -7\\8 & 8\end{pmatrix}$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+行列の和とは、書かれている数をすべて足し合わせて1つの数にすることである。
+</Wrong>
+<WhyWrong>
+すべての成分を足した値は「成分の総和」と呼ばれる1つの数であって、行列の和ではありません。行列の和は型を保ち、同じ位置の成分どうしを足します。総和と和を混同すると、行列の等式や一次変換の計算で形が合わなくなり、手が止まります。
+</WhyWrong>
+<Right>
+和・差・実数倍は、必ず**型をそろえてから、同じ位置で**行います。計算の前に「どちらも何行何列か」を口に出して確認する習慣をつけると、型の食い違いによる誤りが激減します。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}1 & 2\\0 & -1\end{pmatrix}$、$B=\begin{pmatrix}3 & -1\\2 & 4\end{pmatrix}$ のとき、$A+B$ と $3A-2B$ を求めなさい。
+
+(2) $2\times 3$ 型の行列と $3\times 2$ 型の行列は、和を定義できるか。理由をつけて答えなさい。
+
+(3) すべての成分が $0$ の行列を零行列という。$A+O$ が $A$ に等しくなるのはなぜか、成分ごとの規則から説明しなさい。
+
+<Reveal label="答え">
+(1) $A+B=\begin{pmatrix}4 & 1\\2 & 3\end{pmatrix}$。$3A=\begin{pmatrix}3 & 6\\0 & -3\end{pmatrix}$、$2B=\begin{pmatrix}6 & -2\\4 & 8\end{pmatrix}$ なので $3A-2B=\begin{pmatrix}-3 & 8\\-4 & -11\end{pmatrix}$。
+
+(2) 定義できない。和は型が等しい行列にしか定義されず、$2\times 3$ 型と $3\times 2$ 型は型が異なる。
+
+(3) どの位置 $(i,j)$ でも $(A+O)_{ij}=a_{ij}+0=a_{ij}$ となるから、すべての成分が一致し $A+O=A$ である。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="型を確認してから計算する">
+(1) $A=\begin{pmatrix}2 & 1\\-1 & 3\end{pmatrix}$ について、$2A-\dfrac{1}{2}A$ を計算しなさい。
+
+(2) $A=\begin{pmatrix}a & 2\\1 & b\end{pmatrix}$、$B=\begin{pmatrix}3 & c\\d & -2\end{pmatrix}$ が $A=B$ を満たすとき、$a,b,c,d$ を求めなさい。
+
+(3) $\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}1\\1\end{pmatrix}+2\begin{pmatrix}2\\-1\end{pmatrix}$ を満たす $x$、$y$ を求めなさい。
+
+<Reveal label="解答">
+(1) $2A=\begin{pmatrix}4 & 2\\-2 & 6\end{pmatrix}$、$\dfrac{1}{2}A=\begin{pmatrix}1 & \dfrac{1}{2}\\-\dfrac{1}{2} & \dfrac{3}{2}\end{pmatrix}$ なので、$2A-\dfrac{1}{2}A=\dfrac{3}{2}A=\begin{pmatrix}3 & \dfrac{3}{2}\\-\dfrac{3}{2} & \dfrac{9}{2}\end{pmatrix}$。
+
+(2) 相等条件より $a=3$、$2=c$、$1=d$、$b=-2$。
+
+(3) 右辺は $\begin{pmatrix}1+4\\1-2\end{pmatrix}=\begin{pmatrix}5\\-1\end{pmatrix}$ なので $x=5$、$y=-1$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+行列の和・差・実数倍そのものが大問になることは多くありません。しかし、この後の積・逆行列・一次変換・連立方程式はすべて、まず型をそろえて成分を並べる操作の上に成り立っています。入試で行列が並んだ瞬間に「型は何か」「成分はどう並ぶか」を反射的に確認できるかどうかが、その先の計算ミスを左右します。特に、$A=B$ 型の相等条件は未知数を含む行列方程式の基本の一手になるので、初回で確実に手に馴染ませておきましょう。

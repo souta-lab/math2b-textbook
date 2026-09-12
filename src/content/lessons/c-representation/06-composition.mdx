@@ -1,0 +1,133 @@
+---
+title: "変換の合成 — 行列の積の意味"
+summary: "2つの一次変換の合成が行列の積で表されることを学び、積の順序が結果を変えることを確かめる。"
+unit: "c-representation"
+order: 6
+objectives:
+  - "2つの変換の合成行列を、積の順序に注意して計算できる"
+  - "回転の合成が角の和の回転になることを確かめられる"
+  - "逆変換が逆行列で表されることを説明できる"
+prerequisites: ["c-representation/05-transform-figures"]
+tags: ["合成変換", "行列の積", "回転", "逆変換"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+写真を左右反転してから90°回転するのと、90°回転してから左右反転するのでは、出来上がりの向きが違います。同じ2つの操作を使っているのに、順番だけで結果が変わる。この「操作を続けて行う」という日常的な行為を、行列の言葉に翻訳するとどうなるでしょうか。じつは「続けて行う」は、行列の掛け算としてそのまま表せます。順序が結果を変える理由も、積の非可換性として説明できます。
+</Hook>
+
+<Prediction
+  question="先に変換 $B$、続いて変換 $A$ を行う合成変換の行列はどれ？"
+  options={['$AB$', '$BA$', '$A+B$']}
+  answer="$AB$"
+  explanation="点 $\vec{x}$ に先に $B$ を作用させると $B\vec{x}$、それに続いて $A$ を作用させると $A(B\vec{x})=(AB)\vec{x}$。よって合成は $AB$ です。$A+B$ は2つの変換を足した別の変換で、合成ではありません。"
+/>
+
+## 合成変換と積
+
+2つの一次変換
+$$
+f(\vec{x})=A\vec{x},\qquad g(\vec{x})=B\vec{x}
+$$
+をこの順、つまり先に $f$、次に $g$ の順に続けて行う変換を考えます。点 $\vec{x}$ はまず $A\vec{x}$ へ移り、次に $B(A\vec{x})$ へ移ります。結合法則より
+$$
+B(A\vec{x})=(BA)\vec{x}
+$$
+なので、合成変換の行列は $BA$ です。**先に行う変換の行列ほど、積の右側に来る**と覚えます。
+
+<Theorem name="合成変換の性質">
+行列 $A$、$B$、$E$ を単位行列、$A^{-1}$ を $A$ の逆行列とする。
+
+- 合成変換の行列は積 $BA$（先に $A$、次に $B$）で与えられる。
+- 逆変換の行列は $A^{-1}$ である。
+- $\det(AB)=\det A\cdot\det B$、$(AB)^{-1}=B^{-1}A^{-1}$ が成り立つ。
+- 一般に $AB\ne BA$ であり、合成の順序を入れ替えると変換が変わる。
+</Theorem>
+
+<Why>
+行列の積を「行と列の内積」という不自然な形で定義したのは、まさにこの合成を表すためです。先に $A$、次に $B$ を行うとき、$A$ の出力が $B$ の入力になります。この「前者の出力を後者の各成分へ配り、足し合わせる」操作が、$B$ の行と $A$ の列の内積になります。だから積の順序は合成の順序と一致し、逆にすると別の変換になります。座標変換や連立方程式の代入でも、この順序がそのまま効いてきます。
+</Why>
+
+<WorkedExample title="例題: 合成の順序を変えて比べる">
+$$
+A=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}
+\quad(\text{90°の回転}),
+\qquad
+B=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}
+\quad(\text{x軸対称})
+$$
+とする。次の合成変換を求めなさい。
+
+(1) 先に $B$、次に $A$ を行う合成
+
+(2) 先に $A$、次に $B$ を行う合成
+
+<Steps>
+<Step reason="先に B、次に A なので、積の右側に B、左側に A を並べます。">(1) 合成行列は $AB=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}$。</Step>
+<Step reason="AB の結果は x 成分と y 成分を入れ替える変換なので、直線 y=x に関する対称移動です。">(1) これは $y=x$ に関する対称移動。</Step>
+<Step reason="先に A、次に B なので、積の右側に A、左側に B を並べます。">(2) 合成行列は $BA=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}=\begin{pmatrix}0 & -1\\-1 & 0\end{pmatrix}$。</Step>
+<Step reason="BA の結果は成分の符号を両方反転する変換なので、直線 y=−x に関する対称移動です。">(2) これは $y=-x$ に関する対称移動。</Step>
+</Steps>
+
+<Answer>
+(1) $AB=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}$（$y=x$ 対称）　(2) $BA=\begin{pmatrix}0 & -1\\-1 & 0\end{pmatrix}$（$y=-x$ 対称）。順序を変えると別の変換になる。
+</Answer>
+</WorkedExample>
+
+## 回転の合成
+
+回転の合成では、順序を入れ替えても結果が同じになります。角 $\alpha$ の回転と角 $\beta$ の回転を続けて行えば、合わせて角 $\alpha+\beta$ の回転になるからです。
+
+$$
+R(\alpha)R(\beta)=R(\alpha+\beta)
+$$
+
+たとえば $R(30^\circ)R(60^\circ)=R(90^\circ)$ です。三角関数の加法定理が、この等式の背後で働いています。
+
+<Misconception>
+<Wrong>
+合成変換 $AB$ は「$A$ を行ってから $B$ を行う」という意味である。
+</Wrong>
+<WhyWrong>
+記号の並びと実行順は逆になります。点 $\vec{x}$ に対し、まず $B$ が作用して $B\vec{x}$ になり、次に $A$ が作用します。$A(B\vec{x})=(AB)\vec{x}$ なので、$AB$ は「先に $B$、次に $A$」です。この順序を逆に覚えると、合成行列を求める問題で答えが別の変換になってしまいます。
+</WhyWrong>
+<Right>
+「右から左へ作用する」と覚え、$AB$ の一番右の $B$ が最初、左の $A$ が最後に効く、と読む習慣をつけます。式を書くときは、実際に点を1つ決めて $B$ を先に掛けて確かめると安全です。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$（90°回転）と $B=\begin{pmatrix}-1 & 0\\0 & -1\end{pmatrix}$（原点対称）について、$AB$ と $BA$ を求めなさい。
+
+(2) 単位行列 $E$ と逆行列を使い、合成変換 $BA$ の逆変換の行列が何になるか答えなさい。
+
+(3) $R(45^\circ)$ を2回続けて行う変換が、どの基本変換と同じになるか答えなさい。
+
+<Reveal label="答え">
+(1) $AB=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}\begin{pmatrix}-1 & 0\\0 & -1\end{pmatrix}=\begin{pmatrix}0 & 1\\-1 & 0\end{pmatrix}$、$BA=\begin{pmatrix}-1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}=\begin{pmatrix}0 & 1\\-1 & 0\end{pmatrix}$。この2つは等しい。
+
+(2) $(BA)^{-1}=A^{-1}B^{-1}$ である。
+
+(3) $R(45^\circ)^{2}=R(90^\circ)$ となり、原点中心の90°回転と同じ。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="合成と逆変換">
+(1) $A=\begin{pmatrix}2 & 0\\0 & 1\end{pmatrix}$、$B=\begin{pmatrix}1 & 0\\0 & 3\end{pmatrix}$ について、$AB$ と $BA$ を求めなさい。2つは等しいか。
+
+(2) 先に $A=\begin{pmatrix}1 & 1\\0 & 1\end{pmatrix}$ の変換、次に $B=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}$ の変換を行う合成行列を求めなさい。
+
+(3) $A=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}$ の逆変換の行列を求め、$A$ と掛けて単位行列になることを確かめなさい。
+
+<Reveal label="解答">
+(1) $AB=\begin{pmatrix}2 & 0\\0 & 3\end{pmatrix}$、$BA=\begin{pmatrix}2 & 0\\0 & 3\end{pmatrix}$。どちらも対角成分をそれぞれ2倍、3倍する変換なので等しい。
+
+(2) 先に $A$、次に $B$ なので合成は $BA=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}\begin{pmatrix}1 & 1\\0 & 1\end{pmatrix}=\begin{pmatrix}0 & 1\\1 & 1\end{pmatrix}$。
+
+(3) $\det A=1$ なので $A^{-1}=\begin{pmatrix}1 & -2\\0 & 1\end{pmatrix}$。$AA^{-1}=\begin{pmatrix}1 & -2+2\\0 & 1\end{pmatrix}=\begin{pmatrix}1 & 0\\0 & 1\end{pmatrix}$。
+</Reveal>
+</Practice>
+
+## 高校・入試での用途
+
+合成変換は、入試では「2つの変換を続けて行った結果を表す行列を求めよ」「回転を繰り返したときの変換を求めよ」「逆変換を求めよ」という形で問われます。最も差がつくのが順序です。右側の行列が先に作用する、という原則を外すと、答えが別の変換になってしまいます。また、回転の合成が角の和になること、$R(\theta)^{n}=R(n\theta)$ となることは、正多角形や図形の対称性を調べる問題で威力を発揮します。逆行列の公式 $(AB)^{-1}=B^{-1}A^{-1}$ も、順序を逆にする点に注意して覚えましょう。

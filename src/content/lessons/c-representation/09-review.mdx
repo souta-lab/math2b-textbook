@@ -1,0 +1,130 @@
+---
+title: "章末まとめと発展 — 行列・一次変換・グラフ"
+summary: "行列の演算から逆行列・一次変換・固有値・離散グラフまでを、入試の型として総復習する。"
+unit: "c-representation"
+order: 9
+objectives:
+  - "行列の演算・逆行列・連立方程式を一連の流れで処理できる"
+  - "一次変換とその合成を、図形・固有値と結びつけて考えられる"
+  - "隣接行列を使って、グラフの経路の数を数えられる"
+prerequisites: ["c-representation/08-discrete-graph"]
+tags: ["まとめ", "行列", "一次変換", "固有値", "グラフ"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+この章では、数の表としての行列から始めて、積・逆行列・連立方程式・一次変換・合成・固有値・グラフまで一気に進みました。ここで問われるのは、個々の計算を覚えているかどうかではなく、問題を見たときに「どの道具を、どの順で使うか」を選べるかどうかです。入試の行列問題は、たいてい複数の道具を1つの流れで組み合わせます。最後に、章全体を1本の道としてたどり直しましょう。
+</Hook>
+
+<Prediction
+  question="$A=\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}$ の固有値はどれ？"
+  options={['$1$ と $3$', '$2$ と $2$', '$2$ と $3$']}
+  answer="$1$ と $3$"
+  explanation="$\operatorname{tr}A=4$、$\det A=3$ なので、特性方程式は $\lambda^{2}-4\lambda+3=0$。これを解くと $\lambda=1,\ 3$ です。"
+/>
+
+## この章の道具一覧
+
+| 道具 | 式 | 使いどころ |
+|---|---|---|
+| 行列の積 | $(AB)_{ij}=\sum_k a_{ik}b_{kj}$ | 変換の合成、経路の数え上げ |
+| 行列式 | $\det A=ad-bc$ | 逆行列の有無、面積比 |
+| 逆行列 | $A^{-1}=\dfrac{1}{ad-bc}\begin{pmatrix}d & -b\\-c & a\end{pmatrix}$ | 連立方程式、逆変換 |
+| 一次変換 | $\begin{pmatrix}x'\\y'\end{pmatrix}=A\begin{pmatrix}x\\y\end{pmatrix}$ | 回転・対称・拡大 |
+| 回転行列 | $R(\theta)=\begin{pmatrix}\cos\theta & -\sin\theta\\\sin\theta & \cos\theta\end{pmatrix}$ | 角度の合成、正多角形 |
+| 合成 | 先に $A$、次に $B$ は $BA$ | 順序が重要 |
+| 固有値 | $\det(A-\lambda E)=0$ | 行列の $n$ 乗、漸化式 |
+| 隣接行列 | $(A^{m})_{ij}$ は長さ $m$ の道の数 | グラフの経路 |
+
+<Why>
+この章の道具を1つの表にまとめるのは、暗記項目を増やすためではなく、問題を見た瞬間に「使う道具」と「順序」を選べるようにするためです。複合問題は、問題を行列の言葉に翻訳する、必要な計算をする、答えを問題の言葉に戻す、という3段階に分解できます。1つひとつの計算はすでに学んだものばかりなので、どの場面でどの道具が働くかを結びつけておけば、初見の問題でも手が止まりません。
+</Why>
+
+## 総合例題
+
+$$
+A=\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}
+$$
+について、次の問いに答えなさい。
+
+(1) $A$ の逆行列を求めなさい。
+
+(2) 連立方程式 $\begin{cases}2x+y=3\\x+2y=3\end{cases}$ を逆行列を使って解きなさい。
+
+(3) $A$ の固有値と固有ベクトルを求めなさい。
+
+(4) 3点 $(0,0)$、$(1,0)$、$(0,1)$ を $A$ で移した三角形の面積を求めなさい。
+
+<WorkedExample title="例題: 章の道具を一続きで使う">
+上の (1)〜(4) を順に解きなさい。
+
+<Steps>
+<Step reason="逆行列は、行列式を計算し、公式に当てはめれば求まります。">(1) $\det A=2\cdot2-1\cdot1=3$ なので、$A^{-1}=\dfrac{1}{3}\begin{pmatrix}2 & -1\\-1 & 2\end{pmatrix}$。</Step>
+<Step reason="連立方程式は Ax=b の形に直し、両辺に左から逆行列を掛けます。">(2) $\begin{pmatrix}2 & 1\\1 & 2\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}3\\3\end{pmatrix}$。$\begin{pmatrix}x\\y\end{pmatrix}=\dfrac{1}{3}\begin{pmatrix}2 & -1\\-1 & 2\end{pmatrix}\begin{pmatrix}3\\3\end{pmatrix}=\dfrac{1}{3}\begin{pmatrix}3\\3\end{pmatrix}=\begin{pmatrix}1\\1\end{pmatrix}$。</Step>
+<Step reason="固有値はトレースと行列式から作った特性方程式を解いて求めます。">(3) $\lambda^{2}-4\lambda+3=0$ より $\lambda=1,\ 3$。$\lambda=1$ の固有ベクトルは $\begin{pmatrix}1\\-1\end{pmatrix}$ の実数倍、$\lambda=3$ の固有ベクトルは $\begin{pmatrix}1\\1\end{pmatrix}$ の実数倍。</Step>
+<Step reason="三角形の面積は、もとの面積に |det A| を掛けて求まります。">(4) もとの三角形の面積は $\dfrac{1}{2}$。$\det A=3$ なので像の面積は $\dfrac{3}{2}$。</Step>
+</Steps>
+
+<Answer>
+(1) $\dfrac{1}{3}\begin{pmatrix}2 & -1\\-1 & 2\end{pmatrix}$　(2) $x=1$、$y=1$　(3) $\lambda=1$ のとき $\begin{pmatrix}1\\-1\end{pmatrix}$ の実数倍、$\lambda=3$ のとき $\begin{pmatrix}1\\1\end{pmatrix}$ の実数倍　(4) $\dfrac{3}{2}$
+</Answer>
+</WorkedExample>
+
+<Misconception>
+<Wrong>
+$\det A=0$ の連立方程式は解なし、面積比は必ず $\det A$ 倍、合成 $AB$ は「$A$ を行ってから $B$」、という3つはどれも同じ場面で使える一般則である。
+</Wrong>
+<WhyWrong>
+3つとも、状況によって変わるか、順序を逆にしています。$\det A=0$ でも解が無数にあることがあります。面積比は $|\det A|$ 倍で、符号は向きの反転を表すだけです。合成 $AB$ は先に $B$、次に $A$ です。一般則として記憶してしまうと、場合分けを落としたり、順序を逆にした答えを書いたりします。
+</WhyWrong>
+<Right>
+行列式が $0$ のときは右辺との整合性を確認して解なし・無数解を分ける。面積比には絶対値を付ける。合成は右側の行列から先に作用させて点で検算する。この3つの確認を、問題を解き終える前の習慣にしましょう。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $A=\begin{pmatrix}1 & 2\\0 & 1\end{pmatrix}$ について、$A^{2}$ と $A^{n}$ を求めなさい。
+
+(2) 先に $A=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$（90°回転）、次に $B=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}$（x軸対称）を行う合成変換の行列を求めなさい。
+
+(3) 3頂点の完全グラフの隣接行列を $A$ とするとき、$A^{2}$ の $(1,2)$ 成分が $1$ である理由を、長さ2の道を挙げて説明しなさい。
+
+<Reveal label="答え">
+(1) $A^{2}=\begin{pmatrix}1 & 4\\0 & 1\end{pmatrix}$、$A^{n}=\begin{pmatrix}1 & 2n\\0 & 1\end{pmatrix}$。
+
+(2) 先に $A$、次に $B$ なので合成は $BA=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}=\begin{pmatrix}0 & -1\\-1 & 0\end{pmatrix}$。
+
+(3) 隣接行列は $A=\begin{pmatrix}0 & 1 & 1\\1 & 0 & 1\\1 & 1 & 0\end{pmatrix}$。$A^{2}$ の $(1,2)$ 成分は $A_{11}A_{12}+A_{12}A_{22}+A_{13}A_{32}=0+0+1=1$ で、中継点3を通る道 $1-3-2$ の1通りを数えている。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="章の総仕上げ">
+(1) $A=\begin{pmatrix}3 & 1\\2 & 1\end{pmatrix}$ の逆行列を求め、$\begin{cases}3x+y=5\\2x+y=3\end{cases}$ を解きなさい。
+
+(2) $A=\begin{pmatrix}2 & 0\\0 & 3\end{pmatrix}$ で表される一次変換について、円 $x^{2}+y^{2}=1$ の像の方程式を求めなさい。
+
+(3) $A=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}$ を $A$ 自身と、$B=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}$ との合成とで使い分け、$AB$ と $BA$ を求めなさい。
+
+(4) 4頂点 $1,2,3,4$ が $1-2-3-4$ と一直線につながるとき、頂点1から頂点3へちょうど2本で行く道の数を隣接行列の2乗から求めなさい。
+
+<Reveal label="解答">
+(1) $\det A=3-2=1$、$A^{-1}=\begin{pmatrix}1 & -1\\-2 & 3\end{pmatrix}$。$\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}1 & -1\\-2 & 3\end{pmatrix}\begin{pmatrix}5\\3\end{pmatrix}=\begin{pmatrix}5-3\\-10+9\end{pmatrix}=\begin{pmatrix}2\\-1\end{pmatrix}$。
+
+(2) $(\cos\theta,\ \sin\theta)$ は $(2\cos\theta,\ 3\sin\theta)$ へ移る。よって $\dfrac{x^{2}}{4}+\dfrac{y^{2}}{9}=1$。
+
+(3) $AB=\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}=\begin{pmatrix}0 & -1\\1 & 0\end{pmatrix}$、$BA=\begin{pmatrix}1 & 0\\0 & -1\end{pmatrix}\begin{pmatrix}0 & 1\\1 & 0\end{pmatrix}=\begin{pmatrix}0 & 1\\-1 & 0\end{pmatrix}$。
+
+(4) 隣接行列の2乗の $(1,3)$ 成分は $1$ で、道 $1-2-3$ の1通り。
+</Reveal>
+</Practice>
+
+## 発展: 入試で問われる組合せ
+
+この単元の内容は、入試では次のような型で組み合わされて出ます。
+
+- **逆行列→連立方程式→グラフ**: 係数行列の逆行列を求めて解を求め、得られた係数を別の変換や経路の数え上げに使う。
+- **一次変換→合成→固有値**: 合成変換の行列を作り、その固有値を求めて $n$ 乗を計算する。対称行列では固有値が実数になり、直交する固有ベクトルが得られます。
+- **面積→行列式→逆行列の存在**: 面積比 $|\det A|$ が $0$ になるかどうかで、変換がつぶれるかどうかを判定する。
+- **隣接行列→行列の積→場合の数**: 経路の数を、漸化式ではなく行列の累乗で一気に数える。
+
+共通するのは、まず問題を行列の言葉に翻訳し、必要な計算を行い、最後に答えを問題の言葉（座標・面積・経路の数）に戻す、という3段階の流れです。この流れを体に入れておけば、初見の複合問題でも手が止まりません。
