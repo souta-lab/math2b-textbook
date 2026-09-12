@@ -10,67 +10,103 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import ChapterNav from '@/components/nav/ChapterNav.astro';
 import LessonNav from '@/components/nav/LessonNav.astro';
-import Callout from '@/components/ui/Callout.astro';
+import { getUnit, prerequisiteLabel } from '@/data/curriculum';
+// <components:imports>
+import Answer from '@/components/content/Answer.astro';
+import CheckUnderstanding from '@/components/content/CheckUnderstanding.astro';
+import Contrast from '@/components/content/Contrast.astro';
+import Definition from '@/components/content/Definition.astro';
+import FadedExample from '@/components/content/FadedExample.astro';
+import Figure from '@/components/content/Figure.astro';
 import Hook from '@/components/content/Hook.astro';
 import KeyPoint from '@/components/content/KeyPoint.astro';
-import Why from '@/components/content/Why.astro';
-import Definition from '@/components/content/Definition.astro';
-import Theorem from '@/components/content/Theorem.astro';
-import Note from '@/components/content/Note.astro';
-import PrerequisiteNote from '@/components/content/PrerequisiteNote.astro';
-import Steps from '@/components/content/Steps.astro';
-import Step from '@/components/content/Step.astro';
-import WorkedExample from '@/components/content/WorkedExample.astro';
-import Answer from '@/components/content/Answer.astro';
-import Reveal from '@/components/content/Reveal.astro';
-import Prediction from '@/components/content/Prediction.astro';
-import SelfExplanation from '@/components/content/SelfExplanation.astro';
 import Misconception from '@/components/content/Misconception.astro';
-import Wrong from '@/components/content/Wrong.astro';
-import WhyWrong from '@/components/content/WhyWrong.astro';
-import Right from '@/components/content/Right.astro';
-import Contrast from '@/components/content/Contrast.astro';
-import FadedExample from '@/components/content/FadedExample.astro';
+import Note from '@/components/content/Note.astro';
 import Practice from '@/components/content/Practice.astro';
-import CheckUnderstanding from '@/components/content/CheckUnderstanding.astro';
-import Figure from '@/components/content/Figure.astro';
-import UnitCircle from '@/components/viz/UnitCircle.astro';
-import TrigGraph from '@/components/viz/TrigGraph.astro';
+import Prediction from '@/components/content/Prediction.astro';
+import PrerequisiteNote from '@/components/content/PrerequisiteNote.astro';
+import Reveal from '@/components/content/Reveal.astro';
+import Right from '@/components/content/Right.astro';
+import SelfExplanation from '@/components/content/SelfExplanation.astro';
+import Step from '@/components/content/Step.astro';
+import Steps from '@/components/content/Steps.astro';
+import Theorem from '@/components/content/Theorem.astro';
+import Why from '@/components/content/Why.astro';
+import WhyWrong from '@/components/content/WhyWrong.astro';
+import WorkedExample from '@/components/content/WorkedExample.astro';
+import Wrong from '@/components/content/Wrong.astro';
+import Callout from '@/components/ui/Callout.astro';
+import Prose from '@/components/ui/Prose.astro';
 import AngleDiagram from '@/components/viz/AngleDiagram.astro';
-import Slider from '@/components/viz/Slider.astro';
 import RightTriangle from '@/components/viz/RightTriangle.astro';
-import { getUnit, prerequisiteLabel } from '@/data/curriculum';
+import Slider from '@/components/viz/Slider.astro';
+import TrigGraph from '@/components/viz/TrigGraph.astro';
+import UnitCircle from '@/components/viz/UnitCircle.astro';
+import AreaUnderCurve from '@/components/viz/calculus/AreaUnderCurve.astro';
+import TangentSlope from '@/components/viz/calculus/TangentSlope.astro';
+import Circle from '@/components/viz/coordinate/Circle.astro';
+import CoordinatePlane from '@/components/viz/coordinate/CoordinatePlane.astro';
+import Line from '@/components/viz/coordinate/Line.astro';
+import Region from '@/components/viz/coordinate/Region.astro';
+import ExpLogGraph from '@/components/viz/exponential/ExpLogGraph.astro';
+import InverseReflection from '@/components/viz/exponential/InverseReflection.astro';
+import SequencePlot from '@/components/viz/sequences/SequencePlot.astro';
+import GrowthModel from '@/components/viz/society/GrowthModel.astro';
+import PlanCompare from '@/components/viz/society/PlanCompare.astro';
+import BinomialBars from '@/components/viz/statistics/BinomialBars.astro';
+import ConfidenceInterval from '@/components/viz/statistics/ConfidenceInterval.astro';
+import Histogram from '@/components/viz/statistics/Histogram.astro';
+import NormalCurve from '@/components/viz/statistics/NormalCurve.astro';
+// </components:imports>
 
 const mdxComponents = {
-  Callout,
+  // <components:map>
+  Answer,
+  CheckUnderstanding,
+  Contrast,
+  Definition,
+  FadedExample,
+  Figure,
   Hook,
   KeyPoint,
-  Why,
-  Definition,
-  Theorem,
-  Note,
-  PrerequisiteNote,
-  Steps,
-  Step,
-  WorkedExample,
-  Answer,
-  Reveal,
-  Prediction,
-  SelfExplanation,
   Misconception,
-  Wrong,
-  WhyWrong,
-  Right,
-  Contrast,
-  FadedExample,
+  Note,
   Practice,
-  CheckUnderstanding,
-  Figure,
-  UnitCircle,
-  TrigGraph,
+  Prediction,
+  PrerequisiteNote,
+  Reveal,
+  Right,
+  SelfExplanation,
+  Step,
+  Steps,
+  Theorem,
+  Why,
+  WhyWrong,
+  WorkedExample,
+  Wrong,
+  Callout,
+  Prose,
   AngleDiagram,
-  Slider,
   RightTriangle,
+  Slider,
+  TrigGraph,
+  UnitCircle,
+  AreaUnderCurve,
+  TangentSlope,
+  Circle,
+  CoordinatePlane,
+  Line,
+  Region,
+  ExpLogGraph,
+  InverseReflection,
+  SequencePlot,
+  GrowthModel,
+  PlanCompare,
+  BinomialBars,
+  ConfidenceInterval,
+  Histogram,
+  NormalCurve,
+// </components:map>
 };
 
 interface Props {

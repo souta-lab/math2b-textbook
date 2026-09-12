@@ -1,0 +1,127 @@
+---
+title: "二項定理"
+summary: "二項定理で (a+b)^n を展開し、係数の意味を読む。"
+unit: "ii-expressions"
+order: 1
+objectives:
+  - "二項定理を用いて (a+b)^n を展開できる"
+  - "特定の項の係数を組合せの数から求められる"
+  - "組合せの数が展開の係数になる理由を説明できる"
+prerequisites: ["expressions/00-cubic-formulas", "a-probability"]
+tags: ["二項定理", "組合せ", "展開"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+5人の生徒から3人を選んで班を作るとき、選び方は全部で何通りあるだろう。順番を区別しなければ、選ぶ人数の組合せを数えればよい。実はこの「選び方の数」は、式を何度も掛け合わせたときの係数としてそのまま現れる。選ぶという行為と、展開の係数が同じ数で結ばれている。
+</Hook>
+
+<Prediction
+  question="(a+b) を4回掛けて展開したとき、a の2乗 b の2乗の係数はいくつでしょう？"
+  options={['4', '6', '8']}
+  answer="6"
+  explanation="a を2回、b を2回使う選び方は、4つの位置から a を入れる2つを選ぶ方法の数と同じで、6通りあります。"
+/>
+
+<PrerequisiteNote concept="a-probability" />
+
+前のレッスンで $(a+b)^3$ を展開した。ここでは同じ計算を、何乗でも通用する形にまとめる。まず、数学Aで学んだ組合せの数を確認しておこう。異なる $n$ 個から $r$ 個を選ぶ方法の数を $${}_n\mathrm{C}_r$$ と書き、
+
+$$
+{}_n\mathrm{C}_r=\frac{n!}{r!\,(n-r)!}\qquad (n! = n\times(n-1)\times\cdots\times 2\times 1)
+$$
+
+で計算する。たとえば ${}_4\mathrm{C}_2=\dfrac{4!}{2!\,2!}=6$ である。この数は「$n$ 個の位置から $r$ 個を選ぶ方法の数」を表している。
+
+<Why>
+組合せの数を持ち出すのは、$(a+b)^n$ の係数が「$n$ 個のかっこから、$a$ を取る $r$ 個を選ぶ方法の数」にほかならないからだ。各かっこで $a$ か $b$ のどちらかを選ぶとき、同じ $a^{n-r}b^r$ という項が何度も現れる。その現れ方の数を数えるのが ${}_n\mathrm{C}_r$ である。
+</Why>
+
+$(a+b)^n$ を展開するとき、各かっこから $a$ または $b$ を1つずつ選んで掛ける。選んだ $a$ の個数を $n-r$、$b$ の個数を $r$ とすると、積は $a^{n-r}b^r$ になる。この選び方の数は、$n$ か所から $b$ を取る $r$ か所を選ぶ方法の数 ${}_n\mathrm{C}_r$ に等しい。したがって次の定理が成り立つ。
+
+<Theorem name="二項定理">
+$$
+(a+b)^n=\sum_{r=0}^{n}{}_n\mathrm{C}_r\,a^{n-r}b^r={}_n\mathrm{C}_0a^n+{}_n\mathrm{C}_1a^{n-1}b+\cdots+{}_n\mathrm{C}_n b^n
+$$
+</Theorem>
+
+$n=2$ では ${}_2\mathrm{C}_0=1$、${}_2\mathrm{C}_1=2$、${}_2\mathrm{C}_2=1$ となり、$a^2+2ab+b^2$ に一致する。$n=3$ では係数が $1,3,3,1$ となり、前のレッスンの三次の公式とちょうど同じである。二項定理は、あの公式をすべての自然数 $n$ に広げたものだ。
+
+<KeyPoint>
+係数はパスカルの三角形を丸暗記するものではなく、${}_n\mathrm{C}_r$ という組合せの数で書ける。使うたびに ${}_n\mathrm{C}_r=\dfrac{n!}{r!(n-r)!}$ から計算すればよい。
+</KeyPoint>
+
+<WorkedExample title="例題1: 二項定理で展開する">
+$(x+2)^4$ を展開せよ。
+
+<Steps>
+<Step reason="二項定理で $a=x$、$b=2$、$n=4$ とします。">$\displaystyle\sum_{r=0}^{4}{}_4\mathrm{C}_r\,x^{4-r}2^r$。</Step>
+<Step reason="各 $r$ の組合せの数を計算します。${}_4\mathrm{C}_0=1$、${}_4\mathrm{C}_1=4$、${}_4\mathrm{C}_2=6$、${}_4\mathrm{C}_3=4$、${}_4\mathrm{C}_4=1$。">$=x^4+4x^3\cdot 2+6x^2\cdot 4+4x\cdot 8+16$。</Step>
+<Step reason="係数を掛け算し、次数の高い順に並べます。">$=x^4+8x^3+24x^2+32x+16$。</Step>
+</Steps>
+
+<Answer>
+$x^4+8x^3+24x^2+32x+16$
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 特定の項の係数を求める">
+$(2x-1)^6$ を展開したとき、$x^3$ の項の係数を求めよ。
+
+<Steps>
+<Step reason="まず、展開の一般項を書きます。$a=2x$、$b=-1$、$n=6$ です。">一般項は ${}_6\mathrm{C}_r(2x)^{6-r}(-1)^r$。</Step>
+<Step reason="x の指数を3にしたいので、$6-r=3$ から $r=3$ と決まります。展開の全項を書く必要はありません。">$x^3$ の項は $r=3$ の項だけ。</Step>
+<Step reason="組合せの数と係数を計算します。${}_6\mathrm{C}_3=20$、$2^3=8$、$(-1)^3=-1$。">${}_6\mathrm{C}_3\cdot 2^3\cdot(-1)^3=20\cdot 8\cdot(-1)=-160$。</Step>
+</Steps>
+
+<Answer>
+$x^3$ の係数は $-160$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="(a+b) の n 乗の展開で、なぜ組合せの数が係数として現れるのだろう？"
+  options={['同じ項を作る選び方が何通りもあるから', 'a と b の大きさが等しいから', 'n が偶数だから']}
+  model="各かっこで a か b を選ぶとき、同じ a の (n−r) 乗 b の r 乗という項が、b を取る位置を選ぶ方法の数だけ重複して現れます。その数が組合せの数 ${}_nC_r$ です。"
+/>
+
+<Misconception>
+<Wrong>
+$(a+b)^n$ を展開すると、項の数は $n$ 個である。
+</Wrong>
+<WhyWrong>
+項は $a^n$、$a^{n-1}b$、$\cdots$、$b^n$ の $n+1$ 個ある。$b$ を取る個数 $r$ が $0,1,2,\cdots,n$ の $n+1$ 通りあるためだ。たとえば $(a+b)^2=a^2+2ab+b^2$ は3項、$(a+b)^3$ は4項ある。
+</WhyWrong>
+<Right>
+$(a+b)^n$ の展開は $n+1$ 項からなる。各項は ${}_n\mathrm{C}_r\,a^{n-r}b^r$ と書ける。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$a^{n-r}b^r$ の係数は ${}_n\mathrm{P}_r$（順列の数）である。
+</Wrong>
+<WhyWrong>
+順列 ${}_n\mathrm{P}_r$ は順番まで区別して並べる方法の数で、$a$ を取る位置と $b$ を取る位置の順序を二重に数えてしまう。展開では同じ項になる位置の組合せをまとめて数えるので、順序を区別しない組合せの数 ${}_n\mathrm{C}_r$ を使う。
+</WhyWrong>
+<Right>
+係数は ${}_n\mathrm{C}_r=\dfrac{n!}{r!(n-r)!}$。並べる順序ではなく、どの位置から $b$ を取るかという選び方だけを数える。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）二項定理で $(x-1)^4$ を展開せよ。
+<Reveal label="答え">
+$(x-1)^4=x^4+4x^3(-1)+6x^2(-1)^2+4x(-1)^3+(-1)^4=x^4-4x^3+6x^2-4x+1$。
+</Reveal>
+
+（2）$(x+3)^5$ を展開したときの $x^2$ の項の係数を求めよ。
+<Reveal label="答え">
+一般項は ${}_5\mathrm{C}_r x^{5-r}3^r$。$x^2$ になるのは $5-r=2$、つまり $r=3$ のとき。係数は ${}_5\mathrm{C}_3\cdot 3^3=10\cdot 27=270$。
+</Reveal>
+
+（3）$(a+b)^n$ の係数に組合せの数が現れる理由を、1文で説明せよ。
+<Reveal label="答え">
+各かっこから $b$ を取る位置を選ぶ方法の数だけ、同じ $a^{n-r}b^r$ の項が現れるから。その選び方の数が ${}_n\mathrm{C}_r$ である。
+</Reveal>
+</CheckUnderstanding>

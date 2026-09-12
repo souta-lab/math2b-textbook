@@ -1,0 +1,268 @@
+---
+import { CALC_FNS, areaFrame, type CalcFnKey } from './calculus-math';
+import { areaDynamicMarkup } from './calculus-render';
+
+interface Props {
+  /** Which polynomial to draw. String enum, never a function. */
+  fn?: CalcFnKey;
+  /** Left end of the interval. */
+  a?: number;
+  /** Right end of the interval. */
+  b?: number;
+  /** Number of midpoint rectangles. */
+  n?: number;
+  interactive?: boolean;
+  label?: string;
+}
+
+const {
+  fn = 'square',
+  a = 0,
+  b = 2,
+  n = 4,
+  interactive = false,
+  label = '曲線と x 軸の間の面積',
+} = Astro.props;
+
+const spec = CALC_FNS[fn];
+const frame = areaFrame(spec.coeffs, spec.view, a, b, n);
+
+const xMin = spec.view.x[0];
+const xMax = spec.view.x[1];
+const nMax = 20;
+const bound = (v: number): string => v.toFixed(1);
+---
+
+<figure
+  class="viz viz-area"
+  data-viz="calculus-area"
+  data-fn={fn}
+  data-a={String(a)}
+  data-b={String(b)}
+  data-n={String(n)}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <p class="viz-area__fn">{spec.label}</p>
+  <svg
+    class="viz-area__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : label}
+  >
+    <line
+      class="v-axis"
+      x1={frame.plot.x}
+      y1={frame.zeroY}
+      x2={frame.plot.x + frame.plot.width}
+      y2={frame.zeroY}
+    />
+    <line
+      class="v-axis"
+      x1={frame.plot.x}
+      y1={frame.plot.y}
+      x2={frame.plot.x}
+      y2={frame.plot.y + frame.plot.height}
+    />
+    {
+      frame.xTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={tick.x} y1={frame.zeroY - 3} x2={tick.x} y2={frame.zeroY + 3} />
+          <text class="v-faint" x={tick.x} y={frame.zeroY + 16} text-anchor="middle">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    {
+      frame.yTicks.map((tick) => (
+        <>
+          <line
+            class="v-tick"
+            x1={frame.plot.x - 3}
+            y1={tick.y}
+            x2={frame.plot.x + 3}
+            y2={tick.y}
+          />
+          <text class="v-faint" x={frame.plot.x - 6} y={tick.y + 4} text-anchor="end">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    <path class="v-curve" d={frame.curve} />
+    <g data-area-dyn set:html={areaDynamicMarkup(frame)} />
+  </svg>
+  {
+    interactive && (
+      <div class="viz-area__controls">
+        <label class="viz-area__control">
+          <span class="viz-area__control-label">
+            a（左端）＝ <output data-area-out="a">{frame.values.a}</output>
+          </span>
+          <input
+            type="range"
+            data-area-input="a"
+            min={bound(xMin)}
+            max={bound(xMax)}
+            step="0.1"
+            value={String(a)}
+          />
+        </label>
+        <label class="viz-area__control">
+          <span class="viz-area__control-label">
+            b（右端）＝ <output data-area-out="b">{frame.values.b}</output>
+          </span>
+          <input
+            type="range"
+            data-area-input="b"
+            min={bound(xMin)}
+            max={bound(xMax)}
+            step="0.1"
+            value={String(b)}
+          />
+        </label>
+        <label class="viz-area__control">
+          <span class="viz-area__control-label">
+            n（長方形の個数）＝ <output data-area-out="n">{frame.values.n}</output>
+          </span>
+          <input
+            type="range"
+            data-area-input="n"
+            min="1"
+            max={String(nMax)}
+            step="1"
+            value={String(n)}
+          />
+        </label>
+      </div>
+    )
+  }
+  <div class="viz-readout">
+    <span>定積分 ＝ <span data-area-out="exact">{frame.values.exact}</span></span>
+    <span>長方形の合計 ＝ <span data-area-out="approx">{frame.values.approx}</span></span>
+    <span>差 ＝ <span data-area-out="delta">{frame.values.delta}</span></span>
+  </div>
+</figure>
+
+<script>
+  import { CALC_FNS, areaFrame, type CalcFnKey } from './calculus-math';
+  import { areaDynamicMarkup } from './calculus-render';
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const aInput = root.querySelector<HTMLInputElement>('[data-area-input="a"]');
+    const bInput = root.querySelector<HTMLInputElement>('[data-area-input="b"]');
+    const nInput = root.querySelector<HTMLInputElement>('[data-area-input="n"]');
+    const dyn = root.querySelector<SVGGElement>('[data-area-dyn]');
+    if (!aInput || !bInput || !nInput || !dyn) return;
+
+    const fn = (root.dataset.fn ?? 'square') as CalcFnKey;
+    const spec = CALC_FNS[fn];
+
+    const setOut = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-area-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (): void => {
+      const a = Number(aInput.value);
+      const b = Number(bInput.value);
+      const n = Number(nInput.value);
+      const frame = areaFrame(spec.coeffs, spec.view, a, b, n);
+      dyn.innerHTML = areaDynamicMarkup(frame);
+      setOut('a', frame.values.a);
+      setOut('b', frame.values.b);
+      setOut('n', frame.values.n);
+      setOut('exact', frame.values.exact);
+      setOut('approx', frame.values.approx);
+      setOut('delta', frame.values.delta);
+    };
+
+    aInput.addEventListener('input', paint);
+    bInput.addEventListener('input', paint);
+    nInput.addEventListener('input', paint);
+    paint();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="calculus-area"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-area {
+    margin: var(--sp-5) 0;
+  }
+  .viz-area__fn {
+    max-width: 30rem;
+    margin: 0 auto var(--sp-2);
+    color: var(--ink-soft);
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    text-align: center;
+  }
+  .viz-area__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-area .v-axis,
+  .viz-area .v-tick {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-area .v-curve {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-area .v-region {
+    fill: var(--accent-soft);
+    stroke: var(--accent);
+    stroke-width: 1;
+  }
+  .viz-area .v-riemann {
+    fill: var(--accent);
+    fill-opacity: 0.28;
+    stroke: var(--accent);
+    stroke-width: 0.8;
+  }
+  .viz-area .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+  .viz-area__controls {
+    display: grid;
+    gap: var(--sp-2);
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+  }
+  .viz-area__control {
+    display: grid;
+    gap: var(--sp-1);
+  }
+  .viz-area__control-label {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-area__control input[type='range'] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

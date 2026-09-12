@@ -1,0 +1,257 @@
+---
+/**
+ * Region — the half-plane described by y ≤ m x + b or y ≥ m x + b.
+ *
+ * Interactive mode slides the boundary up and down and keeps a test point's
+ * pass/fail status in sync, showing why shading alone does not decide the side.
+ *
+ * Usage:
+ *   <Region m={-1} b={3} relation="le" testX={1} testY={1} />
+ *   <Region m={1} b={0} relation="ge" interactive bMin={-2} bMax={4} />
+ */
+import { fmt, inequalityLabel, lineY, planeFrame, type LineMB, type Pt } from './coordinate-math';
+import { axesMarkup, gridMarkup, regionSceneMarkup } from './coordinate-render';
+
+interface Props {
+  m?: number;
+  b?: number;
+  relation?: 'le' | 'ge';
+  strict?: boolean;
+  testX?: number;
+  testY?: number;
+  interactive?: boolean;
+  bMin?: number;
+  bMax?: number;
+  bStep?: number;
+  xMin?: number;
+  xMax?: number;
+  yMin?: number;
+  yMax?: number;
+  label?: string;
+}
+
+const {
+  m = 1,
+  b = 3,
+  relation = 'le',
+  strict = false,
+  testX,
+  testY,
+  interactive = false,
+  bMin = -2,
+  bMax = 4,
+  bStep = 0.5,
+  xMin = -4,
+  xMax = 4,
+  yMin = -3,
+  yMax = 5,
+  label = '不等式の表す領域',
+} = Astro.props;
+
+const frame = planeFrame({ xMin, xMax, yMin, yMax });
+const line: LineMB = { m, b };
+const test: Pt | null =
+  testX !== undefined && testY !== undefined ? { x: testX, y: testY } : null;
+
+const inequality = inequalityLabel(relation, line, strict);
+
+const testOk =
+  test === null
+    ? null
+    : relation === 'le'
+      ? lineY(line, test.x) >= test.y
+      : lineY(line, test.x) <= test.y;
+
+const scene = regionSceneMarkup(frame, { line, relation, strict, test });
+---
+
+<figure
+  class="viz viz-region"
+  data-viz="coordinate-region"
+  data-m={String(m)}
+  data-b={String(b)}
+  data-relation={relation}
+  data-strict={strict ? 'true' : 'false'}
+  data-testx={test ? String(test.x) : ''}
+  data-testy={test ? String(test.y) : ''}
+  data-xmin={String(xMin)}
+  data-xmax={String(xMax)}
+  data-ymin={String(yMin)}
+  data-ymax={String(yMax)}
+>
+  <svg
+    class="viz-region__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role="img"
+    aria-label={label}
+  >
+    <g set:html={gridMarkup(frame)} />
+    <g set:html={axesMarkup(frame)} />
+    <g data-region-dyn set:html={scene} />
+  </svg>
+  <div class="viz-readout">
+    <span>領域: <span data-region-out="ineq">{inequality}</span></span>
+    {
+      testOk !== null && (
+        <span>
+          点P({fmt(test?.x ?? 0)}, {fmt(test?.y ?? 0)}) は
+          <span data-region-out="test">{testOk ? '満たす' : '満たさない'}</span>
+        </span>
+      )
+    }
+  </div>
+  {
+    interactive && (
+      <label class="viz-region__control">
+        <span class="viz-region__control-label">境界の切片 b</span>
+        <input
+          type="range"
+          data-region-input
+          aria-label="境界線の切片"
+          min={String(bMin)}
+          max={String(bMax)}
+          step={String(bStep)}
+          value={String(b)}
+        />
+        <span class="viz-region__control-value" data-region-out="b">{fmt(b)}</span>
+      </label>
+    )
+  }
+</figure>
+
+<script>
+  import { fmt, inequalityLabel, lineY, planeFrame, type LineMB, type Pt } from './coordinate-math';
+  import { regionSceneMarkup } from './coordinate-render';
+
+  function setText(root: HTMLElement, key: string, value: string): void {
+    const el = root.querySelector(`[data-region-out="${key}"]`);
+    if (el) el.textContent = value;
+  }
+
+  function paint(root: HTMLElement, b: number): void {
+    const m = Number(root.dataset.m);
+    const relation = (root.dataset.relation === 'ge' ? 'ge' : 'le') as 'le' | 'ge';
+    const strict = root.dataset.strict === 'true';
+    const hasTest = (root.dataset.testx ?? '') !== '';
+    const test: Pt | null = hasTest
+      ? { x: Number(root.dataset.testx), y: Number(root.dataset.testy) }
+      : null;
+    const frame = planeFrame({
+      xMin: Number(root.dataset.xmin),
+      xMax: Number(root.dataset.xmax),
+      yMin: Number(root.dataset.ymin),
+      yMax: Number(root.dataset.ymax),
+    });
+    const line: LineMB = { m, b };
+    const scene = regionSceneMarkup(frame, { line, relation, strict, test });
+    const dyn = root.querySelector<SVGGElement>('[data-region-dyn]');
+    if (dyn) dyn.innerHTML = scene;
+
+    setText(root, 'ineq', inequalityLabel(relation, line, strict));
+    if (test) {
+      const ok = relation === 'le' ? lineY(line, test.x) >= test.y : lineY(line, test.x) <= test.y;
+      setText(root, 'test', ok ? '満たす' : '満たさない');
+    }
+    setText(root, 'b', fmt(b));
+  }
+
+  function init(root: HTMLElement): void {
+    const input = root.querySelector<HTMLInputElement>('[data-region-input]');
+    if (!input) return;
+    paint(root, Number(input.value));
+    input.addEventListener('input', () => paint(root, Number(input.value)));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="coordinate-region"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-region {
+    margin: var(--sp-5) 0;
+  }
+  .viz-region__svg {
+    display: block;
+    width: 100%;
+    max-width: 24rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-region .v-grid {
+    stroke: var(--paper-grid);
+    stroke-width: 1;
+  }
+  .viz-region .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1.2;
+  }
+  .viz-region .v-axis-head {
+    fill: var(--ink-faint);
+  }
+  .viz-region .v-tick {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-region .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-region .v-region {
+    fill: var(--accent-soft);
+    stroke: none;
+  }
+  .viz-region .v-boundary {
+    stroke: var(--accent);
+    stroke-width: 2.2;
+  }
+  .viz-region .v-boundary-dashed {
+    stroke-dasharray: 6 5;
+  }
+  .viz-region .v-point {
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-region .v-point-yes {
+    fill: var(--correct);
+  }
+  .viz-region .v-point-no {
+    fill: var(--shu);
+  }
+  .viz-region .v-label {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-region__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    justify-content: center;
+    margin-top: var(--sp-3);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .viz-region__control input {
+    flex: 1 1 12rem;
+    max-width: 16rem;
+    accent-color: var(--accent);
+  }
+  .viz-region__control-value {
+    min-width: 2.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

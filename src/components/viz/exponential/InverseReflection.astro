@@ -1,0 +1,283 @@
+---
+/**
+ * InverseReflection — y = a^x and y = log_a x drawn on one square plot with
+ * the mirror line y = x. A t slider moves a point P = (t, a^t) on the curve and
+ * its mirror P' = (a^t, t) on the logarithm, showing that the two graphs are
+ * reflections of each other across y = x.
+ *
+ * The plot is square, so "reflection across y = x" is literally a 45° mirror.
+ * The log curve is only drawn for x > 0. No React, tokens only.
+ *
+ * Usage:
+ *   <InverseReflection base={2} t={1} interactive />
+ */
+import { reflectionFrame, reflectionCursorRange } from './expo-math';
+import { reflectionDynamicMarkup } from './expo-render';
+
+interface Props {
+  base?: number;
+  t?: number;
+  interactive?: boolean;
+  label?: string;
+}
+
+const { base = 2, t = 1, interactive = false, label } = Astro.props;
+const range = reflectionCursorRange(base);
+const cursor = Math.max(range[0], Math.min(range[1], t));
+const frame = reflectionFrame(base, cursor);
+const dynamic = reflectionDynamicMarkup(frame);
+const ariaLabel =
+  label ?? `y = a^x と y = log_a x（a = ${frame.values.base}）は直線 y = x について対称`;
+const xTicks = frame.xTicks.filter((tick) => tick.label !== '0');
+const yTicks = frame.yTicks.filter((tick) => tick.label !== '0');
+---
+
+<figure
+  class="viz viz-reflect"
+  data-viz="inverse-reflection"
+  data-base={String(base)}
+  data-t={String(cursor)}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <svg
+    class="viz-reflect__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : ariaLabel}
+  >
+    <line class="v-axis" x1={frame.plot.x} y1={frame.zeroY} x2={frame.plot.x + frame.plot.width} y2={frame.zeroY} />
+    <line class="v-axis" x1={frame.zeroX} y1={frame.plot.y} x2={frame.zeroX} y2={frame.plot.y + frame.plot.height} />
+    <line
+      class="v-diagonal"
+      x1={frame.diagonal.x1}
+      y1={frame.diagonal.y1}
+      x2={frame.diagonal.x2}
+      y2={frame.diagonal.y2}
+    />
+    {
+      xTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={tick.x} y1={frame.zeroY - 3} x2={tick.x} y2={frame.zeroY + 3} />
+          <text class="v-faint" x={tick.x} y={frame.zeroY + 16} text-anchor="middle">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    {
+      yTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={frame.zeroX - 3} y1={tick.y} x2={frame.zeroX + 3} y2={tick.y} />
+          <text class="v-faint" x={frame.zeroX - 6} y={tick.y + 4} text-anchor="end">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    <text class="v-faint" x={frame.zeroX - 6} y={frame.zeroY + 15} text-anchor="end">O</text>
+    <text class="v-faint" x={frame.plot.x + frame.plot.width + 2} y={frame.zeroY - 6}>x</text>
+    <text class="v-faint" x={frame.zeroX + 6} y={frame.plot.y + 10}>y</text>
+    <path class="v-curve-exp" d={frame.expCurve} />
+    <path class="v-curve-log" d={frame.logCurve} />
+    <g data-reflect-dyn set:html={dynamic} />
+  </svg>
+  <ul class="viz-reflect__legend">
+    <li><span class="viz-reflect__swatch viz-reflect__swatch--exp" aria-hidden="true"></span>y = a^x</li>
+    <li><span class="viz-reflect__swatch viz-reflect__swatch--log" aria-hidden="true"></span>y = log_a x</li>
+    <li><span class="viz-reflect__swatch viz-reflect__swatch--diag" aria-hidden="true"></span>y = x（折り返しの軸）</li>
+  </ul>
+  {
+    interactive && (
+      <label class="viz-reflect__control">
+        <span class="viz-reflect__control-label">点の x 座標 t</span>
+        <input
+          class="viz-reflect__input"
+          type="range"
+          data-reflect-input
+          min={String(range[0])}
+          max={String(range[1])}
+          step="0.1"
+          value={String(cursor)}
+          aria-label="点の x 座標 t"
+        />
+        <output class="viz-reflect__value" data-reflect-value>{frame.values.t}</output>
+      </label>
+    )
+  }
+  <div class="viz-readout" aria-live={interactive ? 'polite' : undefined}>
+    <span>t ＝ <span data-reflect-out="t">{frame.values.t}</span></span>
+    <span>a^t ＝ <span data-reflect-out="exp">{frame.values.exp}</span></span>
+    <span>(t, a^t) の鏡像 ＝ <span data-reflect-out="mirror">{frame.values.log}</span></span>
+  </div>
+  {
+    interactive && (
+      <p class="viz-hint">
+        t を動かすと、y = a^x 上の点と y = log_a x 上の点が、直線 y = x をはさんで対応します。
+      </p>
+    )
+  }
+</figure>
+
+<script>
+  import { reflectionFrame } from './expo-math';
+  import { reflectionDynamicMarkup } from './expo-render';
+
+  function init(root: HTMLElement): void {
+    const input = root.querySelector<HTMLInputElement>('[data-reflect-input]');
+    if (!input) return;
+    const dyn = root.querySelector<SVGGElement>('[data-reflect-dyn]');
+    if (!dyn) return;
+    const valueOut = root.querySelector<HTMLOutputElement>('[data-reflect-value]');
+    const base = Number(root.dataset.base ?? '2');
+
+    const setOut = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-reflect-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (t: number): void => {
+      const frame = reflectionFrame(base, t);
+      dyn.innerHTML = reflectionDynamicMarkup(frame);
+      setOut('t', frame.values.t);
+      setOut('exp', frame.values.exp);
+      setOut('mirror', frame.values.log);
+      if (valueOut) valueOut.textContent = frame.values.t;
+      root.dataset.t = String(t);
+    };
+
+    input.addEventListener('input', () => paint(Number(input.value)));
+    paint(Number(input.value));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="inverse-reflection"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-reflect {
+    margin: var(--sp-5) 0;
+  }
+  .viz-reflect__svg {
+    display: block;
+    width: 100%;
+    max-width: 28rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-reflect .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-reflect .v-tick {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-reflect .v-diagonal {
+    stroke: var(--ink-faint);
+    stroke-width: 1.2;
+    stroke-dasharray: 5 4;
+  }
+  .viz-reflect .v-curve-exp {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-reflect .v-curve-log {
+    fill: none;
+    stroke: var(--shu);
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-reflect .v-mirror {
+    stroke: var(--correct);
+    stroke-width: 1.6;
+    stroke-dasharray: 4 3;
+  }
+  .viz-reflect .v-point-exp {
+    fill: var(--accent);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-reflect .v-point-log {
+    fill: var(--shu);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-reflect .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+  .viz-reflect__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin: var(--sp-2) 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .viz-reflect__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .viz-reflect__swatch {
+    display: inline-block;
+    width: 1.1rem;
+    height: 0.22rem;
+    border-radius: 999px;
+  }
+  .viz-reflect__swatch--exp {
+    background: var(--accent);
+  }
+  .viz-reflect__swatch--log {
+    background: var(--shu);
+  }
+  .viz-reflect__swatch--diag {
+    background: repeating-linear-gradient(90deg, var(--ink-faint) 0 4px, transparent 4px 7px);
+  }
+  .viz-reflect__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    max-width: 28rem;
+    margin: var(--sp-3) auto 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  .viz-reflect__control-label {
+    font-family: var(--font-heading);
+    white-space: nowrap;
+  }
+  .viz-reflect__input {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .viz-reflect__value {
+    min-width: 2.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-reflect .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-reflect .viz-hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>

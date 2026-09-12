@@ -1,0 +1,143 @@
+---
+title: "二次方程式の解の判別と解と係数の関係"
+summary: "判別式で解の種類を判定し、解と係数の関係を使う。"
+unit: "ii-expressions"
+order: 5
+objectives:
+  - "判別式から実数解の個数を判定できる"
+  - "解と係数の関係を導き、対称な式の値を求められる"
+  - "和と積から二次方程式を組み立てられる"
+prerequisites: ["expressions/04-complex-numbers", "i-quadratic"]
+tags: ["判別式", "解と係数の関係"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+縦と横の長さの和が決まっていて、面積も決まっている長方形を考えよう。この2つの条件だけで辺の長さは決まるだろうか。また、辺の長さを1つずつ求めなくても、和と積からいろいろな量を計算できるだろうか。実は、2つの数を解とする二次方程式を作れば、この問いに見通しよく答えられる。
+</Hook>
+
+<Prediction
+  question="和が 5、積が 10 である2つの実数は存在するでしょう？"
+  options={['存在する', '存在しない', '1つだけ存在する']}
+  answer="存在しない"
+  explanation="2つの数を解とする二次方程式は t の2乗 − 5t + 10 = 0 です。この判別式は負になるので、実数の解はありません。"
+/>
+
+<PrerequisiteNote concept="i-quadratic" />
+
+数学Iで、二次方程式 $ax^2+bx+c=0$ の解の公式を学んだ。解は
+
+$$
+x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}
+$$
+
+で与えられる。根号の中の $b^2-4ac$ の符号によって、解のようすが変わる。この式を $D=b^2-4ac$ とおき、判別式とよぶ。
+
+<Definition term="判別式">
+二次方程式 $ax^2+bx+c=0$（$a\ne 0$）について、$D=b^2-4ac$ を判別式という。
+
+- $D\gt 0$：異なる2つの実数解をもつ。
+- $D=0$：ただ1つの解（重解）をもつ。
+- $D\lt 0$：実数解をもたない（異なる2つの虚数解をもつ）。
+</Definition>
+
+<Why>
+判別式を使うのは、解の公式を最後まで計算しなくても、解が実数かどうか、いくつあるかを先に知れるからだ。解の公式の根号の中が $D$ であり、$D$ が正なら実数の平方根、0なら1つ、負なら虚数の平方根になる。前のレッスンで複素数を学んだので、$D\lt 0$ の場合も「解が2つある」と言える。
+</Why>
+
+次に、解そのものを求めなくても、解の和と積が分かる関係を導く。二次方程式の2つの解を $\alpha$、$\beta$ とすると、左辺は解を使って因数分解できる。
+
+$$
+ax^2+bx+c=a(x-\alpha)(x-\beta)=ax^2-a(\alpha+\beta)x+a\alpha\beta
+$$
+
+両辺の係数を比べると、次の関係が得られる。
+
+<Theorem name="解と係数の関係">
+二次方程式 $ax^2+bx+c=0$ の2つの解を $\alpha$、$\beta$ とすると
+$$
+\alpha+\beta=-\frac{b}{a},\qquad \alpha\beta=\frac{c}{a}
+$$
+</Theorem>
+
+<Why>
+解と係数の関係を導くのに因数分解を使うのは、解 $\alpha$、$\beta$ が分かれば左辺を $a(x-\alpha)(x-\beta)$ と書けるからだ。これを展開して係数を比べるだけで、和と積が係数から直接読み取れる。解の公式から計算するより、この導き方のほうが見通しがよい。
+</Why>
+
+<WorkedExample title="例題1: 判別式で解の種類を判定する">
+次の二次方程式の実数解の個数を判定せよ。
+
+(1) $3x^2-2x+1=0$　(2) $x^2-4x+4=0$
+
+<Steps>
+<Step reason="$a=3$、$b=-2$、$c=1$ を判別式に代入します。">(1) $D=(-2)^2-4\cdot 3\cdot 1=4-12=-8$。</Step>
+<Step reason="$D$ が負なので、実数解はなく、異なる2つの虚数解をもちます。">実数解は0個（虚数解が2個）。</Step>
+<Step reason="$a=1$、$b=-4$、$c=4$ を代入します。">(2) $D=(-4)^2-4\cdot 1\cdot 4=16-16=0$。</Step>
+<Step reason="$D=0$ なので重解をもちます。">実数解は1個（重解 $x=2$）。</Step>
+</Steps>
+
+<Answer>
+(1) 実数解は0個　(2) 実数解は1個（$x=2$ の重解）
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 解と係数の関係を使う">
+二次方程式 $2x^2-6x-4=0$ の2つの解を $\alpha$、$\beta$ とするとき、$\alpha^2+\beta^2$ の値を求めよ。
+
+<Steps>
+<Step reason="解と係数の関係で和と積を先に求めます。$a=2$、$b=-6$、$c=-4$ です。">$\alpha+\beta=-\dfrac{-6}{2}=3$、$\alpha\beta=\dfrac{-4}{2}=-2$。</Step>
+<Step reason="$\alpha^2+\beta^2$ は和と積だけで書けます。展開すると $(\alpha+\beta)^2=\alpha^2+2\alpha\beta+\beta^2$ だからです。">$\alpha^2+\beta^2=(\alpha+\beta)^2-2\alpha\beta$。</Step>
+<Step reason="求めた和と積を代入します。">$=3^2-2\cdot(-2)=9+4=13$。</Step>
+</Steps>
+
+<Answer>
+$\alpha^2+\beta^2=13$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="α の2乗 + β の2乗 を、解を求めずに計算できるのはなぜ？"
+  options={['和と積だけで表せるから', '解が実数だから', '判別式が正だから']}
+  model="(α+β) の2乗 = α の2乗 + 2αβ + β の2乗 を移項すると、α の2乗 + β の2乗 = (α+β) の2乗 − 2αβ となります。和と積は係数から分かるので、解を1つずつ求めなくても計算できます。"
+/>
+
+<Misconception>
+<Wrong>
+判別式が $D\lt 0$ のとき、二次方程式は解をもたない。
+</Wrong>
+<WhyWrong>
+実数解はもたないが、複素数の範囲では異なる2つの解をもつ。$x^2+1=0$ の解は $x=\pm i$ である。数の範囲を複素数まで広げたので、「解がない」のではなく「実数解がない」と言うのが正確だ。
+</WhyWrong>
+<Right>
+$D\lt 0$ のときは実数解をもたず、互いに共役な2つの虚数解をもつ。実数の範囲で考えるか複素数の範囲で考えるかをはっきりさせておく。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+解と係数の関係は $\alpha+\beta=\dfrac{c}{a}$、$\alpha\beta=-\dfrac{b}{a}$ である。
+</Wrong>
+<WhyWrong>
+和と積が逆で、符号も入れ替わっている。$a(x-\alpha)(x-\beta)=ax^2-a(\alpha+\beta)x+a\alpha\beta$ を $ax^2+bx+c$ と比べると、$x$ の係数から $\alpha+\beta=-\dfrac{b}{a}$、定数項から $\alpha\beta=\dfrac{c}{a}$ が得られる。たとえば $x^2-3x+2=0$ の解 $1$、$2$ について、和 $3=-\dfrac{-3}{1}$、積 $2=\dfrac{2}{1}$ で確かめられる。
+</WhyWrong>
+<Right>
+$\alpha+\beta=-\dfrac{b}{a}$、$\alpha\beta=\dfrac{c}{a}$。和は $x$ の係数に負号が付き、積は定数項をそのまま割ったものである。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$x^2-2x+5=0$ の実数解の個数を、判別式を使って判定せよ。
+<Reveal label="答え">
+$D=(-2)^2-4\cdot 1\cdot 5=4-20=-16\lt 0$。よって実数解はなく、異なる2つの虚数解をもつ。
+</Reveal>
+
+（2）$-3$ と $5$ を解とする二次方程式を1つ作れ。
+<Reveal label="答え">
+和は $2$、積は $-15$。和を $s$、積を $p$ とすると $x^2-sx+p=0$ より $x^2-2x-15=0$。
+</Reveal>
+
+（3）解と係数の関係を、$\alpha+\beta$ と $\alpha\beta$ について述べよ。
+<Reveal label="答え">
+$ax^2+bx+c=0$ の2解を $\alpha$、$\beta$ とすると、$\alpha+\beta=-\dfrac{b}{a}$、$\alpha\beta=\dfrac{c}{a}$。
+</Reveal>
+</CheckUnderstanding>

@@ -1,0 +1,122 @@
+---
+title: "Σ記号と種々の和"
+summary: "長い和をΣで書き、性質と公式で計算する。"
+unit: "b-sequences"
+order: 3
+objectives:
+  - "Σ記号の意味と、添字の範囲を説明できる"
+  - "Σの線形性を使って和を分解できる"
+  - "k・k²・k³の和の公式を正しく使い分けられる"
+prerequisites: ["sequences/02-geometric-sum"]
+tags: ["Σ記号", "和の公式", "線形性"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+$1^2+2^2+3^2+\dots+10^2$ のように、同じ形の項をたくさん足す場面があります。「$\dots$」で省略して書くと、どこまで足すのかが人によって曖昧になります。同じ形の和を、省略せず、短く、正確に書く道具はないでしょうか。
+</Hook>
+
+<Prediction
+  question="c を定数とするとき、Σ_{k=1}^{n} c はどう表せるでしょう？"
+  options={['c', 'nc', 'c+n']}
+  answer="nc"
+  explanation="c という同じ項を n 個足すので、和は c の n 倍、つまり nc になります。"
+/>
+
+<PrerequisiteNote concept="i-expression" />
+
+## 和を1つの記号で書き切る
+
+同じ形の項を $k=1$ から $k=n$ まで足すとき、その和を $\sum$ という記号で表します。足し算の記号を何度も書かずに、始まりと終わりと項の形だけを示せるのが利点です。
+
+<Definition term="Σ記号（シグマ）">
+$k=1$ から $k=n$ までの項 $a_k$ の和を
+$$
+\sum_{k=1}^{n} a_k = a_1 + a_2 + \dots + a_n
+$$
+と書く。$k$ を添字、$1$ を和の始まり、$n$ を和の終わりという。添字の文字は $i$ や $m$ でもよく、使う文字を変えても意味は同じである。
+</Definition>
+
+<Why>
+Σ記号を使うのは、長い和を「項の形」と「範囲」の2つに分解して見られるようにするためだ。項が $a_k+b_k$ のように分けられるなら、和もそれぞれの和に分けられる。項に定数が掛かっていれば、その定数をΣの外へ出せる。この性質を使うと、複雑な和を、すでに知っている基本の和へ還元できる。
+</Why>
+
+<Theorem name="Σの性質（線形性）">
+$c$ を定数とするとき、次が成り立つ。
+$$
+\sum_{k=1}^{n}(a_k+b_k) = \sum_{k=1}^{n}a_k + \sum_{k=1}^{n}b_k, \qquad \sum_{k=1}^{n} c\,a_k = c\sum_{k=1}^{n}a_k, \qquad \sum_{k=1}^{n} c = nc
+$$
+</Theorem>
+
+上の3つは、どれも「足し算は分解できる」「共通の数はくくり出せる」という当たり前の性質を、Σの言葉で書き直したものです。
+
+## 基本の和の公式
+
+まず $\sum k$ を求めます。$1+2+\dots+n$ は初項1、公差1の等差数列の和なので、前のレッスンの和の公式がそのまま使えます。
+
+<Theorem name="k・k²・k³ の和">
+$$
+\sum_{k=1}^{n} k = \frac{n(n+1)}{2}, \qquad \sum_{k=1}^{n} k^2 = \frac{n(n+1)(2n+1)}{6}, \qquad \sum_{k=1}^{n} k^3 = \left\{\frac{n(n+1)}{2}\right\}^2
+$$
+</Theorem>
+
+<Why>
+$\sum k$ は等差数列の和の公式から直ちに導ける。初項1、末項 $n$、項数 $n$ なので $\dfrac{n(1+n)}{2}$ である。一方、$k^2$ と $k^3$ の和は、この形からは導けない。$k^2$ は等差でも等比でも並ばないからだ。これらの公式は、次のレッスン以降で学ぶ数学的帰納法を使えばすべての $n$ で成り立つことを確かめられる。
+</Why>
+
+<Figure caption="奇数 1, 3, 5, … を第 n 項まで足すと、和は 1, 4, 9, 16, … と平方数になります。">
+<SequencePlot kind="arithmetic" a={1} d={2} maxN={8} n={5} mode="sum" interactive />
+</Figure>
+
+<WorkedExample title="例題: Σを分解して計算する">
+(1) $\displaystyle\sum_{k=1}^{n}(2k-1)$ を求めよ。
+(2) $\displaystyle\sum_{k=1}^{n}(k^2-3k)$ を求めよ。
+
+<Steps>
+<Step reason="Σは差の形にも分解でき、定数倍は外へ出せるからです。">(1) $\displaystyle\sum_{k=1}^{n}(2k-1) = 2\sum_{k=1}^{n}k - \sum_{k=1}^{n}1$。</Step>
+<Step reason="Σk の公式と、定数の和が個数×定数になることを当てはめます。">$= 2\times\dfrac{n(n+1)}{2} - n = n(n+1)-n$。</Step>
+<Step reason="共通因数 n をくくれば、奇数を足した和が平方数だと分かります。">$= n^2$。</Step>
+<Step reason="項が2つに分かれているので、それぞれの公式に分けて計算します。">(2) $\displaystyle\sum_{k=1}^{n}(k^2-3k) = \dfrac{n(n+1)(2n+1)}{6} - 3\times\dfrac{n(n+1)}{2}$。</Step>
+<Step reason="共通因数をくくり出して、分数を1つにまとめます。">$= \dfrac{n(n+1)(2n+1) - 9n(n+1)}{6} = \dfrac{n(n+1)(2n-8)}{6}$。</Step>
+<Step reason="2n−8 を2でくくって約分すれば、整った形になります。">$= \dfrac{n(n+1)(n-4)}{3}$。</Step>
+</Steps>
+
+<Answer>
+(1) $n^2$　(2) $\dfrac{n(n+1)(n-4)}{3}$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="Σの計算で、まず各項を分解するのはなぜ？"
+  options={['基本の和の公式が使える形に還元できるから', '項数が減るから', 'Σの記号を消せるから']}
+  model="Σは和を保ったまま a_k+b_k や c·a_k の形に分解できます。分解してΣk やΣk² といった基本の公式に当てはめれば、複雑な和も計算できます。分解は公式を使うための準備です。"
+/>
+
+<Misconception>
+<Wrong>
+$\displaystyle\sum_{k=1}^{n} k^2 = \left\{\dfrac{n(n+1)}{2}\right\}^2$ である。
+</Wrong>
+<WhyWrong>
+$\left\{\dfrac{n(n+1)}{2}\right\}^2$ は $\sum k^3$ の公式である。$\sum k^2$ は $n(n+1)(2n+1)/6$ で、$n=2$ を代入すると $5$ になり、$1^2+2^2=5$ と一致する。一方、$\{n(n+1)/2\}^2$ に $n=2$ を代入すると $9$ で合わない。2乗の和と3乗の和で公式を取り違えやすい。
+</WhyWrong>
+<Right>
+$\sum k = \dfrac{n(n+1)}{2}$、$\sum k^2 = \dfrac{n(n+1)(2n+1)}{6}$、$\sum k^3 = \left\{\dfrac{n(n+1)}{2}\right\}^2$。次数と形を対応させて覚える。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\displaystyle\sum_{k=1}^{n}(4k-3)$ を求めよ。
+<Reveal label="答え">
+$\displaystyle\sum_{k=1}^{n}(4k-3) = 4\times\dfrac{n(n+1)}{2} - 3n = 2n(n+1)-3n = 2n^2+2n-3n = n(2n-1)$。
+</Reveal>
+
+(2) $\displaystyle\sum_{k=1}^{n}(k^2+k)$ を求めよ。
+<Reveal label="答え">
+$\displaystyle\sum_{k=1}^{n}(k^2+k) = \dfrac{n(n+1)(2n+1)}{6} + \dfrac{n(n+1)}{2} = \dfrac{n(n+1)\{(2n+1)+3\}}{6} = \dfrac{n(n+1)(2n+4)}{6} = \dfrac{n(n+1)(n+2)}{3}$。
+</Reveal>
+
+(3) 定数5について $\displaystyle\sum_{k=1}^{n} 5$ を求めよ。
+<Reveal label="答え">
+同じ定数5を $n$ 個足すので $5n$。
+</Reveal>
+</CheckUnderstanding>

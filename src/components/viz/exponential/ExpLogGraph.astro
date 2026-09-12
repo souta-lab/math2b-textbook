@@ -1,0 +1,235 @@
+---
+/**
+ * ExpLogGraph — y = a^x or y = log_a x on a square plot, with a live base
+ * slider (a > 0, a ≠ 1). 数学II scope: the log curve is only drawn for x > 0.
+ *
+ * Server-rendered SVG + a vanilla-TS <script> that repaints the curve and the
+ * anchor point when the base changes. No React, tokens only.
+ *
+ * Usage:
+ *   <ExpLogGraph fn="exp" base={2} interactive />
+ *   <ExpLogGraph fn="log" base={2} interactive label="…" />
+ */
+import { expLogFrame, BASE_MIN, BASE_MAX, BASE_STEP, type ExpLogFn } from './expo-math';
+import { expGraphDynamicMarkup } from './expo-render';
+
+interface Props {
+  fn?: ExpLogFn;
+  base?: number;
+  interactive?: boolean;
+  label?: string;
+}
+
+const { fn = 'exp', base = 2, interactive = false, label } = Astro.props;
+const frame = expLogFrame(fn, base);
+const dynamic = expGraphDynamicMarkup(frame);
+const fnName = fn === 'exp' ? 'y = a^x' : 'y = log_a x';
+const ariaLabel = label ?? `${fnName}（a = ${frame.values.base}）のグラフ`;
+const anchor = fn === 'exp' ? 'f(1) = a' : 'f(a) = 1';
+const xTicks = frame.xTicks.filter((tick) => tick.label !== '0');
+const yTicks = frame.yTicks.filter((tick) => tick.label !== '0');
+---
+
+<figure
+  class="viz viz-exp"
+  data-viz="exp-graph"
+  data-fn={fn}
+  data-base={String(base)}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <svg
+    class="viz-exp__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : ariaLabel}
+  >
+    <line class="v-axis" x1={frame.plot.x} y1={frame.zeroY} x2={frame.plot.x + frame.plot.width} y2={frame.zeroY} />
+    <line class="v-axis" x1={frame.zeroX} y1={frame.plot.y} x2={frame.zeroX} y2={frame.plot.y + frame.plot.height} />
+    <line
+      class="v-asymptote"
+      x1={frame.asymptote.x1}
+      y1={frame.asymptote.y1}
+      x2={frame.asymptote.x2}
+      y2={frame.asymptote.y2}
+    />
+    {
+      xTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={tick.x} y1={frame.zeroY - 3} x2={tick.x} y2={frame.zeroY + 3} />
+          <text class="v-faint" x={tick.x} y={frame.zeroY + 16} text-anchor="middle">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    {
+      yTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={frame.zeroX - 3} y1={tick.y} x2={frame.zeroX + 3} y2={tick.y} />
+          <text class="v-faint" x={frame.zeroX - 6} y={tick.y + 4} text-anchor="end">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    <text class="v-faint" x={frame.zeroX - 6} y={frame.zeroY + 15} text-anchor="end">O</text>
+    <text class="v-faint" x={frame.plot.x + frame.plot.width + 2} y={frame.zeroY - 6}>x</text>
+    <text class="v-faint" x={frame.zeroX + 6} y={frame.plot.y + 10}>y</text>
+    <g data-exp-dyn set:html={dynamic} />
+  </svg>
+  {
+    interactive && (
+      <label class="viz-exp__control">
+        <span class="viz-exp__control-label">底 a</span>
+        <input
+          class="viz-exp__input"
+          type="range"
+          data-exp-input
+          min={String(BASE_MIN)}
+          max={String(BASE_MAX)}
+          step={String(BASE_STEP)}
+          value={String(base)}
+          aria-label="底 a"
+          aria-valuetext={`底 a = ${frame.values.base}`}
+        />
+        <output class="viz-exp__value" data-exp-base>{frame.values.base}</output>
+      </label>
+    )
+  }
+  <div class="viz-readout" aria-live={interactive ? 'polite' : undefined}>
+    <span>底 a ＝ <span data-exp-out="base">{frame.values.base}</span></span>
+    <span>{fnName} の値域 ＝ {fn === 'exp' ? 'y > 0' : 'すべての実数'}</span>
+    <span>基準点 {anchor} ＝ <span data-exp-out="point">{frame.values.keyPoint}</span></span>
+  </div>
+  {
+    interactive && (
+      <p class="viz-hint" data-exp-warn hidden={frame.valid}>
+        底 a = 1 のときは値が増えも減りもしないので、指数関数・対数関数になりません（a ≠ 1 が必要）。
+      </p>
+    )
+  }
+  {interactive && <p class="viz-hint">スライダーで底 a を変えられます。</p>}
+</figure>
+
+<script>
+  import { expLogFrame, type ExpLogFn } from './expo-math';
+  import { expGraphDynamicMarkup } from './expo-render';
+
+  function init(root: HTMLElement): void {
+    const input = root.querySelector<HTMLInputElement>('[data-exp-input]');
+    if (!input) return;
+    const dyn = root.querySelector<SVGGElement>('[data-exp-dyn]');
+    if (!dyn) return;
+    const warn = root.querySelector<HTMLElement>('[data-exp-warn]');
+    const baseOut = root.querySelector<HTMLOutputElement>('[data-exp-base]');
+    const fn = (root.dataset.fn ?? 'exp') as ExpLogFn;
+
+    const setOut = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-exp-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (base: number): void => {
+      const frame = expLogFrame(fn, base);
+      dyn.innerHTML = expGraphDynamicMarkup(frame);
+      setOut('base', frame.values.base);
+      setOut('point', frame.values.keyPoint);
+      if (baseOut) baseOut.textContent = frame.values.base;
+      input.setAttribute('aria-valuetext', `底 a = ${frame.values.base}`);
+      if (warn) warn.hidden = frame.valid;
+      root.dataset.base = String(base);
+    };
+
+    input.addEventListener('input', () => paint(Number(input.value)));
+    paint(Number(input.value));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="exp-graph"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-exp {
+    margin: var(--sp-5) 0;
+  }
+  .viz-exp__svg {
+    display: block;
+    width: 100%;
+    max-width: 28rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-exp .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-exp .v-tick {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-exp .v-asymptote {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+  .viz-exp .v-curve {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-exp .v-guide {
+    stroke: var(--shu);
+    stroke-width: 1.4;
+    stroke-dasharray: 4 3;
+  }
+  .viz-exp .v-marker {
+    fill: var(--shu);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-exp .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+  .viz-exp__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    max-width: 28rem;
+    margin: var(--sp-3) auto 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  .viz-exp__control-label {
+    font-family: var(--font-heading);
+    white-space: nowrap;
+  }
+  .viz-exp__input {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .viz-exp__value {
+    min-width: 2.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>

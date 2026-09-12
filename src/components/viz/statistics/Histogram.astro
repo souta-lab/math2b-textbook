@@ -1,0 +1,133 @@
+---
+import { histogramFrame } from './statistics-math';
+
+interface Props {
+  values: number[];
+  bins?: number;
+  showMean?: boolean;
+  showSd?: boolean;
+  label?: string;
+  xLabel?: string;
+  yLabel?: string;
+}
+
+const {
+  values,
+  bins = 8,
+  showMean = true,
+  showSd = false,
+  label,
+  xLabel = '値',
+  yLabel = '度数',
+} = Astro.props;
+
+const frame = histogramFrame(values, bins, { mean: showMean, sd: showSd });
+const ariaLabel = label ?? frame.ariaText;
+const { width, height } = frame;
+const { plot, baseY, stats } = frame;
+---
+
+<figure class="viz viz-hist" data-viz="histogram">
+  <svg
+    class="viz-hist__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role="img"
+    aria-label={ariaLabel}
+  >
+    {
+      frame.sdBand && (
+        <rect
+          class="v-hist-band"
+          x={frame.sdBand.x1}
+          y={plot.y}
+          width={Math.abs(frame.sdBand.x2 - frame.sdBand.x1)}
+          height={baseY - plot.y}
+        />
+      )
+    }
+    {frame.bars.map((bar) => <rect class="v-hist-bar" x={bar.x} y={bar.y} width={bar.w} height={bar.h} />)}
+    {
+      frame.meanLine && (
+        <line
+          class="v-hist-mean"
+          x1={frame.meanLine.x}
+          y1={plot.y}
+          x2={frame.meanLine.x}
+          y2={baseY}
+        />
+      )
+    }
+    <line class="v-axis" x1={plot.x} y1={baseY} x2={plot.x + plot.width} y2={baseY} />
+    <line class="v-axis" x1={plot.x} y1={plot.y} x2={plot.x} y2={baseY} />
+    {
+      frame.yTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={plot.x - 3} y1={tick.y} x2={plot.x + 3} y2={tick.y} />
+          <text class="v-faint" x={plot.x - 6} y={tick.y + 4} text-anchor="end">{tick.label}</text>
+        </>
+      ))
+    }
+    {
+      frame.xTicks.map((tick) => (
+        <text class="v-faint" x={tick.x} y={baseY + 16} text-anchor="middle">{tick.label}</text>
+      ))
+    }
+    <text class="v-faint" x={plot.x + plot.width} y={baseY + 30} text-anchor="end">{xLabel}</text>
+    <text class="v-faint" x={plot.x - 6} y={plot.y - 6} text-anchor="end">{yLabel}</text>
+  </svg>
+  <div class="viz-hist__readout">
+    <span>データ数 ＝ {stats.n}</span>
+    <span>平均 ＝ {stats.mean}</span>
+    <span>標準偏差 ＝ {stats.sd}</span>
+  </div>
+</figure>
+
+<style is:global>
+  .viz-hist {
+    margin: var(--sp-5) 0;
+  }
+  .viz-hist__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-hist .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-hist .v-tick {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+  }
+  .viz-hist .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-hist .v-hist-band {
+    fill: var(--shu-soft);
+  }
+  .viz-hist .v-hist-bar {
+    fill: var(--accent);
+    fill-opacity: 0.85;
+    stroke: var(--surface);
+    stroke-width: 1;
+  }
+  .viz-hist .v-hist-mean {
+    stroke: var(--shu);
+    stroke-width: 1.6;
+    stroke-dasharray: 5 3;
+  }
+  .viz-hist__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

@@ -1,0 +1,297 @@
+---
+/**
+ * Circle — a circle on the coordinate plane, optionally cut by a line.
+ *
+ * With `interactive`, a slider moves the line up and down so the learner can
+ * see the number of intersections change (2 → 1 → 0).
+ *
+ * Usage:
+ *   <Circle cx={1} cy={2} r={3} showRadius />
+ *   <Circle cx={0} cy={0} r={2} lineM={1} lineB={1.5} showIntersections interactive />
+ */
+import {
+  circleEquationLabel,
+  circleLineRelation,
+  fmt,
+  lineEquationLabel,
+  planeFrame,
+  type LineMB,
+  type Pt,
+} from './coordinate-math';
+import { circleSceneMarkup } from './coordinate-render';
+
+interface Props {
+  cx?: number;
+  cy?: number;
+  r?: number;
+  lineM?: number;
+  lineB?: number;
+  showIntersections?: boolean;
+  showRadius?: boolean;
+  shade?: 'none' | 'in' | 'out';
+  boundary?: 'solid' | 'dashed';
+  interactive?: boolean;
+  lineBMin?: number;
+  lineBMax?: number;
+  lineStep?: number;
+  xMin?: number;
+  xMax?: number;
+  yMin?: number;
+  yMax?: number;
+  label?: string;
+}
+
+const {
+  cx = 0,
+  cy = 0,
+  r = 2,
+  lineM,
+  lineB = 0,
+  showIntersections = false,
+  showRadius = true,
+  shade = 'none',
+  boundary = 'solid',
+  interactive = false,
+  lineBMin = -5,
+  lineBMax = 5,
+  lineStep = 0.5,
+  xMin = -4,
+  xMax = 4,
+  yMin = -4,
+  yMax = 4,
+  label = '円と直線',
+} = Astro.props;
+
+const frame = planeFrame({ xMin, xMax, yMin, yMax });
+const center: Pt = { x: cx, y: cy };
+const hasLine = lineM !== undefined;
+const line: LineMB | null = hasLine ? { m: lineM as number, b: lineB } : null;
+
+const relation = line ? circleLineRelation(center, r, line) : null;
+const relationText =
+  relation === null
+    ? ''
+    : relation.kind === 'two'
+      ? '2個（2点で交わる）'
+      : relation.kind === 'one'
+        ? '1個（接する）'
+        : '0個（共有点なし）';
+
+const scene = circleSceneMarkup(frame, {
+  center,
+  r,
+  line,
+  showIntersections,
+  showRadius,
+  shade,
+  boundary,
+});
+---
+
+<figure
+  class="viz viz-circle"
+  data-viz="coordinate-circle"
+  data-cx={String(cx)}
+  data-cy={String(cy)}
+  data-r={String(r)}
+  data-linem={hasLine ? String(lineM) : ''}
+  data-lineb={String(lineB)}
+  data-inter={showIntersections ? 'true' : 'false'}
+  data-radius={showRadius ? 'true' : 'false'}
+  data-shade={shade}
+  data-boundary={boundary}
+  data-xmin={String(xMin)}
+  data-xmax={String(xMax)}
+  data-ymin={String(yMin)}
+  data-ymax={String(yMax)}
+>
+  <svg
+    class="viz-circle__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role="img"
+    aria-label={label}
+  >
+    <line class="v-axis" x1={frame.pad.left} y1={frame.zeroY} x2={frame.width - frame.pad.right} y2={frame.zeroY} />
+    <line class="v-axis" x1={frame.zeroX} y1={frame.height - frame.pad.bottom} x2={frame.zeroX} y2={frame.pad.top} />
+    <g data-circle-dyn set:html={scene} />
+  </svg>
+  <div class="viz-readout">
+    <span>円: <span data-circle-out="eq">{circleEquationLabel(cx, cy, r)}</span></span>
+    {
+      line && (
+        <span>直線 ℓ: <span data-circle-out="line">{lineEquationLabel(line)}</span></span>
+      )
+    }
+    {
+      relation && (
+        <span>共有点: <span data-circle-out="rel">{relationText}</span></span>
+      )
+    }
+  </div>
+  {
+    interactive && hasLine && (
+      <label class="viz-circle__control">
+        <span class="viz-circle__control-label">直線の切片 b</span>
+        <input
+          type="range"
+          data-circle-input
+          aria-label="直線の切片"
+          min={String(lineBMin)}
+          max={String(lineBMax)}
+          step={String(lineStep)}
+          value={String(lineB)}
+        />
+        <span class="viz-circle__control-value" data-circle-out="b">{fmt(lineB)}</span>
+      </label>
+    )
+  }
+</figure>
+
+<script>
+  import {
+    circleLineRelation,
+    fmt,
+    lineEquationLabel,
+    planeFrame,
+    type LineMB,
+    type Pt,
+  } from './coordinate-math';
+  import { circleSceneMarkup } from './coordinate-render';
+
+  function setText(root: HTMLElement, key: string, value: string): void {
+    const el = root.querySelector(`[data-circle-out="${key}"]`);
+    if (el) el.textContent = value;
+  }
+
+  function relationLabel(kind: 'two' | 'one' | 'none'): string {
+    if (kind === 'two') return '2個（2点で交わる）';
+    if (kind === 'one') return '1個（接する）';
+    return '0個（共有点なし）';
+  }
+
+  function paint(root: HTMLElement, b: number): void {
+    const center: Pt = { x: Number(root.dataset.cx), y: Number(root.dataset.cy) };
+    const r = Number(root.dataset.r);
+    const hasLine = (root.dataset.linem ?? '') !== '';
+    const line: LineMB | null = hasLine ? { m: Number(root.dataset.linem), b } : null;
+    const frame = planeFrame({
+      xMin: Number(root.dataset.xmin),
+      xMax: Number(root.dataset.xmax),
+      yMin: Number(root.dataset.ymin),
+      yMax: Number(root.dataset.ymax),
+    });
+    const shade = root.dataset.shade === 'in' ? 'in' : root.dataset.shade === 'out' ? 'out' : 'none';
+    const scene = circleSceneMarkup(frame, {
+      center,
+      r,
+      line,
+      showIntersections: root.dataset.inter === 'true',
+      showRadius: root.dataset.radius === 'true',
+      shade,
+      boundary: root.dataset.boundary === 'dashed' ? 'dashed' : 'solid',
+    });
+    const dyn = root.querySelector<SVGGElement>('[data-circle-dyn]');
+    if (dyn) dyn.innerHTML = scene;
+    if (line) {
+      setText(root, 'line', lineEquationLabel(line));
+      const rel = circleLineRelation(center, r, line);
+      setText(root, 'rel', relationLabel(rel.kind));
+    }
+    setText(root, 'b', fmt(b));
+  }
+
+  function init(root: HTMLElement): void {
+    const input = root.querySelector<HTMLInputElement>('[data-circle-input]');
+    if (!input) return;
+    paint(root, Number(input.value));
+    input.addEventListener('input', () => paint(root, Number(input.value)));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="coordinate-circle"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-circle {
+    margin: var(--sp-5) 0;
+  }
+  .viz-circle__svg {
+    display: block;
+    width: 100%;
+    max-width: 24rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-circle .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1.2;
+  }
+  .viz-circle .v-circle {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2.2;
+  }
+  .viz-circle .v-circle-dashed {
+    stroke-dasharray: 6 5;
+  }
+  .viz-circle .v-disk {
+    fill: var(--accent-soft);
+    stroke: none;
+  }
+  .viz-circle .v-disk-out {
+    fill: var(--accent-soft);
+    stroke: none;
+  }
+  .viz-circle .v-radius {
+    stroke: var(--correct);
+    stroke-width: 2;
+  }
+  .viz-circle .v-line {
+    stroke: var(--shu);
+    stroke-width: 2.2;
+  }
+  .viz-circle .v-point {
+    fill: var(--ink);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-circle .v-label {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .viz-circle .v-label-dist {
+    fill: var(--correct);
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-circle__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    justify-content: center;
+    margin-top: var(--sp-3);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .viz-circle__control input {
+    flex: 1 1 12rem;
+    max-width: 16rem;
+    accent-color: var(--accent);
+  }
+  .viz-circle__control-value {
+    min-width: 2.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

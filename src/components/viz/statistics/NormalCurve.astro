@@ -1,0 +1,236 @@
+---
+import { normalFrame, type NormalShade } from './statistics-math';
+import { normalMarkerMarkup } from './statistics-render';
+
+interface Props {
+  mu?: number;
+  sd?: number;
+  shade?: NormalShade;
+  a?: number;
+  b?: number;
+  marker?: number;
+  interactive?: boolean;
+  label?: string;
+  xLabel?: string;
+}
+
+const {
+  mu = 0,
+  sd = 1,
+  shade = 'none',
+  a,
+  b,
+  marker,
+  interactive = false,
+  label,
+  xLabel = 'z',
+} = Astro.props;
+
+// The interactive probe standardises to N(0, 1) and shades the left tail, so
+// the reader directly sees Φ(z) grow as z moves.
+const frame = interactive
+  ? normalFrame({ mu: 0, sd: 1, shade: 'left', a: a ?? 1.96, marker: a ?? 1.96 })
+  : normalFrame({ mu, sd, shade, a, b, marker: marker ?? null });
+
+const dynamic = normalMarkerMarkup(frame);
+const initialZ = a ?? 1.96;
+const ariaLabel = label ?? frame.ariaText;
+const { width, height } = frame;
+const { plot, baseY } = frame;
+const areaD = frame.shadePaths.join(' ');
+---
+
+<figure
+  class="viz viz-normal"
+  data-viz="normal-curve"
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <svg
+    class="viz-normal__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : ariaLabel}
+  >
+    <path class="v-normal-area" data-normal-area d={areaD} />
+    {
+      frame.sdMarks.map((mark) => (
+        <line class="v-normal-sd" x1={mark.x} y1={plot.y} x2={mark.x} y2={baseY} />
+      ))
+    }
+    <path class="v-normal-curve" d={frame.curve} />
+    <line class="v-axis" x1={plot.x} y1={baseY} x2={plot.x + plot.width} y2={baseY} />
+    {
+      frame.xTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={tick.x} y1={baseY - 3} x2={tick.x} y2={baseY + 3} />
+          <text class="v-faint" x={tick.x} y={baseY + 16} text-anchor="middle">{tick.label}</text>
+        </>
+      ))
+    }
+    <text class="v-faint" x={plot.x + plot.width} y={baseY + 30} text-anchor="end">{xLabel}</text>
+    <g data-normal-dyn set:html={dynamic} />
+  </svg>
+  {
+    interactive && (
+      <label class="viz-normal__control">
+        <span class="viz-normal__control-label">z</span>
+        <input
+          class="viz-normal__range"
+          type="range"
+          data-normal-input
+          min="-3.5"
+          max="3.5"
+          step="0.05"
+          value={String(initialZ)}
+          aria-label={`z を動かして左側の確率を読む。${ariaLabel}`}
+        />
+        <output class="viz-normal__control-value" data-normal-out="z">{initialZ.toFixed(2)}</output>
+      </label>
+    )
+  }
+  <div class="viz-normal__readout">
+    {
+      frame.probability != null && (
+        <span>
+          着色部分の確率 ≈ <span data-normal-out="prob">{(frame.probability * 100).toFixed(2)}</span>%
+        </span>
+      )
+    }
+  </div>
+  {interactive && <p class="viz-normal__hint">スライダーまたは ← → キーで z を動かせます。</p>}
+</figure>
+
+<script>
+  import { normalFrame } from './statistics-math';
+  import { normalMarkerMarkup } from './statistics-render';
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const input = root.querySelector<HTMLInputElement>('[data-normal-input]');
+    const area = root.querySelector<SVGPathElement>('[data-normal-area]');
+    const dyn = root.querySelector<SVGGElement>('[data-normal-dyn]');
+    if (!input || !area || !dyn) return;
+
+    const setText = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-normal-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (rawZ: number): void => {
+      const z = Number(rawZ);
+      const frame = normalFrame({ mu: 0, sd: 1, shade: 'left', a: z, marker: z });
+      area.setAttribute('d', frame.shadePaths.join(' '));
+      dyn.innerHTML = normalMarkerMarkup(frame);
+      setText('z', z.toFixed(2));
+      if (frame.probability != null) setText('prob', (frame.probability * 100).toFixed(2));
+      input.setAttribute('aria-valuetext', frame.ariaText);
+    };
+
+    input.addEventListener('input', () => paint(Number(input.value)));
+    paint(Number(input.value));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="normal-curve"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-normal {
+    margin: var(--sp-5) 0;
+  }
+  .viz-normal__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-normal .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-normal .v-tick {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+  }
+  .viz-normal .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-normal .v-normal-area {
+    fill: var(--accent);
+    fill-opacity: 0.22;
+  }
+  .viz-normal .v-normal-curve {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-normal .v-normal-sd {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .viz-normal .v-normal-guide {
+    stroke: var(--shu);
+    stroke-width: 1.4;
+    stroke-dasharray: 4 3;
+  }
+  .viz-normal .v-normal-halo {
+    fill: none;
+    stroke: var(--shu);
+    stroke-width: 2;
+  }
+  .viz-normal .v-normal-marker {
+    fill: var(--shu);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-normal .v-normal-marker-text {
+    fill: var(--shu);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .viz-normal__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+  }
+  .viz-normal__control-label {
+    font-family: var(--font-heading);
+    color: var(--ink-soft);
+  }
+  .viz-normal__range {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .viz-normal__control-value {
+    min-width: 3.5ch;
+    text-align: right;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+  }
+  .viz-normal__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-normal__hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>

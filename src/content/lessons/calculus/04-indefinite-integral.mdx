@@ -1,0 +1,119 @@
+---
+title: "不定積分"
+summary: "微分の逆の操作として原始関数を求め、積分定数を理解する。"
+unit: "ii-calculus"
+order: 4
+objectives:
+  - "原始関数と不定積分の関係を説明できる"
+  - "xⁿ の不定積分の公式を使って計算できる"
+  - "積分定数が必要になる理由を言える"
+prerequisites: ["calculus/03-extrema"]
+tags: ["不定積分", "原始関数", "積分定数"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+ここまでは、関数からその導関数を取り出す「微分」を学んできました。もし逆に、変化のようすだけが手もとにあるとき、もとの関数を復元することはできないでしょうか。たとえば「微分すると $2x$ になる関数」と言われて、それがどんな関数か分かるでしょうか。
+</Hook>
+
+<Prediction
+  question="微分すると 2x になる関数は、x² のほかにどれくらいある？"
+  options={['定数の違いだけで無数にある', 'x² の1つだけ', 'ちょうど2つだけ']}
+  answer="定数の違いだけで無数にある"
+  explanation="x² にどんな定数を足しても、微分するとその定数は消えて 2x になります。だから定数の分だけ無数にあります。"
+/>
+
+微分すると $2x$ になる関数は $x^2$ だけではありません。$x^2+3$ も、$x^2-7$ も、微分すれば $2x$ です。定数は微分すると $0$ になるので、足した定数の情報は微分で消えてしまいます。逆にいえば、微分の結果からもとの関数を復元するとき、その消えた定数の分だけ候補があるということです。
+
+<Why>
+積分を「微分の逆」ととらえると、定数が消えるという微分の性質がそのまま効いてきます。だから復元した関数には、どんな定数でもよいという印として $+C$ を添えます。この $C$ を書き忘れると、無数にある正解のうちの1つだけを答えたことになり、一般解ではなくなってしまいます。
+</Why>
+
+<Definition term="原始関数">
+微分すると $f(x)$ になる関数、すなわち $F'(x)=f(x)$ を満たす関数 $F(x)$ を、$f(x)$ の**原始関数**という。
+</Definition>
+
+<Definition term="不定積分">
+$f(x)$ の原始関数の1つを $F(x)$ とし、$C$ を任意の定数とするとき
+
+$$
+\int f(x)\,dx = F(x)+C
+$$
+
+と書き、これを $f(x)$ の**不定積分**という。$C$ を**積分定数**といい、$\int$ を積分記号という。
+</Definition>
+
+原始関数は定数の違いを除いて一致します。$F(x)$ と $G(x)$ がどちらも $f(x)$ の原始関数なら、差 $F(x)-G(x)$ を微分すると $f(x)-f(x)=0$ となり、その差は定数だからです。
+
+<Theorem name="不定積分の公式">
+$n$ を $0$ 以上の整数、$k$ を定数とするとき
+
+$$
+\int x^n\,dx=\frac{x^{n+1}}{n+1}+C,\qquad
+\int k\,f(x)\,dx=k\int f(x)\,dx,
+$$
+
+$$
+\int \{f(x)+g(x)\}\,dx=\int f(x)\,dx+\int g(x)\,dx.
+$$
+</Theorem>
+
+1つ目の式は、右辺を微分すると $x^n$ に戻ることを確かめれば正しいと分かります。$n=0$ のときは $\int 1\,dx=x+C$ です。以下の表で、微分と積分の対応を確かめておきましょう。
+
+| $f(x)$ | $f(x)$ の不定積分 |
+| --- | --- |
+| $1$ | $x+C$ |
+| $x$ | $\dfrac{x^2}{2}+C$ |
+| $x^2$ | $\dfrac{x^3}{3}+C$ |
+| $x^3$ | $\dfrac{x^4}{4}+C$ |
+
+<WorkedExample title="例題: 不定積分を計算し、微分で検算する">
+$\displaystyle\int (3x^2-4x+1)\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="和の積分は項ごとに分けられ、定数倍は前に出せるからです。">$3\displaystyle\int x^2\,dx-4\int x\,dx+\int 1\,dx$ と分ける。</Step>
+<Step reason="公式 ∫xⁿdx = xⁿ⁺¹/(n+1)+C を n = 2 に使うと x³/3 が出ます。">$3\cdot\dfrac{x^3}{3}=x^3$。</Step>
+<Step reason="同じ公式を n = 1 に使うと x²/2 が出ます。">$-4\cdot\dfrac{x^2}{2}=-2x^2$。</Step>
+<Step reason="n = 0 のときは ∫1 dx = x だからです。">$\displaystyle\int 1\,dx=x$。</Step>
+<Step reason="定数の分だけ候補があるので、最後に積分定数を添えるからです。">全体に $+C$ を付ける。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int (3x^2-4x+1)\,dx=x^3-2x^2+x+C$。検算すると $(x^3-2x^2+x+C)'=3x^2-4x+1$ となり、もとに戻る。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="不定積分の答えに +C を付けなければならないのはなぜ？"
+  options={['微分で消えた定数の情報があるので、候補が無数にあるから', '計算を間違えやすいから', 'C を付けると値が必ず正になるから']}
+  model="定数は微分すると 0 になり、その情報は微分で消えてしまいます。もとの関数を復元するとき、消えた定数の分だけ候補があるので、任意の定数 C を添えて表します。"
+/>
+
+<Misconception>
+<Wrong>
+$\displaystyle\int x^2\,dx=\frac{x^3}{3}$ で、積分定数は書かなくてよい。
+</Wrong>
+<WhyWrong>
+微分すると $x^2$ になる関数は $\dfrac{x^3}{3}$ だけではなく、$\dfrac{x^3}{3}+5$ でも $\dfrac{x^3}{3}-2$ でもかまいません。$+C$ を書かないと、無数にある原始関数のうちの1つだけを示したことになります。
+</WhyWrong>
+<Right>
+不定積分は $\displaystyle\int x^2\,dx=\frac{x^3}{3}+C$ と、任意の定数 $C$ を添えて答えます。$C$ は積分定数とよばれます。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int (2x+3)\,dx$ を求めなさい。
+<Reveal label="答え">
+$\displaystyle\int 2x\,dx+\int 3\,dx=x^2+3x+C$。
+</Reveal>
+
+（2）$\displaystyle\int (6x^2-2x)\,dx$ を求めなさい。
+<Reveal label="答え">
+$\displaystyle 6\cdot\frac{x^3}{3}-2\cdot\frac{x^2}{2}+C=2x^3-x^2+C$。
+</Reveal>
+
+（3）$F(x)=x^2+4$ の導関数が $2x$ であることを使って、$\displaystyle\int 2x\,dx$ を答えなさい。
+<Reveal label="答え">
+$2x$ の原始関数の1つは $x^2$ なので、$\displaystyle\int 2x\,dx=x^2+C$。定数 $4$ は微分で消えるため、$+C$ に吸収されます。
+</Reveal>
+</CheckUnderstanding>

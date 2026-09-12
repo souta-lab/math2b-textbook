@@ -62,7 +62,7 @@ export const units: Unit[] = [
     title: 'いろいろな式',
     summary: '式と証明、高次方程式。複素数まで数の範囲を広げる。',
     prerequisites: ['i-expression', 'i-quadratic'],
-    status: 'planned',
+    status: 'published',
     order: 1,
   },
   {
@@ -72,7 +72,7 @@ export const units: Unit[] = [
     title: '図形と方程式',
     summary: '座標平面で直線と円を式で表し、軌跡と領域を考える。',
     prerequisites: ['i-expression', 'i-quadratic'],
-    status: 'planned',
+    status: 'published',
     order: 2,
   },
   {
@@ -92,7 +92,7 @@ export const units: Unit[] = [
     title: '指数関数・対数関数',
     summary: '指数を実数へ拡張し、その逆として対数を導入する。',
     prerequisites: ['i-expression', 'i-quadratic'],
-    status: 'planned',
+    status: 'published',
     order: 4,
   },
   {
@@ -102,7 +102,7 @@ export const units: Unit[] = [
     title: '微分・積分の考え',
     summary: '微分係数と導関数、関数の増減、定積分と面積。',
     prerequisites: ['i-quadratic', 'ii-expressions', 'ii-coordinate'],
-    status: 'planned',
+    status: 'published',
     order: 5,
   },
   {
@@ -112,7 +112,7 @@ export const units: Unit[] = [
     title: '数列',
     summary: '等差数列・等比数列、Σ、漸化式と数学的帰納法。',
     prerequisites: ['i-expression', 'i-quadratic'],
-    status: 'planned',
+    status: 'published',
     order: 1,
   },
   {
@@ -122,7 +122,7 @@ export const units: Unit[] = [
     title: '統計的な推測',
     summary: '確率変数と確率分布、二項分布・正規分布、区間推定と仮説検定。',
     prerequisites: ['i-data', 'a-probability'],
-    status: 'planned',
+    status: 'published',
     order: 2,
   },
   {
@@ -132,7 +132,7 @@ export const units: Unit[] = [
     title: '数学と社会生活',
     summary: '社会生活の問題を数学化し、解決・批判的検討・一般化を行う。',
     prerequisites: ['i-data', 'a-probability', 'b-statistics'],
-    status: 'planned',
+    status: 'published',
     order: 3,
   },
 ];

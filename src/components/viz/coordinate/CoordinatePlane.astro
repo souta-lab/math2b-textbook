@@ -1,0 +1,201 @@
+---
+/**
+ * CoordinatePlane — a static coordinate-plane figure for 図形と方程式.
+ *
+ * Server-rendered SVG only (role="img"), used for distance, division, locus
+ * and composed scenes. Interactive exploration lives in Line / Circle / Region.
+ *
+ * Usage:
+ *   <CoordinatePlane
+ *     points={[{ x: 1, y: 2, label: 'A' }, { x: 4, y: 6, label: 'B' }]}
+ *     distance={{ ax: 1, ay: 2, bx: 4, by: 6 }}
+ *   />
+ */
+import { planeFrame, type Pt } from './coordinate-math';
+import {
+  axesMarkup,
+  circleMarkup,
+  diskMarkup,
+  distanceMarkup,
+  gridMarkup,
+  lineMarkup,
+  pointsMarkup,
+  segmentMarkup,
+} from './coordinate-render';
+
+interface PointSpec {
+  x: number;
+  y: number;
+  label?: string;
+  kind?: 'dot' | 'division' | 'test' | 'locus';
+}
+interface SegmentSpec {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  dashed?: boolean;
+}
+interface LineSpec {
+  m: number;
+  b: number;
+}
+interface CircleSpec {
+  cx: number;
+  cy: number;
+  r: number;
+  fill?: boolean;
+}
+
+interface Props {
+  xMin?: number;
+  xMax?: number;
+  yMin?: number;
+  yMax?: number;
+  points?: PointSpec[];
+  segments?: SegmentSpec[];
+  lines?: LineSpec[];
+  circles?: CircleSpec[];
+  distance?: { ax: number; ay: number; bx: number; by: number };
+  showGrid?: boolean;
+  label?: string;
+}
+
+const {
+  xMin = -4,
+  xMax = 4,
+  yMin = -3,
+  yMax = 5,
+  points = [],
+  segments = [],
+  lines = [],
+  circles = [],
+  distance,
+  showGrid = true,
+  label = '座標平面',
+} = Astro.props;
+
+const frame = planeFrame({ xMin, xMax, yMin, yMax });
+const pt = (x: number, y: number): Pt => ({ x, y });
+
+const grid = showGrid ? gridMarkup(frame) : '';
+const axes = axesMarkup(frame);
+const circleMarkupSvg = circles
+  .map((c) => (c.fill ? diskMarkup(frame, pt(c.cx, c.cy), c.r) : circleMarkup(frame, pt(c.cx, c.cy), c.r)))
+  .join('');
+const lineMarkupSvg = lines.map((l) => lineMarkup(frame, l)).join('');
+const segmentMarkupSvg = segments
+  .map((s) => segmentMarkup(frame, pt(s.x1, s.y1), pt(s.x2, s.y2), s.dashed ?? false))
+  .join('');
+const distanceMarkupSvg = distance
+  ? distanceMarkup(frame, pt(distance.ax, distance.ay), pt(distance.bx, distance.by))
+  : '';
+const pointsMarkupSvg = pointsMarkup(
+  frame,
+  points.map((p) => ({ p: pt(p.x, p.y), label: p.label, kind: p.kind })),
+);
+---
+
+<figure class="viz viz-cp" data-viz="coordinate-plane">
+  <svg
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role="img"
+    aria-label={label}
+  >
+    <g set:html={grid} />
+    <g set:html={axes} />
+    <g set:html={circleMarkupSvg} />
+    <g set:html={lineMarkupSvg} />
+    <g set:html={segmentMarkupSvg} />
+    <g set:html={distanceMarkupSvg} />
+    <g set:html={pointsMarkupSvg} />
+  </svg>
+</figure>
+
+<style is:global>
+  .viz-cp {
+    margin: var(--sp-5) 0;
+  }
+  .viz-cp svg {
+    display: block;
+    width: 100%;
+    max-width: 24rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-cp .v-grid {
+    stroke: var(--paper-grid);
+    stroke-width: 1;
+  }
+  .viz-cp .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1.2;
+  }
+  .viz-cp .v-axis-head {
+    fill: var(--ink-faint);
+  }
+  .viz-cp .v-tick {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-cp .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-cp .v-point {
+    fill: var(--ink);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-cp .v-point-division {
+    fill: var(--shu);
+  }
+  .viz-cp .v-point-test {
+    fill: var(--correct);
+  }
+  .viz-cp .v-point-locus {
+    fill: var(--accent);
+  }
+  .viz-cp .v-label {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  .viz-cp .v-label-dist {
+    fill: var(--accent);
+  }
+  .viz-cp .v-label-dist {
+    fill: var(--accent);
+  }
+  .viz-cp .v-seg {
+    stroke: var(--ink);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+  }
+  .viz-cp .v-seg-dashed {
+    stroke: var(--ink-faint);
+    stroke-width: 1.4;
+    stroke-dasharray: 5 4;
+  }
+  .viz-cp .v-line {
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+  .viz-cp .v-circle {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+  }
+  .viz-cp .v-disk {
+    fill: var(--accent-soft);
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+  .viz-cp .v-path {
+    fill: none;
+    stroke: var(--note);
+    stroke-width: 2;
+  }
+</style>

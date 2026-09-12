@@ -1,0 +1,391 @@
+---
+/**
+ * PlanCompare — 料金プランの比較図（数学と社会生活）.
+ *
+ * Server-renders the two cost lines and the crossover point, then upgrades to
+ * an interactive usage slider with a tiny vanilla-TS script. No React island,
+ * no chart library (AUTHORING.md §16).
+ *
+ * Usage:
+ *   <PlanCompare usage={3} interactive />
+ *
+ * Colour is never the only cue: each line and marker is labelled A / B in the
+ * text, and the readout repeats the plan names.
+ */
+import { PLAN_A, PLAN_B, planFrame } from './society-math';
+import { planDynamicMarkup } from './society-render';
+
+interface Props {
+  /** 横軸の最大データ使用量（GB）。 */
+  maxGb?: number;
+  /** 最初に表示する使用量（GB）。 */
+  usage?: number;
+  baseA?: number;
+  includedA?: number;
+  perGbA?: number;
+  baseB?: number;
+  includedB?: number;
+  perGbB?: number;
+  nameA?: string;
+  nameB?: string;
+  interactive?: boolean;
+  label?: string;
+}
+
+const {
+  maxGb = 10,
+  usage = 3,
+  baseA = PLAN_A.base,
+  includedA = PLAN_A.includedGb,
+  perGbA = PLAN_A.perGb,
+  baseB = PLAN_B.base,
+  includedB = PLAN_B.includedGb,
+  perGbB = PLAN_B.perGb,
+  nameA = 'プランA（従量制）',
+  nameB = 'プランB（定額）',
+  interactive = false,
+  label,
+} = Astro.props;
+
+const planA = { base: baseA, includedGb: includedA, perGb: perGbA };
+const planB = { base: baseB, includedGb: includedB, perGb: perGbB };
+
+const initialUsage = Math.max(0, Math.min(maxGb, usage));
+const frame = planFrame(planA, planB, initialUsage, maxGb);
+const dynamic = planDynamicMarkup(frame);
+const { plot, zeroY } = frame;
+const { width, height } = frame;
+const cheaperText = (key: 'A' | 'B' | 'tie'): string =>
+  key === 'tie' ? 'どちらも同じ金額' : `${key === 'A' ? nameA : nameB}が安い`;
+
+const ariaLabel =
+  label ??
+  `データ使用量を変えたときの、${nameA}と${nameB}の月額料金の比較。交点はどちらも同じ金額になる使用量を示します。`;
+---
+
+<figure
+  class="viz viz-plan"
+  data-viz="plan-compare"
+  data-maxgb={String(maxGb)}
+  data-base-a={String(baseA)}
+  data-included-a={String(includedA)}
+  data-pergb-a={String(perGbA)}
+  data-base-b={String(baseB)}
+  data-included-b={String(includedB)}
+  data-pergb-b={String(perGbB)}
+  data-name-a={nameA}
+  data-name-b={nameB}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <svg
+    class="viz-plan__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : ariaLabel}
+  >
+    <line class="v-axis" x1={plot.x} y1={zeroY} x2={plot.x + plot.width} y2={zeroY} />
+    <line class="v-axis" x1={plot.x} y1={plot.y} x2={plot.x} y2={plot.y + plot.height} />
+    {
+      frame.yTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={plot.x - 3} y1={tick.y} x2={plot.x + 3} y2={tick.y} />
+          <text class="v-faint" x={plot.x - 6} y={tick.y + 4} text-anchor="end">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    {
+      frame.xTicks.map((tick) => (
+        <text class="v-faint" x={tick.x} y={zeroY + 16} text-anchor="middle">
+          {tick.label}
+        </text>
+      ))
+    }
+    <text class="v-faint" x={plot.x + plot.width} y={zeroY + 31} text-anchor="end">
+      データ使用量（GB）
+    </text>
+    <text class="v-faint" x={plot.x - 6} y={plot.y - 6} text-anchor="end">
+      月額（円）
+    </text>
+    <path class="v-plan-line v-plan-line--a" d={frame.lines[0].d} />
+    <path class="v-plan-line v-plan-line--b" d={frame.lines[1].d} />
+    <text class="v-plan-tag v-plan-tag--a" x={plot.x + plot.width - 4} y={frame.lines[0].endY - 5} text-anchor="end">A</text>
+    <text class="v-plan-tag v-plan-tag--b" x={plot.x + plot.width - 4} y={frame.lines[1].endY + 15} text-anchor="end">B</text>
+    {
+      frame.crossover && (
+        <>
+          <line
+            class="v-plan-cross"
+            x1={frame.crossover.x}
+            y1={zeroY}
+            x2={frame.crossover.x}
+            y2={frame.crossover.y}
+          />
+          <circle class="v-plan-cross-dot" cx={frame.crossover.x} cy={frame.crossover.y} r="4" />
+          <text class="v-plan-cross-text" x={frame.crossover.x + 6} y={frame.crossover.y - 8}>
+            交点 {frame.crossover.gb} GB / {frame.crossover.yen}円
+          </text>
+        </>
+      )
+    }
+    <g data-plan-dyn set:html={dynamic} />
+  </svg>
+  {
+    interactive && (
+      <label class="viz-plan__control">
+        <span class="viz-plan__control-label">データ使用量</span>
+        <input
+          class="viz-plan__range"
+          type="range"
+          data-plan-input
+          min="0"
+          max={String(maxGb)}
+          step="0.5"
+          value={String(initialUsage)}
+          aria-label={`1か月のデータ使用量（GB）。${ariaLabel}`}
+        />
+        <output class="viz-plan__control-value" data-plan-out="usage">
+          {frame.values.usage}
+        </output>
+        <span class="viz-plan__unit">GB</span>
+      </label>
+    )
+  }
+  <div class="viz-plan__legend">
+    <span class="viz-plan__legend-item"><span class="viz-plan__swatch viz-plan__swatch--a" aria-hidden="true" />{nameA}</span>
+    <span class="viz-plan__legend-item"><span class="viz-plan__swatch viz-plan__swatch--b" aria-hidden="true" />{nameB}</span>
+  </div>
+  <div class="viz-plan__readout">
+    <span>使用量 <span data-plan-out="usage-text">{frame.values.usage}</span> GB の月額: </span>
+    <span>A ＝ <span data-plan-out="a">{frame.values.costA.toLocaleString('ja-JP')}</span> 円</span>
+    <span>B ＝ <span data-plan-out="b">{frame.values.costB.toLocaleString('ja-JP')}</span> 円</span>
+  </div>
+  <p class="viz-plan__verdict" data-plan-out="cheaper">{cheaperText(frame.values.cheaper)}</p>
+  {interactive && <p class="viz-plan__hint">スライダーまたは ← → キーで使用量を動かせます。</p>}
+</figure>
+
+<script>
+  import { formatCount, formatNumber, planFrame } from './society-math';
+  import { planDynamicMarkup } from './society-render';
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const input = root.querySelector<HTMLInputElement>('[data-plan-input]');
+    const dyn = root.querySelector<SVGGElement>('[data-plan-dyn]');
+    if (!input || !dyn) return;
+
+    const maxGb = Number(root.dataset.maxgb ?? '10');
+    const planA = {
+      base: Number(root.dataset.baseA ?? '1500'),
+      includedGb: Number(root.dataset.includedA ?? '0'),
+      perGb: Number(root.dataset.pergbA ?? '800'),
+    };
+    const planB = {
+      base: Number(root.dataset.baseB ?? '4700'),
+      includedGb: Number(root.dataset.includedB ?? '0'),
+      perGb: Number(root.dataset.pergbB ?? '0'),
+    };
+    const nameA = root.dataset.nameA ?? 'プランA';
+    const nameB = root.dataset.nameB ?? 'プランB';
+
+    const setText = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-plan-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (rawUsage: number): void => {
+      const frame = planFrame(planA, planB, rawUsage, maxGb);
+      dyn.innerHTML = planDynamicMarkup(frame);
+      setText('usage', formatNumber(frame.values.usage));
+      setText('usage-text', formatNumber(frame.values.usage));
+      setText('a', formatCount(frame.values.costA));
+      setText('b', formatCount(frame.values.costB));
+      const cheaper = frame.values.cheaper;
+      setText('cheaper', cheaper === 'tie' ? 'どちらも同じ金額' : `${cheaper === 'A' ? nameA : nameB}が安い`);
+      input.setAttribute('aria-valuetext', frame.ariaText);
+    };
+
+    input.addEventListener('input', () => paint(Number(input.value)));
+    paint(Number(input.value));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="plan-compare"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-plan {
+    margin: var(--sp-5) 0;
+  }
+  .viz-plan__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-plan .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-plan .v-tick {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+  }
+  .viz-plan .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-plan .v-plan-line {
+    fill: none;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-plan .v-plan-line--a {
+    stroke: var(--accent);
+  }
+  .viz-plan .v-plan-line--b {
+    stroke: var(--shu);
+  }
+  .viz-plan .v-plan-tag {
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .viz-plan .v-plan-tag--a {
+    fill: var(--accent);
+  }
+  .viz-plan .v-plan-tag--b {
+    fill: var(--shu);
+  }
+  .viz-plan .v-plan-cross {
+    stroke: var(--rule-strong);
+    stroke-width: 1.2;
+    stroke-dasharray: 4 3;
+  }
+  .viz-plan .v-plan-cross-dot {
+    fill: var(--note);
+    stroke: var(--surface);
+    stroke-width: 1.5;
+  }
+  .viz-plan .v-plan-cross-text {
+    fill: var(--note);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .viz-plan .v-soc-guide {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .viz-plan .v-soc-halo {
+    fill: none;
+    stroke-width: 2;
+  }
+  .viz-plan .v-soc-halo--a {
+    stroke: var(--accent);
+  }
+  .viz-plan .v-soc-halo--b {
+    stroke: var(--shu);
+  }
+  .viz-plan .v-soc-marker {
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-plan .v-soc-marker--a {
+    fill: var(--accent);
+  }
+  .viz-plan .v-soc-marker--b {
+    fill: var(--shu);
+  }
+  .viz-plan .v-soc-marker-text {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .viz-plan .v-soc-marker-text--a {
+    fill: var(--accent);
+  }
+  .viz-plan .v-soc-marker-text--b {
+    fill: var(--shu);
+  }
+  .viz-plan__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+  }
+  .viz-plan__control-label {
+    font-family: var(--font-heading);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  .viz-plan__range {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .viz-plan__control-value {
+    min-width: 3ch;
+    text-align: right;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+  }
+  .viz-plan__unit {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+  .viz-plan__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.2rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .viz-plan__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .viz-plan__swatch {
+    width: 1.1rem;
+    height: 0.2rem;
+    border-radius: 1px;
+    background: currentColor;
+  }
+  .viz-plan__swatch--a {
+    color: var(--accent);
+  }
+  .viz-plan__swatch--b {
+    color: var(--shu);
+  }
+  .viz-plan__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-plan__verdict {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .viz-plan__hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>

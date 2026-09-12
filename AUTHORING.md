@@ -72,6 +72,7 @@
 ## 7. 数式の書き方
 
 - インライン `$...$`、別行 `$$...$$`（KaTeX, ビルド時SSR）。
+- **別行数式は `$$` を単独行に置く**（`$$\n…\n$$`）。`$$…$$` を1行で書くとインライン扱いになり、スマホで横に漏れる。テストで検出する。
 - 共通マクロ: `\R` → `\mathbb{R}`, `\Z` → `\mathbb{Z}`, `\deg` → `^{\circ}`。
 - LaTeX誤りは**ビルドを失敗**させる（`throwOnError: true`）。書きっぱなしにしない。
 - 別行数式が長い場合は折り返さない（横スクロールになる）。導出は `<Steps>` で1段ずつ（segmenting）。
@@ -224,11 +225,12 @@ npm run new-lesson -- --unit <unitId> --slug <slug> --title "…" --summary "…
 加えて機械的検証（§17）を必ず通す。レビューは「OKと言うため」ではなく、反例・反証を探す前提で行う。
 
 ## 16. 可視化を追加するパターン
-1. 幾何・数値計算を `src/components/viz/viz-math.ts` の純関数に置く（サーバーとクライアントで共有）。
-2. 動的な部分のSVG文字列生成を `src/components/viz/viz-render.ts` に置く（SSRとハイドレーションで共有）。
+1. 幾何・数値計算を `src/components/viz/<unit>/<unit>-math.ts` の純関数に置く（サーバーとクライアントで共有）。
+2. 動的な部分のSVG文字列生成を同ディレクトリの `<name>-render.ts` に置く（SSRとハイドレーションで共有）。
 3. `.astro` はサーバー描画＋vanilla TS `<script>` で操作。React島や外部チャートライブラリは使わない。
 4. a11y: 静的図は `role="img"`＋`aria-label`、操作可能な図は `role="slider"`＋キーボード対応。装飾は `aria-hidden`。
-5. `viz-math.test.ts` に数値回帰テストを追加（例: 2π目盛り、単位円の点・射影）。
+5. `tests/<unit>-viz.test.ts` に数値回帰テストを追加（例: 2π目盛り、単位円の点・射影）。
+6. **登録は自動**: `src/components/{content,ui,viz}/**.astro` に置けば、`prebuild`/`predev`（`scripts/sync-components.mjs`）が `LessonLayout.astro` に自動登録する。手動登録は不要。コンポーネント名は全ディレクトリで一意にすること（重複は同期時にエラー）。
 
 ## 17. 品質ゲート（CI）
 - `deploy.yml`: `npm run check` → `npm run test` を通過しないと**デプロイしない**（壊れた章を公開しない）。

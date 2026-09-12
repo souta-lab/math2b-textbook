@@ -1,0 +1,135 @@
+---
+title: "定積分"
+summary: "原始関数の差として定積分を計算し、その性質を使う。"
+unit: "ii-calculus"
+order: 5
+objectives:
+  - "定積分を原始関数の差 F(b) − F(a) として計算できる"
+  - "定積分の基本的な性質を使える"
+  - "積分定数が定積分の結果に影響しない理由を説明できる"
+prerequisites: ["calculus/04-indefinite-integral"]
+tags: ["定積分", "原始関数", "面積"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+曲線で囲まれた土地の面積を測りたいとします。曲がっているので、たて×よこの計算は使えません。そこで、細い長方形をたくさん並べて面積を近似してみます。長方形をどんどん細くしていったとき、合計はどこへ向かうのでしょうか。そして、その行き先を微分の逆算で直接求められるでしょうか。
+</Hook>
+
+<Prediction
+  question="曲線の下の面積を、細い長方形 n 個で近似する。n を増やすと合計はどうなる？"
+  options={['ある一定の値に近づく', 'どこまでも大きくなる', 'つねに 0 になる']}
+  answer="ある一定の値に近づく"
+  explanation="長方形を細かくすると、曲線とのすき間が減っていきます。合計は本当の面積に近づき、その行き先が定積分です。"
+/>
+
+前のレッスンで、微分の逆として不定積分 $\displaystyle\int f(x)\,dx=F(x)+C$ を学びました。ここでは、この原始関数を使って、区間の端から端までの「積み重ね」を一つの数として取り出します。それが定積分です。
+
+<Figure caption="y = x² と x 軸の間の面積を、長方形で近似するようす。n を増やすと長方形の合計が定積分の値に近づきます。">
+<AreaUnderCurve fn="square" a={0} b={2} n={4} interactive />
+</Figure>
+
+$n$ のスライダーを大きくすると、長方形が細かくなり、合計がある一定の値へ近づいていくのが分かります。この行き先を、長方形を無限に細かくする代わりに、原始関数の差として計算できるのが定積分の強みです。
+
+<Why>
+不定積分で現れた積分定数 $C$ は、定積分では差をとることで必ず消えます。$(F(b)+C)-(F(a)+C)=F(b)-F(a)$ となり、$C$ の値によらず同じ結果になるのです。だから定積分を計算するときは、$C$ を含まない都合のよい原始関数を1つ選べば十分です。
+</Why>
+
+<Definition term="定積分">
+$f(x)$ の原始関数の1つを $F(x)$ とするとき、$a$ から $b$ までの定積分を
+
+$$
+\int_a^b f(x)\,dx=\Big[\,F(x)\,\Big]_a^b=F(b)-F(a)
+$$
+
+と定める。$a$ を下端、$b$ を上端という。
+</Definition>
+
+<Theorem name="定積分の性質">
+定積分について、次が成り立つ（$k$ は定数）。
+
+$$
+\int_a^a f(x)\,dx=0,\qquad
+\int_b^a f(x)\,dx=-\int_a^b f(x)\,dx,
+$$
+
+$$
+\int_a^b k\,f(x)\,dx=k\int_a^b f(x)\,dx,\qquad
+\int_a^b \{f(x)+g(x)\}\,dx=\int_a^b f(x)\,dx+\int_a^b g(x)\,dx.
+$$
+</Theorem>
+
+<WorkedExample title="例題1: 定積分を計算する">
+$\displaystyle\int_0^2 x^2\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="定積分はまず原始関数を求めることから始まるからです。">$x^2$ の原始関数の1つは $\dfrac{x^3}{3}$。積分定数は差で消えるので $C=0$ としてよい。</Step>
+<Step reason="定積分の定義は、上端と下端での原始関数の値の差だからです。">$\Big[\dfrac{x^3}{3}\Big]_0^2=\dfrac{2^3}{3}-\dfrac{0^3}{3}$。</Step>
+<Step reason="上の式をそのまま計算するだけです。">$\dfrac{8}{3}-0=\dfrac{8}{3}$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_0^2 x^2\,dx=\dfrac{8}{3}$。
+</Answer>
+</WorkedExample>
+
+<WorkedExample title="例題2: 性質を使って計算する">
+$\displaystyle\int_1^3 (2x+1)\,dx$ を求めなさい。
+
+<Steps>
+<Step reason="和の定積分は項ごとに分けられるからです。">$\displaystyle\int_1^3 2x\,dx+\int_1^3 1\,dx$ と分ける。</Step>
+<Step reason="原始関数を求めて、上端と下端の差をとるためです。">$2x$ の原始関数は $x^2$、$1$ の原始関数は $x$。よって $\Big[x^2+x\Big]_1^3$。</Step>
+<Step reason="上端と下端をそれぞれ代入して差をとるからです。">$(3^2+3)-(1^2+1)=12-2=10$。</Step>
+</Steps>
+
+<Answer>
+$\displaystyle\int_1^3 (2x+1)\,dx=10$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="定積分の計算では、なぜ積分定数を書かなくてよい？"
+  options={['上端と下端の差をとると、積分定数が必ず消えるから', '定積分には積分定数が存在しないから', '積分定数はいつも 1 だから']}
+  model="原始関数を F(x)+C と書いても、(F(b)+C)−(F(a)+C)=F(b)−F(a) となり、C は打ち消し合って消えます。だから都合のよい C=0 の原始関数を使えばよいのです。"
+/>
+
+<Misconception>
+<Wrong>
+定積分を計算するときも、原始関数に $+C$ を付けてから代入しなければならない。
+</Wrong>
+<WhyWrong>
+$+C$ は上端と下端の差をとる途中で必ず打ち消し合って消えます。たとえば $F(x)+C$ を使うと $(F(b)+C)-(F(a)+C)=F(b)-F(a)$ となり、$C$ の値は結果に現れません。
+</WhyWrong>
+<Right>
+定積分では、原始関数の1つ（$C=0$ のもの）を選んで $\Big[F(x)\Big]_a^b=F(b)-F(a)$ と計算します。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+定積分 $\displaystyle\int_a^b f(x)\,dx$ の値は、つねに正である。
+</Wrong>
+<WhyWrong>
+定積分は原始関数の差で計算され、その符号は $F(b)-F(a)$ の大小で決まります。$f(x)$ が負の区間では、定積分の値も負になります。定積分は「符号をもつ面積」を表し、正の値だけとは限りません。
+</WhyWrong>
+<Right>
+定積分は正にも負にもなります。符号付きの量としてとらえ、面積として使うときは次のレッスンで符号の扱いを整理します。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\displaystyle\int_0^1 x^3\,dx$ を求めなさい。
+<Reveal label="答え">
+$\Big[\dfrac{x^4}{4}\Big]_0^1=\dfrac{1}{4}-0=\dfrac{1}{4}$。
+</Reveal>
+
+（2）$\displaystyle\int_1^2 3x^2\,dx$ を求めなさい。
+<Reveal label="答え">
+$\Big[x^3\Big]_1^2=8-1=7$。
+</Reveal>
+
+（3）$\displaystyle\int_a^b f(x)\,dx$ と $\displaystyle\int_b^a f(x)\,dx$ の関係を答えなさい。
+<Reveal label="答え">
+$\displaystyle\int_b^a f(x)\,dx=-\int_a^b f(x)\,dx$。上下を入れ替えると符号が逆になります。
+</Reveal>
+</CheckUnderstanding>

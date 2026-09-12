@@ -1,0 +1,206 @@
+---
+import { binomialFrame } from './statistics-math';
+import { binomialDynamicMarkup } from './statistics-render';
+
+interface Props {
+  n?: number;
+  p?: number;
+  highlight?: number;
+  interactive?: boolean;
+  label?: string;
+}
+
+const { n = 10, p = 0.5, highlight, interactive = false, label } = Astro.props;
+
+const frame = binomialFrame(n, p, highlight ?? null);
+const dynamic = binomialDynamicMarkup(frame, highlight ?? null);
+const ariaLabel = label ?? frame.ariaText;
+const { width, height } = frame;
+const { plot, baseY } = frame;
+---
+
+<figure
+  class="viz viz-bin"
+  data-viz="binomial-bars"
+  data-n={String(n)}
+  data-p={String(p)}
+  data-highlight={highlight != null ? String(highlight) : ''}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <svg
+    class="viz-bin__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : ariaLabel}
+  >
+    <line class="v-axis" x1={plot.x} y1={baseY} x2={plot.x + plot.width} y2={baseY} />
+    <line class="v-axis" x1={plot.x} y1={plot.y} x2={plot.x} y2={baseY} />
+    {
+      frame.yTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={plot.x - 3} y1={tick.y} x2={plot.x + 3} y2={tick.y} />
+          <text class="v-faint" x={plot.x - 6} y={tick.y + 4} text-anchor="end">{tick.label}</text>
+        </>
+      ))
+    }
+    {
+      frame.xTicks.map((tick) => (
+        <text class="v-faint" x={tick.x} y={baseY + 16} text-anchor="middle">{tick.label}</text>
+      ))
+    }
+    <text class="v-faint" x={plot.x + plot.width} y={baseY + 30} text-anchor="end">k</text>
+    <text class="v-faint" x={plot.x - 6} y={plot.y - 6} text-anchor="end">P(X = k)</text>
+    <g data-bin-dyn set:html={dynamic} />
+  </svg>
+  {
+    interactive && (
+      <label class="viz-bin__control">
+        <span class="viz-bin__control-label">確率 p</span>
+        <input
+          class="viz-bin__range"
+          type="range"
+          data-bin-input
+          min="0.05"
+          max="0.95"
+          step="0.01"
+          value={String(p)}
+          aria-label={`成功の確率 p を動かす。${ariaLabel}`}
+        />
+        <output class="viz-bin__control-value" data-bin-out="p">{String(p)}</output>
+      </label>
+    )
+  }
+  <div class="viz-bin__readout">
+    <span>期待値 μ ＝ <span data-bin-out="mean">{frame.values.mean}</span></span>
+    <span>標準偏差 σ ＝ <span data-bin-out="sd">{frame.values.sd}</span></span>
+    {
+      highlight != null && frame.highlightP && (
+        <span>P(X = {highlight}) ＝ <span>{frame.highlightP}</span>%</span>
+      )
+    }
+  </div>
+  {interactive && <p class="viz-bin__hint">スライダーまたは ← → キーで p を動かせます。</p>}
+</figure>
+
+<script>
+  import { binomialFrame, binomialSd, binomialMean, fmtStat } from './statistics-math';
+  import { binomialDynamicMarkup } from './statistics-render';
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const input = root.querySelector<HTMLInputElement>('[data-bin-input]');
+    const dyn = root.querySelector<SVGGElement>('[data-bin-dyn]');
+    if (!input || !dyn) return;
+
+    const n = Number(root.dataset.n ?? '10');
+    const highlight = root.dataset.highlight ? Number(root.dataset.highlight) : null;
+
+    const setText = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-bin-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (rawP: number): void => {
+      const p = Number(rawP);
+      const frame = binomialFrame(n, p, highlight);
+      dyn.innerHTML = binomialDynamicMarkup(frame, highlight);
+      setText('p', fmtStat(p, 2));
+      setText('mean', fmtStat(binomialMean(n, p), 2));
+      setText('sd', fmtStat(binomialSd(n, p), 2));
+      input.setAttribute('aria-valuetext', frame.ariaText);
+    };
+
+    input.addEventListener('input', () => paint(Number(input.value)));
+    paint(Number(input.value));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="binomial-bars"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-bin {
+    margin: var(--sp-5) 0;
+  }
+  .viz-bin__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-bin .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-bin .v-tick {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+  }
+  .viz-bin .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-bin .v-bin-band {
+    fill: var(--shu-soft);
+  }
+  .viz-bin .v-bin-bar {
+    fill: var(--accent);
+    stroke: var(--surface);
+    stroke-width: 1;
+  }
+  .viz-bin .v-bin-bar.is-hinted {
+    fill: var(--shu);
+  }
+  .viz-bin .v-bin-mean {
+    stroke: var(--ink);
+    stroke-width: 1.4;
+    stroke-dasharray: 4 3;
+  }
+  .viz-bin .v-bin-mean-text {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .viz-bin__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+  }
+  .viz-bin__control-label {
+    font-family: var(--font-heading);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+  .viz-bin__range {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .viz-bin__control-value {
+    min-width: 3ch;
+    text-align: right;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+  }
+  .viz-bin__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-bin__hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>

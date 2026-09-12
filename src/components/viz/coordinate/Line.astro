@@ -1,0 +1,272 @@
+---
+/**
+ * Line — an (optionally interactive) line on the coordinate plane.
+ *
+ * Interactive mode adds a slope slider so the learner can watch the slope
+ * change and, with `linkedPerp`, see the perpendicular line follow it.
+ *
+ * Usage:
+ *   <Line m={2} b={1} showSlopeTriangle />
+ *   <Line m={2} b={1} m2={-0.5} b2={3} showIntersection />
+ *   <Line m={1} b={0} interactive linkedPerp mMin={0.25} mMax={4} />
+ */
+import {
+  fmt,
+  intersect,
+  lineEquationLabel,
+  planeFrame,
+  type LineMB,
+  type Pt,
+} from './coordinate-math';
+import { lineSceneMarkup, type ScenePoint } from './coordinate-render';
+
+interface Props {
+  m?: number;
+  b?: number;
+  m2?: number;
+  b2?: number;
+  linkedPerp?: boolean;
+  showSlopeTriangle?: boolean;
+  showIntersection?: boolean;
+  interactive?: boolean;
+  mMin?: number;
+  mMax?: number;
+  xMin?: number;
+  xMax?: number;
+  yMin?: number;
+  yMax?: number;
+  label?: string;
+}
+
+const {
+  m = 1,
+  b = 0,
+  m2,
+  b2 = 0,
+  linkedPerp = false,
+  showSlopeTriangle = false,
+  showIntersection = false,
+  interactive = false,
+  mMin = -3,
+  mMax = 3,
+  xMin = -4,
+  xMax = 4,
+  yMin = -4,
+  yMax = 4,
+  label = '直線のグラフ',
+} = Astro.props;
+
+const frame = planeFrame({ xMin, xMax, yMin, yMax });
+const hasSecond = m2 !== undefined;
+const primary: LineMB = { m, b };
+const secondary: LineMB | null = hasSecond ? { m: m2 as number, b: b2 } : null;
+
+const serverIntersection: Pt | null = secondary ? intersect(primary, secondary) : null;
+const serverPoints: ScenePoint[] =
+  showIntersection && serverIntersection ? [{ p: serverIntersection, label: 'P', kind: 'dot' }] : [];
+
+const scene = lineSceneMarkup(frame, {
+  lines: [
+    { l: primary },
+    ...(secondary ? [{ l: secondary, cls: 'v-line v-line-alt' }] : []),
+  ],
+  slopeTriangle: showSlopeTriangle ? primary : null,
+  points: serverPoints,
+});
+
+const intersectionText = serverIntersection
+  ? `(${fmt(serverIntersection.x)}, ${fmt(serverIntersection.y)})`
+  : 'なし';
+---
+
+<figure
+  class="viz viz-line"
+  data-viz="coordinate-line"
+  data-m={String(m)}
+  data-b={String(b)}
+  data-m2={hasSecond ? String(m2) : ''}
+  data-b2={String(b2)}
+  data-linked={linkedPerp ? 'true' : 'false'}
+  data-slope={showSlopeTriangle ? 'true' : 'false'}
+  data-intersection={showIntersection ? 'true' : 'false'}
+  data-xmin={String(xMin)}
+  data-xmax={String(xMax)}
+  data-ymin={String(yMin)}
+  data-ymax={String(yMax)}
+>
+  <svg
+    class="viz-line__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role="img"
+    aria-label={label}
+  >
+    <line class="v-axis" x1={frame.pad.left} y1={frame.zeroY} x2={frame.width - frame.pad.right} y2={frame.zeroY} />
+    <line class="v-axis" x1={frame.zeroX} y1={frame.height - frame.pad.bottom} x2={frame.zeroX} y2={frame.pad.top} />
+    <g data-line-dyn set:html={scene} />
+  </svg>
+  <div class="viz-readout">
+    <span>ℓ: <span data-line-out="eq">{lineEquationLabel(primary)}</span></span>
+    {
+      secondary && (
+        <span>m: <span data-line-out="eq2">{lineEquationLabel(secondary)}</span></span>
+      )
+    }
+    {
+      showIntersection && (
+        <span>交点 P: <span data-line-out="inter">{intersectionText}</span></span>
+      )
+    }
+  </div>
+  {
+    interactive && (
+      <label class="viz-line__control">
+        <span class="viz-line__control-label">傾き {linkedPerp ? 'm（垂直な直線も連動）' : 'm'}</span>
+        <input
+          type="range"
+          data-line-input
+          aria-label="直線の傾き"
+          min={String(mMin)}
+          max={String(mMax)}
+          step="0.1"
+          value={String(m)}
+        />
+        <span class="viz-line__control-value" data-line-out="m">{fmt(m)}</span>
+      </label>
+    )
+  }
+</figure>
+
+<script>
+  import { fmt, intersect, lineEquationLabel, planeFrame, type LineMB, type Pt } from './coordinate-math';
+  import { lineSceneMarkup, type ScenePoint } from './coordinate-render';
+
+  function setText(root: HTMLElement, key: string, value: string): void {
+    const el = root.querySelector(`[data-line-out="${key}"]`);
+    if (el) el.textContent = value;
+  }
+
+  function paint(root: HTMLElement, m: number): void {
+    const b = Number(root.dataset.b ?? '0');
+    const b2 = Number(root.dataset.b2 ?? '0');
+    const linked = root.dataset.linked === 'true';
+    const showSlope = root.dataset.slope === 'true';
+    const showInter = root.dataset.intersection === 'true';
+    const frame = planeFrame({
+      xMin: Number(root.dataset.xmin),
+      xMax: Number(root.dataset.xmax),
+      yMin: Number(root.dataset.ymin),
+      yMax: Number(root.dataset.ymax),
+    });
+    const primary: LineMB = { m, b };
+    const hasSecond = (root.dataset.m2 ?? '') !== '';
+    let secondary: LineMB | null = hasSecond ? { m: Number(root.dataset.m2), b: b2 } : null;
+    if (linked && secondary) secondary = { m: -1 / m, b: b2 };
+
+    const inter: Pt | null = secondary ? intersect(primary, secondary) : null;
+    const points: ScenePoint[] = showInter && inter ? [{ p: inter, label: 'P', kind: 'dot' }] : [];
+    const scene = lineSceneMarkup(frame, {
+      lines: [primary, ...(secondary ? [secondary] : [])].map((l, i) => ({
+        l,
+        cls: i === 0 ? 'v-line' : 'v-line v-line-alt',
+      })),
+      slopeTriangle: showSlope ? primary : null,
+      points,
+    });
+    const dyn = root.querySelector<SVGGElement>('[data-line-dyn]');
+    if (dyn) dyn.innerHTML = scene;
+
+    setText(root, 'eq', lineEquationLabel(primary));
+    if (secondary) setText(root, 'eq2', lineEquationLabel(secondary));
+    if (showInter) setText(root, 'inter', inter ? `(${fmt(inter.x)}, ${fmt(inter.y)})` : 'なし');
+    setText(root, 'm', fmt(m));
+  }
+
+  function init(root: HTMLElement): void {
+    if (!root.querySelector('[data-line-input]')) return;
+    const input = root.querySelector<HTMLInputElement>('[data-line-input]');
+    if (!input) return;
+    paint(root, Number(input.value));
+    input.addEventListener('input', () => paint(root, Number(input.value)));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="coordinate-line"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-line {
+    margin: var(--sp-5) 0;
+  }
+  .viz-line__svg {
+    display: block;
+    width: 100%;
+    max-width: 24rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-line .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1.2;
+  }
+  .viz-line .v-line {
+    stroke: var(--accent);
+    stroke-width: 2.2;
+  }
+  .viz-line .v-line-alt {
+    stroke: var(--shu);
+    stroke-dasharray: 6 4;
+  }
+  .viz-line .v-run {
+    stroke: var(--note);
+    stroke-width: 2;
+  }
+  .viz-line .v-rise {
+    stroke: var(--note);
+    stroke-width: 2;
+  }
+  .viz-line .v-point {
+    fill: var(--shu);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-line .v-label {
+    fill: var(--ink);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .viz-line .v-label-run,
+  .viz-line .v-label-rise {
+    fill: var(--note);
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-line__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    justify-content: center;
+    margin-top: var(--sp-3);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .viz-line__control input {
+    flex: 1 1 12rem;
+    max-width: 16rem;
+    accent-color: var(--accent);
+  }
+  .viz-line__control-value {
+    min-width: 2.5rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>

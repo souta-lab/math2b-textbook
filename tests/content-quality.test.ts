@@ -138,6 +138,17 @@ describe('lesson body quality', () => {
       expect(/href="\/(?![\/])/.test(body), `${id}: href to a root-absolute path`).toBe(false);
     }
   });
+
+  it('uses multi-line fences for display math', () => {
+    for (const { id, body } of lessons) {
+      for (const line of body.split('\n')) {
+        expect(
+          /^\s*\$\$.+\$\$\s*$/.test(line),
+          `${id}: single-line $$...$$ is inline math; use its own lines for display math`,
+        ).toBe(false);
+      }
+    }
+  });
 });
 
 describe('lesson metadata quality', () => {

@@ -1,14 +1,12 @@
+import { readdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { expect, test } from '@playwright/test';
 
-const LESSON_SLUGS = [
-  '00-review-ratios',
-  '01-general-angle',
-  '02-radian',
-  '03-definition',
-  '04-identities',
-  '05-properties',
-  '06-graphs',
-];
+const lessonsDir = fileURLToPath(new URL('../src/content/lessons', import.meta.url));
+const LESSON_IDS = readdirSync(lessonsDir, { recursive: true, encoding: 'utf8' })
+  .filter((entry) => entry.endsWith('.mdx'))
+  .map((entry) => entry.replace(/\\/g, '/').replace(/\.mdx$/, ''))
+  .sort();
 
 test('home page shows the course map', async ({ page }) => {
   await page.goto('/');
@@ -59,9 +57,9 @@ test('trig graph slider updates the readout', async ({ page }) => {
   expect(after).not.toBe(before);
 });
 
-for (const slug of LESSON_SLUGS) {
-  test(`lesson ${slug} renders math with no errors and no overflow`, async ({ page }) => {
-    await page.goto(`/lessons/trig/${slug}`);
+for (const id of LESSON_IDS) {
+  test(`lesson ${id} renders math with no errors and no overflow`, async ({ page }) => {
+    await page.goto(`/lessons/${id}`);
     await expect(page.locator('.katex').first()).toBeVisible();
     await expect(page.locator('.katex-error')).toHaveCount(0);
     const overflow = await page.evaluate(

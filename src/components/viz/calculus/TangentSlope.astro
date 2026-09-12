@@ -1,0 +1,278 @@
+---
+import {
+  CALC_FNS,
+  tangentFrame,
+  type CalcFnKey,
+} from './calculus-math';
+import { tangentDynamicMarkup } from './calculus-render';
+
+interface Props {
+  /** Which polynomial to draw. String enum, never a function. */
+  fn?: CalcFnKey;
+  /** x of the fixed point A (the point whose slope we study). */
+  a?: number;
+  /** Horizontal gap to the second point B. h = 0 means the secant becomes the tangent. */
+  h?: number;
+  interactive?: boolean;
+  label?: string;
+}
+
+const {
+  fn = 'square',
+  a = 1,
+  h = 1,
+  interactive = false,
+  label = '割線から接線へ',
+} = Astro.props;
+
+const spec = CALC_FNS[fn];
+const frame = tangentFrame(spec.coeffs, spec.view, a, h);
+const dynamic = tangentDynamicMarkup(frame);
+
+const aMin = spec.view.x[0] + 0.2;
+const aMax = spec.view.x[1] - 0.2;
+const hMax = Math.max(0.5, spec.view.x[1] - spec.view.x[0] - 1.2);
+const hValue = Math.max(0, h);
+const stateLabel = frame.values.isTangent ? '接線に一致' : '割線';
+---
+
+<figure
+  class="viz viz-tangent"
+  data-viz="calculus-tangent"
+  data-fn={fn}
+  data-a={String(a)}
+  data-h={String(hValue)}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <p class="viz-tangent__fn">{spec.label}、{spec.derivativeLabel}</p>
+  <svg
+    class="viz-tangent__svg"
+    viewBox={`0 0 ${frame.width} ${frame.height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : label}
+  >
+    <line
+      class="v-axis"
+      x1={frame.plot.x}
+      y1={frame.zeroY}
+      x2={frame.plot.x + frame.plot.width}
+      y2={frame.zeroY}
+    />
+    <line
+      class="v-axis"
+      x1={frame.plot.x}
+      y1={frame.plot.y}
+      x2={frame.plot.x}
+      y2={frame.plot.y + frame.plot.height}
+    />
+    {
+      frame.xTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={tick.x} y1={frame.zeroY - 3} x2={tick.x} y2={frame.zeroY + 3} />
+          <text class="v-faint" x={tick.x} y={frame.zeroY + 16} text-anchor="middle">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    {
+      frame.yTicks.map((tick) => (
+        <>
+          <line
+            class="v-tick"
+            x1={frame.plot.x - 3}
+            y1={tick.y}
+            x2={frame.plot.x + 3}
+            y2={tick.y}
+          />
+          <text class="v-faint" x={frame.plot.x - 6} y={tick.y + 4} text-anchor="end">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    <path class="v-curve" d={frame.curve} />
+    <g data-tangent-dyn set:html={dynamic} />
+  </svg>
+  {
+    interactive && (
+      <div class="viz-tangent__controls">
+        <label class="viz-tangent__control">
+          <span class="viz-tangent__control-label">
+            a（接点の x）＝ <output data-tangent-out="a">{frame.values.a}</output>
+          </span>
+          <input
+            type="range"
+            data-tangent-input="a"
+            min={String(aMin)}
+            max={String(aMax)}
+            step="0.1"
+            value={String(a)}
+          />
+        </label>
+        <label class="viz-tangent__control">
+          <span class="viz-tangent__control-label">
+            h（点 B までの幅）＝ <output data-tangent-out="h">{frame.values.h}</output>
+          </span>
+          <input
+            type="range"
+            data-tangent-input="h"
+            min="0"
+            max={String(hMax)}
+            step="0.05"
+            value={String(hValue)}
+          />
+        </label>
+      </div>
+    )
+  }
+  <div class="viz-readout">
+    <span>f(a) ＝ <span data-tangent-out="fa">{frame.values.fa}</span></span>
+    <span>f(a+h) ＝ <span data-tangent-out="fb">{frame.values.fb}</span></span>
+    <span>平均変化率 ＝ <span data-tangent-out="average">{frame.values.average}</span></span>
+    <span>微分係数 f′(a) ＝ <span data-tangent-out="slope">{frame.values.slope}</span></span>
+    <span>状態: <span data-tangent-out="state">{stateLabel}</span></span>
+  </div>
+</figure>
+
+<script>
+  import { CALC_FNS, tangentFrame, type CalcFnKey } from './calculus-math';
+  import { tangentDynamicMarkup } from './calculus-render';
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const aInput = root.querySelector<HTMLInputElement>('[data-tangent-input="a"]');
+    const hInput = root.querySelector<HTMLInputElement>('[data-tangent-input="h"]');
+    const dyn = root.querySelector<SVGGElement>('[data-tangent-dyn]');
+    if (!aInput || !hInput || !dyn) return;
+
+    const fn = (root.dataset.fn ?? 'square') as CalcFnKey;
+    const spec = CALC_FNS[fn];
+
+    const setOut = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-tangent-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (): void => {
+      const a = Number(aInput.value);
+      const h = Math.max(0, Number(hInput.value));
+      const frame = tangentFrame(spec.coeffs, spec.view, a, h);
+      dyn.innerHTML = tangentDynamicMarkup(frame);
+      setOut('a', frame.values.a);
+      setOut('h', frame.values.h);
+      setOut('fa', frame.values.fa);
+      setOut('fb', frame.values.fb);
+      setOut('average', frame.values.average);
+      setOut('slope', frame.values.slope);
+      setOut('state', frame.values.isTangent ? '接線に一致' : '割線');
+    };
+
+    aInput.addEventListener('input', paint);
+    hInput.addEventListener('input', paint);
+    paint();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="calculus-tangent"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-tangent {
+    margin: var(--sp-5) 0;
+  }
+  .viz-tangent__fn {
+    max-width: 30rem;
+    margin: 0 auto var(--sp-2);
+    color: var(--ink-soft);
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    text-align: center;
+  }
+  .viz-tangent__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-tangent .v-axis,
+  .viz-tangent .v-tick {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-tangent .v-curve {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-tangent .v-secant {
+    stroke: var(--shu);
+    stroke-width: 1.6;
+    stroke-dasharray: 5 4;
+  }
+  .viz-tangent .v-tangent {
+    stroke: var(--correct);
+    stroke-width: 1.8;
+  }
+  .viz-tangent .v-delta-x,
+  .viz-tangent .v-delta-y {
+    stroke: var(--note);
+    stroke-width: 1.4;
+  }
+  .viz-tangent .v-point-a {
+    fill: var(--accent);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-tangent .v-point-b {
+    fill: var(--shu);
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-tangent .v-line-label {
+    fill: var(--correct);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+  .viz-tangent .v-line-label--secant {
+    fill: var(--shu);
+  }
+  .viz-tangent .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+  .viz-tangent__controls {
+    display: grid;
+    gap: var(--sp-2);
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+  }
+  .viz-tangent__control {
+    display: grid;
+    gap: var(--sp-1);
+  }
+  .viz-tangent__control-label {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-tangent__control input[type='range'] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+  .viz-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

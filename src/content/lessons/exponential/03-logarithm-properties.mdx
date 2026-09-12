@@ -1,0 +1,123 @@
+---
+title: "対数の性質 — 積・商・累乗"
+summary: "かけ算をたし算に変える対数の性質と、底を揃える理由。"
+unit: "ii-exponential"
+order: 3
+objectives:
+  - "積・商・累乗の対数を、それぞれ和・差・係数倍に変形できる"
+  - "対数の性質を使う前に底を揃える必要がある理由を説明できる"
+  - "和の対数を積の対数と混同しない"
+prerequisites: ["exponential/02-logarithm-definition"]
+tags: ["対数の性質", "底を揃える"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+音の大きさ、地震の規模、星の明るさ。これらはどれも、ふつうの数で比べると桁が大きく離れすぎて実感がわきません。もし「かけ算」を「たし算」に置き換えて比べられたら、桁の違いをそのまま差として読めるはずです。対数は、それを可能にします。
+</Hook>
+
+<Prediction
+  question="log_2 6 と log_2 2 + log_2 3 の関係は？"
+  options={['等しい', '等しくない', '底がないと比べられない']}
+  answer="等しい"
+  explanation="6 = 2×3 なので、log_2 6 = log_2(2×3) = log_2 2 + log_2 3。積の対数は和に分けられます。"
+/>
+
+<PrerequisiteNote concept="i-expression" />
+
+## 指数法則を対数の言葉に直す
+
+前のレッスンの定義から、$M=a^p$、$N=a^q$ とおけます。このとき指数法則 $a^p a^q=a^{p+q}$ より $MN=a^{p+q}$ です。この式を対数の形に直すと、$\log_a MN=p+q$、つまり $\log_a MN=\log_a M+\log_a N$ が得られます。かけ算がたし算に変わったのです。同じように割り算と累乗を指数法則から読み替えると、次の性質がそろいます。
+
+<Why>
+対数の性質が成り立つのは、指数法則 $a^p a^q=a^{p+q}$ を対数の言葉に直したものだからです。$M=a^p$、$N=a^q$ と、同じ底 $a$ の累乗で表せるからこそ $MN=a^{p+q}$ となり、積の対数が和になります。$M$ と $N$ を同じ底の累乗で表せなければ、この計算はできません。だから性質を使う前に底を揃えることが前提になるのです。
+</Why>
+
+<Theorem name="対数の性質">
+$a>0$、$a\neq1$、$M>0$、$N>0$ で、$r$ が実数のとき
+
+$$
+\log_a MN=\log_a M+\log_a N
+$$
+
+$$
+\log_a \frac{M}{N}=\log_a M-\log_a N
+$$
+
+$$
+\log_a M^r=r\log_a M
+$$
+
+が成り立つ。
+</Theorem>
+
+これは「積の対数は和、商の対数は差、累乗の対数は係数倍になる」という意味です。いずれも真数が正のときにだけ使えます。とくに累乗の性質は、大きな累乗の桁数を数えるときの道具になります。
+
+<KeyPoint>
+対数はかけ算をたし算に、割り算をひき算に、累乗を係数倍に変える。使うときは、底が同じで真数が正であることを確かめる。
+</KeyPoint>
+
+<WorkedExample title="例題: 対数の性質でまとめる">
+次の値を求めよ。(1) $\log_{10}2+\log_{10}5$ (2) $\log_2 48-\log_2 3$ (3) $x>0$、$y>0$ のとき $\log_a\dfrac{x^3}{y}$ を分解せよ。
+
+<Steps>
+<Step reason="積の対数は和になるので、逆に和を1つの対数へまとめられます。">$\log_{10}2+\log_{10}5=\log_{10}(2\times5)=\log_{10}10$。</Step>
+<Step reason="底と真数が等しいときの対数は 1 です。">$\log_{10}10=1$。</Step>
+<Step reason="商の対数は差になるので、差を1つの対数へまとめられます。">$\log_2 48-\log_2 3=\log_2\dfrac{48}{3}=\log_2 16$。</Step>
+<Step reason="16 を底 2 の累乗で表せば指数が読めます。">$16=2^4$ より $\log_2 16=4$。</Step>
+<Step reason="真数の商と累乗を、対数の差と係数倍に分けるためです。">$\log_a\dfrac{x^3}{y}=\log_a x^3-\log_a y$。</Step>
+<Step reason="累乗の対数は、指数を係数として前に出せます。">$\log_a x^3=3\log_a x$ より、$3\log_a x-\log_a y$。</Step>
+</Steps>
+
+<Answer>
+(1) $1$ (2) $4$ (3) $3\log_a x-\log_a y$
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="対数の性質を使う前に、底を揃えなければならないのはなぜ？"
+  options={['同じ底の累乗に直せて初めて指数法則が使えるから', '底が違うと対数の値が必ず負になるから', '真数がいつも1になるから']}
+  model="対数の性質は M=a^p、N=a^q と同じ底 a の累乗で表せることを前提にしています。底が違うと指数 p と q を同じ土俵で足せず、積や商の対数にまとめられません。だから底を揃えることが先決です。"
+/>
+
+<Misconception>
+<Wrong>
+$\log_a(M+N)=\log_a M+\log_a N$ が成り立つ。
+</Wrong>
+<WhyWrong>
+和の対数を積の対数と混同しています。和では指数法則 $a^p a^q$ に対応する形にならず、分解できません。たとえば $\log_{10}(2+3)=\log_{10}5$ はおよそ $0.699$ ですが、$\log_{10}2+\log_{10}3$ はおよそ $0.301+0.477=0.778$ で一致しません。
+</WhyWrong>
+<Right>
+分解できるのは積・商・累乗。$\log_a MN=\log_a M+\log_a N$ であり、和 $\log_a(M+N)$ はそのままでは分解できない。
+</Right>
+</Misconception>
+
+<Misconception>
+<Wrong>
+$\log_a M^2=(\log_a M)^2$ である。
+</Wrong>
+<WhyWrong>
+累乗の性質は、指数を係数として対数の前に出すもので、対数全体を2乗するのではありません。$\log_a M^2=2\log_a M$ です。たとえば $\log_{10}100=2$ ですが、$(\log_{10}10)^2=1$ とは異なります。
+</WhyWrong>
+<Right>
+$\log_a M^r=r\log_a M$。指数は対数の外へ係数として出る。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+(1) $\log_2 4+\log_2 8$ を1つの対数にまとめ、値を求めよ。(2) $\log_3 45-\log_3 5$ の値を求めよ。(3) $\log_a M^5$ を係数倍の形に直せ。
+<Reveal label="答え">
+(1) $\log_2(4\times8)=\log_2 32=5$。(2) $\log_3\dfrac{45}{5}=\log_3 9=2$。(3) $5\log_a M$（$M>0$）。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="練習（指数の拡張・対数の定義・対数の性質）">
+(1) $8^{-\frac{2}{3}}$ の値を求めよ。
+(2) $\log_2 6-\log_2 15+\log_2 20$ の値を求めよ。
+(3) $\log_5 2+\log_5 50-\log_5 4$ の値を求めよ。
+<Reveal label="解答">
+(1) $8^{-\frac23}=\dfrac{1}{(8^{\frac13})^2}=\dfrac{1}{2^2}=\dfrac14$。
+(2) $\log_2\dfrac{6\times20}{15}=\log_2 8=3$。
+(3) $\log_5\dfrac{2\times50}{4}=\log_5 25=2$。
+</Reveal>
+</Practice>

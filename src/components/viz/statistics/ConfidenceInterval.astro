@@ -1,0 +1,131 @@
+---
+import { confidenceFrame } from './statistics-math';
+
+interface Props {
+  mu?: number;
+  sigma?: number;
+  n?: number;
+  level?: number;
+  count?: number;
+  seed?: number;
+  label?: string;
+  xLabel?: string;
+}
+
+const {
+  mu = 50,
+  sigma = 10,
+  n = 16,
+  level = 0.95,
+  count = 20,
+  seed = 20260912,
+  label,
+  xLabel = '推定値',
+} = Astro.props;
+
+const frame = confidenceFrame({ mu, sigma, n, level, count, seed });
+const ariaLabel = label ?? frame.ariaText;
+const { width, height } = frame;
+const { plot } = frame;
+const missCount = frame.total - frame.covered;
+---
+
+<figure class="viz viz-ci" data-viz="confidence-interval">
+  <svg class="viz-ci__svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel}>
+    <line class="v-axis" x1={plot.x} y1={plot.y + plot.height} x2={plot.x + plot.width} y2={plot.y + plot.height} />
+    {
+      frame.xTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={tick.x} y1={plot.y + plot.height - 3} x2={tick.x} y2={plot.y + plot.height + 3} />
+          <text class="v-faint" x={tick.x} y={plot.y + plot.height + 16} text-anchor="middle">{tick.label}</text>
+        </>
+      ))
+    }
+    <line class="v-ci-mu" x1={frame.muX} y1={plot.y} x2={frame.muX} y2={plot.y + plot.height} />
+    <text class="v-ci-mu-text" x={frame.muX} y={plot.y - 6} text-anchor="middle">真の平均 μ</text>
+    {
+      frame.intervals.map((interval) => (
+        <g class={interval.covers ? 'v-ci-row is-cover' : 'v-ci-row is-miss'}>
+          <line class="v-ci-bar" x1={interval.x1} y1={interval.y} x2={interval.x2} y2={interval.y} />
+          <line class="v-ci-cap" x1={interval.x1} y1={interval.y - 4} x2={interval.x1} y2={interval.y + 4} />
+          <line class="v-ci-cap" x1={interval.x2} y1={interval.y - 4} x2={interval.x2} y2={interval.y + 4} />
+          <circle class="v-ci-dot" cx={interval.meanX} cy={interval.y} r="2.5" />
+        </g>
+      ))
+    }
+    <text class="v-faint" x={plot.x + plot.width} y={plot.y + plot.height + 30} text-anchor="end">{xLabel}</text>
+  </svg>
+  <div class="viz-ci__readout">
+    <span>信頼度 ＝ {frame.level}% （z ＝ {frame.z}）</span>
+    <span>区間の幅の半分 ＝ ±{frame.halfWidth}</span>
+    <span>
+      μ を含む区間 ＝ {frame.covered} / {frame.total} 本
+      {missCount > 0 ? `（外れた ${missCount} 本は破線）` : ''}
+    </span>
+  </div>
+</figure>
+
+<style is:global>
+  .viz-ci {
+    margin: var(--sp-5) 0;
+  }
+  .viz-ci__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-ci .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-ci .v-tick {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+  }
+  .viz-ci .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-ci .v-ci-mu {
+    stroke: var(--shu);
+    stroke-width: 1.6;
+  }
+  .viz-ci .v-ci-mu-text {
+    fill: var(--shu);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .viz-ci .v-ci-bar,
+  .viz-ci .v-ci-cap {
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+  .viz-ci .is-cover .v-ci-bar,
+  .viz-ci .is-cover .v-ci-cap {
+    stroke: var(--accent);
+  }
+  .viz-ci .is-miss .v-ci-bar,
+  .viz-ci .is-miss .v-ci-cap {
+    stroke: var(--shu);
+    stroke-dasharray: 4 3;
+  }
+  .viz-ci .v-ci-dot {
+    fill: var(--ink);
+    stroke: var(--surface);
+    stroke-width: 1;
+  }
+  .viz-ci__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+</style>

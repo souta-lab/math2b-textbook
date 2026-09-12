@@ -1,0 +1,364 @@
+---
+/**
+ * GrowthModel — 増加のモデル（数学と社会生活）.
+ *
+ * Draws N_n = N0·(1+r)^n for two growth rates and an optional capacity line,
+ * so the reader can see both the model and where it stops being believable.
+ * Server-rendered SVG + a vanilla-TS year slider (AUTHORING.md §16).
+ *
+ * Usage:
+ *   <GrowthModel n0={1} rate={0.2} altRate={0.3} cap={1000} year={10} interactive />
+ */
+import { DEFAULT_GROWTH, growthFrame } from './society-math';
+import { growthDynamicMarkup } from './society-render';
+
+interface Props {
+  /** はじめの人数 N0。 */
+  n0?: number;
+  /** 主モデルの増加率（0.2 なら毎回 1.2 倍）。 */
+  rate?: number;
+  /** 比較用の増加率。 */
+  altRate?: number;
+  /** 何ステップ先まで描くか。 */
+  maxYear?: number;
+  /** 最初に表示するステップ。 */
+  year?: number;
+  /** 上限（収容できる人数など）。0 以下なら描かない。 */
+  cap?: number;
+  /** 1ステップの呼び名。 */
+  unit?: string;
+  interactive?: boolean;
+  label?: string;
+}
+
+const {
+  n0 = DEFAULT_GROWTH.n0,
+  rate = DEFAULT_GROWTH.rate,
+  altRate = DEFAULT_GROWTH.altRate,
+  maxYear = DEFAULT_GROWTH.maxYear,
+  year = 10,
+  cap = 0,
+  unit = '日',
+  interactive = false,
+  label,
+} = Astro.props;
+
+const params = { n0, rate, altRate, maxYear };
+const initialYear = Math.max(0, Math.min(maxYear, Math.round(year)));
+const frame = growthFrame(params, initialYear, cap);
+const dynamic = growthDynamicMarkup(frame);
+const { plot, zeroY } = frame;
+const { width, height } = frame;
+const mainEnd = frame.main.points[frame.main.points.length - 1];
+const altEnd = frame.alt.points[frame.alt.points.length - 1];
+const percent = (r: number): string => `${Math.round(r * 100)}%`;
+
+const ariaLabel =
+  label ??
+  `増加のモデルのグラフ。増加率${percent(rate)}と${percent(altRate)}の2本の曲線があり、` +
+  `ステップ数を動かすとそれぞれの人数が読めます。`;
+---
+
+<figure
+  class="viz viz-growth"
+  data-viz="growth-model"
+  data-n0={String(n0)}
+  data-rate={String(rate)}
+  data-altrate={String(altRate)}
+  data-maxyear={String(maxYear)}
+  data-cap={String(cap)}
+  data-unit={unit}
+  data-interactive={interactive ? 'true' : 'false'}
+>
+  <svg
+    class="viz-growth__svg"
+    viewBox={`0 0 ${width} ${height}`}
+    role={interactive ? 'presentation' : 'img'}
+    aria-hidden={interactive ? 'true' : undefined}
+    aria-label={interactive ? undefined : ariaLabel}
+  >
+    <line class="v-axis" x1={plot.x} y1={zeroY} x2={plot.x + plot.width} y2={zeroY} />
+    <line class="v-axis" x1={plot.x} y1={plot.y} x2={plot.x} y2={plot.y + plot.height} />
+    {
+      frame.yTicks.map((tick) => (
+        <>
+          <line class="v-tick" x1={plot.x - 3} y1={tick.y} x2={plot.x + 3} y2={tick.y} />
+          <text class="v-faint" x={plot.x - 6} y={tick.y + 4} text-anchor="end">
+            {tick.label}
+          </text>
+        </>
+      ))
+    }
+    {
+      frame.xTicks.map((tick) => (
+        <text class="v-faint" x={tick.x} y={zeroY + 16} text-anchor="middle">
+          {tick.label}
+        </text>
+      ))
+    }
+    <text class="v-faint" x={plot.x + plot.width} y={zeroY + 31} text-anchor="end">
+      経過（{unit}）
+    </text>
+    <text class="v-faint" x={plot.x - 6} y={plot.y - 6} text-anchor="end">
+      人数
+    </text>
+    {
+      frame.cap && (
+        <>
+          <line class="v-growth-cap" x1={plot.x} y1={frame.cap.y} x2={plot.x + plot.width} y2={frame.cap.y} />
+          <text class="v-growth-cap-text" x={plot.x + plot.width} y={frame.cap.y - 6} text-anchor="end">
+            {frame.cap.label}
+          </text>
+        </>
+      )
+    }
+    <path class="v-growth-line v-growth-line--alt" d={frame.alt.d} />
+    <path class="v-growth-line v-growth-line--main" d={frame.main.d} />
+    <text class="v-growth-tag v-growth-tag--main" x={Math.min(plot.x + plot.width - 4, mainEnd.x + 4)} y={mainEnd.y - 6} text-anchor="end">
+      増加率{percent(rate)}
+    </text>
+    <text class="v-growth-tag v-growth-tag--alt" x={Math.min(plot.x + plot.width - 4, altEnd.x + 4)} y={altEnd.y - 6} text-anchor="end">
+      増加率{percent(altRate)}
+    </text>
+    <g data-growth-dyn set:html={dynamic} />
+  </svg>
+  {
+    interactive && (
+      <label class="viz-growth__control">
+        <span class="viz-growth__control-label">経過</span>
+        <input
+          class="viz-growth__range"
+          type="range"
+          data-growth-input
+          min="0"
+          max={String(maxYear)}
+          step="1"
+          value={String(initialYear)}
+          aria-label={`経過${unit}数を動かす。${ariaLabel}`}
+        />
+        <output class="viz-growth__control-value" data-growth-out="year">
+          {frame.values.year}
+        </output>
+        <span class="viz-growth__unit">{unit}</span>
+      </label>
+    )
+  }
+  <div class="viz-growth__legend">
+    <span class="viz-growth__legend-item"><span class="viz-growth__swatch viz-growth__swatch--main" aria-hidden="true" />増加率{percent(rate)}</span>
+    <span class="viz-growth__legend-item"><span class="viz-growth__swatch viz-growth__swatch--alt" aria-hidden="true" />増加率{percent(altRate)}</span>
+  </div>
+  <div class="viz-growth__readout">
+    <span><span data-growth-out="year-text">{frame.values.year}</span> {unit}後: </span>
+    <span>{percent(rate)} で <span data-growth-out="main">{frame.values.main}</span> 人</span>
+    <span>{percent(altRate)} で <span data-growth-out="alt">{frame.values.alt}</span> 人</span>
+    <span>（差は約 <span data-growth-out="ratio">{frame.values.ratio}</span> 倍）</span>
+  </div>
+  {interactive && <p class="viz-growth__hint">スライダーまたは ← → キーで経過を動かせます。モデルは上限を越えて増え続ける点に注意しましょう。</p>}
+</figure>
+
+<script>
+  import { growthFrame } from './society-math';
+  import { growthDynamicMarkup } from './society-render';
+
+  function init(root: HTMLElement): void {
+    if (root.dataset.interactive !== 'true') return;
+    const input = root.querySelector<HTMLInputElement>('[data-growth-input]');
+    const dyn = root.querySelector<SVGGElement>('[data-growth-dyn]');
+    if (!input || !dyn) return;
+
+    const params = {
+      n0: Number(root.dataset.n0 ?? '1'),
+      rate: Number(root.dataset.rate ?? '0.2'),
+      altRate: Number(root.dataset.altrate ?? '0.3'),
+      maxYear: Number(root.dataset.maxyear ?? '30'),
+    };
+    const cap = Number(root.dataset.cap ?? '0');
+
+    const setText = (key: string, value: string): void => {
+      const el = root.querySelector(`[data-growth-out="${key}"]`);
+      if (el) el.textContent = value;
+    };
+
+    const paint = (rawYear: number): void => {
+      const frame = growthFrame(params, rawYear, cap);
+      dyn.innerHTML = growthDynamicMarkup(frame);
+      setText('year', String(frame.values.year));
+      setText('year-text', String(frame.values.year));
+      setText('main', frame.values.main);
+      setText('alt', frame.values.alt);
+      setText('ratio', frame.values.ratio);
+      input.setAttribute('aria-valuetext', frame.ariaText);
+    };
+
+    input.addEventListener('input', () => paint(Number(input.value)));
+    paint(Number(input.value));
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-viz="growth-model"]').forEach(init);
+</script>
+
+<style is:global>
+  .viz-growth {
+    margin: var(--sp-5) 0;
+  }
+  .viz-growth__svg {
+    display: block;
+    width: 100%;
+    max-width: 30rem;
+    height: auto;
+    margin-inline: auto;
+  }
+  .viz-growth .v-axis {
+    stroke: var(--ink-faint);
+    stroke-width: 1;
+  }
+  .viz-growth .v-tick {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+  }
+  .viz-growth .v-faint {
+    fill: var(--ink-faint);
+    font-family: var(--font-body);
+    font-size: 11px;
+  }
+  .viz-growth .v-growth-cap {
+    stroke: var(--note);
+    stroke-width: 1.3;
+    stroke-dasharray: 6 4;
+  }
+  .viz-growth .v-growth-cap-text {
+    fill: var(--note);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .viz-growth .v-growth-line {
+    fill: none;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .viz-growth .v-growth-line--main {
+    stroke: var(--accent);
+  }
+  .viz-growth .v-growth-line--alt {
+    stroke: var(--shu);
+    stroke-dasharray: 6 3;
+  }
+  .viz-growth .v-growth-tag {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .viz-growth .v-growth-tag--main {
+    fill: var(--accent);
+  }
+  .viz-growth .v-growth-tag--alt {
+    fill: var(--shu);
+  }
+  .viz-growth .v-soc-guide {
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+    stroke-dasharray: 3 3;
+  }
+  .viz-growth .v-soc-halo {
+    fill: none;
+    stroke-width: 2;
+  }
+  .viz-growth .v-soc-halo--a {
+    stroke: var(--accent);
+  }
+  .viz-growth .v-soc-halo--b {
+    stroke: var(--shu);
+  }
+  .viz-growth .v-soc-marker {
+    stroke: var(--surface);
+    stroke-width: 2;
+  }
+  .viz-growth .v-soc-marker--a {
+    fill: var(--accent);
+  }
+  .viz-growth .v-soc-marker--b {
+    fill: var(--shu);
+  }
+  .viz-growth .v-soc-marker-text {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .viz-growth .v-soc-marker-text--a {
+    fill: var(--accent);
+  }
+  .viz-growth .v-soc-marker-text--b {
+    fill: var(--shu);
+  }
+  .viz-growth__control {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    max-width: 30rem;
+    margin: var(--sp-2) auto 0;
+  }
+  .viz-growth__control-label {
+    font-family: var(--font-heading);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  .viz-growth__range {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .viz-growth__control-value {
+    min-width: 3ch;
+    text-align: right;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+  }
+  .viz-growth__unit {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+  .viz-growth__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.2rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .viz-growth__legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .viz-growth__swatch {
+    width: 1.1rem;
+    height: 0.2rem;
+    border-radius: 1px;
+    background: currentColor;
+  }
+  .viz-growth__swatch--main {
+    color: var(--accent);
+  }
+  .viz-growth__swatch--alt {
+    color: var(--shu);
+  }
+  .viz-growth__readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    margin-top: var(--sp-2);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .viz-growth__hint {
+    margin: 0.35rem 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+</style>
