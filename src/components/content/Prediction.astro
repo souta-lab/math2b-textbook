@@ -11,14 +11,15 @@
  *   />
  *
  * `answer` must be one of `options` (not enforced at compile time). All props
- * are plain strings: KaTeX is not processed inside attributes, so keep math in
- * the surrounding MDX body, not in these props.
+ * are plain strings; inline math `$...$` inside a prop is rendered with KaTeX
+ * (display `$$...$$` is not supported inside attributes).
  *
  * Rendering: question, a non-interactive option list, and a JS-free <details>
  * that discloses the correct option and why. The note that this is ungraded is
  * part of the component, per the contract.
  */
 import Reveal from './Reveal.astro';
+import { renderInlineMath } from '../../lib/inline-math';
 
 interface Props {
   question: string;
@@ -32,14 +33,20 @@ const { question, options, answer, explanation } = Astro.props;
 
 <section class="prediction" aria-label="予想">
   <p class="prediction__label">予想</p>
-  <p class="prediction__question">{question}</p>
+  <p class="prediction__question"><Fragment set:html={renderInlineMath(question)} /></p>
   <p class="prediction__note">（成績には関係ありません。まず自分で予想しましょう）</p>
   <ol class="prediction__options">
-    {options.map((option) => <li>{option}</li>)}
+    {options.map((option) => (
+      <li><Fragment set:html={renderInlineMath(option)} /></li>
+    ))}
   </ol>
   <Reveal>
-    <p class="prediction__answer">正解: {answer}</p>
-    {explanation && <p>{explanation}</p>}
+    <p class="prediction__answer">正解: <Fragment set:html={renderInlineMath(answer)} /></p>
+    {
+      explanation && (
+        <p><Fragment set:html={renderInlineMath(explanation)} /></p>
+      )
+    }
   </Reveal>
 </section>
 

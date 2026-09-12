@@ -72,6 +72,7 @@
 ## 7. 数式の書き方
 
 - インライン `$...$`、別行 `$$...$$`（KaTeX, ビルド時SSR）。
+- コンポーネントの**文字列prop**（`<Step reason>`、`<Prediction>` の `question`/`options`/`answer`/`explanation`、`<SelfExplanation>` の `prompt`/`model`/`options`）内でも、インライン `$...$` はKaTeXで描画される（`src/lib/inline-math.ts`）。prop内では**別行 `$$...$$` は使えない**。別行数式が必要なら本文に置く。
 - **別行数式は `$$` を単独行に置く**（`$$\n…\n$$`）。`$$…$$` を1行で書くとインライン扱いになり、スマホで横に漏れる。テストで検出する。
 - 共通マクロ: `\R` → `\mathbb{R}`, `\Z` → `\mathbb{Z}`, `\deg` → `^{\circ}`。
 - LaTeX誤りは**ビルドを失敗**させる（`throwOnError: true`）。書きっぱなしにしない。
@@ -139,6 +140,8 @@
 <Slider label="角 θ" min={0} max={360} step={1} value={30} unit="°" />
 ```
 > `<TrigGraph fn>` は**文字列enum**（関数は渡さない）。`from`/`to` は弧度法。`linked` を付けると、グラフの下に小さな単位円が表示され、スライダーと連動する。`AngleDiagram` は負の角を時計回り、複数周を螺旋で正しく描く。`showQuadrants` で象限 I–IV を表示。
+>
+> **文字列prop内の数式**: `Step reason`、`Prediction` の `question`/`options`/`answer`/`explanation`、`SelfExplanation` の `prompt`/`model`/`options` では、インライン `$...$` がKaTeXで描画される。prop内では別行 `$$...$$` は使えない（本文側に書く）。
 
 ## 10. ファイル規約とフロントマター
 

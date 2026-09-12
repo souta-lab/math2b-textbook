@@ -13,9 +13,11 @@
  * Shows the prompt and, optionally, candidate statements to compare against;
  * the model explanation stays behind a <details> so readers can commit to a
  * answer first. Nothing requires open-ended writing. All props are plain
- * strings (no KaTeX inside attributes).
+ * strings; inline math `$...$` inside a prop is rendered with KaTeX (display
+ * `$$...$$` is not supported inside attributes).
  */
 import Reveal from './Reveal.astro';
+import { renderInlineMath } from '../../lib/inline-math';
 
 interface Props {
   prompt: string;
@@ -29,21 +31,21 @@ const hasOptions = options && options.length > 0;
 
 <section class="self-explanation" aria-label="自己説明">
   <p class="self-explanation__label">自己説明</p>
-  <p class="self-explanation__prompt">{prompt}</p>
+  <p class="self-explanation__prompt"><Fragment set:html={renderInlineMath(prompt)} /></p>
   {
     hasOptions && (
       <>
         <p class="self-explanation__options-label">考え方の候補:</p>
         <ul class="self-explanation__options">
           {options.map((option) => (
-            <li>{option}</li>
+            <li><Fragment set:html={renderInlineMath(option)} /></li>
           ))}
         </ul>
       </>
     )
   }
   <Reveal label="モデルの説明を見る">
-    <p>{model}</p>
+    <p><Fragment set:html={renderInlineMath(model)} /></p>
   </Reveal>
 </section>
 

@@ -3,9 +3,12 @@
  * Step — one numbered move inside <Steps>.
  *
  * `reason` is an optional なぜ annotation: why this move (or this order) is
- * chosen (AUTHORING.md §2). It is a plain string — keep real math in the
- * step body, and use <Why> in body text when a fuller explanation is needed.
+ * chosen (AUTHORING.md §2). It is a plain string; inline math `$...$` inside
+ * it is rendered with KaTeX (display `$$...$$` is not supported). Use <Why>
+ * in body text when a fuller explanation is needed.
  */
+import { renderInlineMath } from '../../lib/inline-math';
+
 interface Props {
   reason?: string;
 }
@@ -19,7 +22,7 @@ const { reason } = Astro.props;
     reason && (
       <p class="step__reason">
         <span class="step__reason-label">なぜ</span>
-        {reason}
+        <Fragment set:html={renderInlineMath(reason)} />
       </p>
     )
   }
