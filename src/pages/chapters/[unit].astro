@@ -4,6 +4,7 @@ import type { Unit } from '@/data/curriculum';
 import { getUnit, prerequisiteLabel, statusLabel, SUBJECT_META, units, unitsBySubject } from '@/data/curriculum';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+import { renderInlineMath } from '@/lib/inline-math';
 
 export function getStaticPaths() {
   return units.map((unit) => ({
@@ -82,9 +83,9 @@ const emptyMessage =
             {lessons.map((lesson) => (
               <li class="chapter__lesson">
                 <a class="chapter__lesson-link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
-                  <span class="chapter__lesson-num">{lesson.data.order}</span>
+                  <span class="chapter__lesson-num">{lesson.data.order + 1}</span>
                   <span class="chapter__lesson-title">{lesson.data.title}</span>
-                  <span class="chapter__lesson-summary">{lesson.data.summary}</span>
+                  <span class="chapter__lesson-summary"><Fragment set:html={renderInlineMath(lesson.data.summary)} /></span>
                 </a>
               </li>
             ))}

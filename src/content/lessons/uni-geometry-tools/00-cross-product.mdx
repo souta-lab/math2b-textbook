@@ -13,14 +13,14 @@ reviewed: 2026-09-12
 ---
 
 <Hook>
-空間に3点 A、B、C があり、この3点を通る平面に垂直なベクトル（法線ベクトル）を求めたいとします。教科書どおりなら、求めるベクトルを $\vec n=(x,y,z)$ とおき、$\overrightarrow{AB}\cdot\vec n=0$ と $\overrightarrow{AC}\cdot\vec n=0$ の連立方程式を立てて解きます。文字が3つで式が2つ、次数の条件もないので、答えは「ひとつに決まらないが比例するもの」として手間がかかります。ところが、2つのベクトルを「掛け算」するだけで、この法線を一発で作る計算があります。それが**外積**です。しかもこの計算は、面積や体積まで同時に教えてくれます。
+空間に3点 A、B、C があり、この3点を通る平面に垂直なベクトル（法線ベクトル）を求めたいとします。教科書どおりなら、求めるベクトルを $\vec n=(x,y,z)$ とおき、$\overrightarrow{AB}\cdot\vec n=0$ と $\overrightarrow{AC}\cdot\vec n=0$ の連立方程式を立てて解きます。文字が3つで式が2つ、次数の条件もないので、答えは「ひとつに決まらないが比例するもの」として手間がかかります。ところが、2つのベクトルを「掛け算」するだけで、この法線を一発で作る計算があります。しかもこの計算は、面積や体積まで同時に教えてくれます。
 </Hook>
 
 <Prediction
-  question="2つの空間ベクトル $\vec a$、$\vec b$ の両方に垂直なベクトルを1つ作りたい。最初に何を計算する？"
-  options={['内積 $\\vec a\\cdot\\vec b$ を計算する', '外積 $\\vec a\\times\\vec b$ を計算する', '2つを足して $\\vec a+\\vec b$ を作る']}
-  answer="外積 $\\vec a\\times\\vec b$ を計算する"
-  explanation="内積は垂直かどうかを判定する量で、垂直なベクトルそのものは作れません。外積 $\vec a\times\vec b$ は、定義から常に $\vec a$ とも $\vec b$ とも垂直なベクトルになります。足し算では垂直になる保証はありません。"
+  question="2つの空間ベクトル $\vec a$、$\vec b$ の両方に垂直なベクトルを1つ作りたい。内積と外積のどちらを使えばよい？"
+  options={['内積 $\\vec a\\cdot\\vec b$ を使う', '外積 $\\vec a\\times\\vec b$ を使う', 'どちらでも垂直なベクトルが作れる']}
+  answer="外積 $\\vec a\\times\\vec b$ を使う"
+  explanation="内積 $\vec a\cdot\vec b$ は「どれだけ同じ向きか」を測る**数**で、垂直かどうかの判定はできますが、垂直なベクトルそのものは出力しません。外積 $\vec a\times\vec b$ は常に $\vec a$ とも $\vec b$ とも垂直な**ベクトル**になります。返すものの種類（スカラーかベクトルか）が違う点が核心です。"
 />
 
 <Note type="info">
@@ -164,11 +164,6 @@ $\vec a\cdot(\vec a\times\vec b)=0$、$\vec b\cdot(\vec a\times\vec b)=0$（両�
 (2) $\vec a=(2,1,0)$、$\vec b=(0,3,1)$ のとき、$\vec a\times\vec b$ を求めよ。
 <Reveal label="答え">
 第1成分 $1\cdot1-0\cdot3=1$、第2成分 $0\cdot0-2\cdot1=-2$、第3成分 $2\cdot3-1\cdot0=6$。よって $\vec a\times\vec b=(1,-2,6)$。検算として $\vec a\cdot(1,-2,6)=2-2+0=0$、$\vec b\cdot(1,-2,6)=0-6+6=0$。
-</Reveal>
-
-(3) 4点 O$(0,0,0)$、A$(1,0,0)$、B$(0,2,0)$、C$(0,0,3)$ を頂点とする四面体の体積を求めよ。
-<Reveal label="答え">
-$\overrightarrow{OA}\times\overrightarrow{OB}=(0,0,2)$ なので、三重積は $(0,0,2)\cdot(0,0,3)=6$。体積は $\dfrac16\cdot6=1$。
 </Reveal>
 </CheckUnderstanding>
 

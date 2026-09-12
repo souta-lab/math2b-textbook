@@ -30,12 +30,12 @@ const headingId = 'chapter-nav-heading';
             <li class="chapter-nav__item">
               {lesson.id === currentId ? (
                 <span class="chapter-nav__link chapter-nav__link--current" aria-current="page">
-                  <span class="chapter-nav__num">{lesson.data.order}</span>
+                  <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                   {lesson.data.title}
                 </span>
               ) : (
                 <a class="chapter-nav__link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
-                  <span class="chapter-nav__num">{lesson.data.order}</span>
+                  <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                   {lesson.data.title}
                 </a>
               )}
@@ -58,12 +58,12 @@ const headingId = 'chapter-nav-heading';
           <li class="chapter-nav__item">
             {lesson.id === currentId ? (
               <span class="chapter-nav__link chapter-nav__link--current" aria-current="page">
-                <span class="chapter-nav__num">{lesson.data.order}</span>
+                <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                 {lesson.data.title}
               </span>
             ) : (
               <a class="chapter-nav__link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
-                <span class="chapter-nav__num">{lesson.data.order}</span>
+                <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                 {lesson.data.title}
               </a>
             )}

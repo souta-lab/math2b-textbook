@@ -147,9 +147,9 @@ $a_2x^2+a_3x^3+\cdots$ を $x$ でくくると $\dfrac{G(x)-a_1x}{x}$。
 等比数列なので $a_n=2\cdot3^{n-1}$、すなわち $G(x)=2x+2\cdot3x^2+2\cdot3^2x^3+\cdots=\dfrac{2x}{1-3x}$。ずらしの式からも $\dfrac{G-2x}{x}=3G$ より $G=\dfrac{2x}{1-3x}$ と一致する。
 </Reveal>
 
-(3) $G(x)=\dfrac{1}{1-4x}$ を係数にもつ数列の一般項を答えよ。
+(3) $G(x)=\dfrac{4x}{1-4x}$ を係数にもつ数列の一般項を答えよ。
 <Reveal label="答え">
-$\dfrac{1}{1-4x}=\sum_{n\ge0}4^nx^n$ なので、$a_n=4^{\,n}$（$n\ge0$ のとき。$n\ge1$ なら $a_n=4^{\,n}$）。
+$\dfrac{4x}{1-4x}=4x\cdot\dfrac{1}{1-4x}=4x\sum_{n\ge0}(4x)^n=\sum_{n\ge1}4^{\,n}x^{\,n}$ なので、$G(x)=\sum_{n\ge1}a_nx^n$ と比べて $a_n=4^{\,n}$（$n\ge1$）。
 </Reveal>
 </CheckUnderstanding>
 

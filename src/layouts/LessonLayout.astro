@@ -11,6 +11,7 @@ import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import ChapterNav from '@/components/nav/ChapterNav.astro';
 import LessonNav from '@/components/nav/LessonNav.astro';
 import { getUnit, prerequisiteLabel, SUBJECT_META } from '@/data/curriculum';
+import { renderInlineMath, stripInlineMath } from '@/lib/inline-math';
 // <components:imports>
 import Answer from '@/components/content/Answer.astro';
 import CheckUnderstanding from '@/components/content/CheckUnderstanding.astro';
@@ -155,7 +156,7 @@ const crumbs = [
 ];
 ---
 
-<BaseLayout title={lesson.data.title} description={lesson.data.summary}>
+<BaseLayout title={lesson.data.title} description={stripInlineMath(lesson.data.summary)}>
   <div class="lesson-layout">
     <Breadcrumbs crumbs={crumbs} />
     <div class="lesson-layout__body">
@@ -165,13 +166,15 @@ const crumbs = [
       <article class="lesson-layout__article">
         <header class="lesson-layout__header">
           <h1>{lesson.data.title}</h1>
-          <p class="lesson-layout__summary">{lesson.data.summary}</p>
+          <p class="lesson-layout__summary"><Fragment set:html={renderInlineMath(lesson.data.summary)} /></p>
         </header>
 
         <section class="lesson-layout__objectives" aria-labelledby="lesson-objectives">
           <h2 class="lesson-layout__objectives-title" id="lesson-objectives">学習目標</h2>
           <ul>
-            {lesson.data.objectives.map((objective) => <li>{objective}</li>)}
+            {lesson.data.objectives.map((objective) => (
+              <li><Fragment set:html={renderInlineMath(objective)} /></li>
+            ))}
           </ul>
         </section>
 

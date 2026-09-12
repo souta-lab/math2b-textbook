@@ -147,12 +147,22 @@ const scene = regionSceneMarkup(frame, { line, relation, strict, test });
     const dyn = root.querySelector<SVGGElement>('[data-region-dyn]');
     if (dyn) dyn.innerHTML = scene;
 
-    setText(root, 'ineq', inequalityLabel(relation, line, strict));
+    const inequality = inequalityLabel(relation, line, strict);
+    setText(root, 'ineq', inequality);
+    let testPhrase = '';
     if (test) {
       const ok = relation === 'le' ? lineY(line, test.x) >= test.y : lineY(line, test.x) <= test.y;
       setText(root, 'test', ok ? '満たす' : '満たさない');
+      testPhrase = `、点Pは${ok ? '領域を満たす' : '領域を満たさない'}`;
     }
     setText(root, 'b', fmt(b));
+    const input = root.querySelector<HTMLInputElement>('[data-region-input]');
+    if (input) {
+      input.setAttribute(
+        'aria-valuetext',
+        `境界の切片 b = ${fmt(b)}、${inequality}${testPhrase}`,
+      );
+    }
   }
 
   function init(root: HTMLElement): void {

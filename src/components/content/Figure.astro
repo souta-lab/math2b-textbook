@@ -10,6 +10,8 @@
  * `caption` is optional. The frame never forces horizontal overflow; long
  * display math elsewhere scrolls globally (global.css .katex-display).
  */
+import { renderInlineMath } from '../../lib/inline-math';
+
 interface Props {
   caption?: string;
 }
@@ -19,7 +21,7 @@ const { caption } = Astro.props;
 
 <figure class="figure">
   <div class="figure__frame"><slot /></div>
-  {caption && <figcaption class="figure__caption">{caption}</figcaption>}
+  {caption && <figcaption class="figure__caption"><Fragment set:html={renderInlineMath(caption)} /></figcaption>}
 </figure>
 
 <style>

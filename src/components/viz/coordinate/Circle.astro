@@ -196,6 +196,13 @@ const scene = circleSceneMarkup(frame, {
       setText(root, 'line', lineEquationLabel(line));
       const rel = circleLineRelation(center, r, line);
       setText(root, 'rel', relationLabel(rel.kind));
+      const input = root.querySelector<HTMLInputElement>('[data-circle-input]');
+      if (input) {
+        input.setAttribute(
+          'aria-valuetext',
+          `切片 b = ${fmt(b)}、直線は ${lineEquationLabel(line)}、共有点は${relationLabel(rel.kind)}`,
+        );
+      }
     }
     setText(root, 'b', fmt(b));
   }

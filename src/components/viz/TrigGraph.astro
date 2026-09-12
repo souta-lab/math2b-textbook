@@ -176,6 +176,10 @@ const extraCells: Array<{ key: string; label: string }> =
       setOut('f', frame.values.f);
       setOut('sin', frame.values.sin);
       setOut('cos', frame.values.cos);
+      input.setAttribute(
+        'aria-valuetext',
+        `角度 ${frame.values.thetaDeg}度、${fn} θ の値は ${frame.values.f}`,
+      );
     };
 
     input.addEventListener('input', () => paint(Number(input.value)));

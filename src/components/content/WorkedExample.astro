@@ -13,16 +13,19 @@
  * `title` defaults to 「例題」. The label is visual context; document heading
  * levels remain owned by the lesson author.
  */
+import { renderInlineMath, stripInlineMath } from '../../lib/inline-math';
+
 interface Props {
   title?: string;
 }
 
 const { title } = Astro.props;
 const label = title?.trim() || '例題';
+const labelText = stripInlineMath(label);
 ---
 
-<section class="worked" aria-label={label}>
-  <p class="worked__label">{label}</p>
+<section class="worked" aria-label={labelText}>
+  <p class="worked__label"><Fragment set:html={renderInlineMath(label)} /></p>
   <div class="worked__body"><slot /></div>
 </section>
 

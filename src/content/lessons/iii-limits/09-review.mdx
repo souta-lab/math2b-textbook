@@ -140,7 +140,7 @@ $f$ は連続。$f(0) = 1 \gt 0$、$f\left(\dfrac{\pi}{2}\right) = 0 - \dfrac{\p
 
 (3) $\displaystyle\lim_{n\to\infty}\left(\sqrt{n^2+2n} - n\right)$ を求めよ。
 
-(4) $x^3 - 2x + k = 0$ が $0 \lt x \lt 1$ に少なくとも1つの実数解をもつための $k$ の範囲を求めよ。
+(4) 中間値の定理を用いて、$x^3 - 2x + k = 0$ が $0 \lt x \lt 1$ に少なくとも1つの実数解をもつための十分条件を求めよ。
 
 <Reveal label="解答">
 (1) $\dfrac{\sin 4x}{\sin 2x} = \dfrac{4x}{2x} \cdot \dfrac{\frac{\sin 4x}{4x}}{\frac{\sin 2x}{2x}} \to 2 \cdot \dfrac11 = 2$。
@@ -149,6 +149,6 @@ $f$ は連続。$f(0) = 1 \gt 0$、$f\left(\dfrac{\pi}{2}\right) = 0 - \dfrac{\p
 
 (3) 有理化すると $\dfrac{2n}{\sqrt{n^2+2n}+n} = \dfrac{2}{\sqrt{1+\frac2n}+1} \to \dfrac{2}{2} = 1$。
 
-(4) $f(x) = x^3 - 2x + k$ は連続。$f(0) = k$、$f(1) = k - 1$ より、$f(0)f(1) = k(k-1) \lt 0$ すなわち $0 \lt k \lt 1$ のとき解が存在する。
+(4) $f(x) = x^3 - 2x + k$ は $[0,1]$ で連続。$f(0) = k$、$f(1) = k - 1$ より $f(0)f(1) = k(k-1)$。$f(0)f(1) \lt 0$（すなわち $0 \lt k \lt 1$）なら端点で符号が異なるから、中間値の定理により $0 \lt x \lt 1$ に少なくとも1つの実数解が存在する。よって $0 \lt k \lt 1$ は十分条件。
 </Reveal>
 </Practice>

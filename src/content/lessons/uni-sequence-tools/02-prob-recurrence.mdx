@@ -54,14 +54,6 @@ $$
 各時点の状態の確率を $p_n$ とし、$p_{n+1}$ を $p_n$ だけから表す関係式を**確率漸化式**という。このように次の状態が直前の状態のみに依存し、それ以前の履歴に依存しない性質を**マルコフ性**という。
 </Definition>
 
-## 対称な状態はまとめる
-
-3つ以上の状態があるときも、対称性があれば $p_n$ 1つに畳めます。三角形の例では、頂点 $0$ にいる確率を $p_n$、残り2頂点は対称なのでそれぞれ $\dfrac{1-p_n}{2}$ です。$n+1$ ステップ後に頂点 $0$ にいるのは、残り2頂点から移ってくる場合だけなので
-$$
-p_{n+1}=2\cdot\frac{1-p_n}{2}\cdot\frac12=\frac{1-p_n}{2}.
-$$
-対称性を見抜けば、連立漸化式を3本立てる必要はありません。
-
 ## 不動点で等比に直す
 
 得られる漸化式は $p_{n+1}=r\,p_n+s$ の形です。これは数学Bで学んだ二項間漸化式と同じで、不動点 $c=r\,c+s$ を引けば等比になります。
@@ -74,23 +66,7 @@ $$
 $n$ が十分大きいと $r^{\,n}$ の項は0に近づき、確率は $c$ に落ち着く。
 </Theorem>
 
-<WorkedExample title="例題1: 三角形の頂点を移る">
-三角形 $ABC$ の頂点を点が動く。各ステップで、今いる頂点以外の2頂点を等確率 $\dfrac12$ で選んで移る。$A$ から出発して $n$ ステップ後に $A$ にいる確率 $p_n$ を求めよ。
-
-<Steps>
-<Step reason="求める確率を $p_n$ とだけおき、残り2頂点は対称なのでまとめます。">$A$ にいる確率が $p_n$ なので、$B$ と $C$ にいる確率はそれぞれ $\dfrac{1-p_n}{2}$。</Step>
-<Step reason="$n+1$ ステップ後に $A$ に来るのは、$B$ または $C$ から移る場合だけです。各経路の確率を足します。">$\dfrac{1-p_n}{2}\cdot\dfrac12$ が $B$ から、$\dfrac{1-p_n}{2}\cdot\dfrac12$ が $C$ からなので $p_{n+1}=2\cdot\frac{1-p_n}{2}\cdot\frac12=\frac{1-p_n}{2}.$ </Step>
-<Step reason="不動点を求めて、等比の形に直します。">不動点は $c=\dfrac{1-c}{2}$ より $c=\dfrac13$。</Step>
-<Step reason="両辺から不動点を引き、公比と初項を決めます。">$p_{n+1}-\dfrac13=-\dfrac12\left(p_n-\dfrac13\right)$、$p_0-\dfrac13=\dfrac23$。</Step>
-<Step reason="等比の一般項を当てはめます。">$p_n-\dfrac13=\dfrac23\left(-\dfrac12\right)^{n}$。 </Step>
-</Steps>
-
-<Answer>
-$p_n=\dfrac13+\dfrac23\left(-\dfrac12\right)^{n}$。$n$ が大きくなると $\dfrac13$ に近づく（$p_1=0$、$p_2=\dfrac12$ と実際の値で確かめられる）
-</Answer>
-</WorkedExample>
-
-<WorkedExample title="例題2: 非対称な2状態">
+<WorkedExample title="例題: 非対称な2状態">
 玉が $A$ か $B$ にある。$A$ からは確率 $\dfrac13$ で $B$ へ移り、$B$ からは確率 $\dfrac12$ で $A$ へ移る。$A$ から出発して $n$ ステップ後に $A$ にある確率 $p_n$ を求めよ。
 
 <Steps>
@@ -105,8 +81,30 @@ $p_n=\dfrac35+\dfrac25\left(\dfrac16\right)^{n}$（$n=1$ では $\dfrac23$ と�
 </Answer>
 </WorkedExample>
 
+<FadedExample title="発展: 対称な状態をまとめる（三角形の頂点）">
+3つ以上の状態があっても、対称性があれば $p_n$ 1つに畳めます。三角形 $ABC$ の頂点を点が動き、各ステップで今いる頂点以外の2頂点を等確率 $\dfrac12$ で選んで移るとします。$A$ から出発して $n$ ステップ後に $A$ にいる確率を $p_n$ とすると、$B$ と $C$ は対称なのでそれぞれ $\dfrac{1-p_n}{2}$ とまとめられます。
+
+$n+1$ ステップ後に $A$ に来るのは、$B$ または $C$ から移ってくる場合だけなので
+$$
+p_{n+1}=2\cdot\frac{1-p_n}{2}\cdot\frac12=\frac{1-p_n}{2}.
+$$
+あとは例題と同じく、不動点を引いて等比に直せば一般項が得られます。
+
+<Reveal label="続きを見る">
+不動点は $c=\dfrac{1-c}{2}$ より $c=\dfrac13$。両辺から不動点を引くと
+$$
+p_{n+1}-\dfrac13=-\dfrac12\left(p_n-\dfrac13\right)
+$$
+で、$p_0-\dfrac13=\dfrac23$ なので
+$$
+p_n=\dfrac13+\dfrac23\left(-\dfrac12\right)^{n}.
+$$
+$n$ が大きくなると $\dfrac13$ に近づく（$p_1=0$、$p_2=\dfrac12$ と実際の値で確かめられる）。
+</Reveal>
+</FadedExample>
+
 <Note type="tip">
-**定常分布と行列**：$n$ が十分大きいときの確率 $\left(\dfrac13,\dfrac23\right)$ や $\left(\dfrac35,\dfrac25\right)$ は、初期状態に依存しない落ち着き先です。例題2は
+**定常分布と行列**：$n$ が十分大きいときの確率 $\left(\dfrac13,\dfrac23\right)$ や $\left(\dfrac35,\dfrac25\right)$ は、初期状態に依存しない落ち着き先です。例題は
 $$
 \begin{pmatrix}p_{n+1}\\q_{n+1}\end{pmatrix}
 =\begin{pmatrix}\frac23 & \frac12\\\frac13 & \frac12\end{pmatrix}
@@ -132,7 +130,7 @@ $$
 落ち着き先の確率 $\dfrac13$ が分かったので、$10$ ステップ後の確率もそのまま $\dfrac13$ としてよい。
 </Wrong>
 <WhyWrong>
-$\dfrac13$ は $n$ を限りなく大きくしたときの極限であって、有限の $n$ での値ではない。例題1では $p_{10}=\dfrac13+\dfrac23\left(-\dfrac12\right)^{10}=\dfrac13+\dfrac{1}{1536}$ で、$\dfrac13$ とはわずかにずれる。補正項 $\left(-\dfrac12\right)^n$ が無視できるほど小さくなって初めて近似として使える。
+$\dfrac13$ は $n$ を限りなく大きくしたときの極限であって、有限の $n$ での値ではない。発展の三角形では $p_{10}=\dfrac13+\dfrac23\left(-\dfrac12\right)^{10}=\dfrac13+\dfrac{1}{1536}$ で、$\dfrac13$ とはわずかにずれる。補正項 $\left(-\dfrac12\right)^n$ が無視できるほど小さくなって初めて近似として使える。
 </WhyWrong>
 <Right>
 有限の $n$ では一般項 $p_n=c+(p_0-c)r^{\,n}$ をそのまま使う。$c$ はあくまで $n\to\infty$ の極限・近似の基準として扱う。
@@ -153,7 +151,7 @@ $\dfrac13$ は $n$ を限りなく大きくしたときの極限であって、�
 不動点は $c=\dfrac{1-c}{2}$ より $c=\dfrac13$。$p_n-\dfrac13=\left(-\dfrac12\right)^n\left(1-\dfrac13\right)=\dfrac23\left(-\dfrac12\right)^n$。よって $p_n=\dfrac13+\dfrac23\left(-\dfrac12\right)^n$。
 </Reveal>
 
-(2) 例題2で、$n\to\infty$ としたときの $p_n$ の極限を求めよ。
+(2) 例題で、$n\to\infty$ としたときの $p_n$ の極限を求めよ。
 <Reveal label="答え">
 $\left(\dfrac16\right)^n\to0$ なので $p_n\to\dfrac35$。
 </Reveal>
@@ -169,7 +167,7 @@ $\left(\dfrac16\right)^n\to0$ なので $p_n\to\dfrac35$。
 
 (2) 三角形 $ABC$ の頂点を動く点がある。各ステップで、今いる頂点にとどまる確率が $\dfrac12$、残り2頂点へはそれぞれ等確率 $\dfrac14$ で移る。$A$ から出発して $n$ ステップ後に $A$ にいる確率を求めよ。
 
-(3) 例題1で、$n\to\infty$ としたとき $B$ にいる確率の極限を求めよ。
+(3) 発展の三角形で、$n\to\infty$ としたとき $B$ にいる確率の極限を求めよ。
 
 <Reveal label="解答">
 (1) $p_{n+1}=\dfrac34p_n+\dfrac14(1-p_n)=\dfrac12p_n+\dfrac14$。不動点 $c=\dfrac12c+\dfrac14$ より $c=\dfrac12$。$p_n-\dfrac12=\left(\dfrac12\right)^n\left(1-\dfrac12\right)$ なので $p_n=\dfrac12+\dfrac12\left(\dfrac12\right)^n=\dfrac12+\left(\dfrac12\right)^{n+1}$。

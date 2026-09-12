@@ -116,6 +116,20 @@ h3 {
   margin: var(--sp-7) 0;
 }
 
+/* Wide markdown tables scroll inside the prose measure instead of clipping. */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--rule);
+  padding: 0.3em 0.6em;
+}
+
 /* Keep display math from overflowing on small screens. */
 .katex-display {
   display: block;

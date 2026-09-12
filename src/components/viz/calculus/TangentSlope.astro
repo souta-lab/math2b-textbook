@@ -167,6 +167,8 @@ const stateLabel = frame.values.isTangent ? '接線に一致' : '割線';
       setOut('average', frame.values.average);
       setOut('slope', frame.values.slope);
       setOut('state', frame.values.isTangent ? '接線に一致' : '割線');
+      aInput.setAttribute('aria-valuetext', frame.ariaText);
+      hInput.setAttribute('aria-valuetext', frame.ariaText);
     };
 
     aInput.addEventListener('input', paint);

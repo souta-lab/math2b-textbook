@@ -177,6 +177,9 @@ const bound = (v: number): string => v.toFixed(1);
       setOut('exact', frame.values.exact);
       setOut('approx', frame.values.approx);
       setOut('delta', frame.values.delta);
+      aInput.setAttribute('aria-valuetext', frame.ariaText);
+      bInput.setAttribute('aria-valuetext', frame.ariaText);
+      nInput.setAttribute('aria-valuetext', frame.ariaText);
     };
 
     aInput.addEventListener('input', paint);
