@@ -1,0 +1,106 @@
+---
+/**
+ * 「学んだ」 toggle for one lesson.
+ *
+ * `aria-pressed` reflects the localStorage state; the shared client script
+ * flips it and repaints every dependent widget (sidebar checks, chapter list,
+ * progress bars). The 44px minimum height keeps the touch target usable on
+ * mobile.
+ */
+interface Props {
+  lessonId: string;
+}
+
+const { lessonId } = Astro.props;
+---
+
+<button
+  type="button"
+  class="progress-toggle"
+  data-progress-toggle
+  data-lesson-id={lessonId}
+  aria-pressed="false"
+>
+  <span class="progress-toggle__box" aria-hidden="true">
+    <svg class="progress-toggle__icon" viewBox="0 0 16 16" focusable="false">
+      <path
+        d="M2.8 8.7 6.2 12l7-7.4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </span>
+  <span class="progress-toggle__text">学んだ</span>
+</button>
+
+<script>
+  import { initProgress } from '../../lib/progress-client';
+
+  initProgress();
+</script>
+
+<style>
+  .progress-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-block-size: 44px;
+    padding: var(--sp-2) var(--sp-4);
+    border: 1px solid var(--rule-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    line-height: 1.4;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .progress-toggle:hover {
+    border-color: var(--ink-soft);
+    color: var(--ink);
+  }
+
+  .progress-toggle__box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.15rem;
+    block-size: 1.15rem;
+    border: 1.5px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    color: transparent;
+    transition:
+      border-color 0.15s ease,
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .progress-toggle__icon {
+    display: block;
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+  }
+
+  .progress-toggle.is-done,
+  .progress-toggle[aria-pressed='true'] {
+    border-color: var(--correct);
+    background: var(--correct-soft);
+    color: var(--correct);
+  }
+
+  .progress-toggle.is-done .progress-toggle__box,
+  .progress-toggle[aria-pressed='true'] .progress-toggle__box {
+    border-color: var(--correct);
+    background: var(--correct);
+    color: var(--accent-ink);
+  }
+</style>

@@ -5,7 +5,19 @@
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+import ProgressBar from '@/components/progress/ProgressBar.astro';
+import { getCollection } from 'astro:content';
 import { SUBJECT_META, SUBJECT_ORDER, unitsBySubject } from '@/data/curriculum';
+
+const allLessonIds: string[] = [];
+const lessonIdsByUnit = new Map<string, string[]>();
+for (const lesson of await getCollection('lessons')) {
+  if (lesson.data.draft) continue;
+  allLessonIds.push(lesson.id);
+  const ids = lessonIdsByUnit.get(lesson.data.unit) ?? [];
+  ids.push(lesson.id);
+  lessonIdsByUnit.set(lesson.data.unit, ids);
+}
 
 const subjects = SUBJECT_ORDER.map((subject) => {
   const units = unitsBySubject(subject);
@@ -14,6 +26,7 @@ const subjects = SUBJECT_ORDER.map((subject) => {
     meta: SUBJECT_META[subject],
     total: units.length,
     published: units.filter((unit) => unit.status === 'published').length,
+    lessonIds: units.flatMap((unit) => lessonIdsByUnit.get(unit.id) ?? []),
     href: `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[subject].slug}/`,
   };
 });
@@ -31,11 +44,16 @@ const subjects = SUBJECT_ORDER.map((subject) => {
       <p class="subjects__lead">
         中学数学の復習から高校数学I・A・II・B・III・C、大学数学の実用ツールまで、科目ごとに単元を並べています。各科目のページから章へ進めます。
       </p>
+      {allLessonIds.length > 0 && (
+        <div class="subjects__overall">
+          <ProgressBar lessons={allLessonIds} label="全体の進捗" />
+        </div>
+      )}
     </header>
 
     <ul class="subjects__list">
       {
-        subjects.map(({ meta, total, published, href }) => (
+        subjects.map(({ meta, total, published, lessonIds, href }) => (
           <li class="subjects__item">
             <a class="subjects__link" href={href}>
               <span class="subjects__level">{meta.level}</span>
@@ -44,6 +62,11 @@ const subjects = SUBJECT_ORDER.map((subject) => {
               <span class="subjects__count">
                 公開{published}章 / 全{total}章
               </span>
+              {lessonIds.length > 0 && (
+                <div class="subjects__progress">
+                  <ProgressBar lessons={lessonIds} size="sm" />
+                </div>
+              )}
             </a>
           </li>
         ))
@@ -64,6 +87,10 @@ const subjects = SUBJECT_ORDER.map((subject) => {
   .subjects__lead {
     margin: 0;
     color: var(--ink-soft);
+  }
+
+  .subjects__overall {
+    margin-top: var(--sp-4);
   }
 
   .subjects__list {
@@ -115,5 +142,10 @@ const subjects = SUBJECT_ORDER.map((subject) => {
   .subjects__count {
     color: var(--ink-faint);
     font-size: 0.8rem;
+  }
+
+  .subjects__progress {
+    grid-column: 2;
+    margin-top: var(--sp-1);
   }
 </style>

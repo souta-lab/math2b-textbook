@@ -10,6 +10,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import ChapterNav from '@/components/nav/ChapterNav.astro';
 import LessonNav from '@/components/nav/LessonNav.astro';
+import ProgressToggle from '@/components/progress/ProgressToggle.astro';
 import { getUnit, prerequisiteLabel, SUBJECT_META } from '@/data/curriculum';
 import { renderInlineMath, stripInlineMath } from '@/lib/inline-math';
 // <components:imports>
@@ -167,6 +168,9 @@ const crumbs = [
         <header class="lesson-layout__header">
           <h1>{lesson.data.title}</h1>
           <p class="lesson-layout__summary"><Fragment set:html={renderInlineMath(lesson.data.summary)} /></p>
+          <div class="lesson-layout__progress">
+            <ProgressToggle lessonId={lesson.id} />
+          </div>
         </header>
 
         <section class="lesson-layout__objectives" aria-labelledby="lesson-objectives">
@@ -218,6 +222,10 @@ const crumbs = [
   .lesson-layout__summary {
     margin: 0;
     color: var(--ink-soft);
+  }
+
+  .lesson-layout__progress {
+    margin-top: var(--sp-4);
   }
 
   .lesson-layout__objectives {

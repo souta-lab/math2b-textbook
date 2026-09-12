@@ -2,12 +2,23 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import CourseMap from '@/components/nav/CourseMap.astro';
+import ProgressBar from '@/components/progress/ProgressBar.astro';
 import { SUBJECT_META, SUBJECT_ORDER, unitsBySubject } from '@/data/curriculum';
 
 const lessons = await getCollection('lessons');
 const columns = (await getCollection('columns'))
   .filter((column) => !column.data.draft)
   .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+
+const allLessonIds: string[] = [];
+const lessonIdsByUnit = new Map<string, string[]>();
+for (const lesson of lessons) {
+  if (lesson.data.draft) continue;
+  allLessonIds.push(lesson.id);
+  const ids = lessonIdsByUnit.get(lesson.data.unit) ?? [];
+  ids.push(lesson.id);
+  lessonIdsByUnit.set(lesson.data.unit, ids);
+}
 
 const subjects = SUBJECT_ORDER.map((subject) => {
   const units = unitsBySubject(subject);
@@ -16,6 +27,7 @@ const subjects = SUBJECT_ORDER.map((subject) => {
     href: `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[subject].slug}/`,
     total: units.length,
     published: units.filter((unit) => unit.status === 'published').length,
+    lessonIds: units.flatMap((unit) => lessonIdsByUnit.get(unit.id) ?? []),
   };
 });
 ---
@@ -27,11 +39,17 @@ const subjects = SUBJECT_ORDER.map((subject) => {
       中学数学の復習から高校数学、大学数学の実用ツールまで、科目ごとに単元をたどる教材です。各章の公開状況と、読み始める前に必要な事項を示します。
     </p>
 
+    {allLessonIds.length > 0 && (
+      <div class="home__progress">
+        <ProgressBar lessons={allLessonIds} label="全体の進捗" />
+      </div>
+    )}
+
     <section class="home__subjects" aria-labelledby="home-subjects" id="subjects">
       <h2 class="home__subjects-title" id="home-subjects">科目から探す</h2>
       <ul class="home__subjects-list">
         {
-          subjects.map(({ meta, href, total, published }) => (
+          subjects.map(({ meta, href, total, published, lessonIds }) => (
             <li class="home__subject-card">
               <a class="home__subject-link" href={href}>
                 <span class="home__subject-level">{meta.level}</span>
@@ -39,6 +57,11 @@ const subjects = SUBJECT_ORDER.map((subject) => {
                 <span class="home__subject-count">
                   公開{published}章 / 全{total}章
                 </span>
+                {lessonIds.length > 0 && (
+                  <div class="home__subject-progress">
+                    <ProgressBar lessons={lessonIds} size="sm" />
+                  </div>
+                )}
               </a>
             </li>
           ))
@@ -83,6 +106,10 @@ const subjects = SUBJECT_ORDER.map((subject) => {
   .home__lead {
     margin: 0 0 var(--sp-6);
     color: var(--ink-soft);
+  }
+
+  .home__progress {
+    margin: 0 0 var(--sp-6);
   }
 
   .home__subjects {
@@ -142,6 +169,10 @@ const subjects = SUBJECT_ORDER.map((subject) => {
   .home__subject-count {
     color: var(--ink-soft);
     font-size: 0.82rem;
+  }
+
+  .home__subject-progress {
+    margin-top: var(--sp-1);
   }
 
   .home__columns {

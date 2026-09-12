@@ -13,6 +13,7 @@
     "test:e2e": "playwright test",
     "new-lesson": "node scripts/new-lesson.mjs",
     "sync-components": "node scripts/sync-components.mjs",
+    "generate-icons": "node scripts/generate-icons.mjs",
     "predev": "node scripts/sync-components.mjs",
     "prebuild": "node scripts/sync-components.mjs",
     "verify": "npm run check && npm run test && npm run build"

@@ -14,6 +14,7 @@ import {
 } from '@/data/curriculum';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
+import ProgressBar from '@/components/progress/ProgressBar.astro';
 
 export function getStaticPaths() {
   return SUBJECT_ORDER.map((subject) => ({
@@ -29,18 +30,26 @@ interface Props {
 const { subject } = Astro.props;
 const meta = SUBJECT_META[subject];
 
-const lessonCounts = new Map<string, number>();
+const lessonIdsByUnit = new Map<string, string[]>();
 for (const lesson of await getCollection('lessons')) {
   if (lesson.data.draft) continue;
-  lessonCounts.set(lesson.data.unit, (lessonCounts.get(lesson.data.unit) ?? 0) + 1);
+  const ids = lessonIdsByUnit.get(lesson.data.unit) ?? [];
+  ids.push(lesson.id);
+  lessonIdsByUnit.set(lesson.data.unit, ids);
 }
 
-const units = unitsBySubject(subject).map((unit, index) => ({
-  unit,
-  chapterNumber: index + 1,
-  lessonCount: lessonCounts.get(unit.id) ?? 0,
-  href: `${import.meta.env.BASE_URL}chapters/${unit.id}`,
-}));
+const units = unitsBySubject(subject).map((unit, index) => {
+  const lessonIds = lessonIdsByUnit.get(unit.id) ?? [];
+  return {
+    unit,
+    chapterNumber: index + 1,
+    lessonIds,
+    lessonCount: lessonIds.length,
+    href: `${import.meta.env.BASE_URL}chapters/${unit.id}`,
+  };
+});
+
+const subjectLessonIds = units.flatMap((entry) => entry.lessonIds);
 ---
 
 <BaseLayout title={meta.label} description={meta.description}>
@@ -57,22 +66,32 @@ const units = unitsBySubject(subject).map((unit, index) => ({
       <h1>{meta.label}</h1>
       <p class="subject__lead">{meta.description}</p>
       <p class="subject__count">全{units.length}章</p>
+      {subjectLessonIds.length > 0 && (
+        <div class="subject__progress">
+          <ProgressBar lessons={subjectLessonIds} label="科目全体の進捗" />
+        </div>
+      )}
     </header>
 
     <ol class="subject__units">
       {
-        units.map(({ unit, chapterNumber, lessonCount, href }) => (
+        units.map(({ unit, chapterNumber, lessonIds, lessonCount, href }) => (
           <li class="subject__unit">
             <a class="subject__unit-link" href={href}>
               <span class="subject__unit-index">第{chapterNumber}章</span>
               <span class="subject__unit-title">{unit.title}</span>
               <span class="subject__unit-summary">{unit.summary}</span>
-              <span class="subject__unit-meta">
+              <div class="subject__unit-meta">
                 <span class:list={['subject__status', `subject__status--${unit.status}`]}>
                   {statusLabel[unit.status]}
                 </span>
                 {lessonCount > 0 && <span>レッスン{lessonCount}件</span>}
-              </span>
+              </div>
+              {lessonIds.length > 0 && (
+                <div class="subject__unit-progress">
+                  <ProgressBar lessons={lessonIds} size="sm" />
+                </div>
+              )}
             </a>
           </li>
         ))
@@ -105,6 +124,10 @@ const units = unitsBySubject(subject).map((unit, index) => ({
     margin: var(--sp-2) 0 0;
     color: var(--ink-faint);
     font-size: 0.82rem;
+  }
+
+  .subject__progress {
+    margin-top: var(--sp-3);
   }
 
   .subject__units {
@@ -160,6 +183,11 @@ const units = unitsBySubject(subject).map((unit, index) => ({
     gap: var(--sp-2) var(--sp-4);
     color: var(--ink-faint);
     font-size: 0.8rem;
+  }
+
+  .subject__unit-progress {
+    grid-column: 2;
+    margin-top: var(--sp-2);
   }
 
   .subject__status {

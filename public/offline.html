@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1f4e79" />
+    <title>オフライン — 高校数学 読解教材</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --paper: #fcfcfb;
+        --paper-grid: rgba(31, 78, 121, 0.055);
+        --surface: #ffffff;
+        --rule: #dde3e8;
+        --ink: #16202b;
+        --ink-soft: #4a5560;
+        --ink-faint: #79838d;
+        --accent: #1f4e79;
+        --accent-ink: #ffffff;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #12161a;
+          --paper-grid: rgba(110, 168, 216, 0.07);
+          --surface: #181d22;
+          --rule: #2b343d;
+          --ink: #e7edf3;
+          --ink-soft: #a9b4bd;
+          --ink-faint: #76818b;
+          --accent: #74aede;
+          --accent-ink: #0e1a24;
+        }
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: calc(1.5rem + env(safe-area-inset-top, 0px))
+          calc(1.25rem + env(safe-area-inset-right, 0px))
+          calc(1.5rem + env(safe-area-inset-bottom, 0px))
+          calc(1.25rem + env(safe-area-inset-left, 0px));
+        font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic',
+          'Yu Gothic UI', 'Meiryo', 'Noto Sans JP', system-ui, -apple-system,
+          'Segoe UI', sans-serif;
+        line-height: 1.95;
+        color: var(--ink);
+        background-color: var(--paper);
+        background-image: linear-gradient(var(--paper-grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--paper-grid) 1px, transparent 1px);
+        background-size: 1.5rem 1.5rem;
+      }
+
+      main {
+        width: min(32rem, 100%);
+        padding: 2rem 1.75rem 2.25rem;
+        border: 1px solid var(--rule);
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: 0 1px 2px rgba(22, 32, 43, 0.06);
+      }
+
+      .mark {
+        display: block;
+        margin-bottom: 1.25rem;
+      }
+
+      h1 {
+        margin: 0 0 0.75rem;
+        font-family: 'Hiragino Mincho ProN', 'Yu Mincho', 'YuMincho',
+          'Noto Serif JP', 'Times New Roman', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.35;
+        letter-spacing: 0.01em;
+      }
+
+      p {
+        margin: 0 0 1rem;
+        color: var(--ink-soft);
+        font-size: 0.95rem;
+      }
+
+      p:last-of-type {
+        margin-bottom: 1.5rem;
+      }
+
+      .retry {
+        display: inline-block;
+        padding: 0.6rem 1.25rem;
+        border-radius: 8px;
+        background: var(--accent);
+        color: var(--accent-ink);
+        font-size: 0.95rem;
+        text-decoration: none;
+      }
+
+      .retry:hover {
+        text-decoration: underline;
+        text-underline-offset: 0.18em;
+      }
+
+      footer {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--rule);
+        color: var(--ink-faint);
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <svg
+        class="mark"
+        width="52"
+        height="52"
+        viewBox="0 0 512 512"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <defs>
+          <clipPath id="plate">
+            <rect width="512" height="512" rx="115.2" />
+          </clipPath>
+        </defs>
+        <rect width="512" height="512" rx="115.2" fill="#1f4e79" />
+        <g clip-path="url(#plate)" stroke="#ffffff" stroke-opacity="0.1" stroke-width="5.1">
+          <path
+            d="M32 0V512 M0 32H512 M96 0V512 M0 96H512 M160 0V512 M0 160H512 M224 0V512 M0 224H512 M288 0V512 M0 288H512 M352 0V512 M0 352H512 M416 0V512 M0 416H512 M480 0V512 M0 480H512"
+          />
+        </g>
+        <path
+          d="M122.9 256 L126.6 248.4 L130.3 240.9 L134 233.5 L137.7 226.2 L141.4 219.2 L145.1 212.5 L148.8 206.1 L152.5 200.1 L156.2 194.5 L159.9 189.3 L163.6 184.7 L167.3 180.6 L171 177.1 L174.6 174.2 L178.3 171.9 L182 170.3 L185.7 169.3 L189.4 169 L193.1 169.3 L196.8 170.3 L200.5 171.9 L204.2 174.2 L207.9 177.1 L211.6 180.6 L215.3 184.7 L219 189.3 L222.7 194.5 L226.4 200.1 L230.1 206.1 L233.8 212.5 L237.5 219.2 L241.2 226.2 L244.9 233.5 L248.6 240.9 L252.3 248.4 L256 256 L259.7 263.6 L263.4 271.1 L267.1 278.5 L270.8 285.8 L274.5 292.8 L278.2 299.5 L281.9 305.9 L285.6 311.9 L289.3 317.5 L293 322.7 L296.7 327.3 L300.4 331.4 L304.1 334.9 L307.8 337.8 L311.5 340.1 L315.2 341.7 L318.9 342.7 L322.6 343 L326.3 342.7 L330 341.7 L333.7 340.1 L337.4 337.8 L341 334.9 L344.7 331.4 L348.4 327.3 L352.1 322.7 L355.8 317.5 L359.5 311.9 L363.2 305.9 L366.9 299.5 L370.6 292.8 L374.3 285.8 L378 278.5 L381.7 271.1 L385.4 263.6 L389.1 256"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="37.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="189.4" cy="169" r="20.5" fill="#b3402f" />
+      </svg>
+      <h1>オフラインです</h1>
+      <p>
+        ネットワークに接続できませんでした。通信できる場所で、もう一度お試しください。
+      </p>
+      <p>
+        一度開いたことのあるページは、オフラインでもそのまま読めます。下のリンクから戻ってください。
+      </p>
+      <a class="retry" href="./">目次に戻る</a>
+      <footer>高校数学 読解教材</footer>
+    </main>
+  </body>
+</html>

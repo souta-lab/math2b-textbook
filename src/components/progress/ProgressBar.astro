@@ -1,0 +1,115 @@
+---
+/**
+ * Progress bar + 「X / Y ・ Z%」 readout for a list of lesson ids.
+ *
+ * SSR renders the base state (0 / N, 0%); the shared client script
+ * (`progress-client`) paints the real value from localStorage on load and on
+ * every change. The lesson ids travel in `data-progress-lessons`, so the client
+ * computes everything locally — no JSON payload and no fetch.
+ */
+interface Props {
+  /** Lesson ids covered by this bar. */
+  lessons: string[];
+  /** Visible label. Omit for the compact, label-less variant. */
+  label?: string;
+  /** `sm` for unit/card rows, `md` for page-level bars. */
+  size?: 'sm' | 'md';
+}
+
+const { lessons, label, size = 'md' } = Astro.props;
+const total = lessons.length;
+const barLabel = label ?? `学習の進捗（全${total}レッスン）`;
+---
+
+<div
+  class:list={['progress', size === 'sm' ? 'progress--sm' : 'progress--md']}
+  data-progress-lessons={lessons.join(',')}
+>
+  <div class="progress__head">
+    {label && <span class="progress__label">{label}</span>}
+    <span class="progress__meter">
+      <span class="progress__count" data-progress-count>{`0 / ${total}`}</span>
+      <span class="progress__percent" data-progress-percent>0%</span>
+    </span>
+  </div>
+  <div
+    class="progress__track"
+    role="progressbar"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow="0"
+    aria-label={barLabel}
+    data-progress-bar
+  >
+    <span class="progress__fill" data-progress-fill></span>
+  </div>
+</div>
+
+<script>
+  import { initProgress } from '../../lib/progress-client';
+
+  initProgress();
+</script>
+
+<style>
+  .progress {
+    --progress: 0%;
+
+    display: grid;
+    gap: var(--sp-1);
+    min-width: 0;
+  }
+
+  .progress__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 var(--sp-3);
+  }
+
+  .progress__label {
+    color: var(--ink-soft);
+    font-size: 0.82rem;
+  }
+
+  .progress__meter {
+    display: inline-flex;
+    gap: var(--sp-2);
+    margin-left: auto;
+    color: var(--ink-faint);
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress__count,
+  .progress__percent {
+    white-space: nowrap;
+  }
+
+  .progress--md .progress__percent {
+    min-inline-size: 2.4em;
+    text-align: right;
+  }
+
+  .progress__track {
+    overflow: hidden;
+    block-size: 0.4rem;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    box-shadow: inset 0 0 0 1px var(--rule);
+  }
+
+  .progress--sm .progress__track {
+    block-size: 0.3rem;
+  }
+
+  .progress__fill {
+    display: block;
+    block-size: 100%;
+    inline-size: var(--progress);
+    border-radius: inherit;
+    background: var(--correct);
+    transition: inline-size 0.25s ease;
+  }
+</style>

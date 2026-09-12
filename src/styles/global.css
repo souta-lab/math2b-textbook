@@ -8,8 +8,14 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
+
+/* Mobile hardening: never rely on fixed viewport heights (100vh is unreliable
+   in mobile Safari); images keep their intrinsic ratio. Safe-area insets for
+   the notch and the home indicator are applied as env(safe-area-inset-*)
+   padding on the layout header/main/footer (see BaseLayout.astro). */
 
 @media (prefers-reduced-motion: reduce) {
   html {

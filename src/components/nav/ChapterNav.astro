@@ -3,7 +3,11 @@
  * Table of contents for the current unit.
  * Mobile: collapsible <details>. Desktop (>= 60rem): sticky sidebar list.
  * The current lesson is marked with aria-current="page".
+ *
+ * Each row carries `data-progress-item` + `data-lesson-id`; the shared client
+ * script reveals the <ProgressCheck /> when the lesson is marked 「学んだ」.
  */
+import ProgressCheck from '@/components/progress/ProgressCheck.astro';
 interface LessonLink {
   id: string;
   data: { title: string; order: number };
@@ -27,16 +31,18 @@ const headingId = 'chapter-nav-heading';
       lessons.length > 0 ? (
         <ol class="chapter-nav__list">
           {lessons.map((lesson) => (
-            <li class="chapter-nav__item">
+            <li class="chapter-nav__item" data-progress-item data-lesson-id={lesson.id}>
               {lesson.id === currentId ? (
                 <span class="chapter-nav__link chapter-nav__link--current" aria-current="page">
                   <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                   {lesson.data.title}
+                  <span class="chapter-nav__check"><ProgressCheck /></span>
                 </span>
               ) : (
                 <a class="chapter-nav__link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
                   <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                   {lesson.data.title}
+                  <span class="chapter-nav__check"><ProgressCheck /></span>
                 </a>
               )}
             </li>
@@ -55,16 +61,18 @@ const headingId = 'chapter-nav-heading';
     lessons.length > 0 ? (
       <ol class="chapter-nav__list">
         {lessons.map((lesson) => (
-          <li class="chapter-nav__item">
+          <li class="chapter-nav__item" data-progress-item data-lesson-id={lesson.id}>
             {lesson.id === currentId ? (
               <span class="chapter-nav__link chapter-nav__link--current" aria-current="page">
                 <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                 {lesson.data.title}
+                <span class="chapter-nav__check"><ProgressCheck /></span>
               </span>
             ) : (
               <a class="chapter-nav__link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
                 <span class="chapter-nav__num">{lesson.data.order + 1}</span>
                 {lesson.data.title}
+                <span class="chapter-nav__check"><ProgressCheck /></span>
               </a>
             )}
           </li>
@@ -75,6 +83,12 @@ const headingId = 'chapter-nav-heading';
     )
   }
 </nav>
+
+<script>
+  import { initProgress } from '../../lib/progress-client';
+
+  initProgress();
+</script>
 
 <style>
   .chapter-nav--desktop {
@@ -130,6 +144,14 @@ const headingId = 'chapter-nav-heading';
 
   .chapter-nav__link--current .chapter-nav__num {
     color: var(--accent);
+  }
+
+  .chapter-nav__check {
+    margin-left: 0.4em;
+  }
+
+  .chapter-nav__item.is-done .chapter-nav__num {
+    color: var(--correct);
   }
 
   .chapter-nav__empty {

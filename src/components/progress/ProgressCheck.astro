@@ -1,0 +1,48 @@
+---
+/**
+ * Checkmark shown next to a lesson marked 「学んだ」.
+ *
+ * Rendered hidden via `visibility` (so revealing it never shifts layout) and
+ * revealed by `progress-client` adding `.is-done` to the enclosing
+ * `[data-progress-item]`. The visually-hidden status text is filled in by the
+ * client for screen readers.
+ */
+---
+
+<span class="progress-check" data-progress-check>
+  <svg class="progress-check__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+    <path
+      d="M2.8 8.7 6.2 12l7-7.4"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+  <span class="visually-hidden" data-progress-status></span>
+</span>
+
+<style>
+  .progress-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--correct);
+    visibility: hidden;
+  }
+
+  /*
+   * `.is-done` is added by progress-client to the enclosing item, which belongs
+   * to the parent component — keep the ancestor selector global.
+   */
+  :global(.is-done) .progress-check {
+    visibility: visible;
+  }
+
+  .progress-check__icon {
+    display: block;
+    inline-size: 0.9rem;
+    block-size: 0.9rem;
+  }
+</style>

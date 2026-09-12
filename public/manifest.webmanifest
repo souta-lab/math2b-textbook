@@ -1,0 +1,38 @@
+{
+  "name": "高校数学 読解教材",
+  "short_name": "高校数学読解",
+  "description": "読むだけで理解できる高校数学のWeb教材",
+  "lang": "ja",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
+  "background_color": "#fcfcfb",
+  "theme_color": "#1f4e79",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

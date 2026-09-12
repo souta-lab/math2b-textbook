@@ -9,15 +9,23 @@ interface Props {
 
 const { title, description = '読むだけで理解できる高校数学のWeb教材' } = Astro.props;
 const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読解教材`;
+const base = import.meta.env.BASE_URL;
 ---
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#1f4e79" />
     <title>{pageTitle}</title>
+    <link rel="manifest" href={`${base}manifest.webmanifest`} />
+    <link rel="icon" type="image/svg+xml" href={`${base}icons/icon.svg`} />
+    <link rel="apple-touch-icon" href={`${base}icons/apple-touch-icon.png`} />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="高校数学 読解教材" />
   </head>
   <body>
     <a class="skip-link" href="#main">本文へスキップ</a>
@@ -36,6 +44,30 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読
     <footer class="site-footer">
       <p>読み進めるだけで理解できることを目指した、高校数学の学習教材です。</p>
     </footer>
+    <script
+      is:inline
+      data-sw-url={`${base}sw.js`}
+      data-sw-scope={base}
+      data-prod={import.meta.env.PROD}
+    >
+      (() => {
+        const tag = document.currentScript;
+        if (!tag || tag.dataset.prod !== 'true') return;
+        if (!('serviceWorker' in navigator)) return;
+        const swUrl = tag.dataset.swUrl;
+        const swScope = tag.dataset.swScope;
+        if (!swUrl || !swScope) return;
+        const register = () => {
+          navigator.serviceWorker
+            .register(new URL(swUrl, location.origin), { scope: swScope })
+            .catch(() => {
+              /* PWA support is progressive enhancement; ignore failures. */
+            });
+        };
+        if (document.readyState === 'complete') register();
+        else window.addEventListener('load', register, { once: true });
+      })();
+    </script>
     <style>
       .site-header {
         border-bottom: 1px solid var(--rule);
@@ -48,7 +80,10 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読
       .site-header__inner {
         max-width: var(--measure-wide);
         margin: 0 auto;
-        padding: var(--sp-3) var(--sp-4);
+        /* iOS notch / stand-alone safe areas (0 elsewhere). */
+        padding: calc(var(--sp-3) + env(safe-area-inset-top, 0px))
+          calc(var(--sp-4) + env(safe-area-inset-right, 0px)) var(--sp-3)
+          calc(var(--sp-4) + env(safe-area-inset-left, 0px));
         display: flex;
         align-items: baseline;
         justify-content: space-between;
@@ -74,7 +109,8 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読
       .site-main {
         max-width: var(--measure-wide);
         margin: 0 auto;
-        padding: var(--sp-5) var(--sp-4) var(--sp-8);
+        padding: var(--sp-5) calc(var(--sp-4) + env(safe-area-inset-right, 0px))
+          var(--sp-8) calc(var(--sp-4) + env(safe-area-inset-left, 0px));
       }
       .site-footer {
         border-top: 1px solid var(--rule);
@@ -84,7 +120,9 @@ const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読
       .site-footer p {
         max-width: var(--measure-wide);
         margin: 0 auto;
-        padding: var(--sp-5) var(--sp-4);
+        padding: var(--sp-5) calc(var(--sp-4) + env(safe-area-inset-right, 0px))
+          calc(var(--sp-5) + env(safe-area-inset-bottom, 0px))
+          calc(var(--sp-4) + env(safe-area-inset-left, 0px));
       }
       @media (min-width: 60rem) {
         .site-main {
