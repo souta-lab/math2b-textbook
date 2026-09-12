@@ -1,0 +1,202 @@
+---
+title: "三角方程式と三角不等式 — 一般解をすべて書く"
+summary: "単位円で三角方程式の一般解を求め、2次式への帰着と三角不等式を解く。"
+unit: "ii-trigonometric"
+order: 10
+objectives:
+  - "単位円を用いて三角方程式の一般解を書ける"
+  - "sin・cos の2次式に帰着する方程式を解ける"
+  - "三角不等式の解を角の範囲として求められる"
+prerequisites: ["trig/09-synthesis-equations"]
+tags: ["三角方程式", "一般解", "三角不等式", "2次方程式"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+プールの水位が一定の高さになる時刻を考えよう。水位は上がっては下がるを繰り返す。水位計がちょうど1mを示す時刻は、1回だけではない。上がる途中で1回、下がる途中でもう1回。そして翌日も、またその次の日も、同じ2つの時刻が巡ってくる。1つの時刻を見つけただけでは、すべての時刻を答えたことにはならない。
+</Hook>
+
+<Prediction
+  question="0≤θ<2π のとき、sinθ=1/2 を満たす θ はいくつある？"
+  options={['1個', '2個', '4個']}
+  answer="2個"
+  explanation="単位円で高さ 1/2 の水平線を引くと、円との交点は2つ。第1象限の θ=π/6 と第2象限の θ=5π/6 です。1周期の中で解は2つあり、範囲を広げるとこの2つが 2π ごとに繰り返します。"
+/>
+
+前のレッスンでは、$a\sin\theta+b\cos\theta$ を1つのサインにまとめる合成を学んだ。ここではその逆に、三角関数の値から角を求める側に回る。値が与えられたとき、その値をとる角をすべて求めるのが三角方程式だ。角の範囲が指定されていなければ解は無数にあるので、周期を使って1つの形にまとめる。まずは単位円で解の位置を読み取る。
+
+## 三角方程式の一般解
+
+<Definition term="三角方程式">
+$\sin\theta$、$\cos\theta$、$\tan\theta$ のうち少なくとも1つを含み、角 $\theta$ を求める等式を三角方程式とよぶ。角の範囲が指定されていなければ、無数にある解を周期ごとにまとめて書く。このまとめた形を一般解とよぶ。
+</Definition>
+
+解き方は、単位円上でその値をとる点を探すことに尽きる。$\sin\theta=k$ なら高さ $k$ の水平線と円の交点、$\cos\theta=k$ なら横位置 $k$ の縦線と円の交点、$\tan\theta=k$ なら原点を通る傾き $k$ の直線と円の交点を見る。1周期分の解が見つかったら、周期を足して一般解にする。
+
+<Why>
+数学Iの三角比では、角は三角形の内角だから $0^\circ$ から $180^\circ$ までしか現れなかった。三角関数では角は何周してもよく、同じ値をとる角が無数にある。だから1つの解で終わらせず、単位円上で同じ値になる点をすべて拾い、周期を足して一般解の形に書く。
+</Why>
+
+<Theorem name="三角方程式の一般解">
+$n$ を整数とし、それぞれの方程式を満たす角を1つ $\alpha$ とすると、$\sin\theta=k$ なら $\theta=\alpha+2n\pi$ または $\theta=(\pi-\alpha)+2n\pi$。$\cos\theta=k$ なら $\theta=\pm\alpha+2n\pi$。$\tan\theta=k$ なら $\theta=\alpha+n\pi$（ただし $\tan$ は $\cos\theta\ne0$ の範囲で考える）。
+</Theorem>
+
+表にまとめると次のようになる。
+
+| 方程式 | 一般解（$n$ は整数） | 単位円での見方 |
+| --- | --- | --- |
+| $\sin\theta=k$ | $\theta=\alpha+2n\pi$、$\theta=(\pi-\alpha)+2n\pi$ | 高さ $k$ の水平線との交点 |
+| $\cos\theta=k$ | $\theta=\pm\alpha+2n\pi$ | 横位置 $k$ の縦線との交点 |
+| $\tan\theta=k$ | $\theta=\alpha+n\pi$ | 傾き $k$ の直線との交点 |
+
+たとえば $\sin\theta=\dfrac{1}{2}$ なら $\alpha=\dfrac{\pi}{6}$ として、$\theta=\dfrac{\pi}{6}+2n\pi$ または $\theta=\dfrac{5\pi}{6}+2n\pi$。2つの解が対になって現れるのは、水平線と円が1周期に2回交わるからだ。
+
+## 2次式に帰着する方程式
+
+$\sin$ の2次式になった方程式も、因数分解すれば基本の形に帰着する。
+
+<FadedExample title="穴埋め例: sin の2次式になる方程式">
+$2\sin^2\theta-\sin\theta-1=0$ を $0\le\theta<2\pi$ で解こう。$\sin\theta$ の2次式と見て因数分解すると、
+
+$$
+(2\sin\theta+1)(\sin\theta-1)=0
+$$
+
+となる。よって $\sin\theta=-\dfrac{1}{2}$ または $\sin\theta=1$。ここから先の解を単位円で探してみよう。
+
+<Reveal label="続きを見る">
+$\sin\theta=1$ となる点は単位円の一番上だけで、$\theta=\dfrac{\pi}{2}$。
+
+$\sin\theta=-\dfrac{1}{2}$ となるのは高さ $-\dfrac{1}{2}$ の水平線との交点で、第3象限と第4象限に1つずつあり、$\theta=\dfrac{7\pi}{6}$ と $\theta=\dfrac{11\pi}{6}$。
+
+以上から $0\le\theta<2\pi$ での解は $\theta=\dfrac{\pi}{2},\ \dfrac{7\pi}{6},\ \dfrac{11\pi}{6}$。範囲を指定しない一般解なら、それぞれに $2n\pi$ を足して $\theta=\dfrac{\pi}{2}+2n\pi$、$\dfrac{7\pi}{6}+2n\pi$、$\dfrac{11\pi}{6}+2n\pi$（$n$ は整数）。
+</Reveal>
+</FadedExample>
+
+$\cos\theta$ の場合も同じだ。$\sin^2\theta$ が混ざっていれば、相互関係 $\sin^2\theta=1-\cos^2\theta$ で $\sin$ を消し、$\cos\theta$ だけの2次式にする。因数分解して $\cos\theta$ の値を絞り、最後に単位円で角を読む。
+
+<WorkedExample title="例題1: cos の2次式に帰着する方程式">
+$0\le\theta<2\pi$ のとき、$2\cos^2\theta+3\cos\theta+1=0$ を解け。
+
+<Steps>
+<Step reason="cosθ を1つの文字と見れば2次方程式です。因数分解して、cosθ の値の候補を絞ります。">左辺は $(2\cos\theta+1)(\cos\theta+1)=0$。よって $\cos\theta=-\dfrac{1}{2}$ または $\cos\theta=-1$。</Step>
+<Step reason="cosθ=−1/2 となる角は、単位円で横位置 −1/2 の縦線との交点を読めば求められます。1周期に第2象限と第3象限の2つあります。">$\cos\theta=-\dfrac{1}{2}$ より $\theta=\dfrac{2\pi}{3},\ \dfrac{4\pi}{3}$。</Step>
+<Step reason="cosθ=−1 となる点は単位円の左端の1つだけです。">$\cos\theta=-1$ より $\theta=\pi$。</Step>
+</Steps>
+
+<Answer>
+$\theta=\dfrac{2\pi}{3},\ \pi,\ \dfrac{4\pi}{3}$
+</Answer>
+</WorkedExample>
+
+合成を使えば、$\sin$ と $\cos$ が混ざった方程式も同じ手順で解ける。角の範囲をずらすところだけが新しい。
+
+<WorkedExample title="例題2: 合成して方程式を解く">
+$0\le\theta<2\pi$ のとき、$\sin\theta+\cos\theta=1$ を解け。
+
+<Steps>
+<Step reason="左辺を合成して1つの sin にします。係数 (1, 1) の距離は √2、向きは π/4 です。">左辺を合成すると $\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)$。よって $\sin\left(\theta+\dfrac{\pi}{4}\right)=\dfrac{1}{\sqrt{2}}$。</Step>
+<Step reason="θ が 0 以上 2π 未満なら、ずらした角 θ+π/4 は π/4 以上 9π/4 未満です。幅がちょうど1周期なので、解はこの範囲で探します。">$\phi=\theta+\dfrac{\pi}{4}$ とおくと $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$。この範囲で $\sin\phi=\dfrac{1}{\sqrt{2}}$ となるのは $\phi=\dfrac{\pi}{4},\ \dfrac{3\pi}{4}$。</Step>
+<Step reason="φ の値から π/4 を引けば、元の θ に戻ります。">$\theta=\phi-\dfrac{\pi}{4}$ より $\theta=0,\ \dfrac{\pi}{2}$。</Step>
+<Step reason="求めた θ を元の式に代入し、左辺が 1 になることを確かめます。">確認: $\sin0+\cos0=0+1=1$、$\sin\dfrac{\pi}{2}+\cos\dfrac{\pi}{2}=1+0=1$。</Step>
+</Steps>
+
+<Answer>
+$\theta=0,\ \dfrac{\pi}{2}$
+</Answer>
+</WorkedExample>
+
+## 三角不等式
+
+続いて不等式を解く。方程式のときと同じで、まず単位円の上で「値の範囲」を「弧の範囲」に翻訳する。例として $0\le\theta<2\pi$ で $\sin\theta>\dfrac{1}{2}$ を解こう。$\sin\theta$ は点の高さだから、この不等式は「単位円上の点の高さが $\dfrac{1}{2}$ より上にある」という意味だ。高さ $\dfrac{1}{2}$ の水平線を引くと、円との交点は $\theta=\dfrac{\pi}{6}$ と $\theta=\dfrac{5\pi}{6}$。
+
+<Figure caption="点を動かして、高さ sinθ が 1/2 より大きくなる角の範囲を確かめよう。境界は π/6 と 5π/6">
+<UnitCircle angleDeg={90} interactive showSin />
+</Figure>
+
+この2点の間で円弧は水平線より上にあるから、解は
+
+$$
+\dfrac{\pi}{6}<\theta<\dfrac{5\pi}{6}
+$$
+
+である。境界の角は $\sin\theta=\dfrac{1}{2}$ となる角なので、等号のない今回は解に含めない。不等号が $\ge$ なら両端を含める。
+
+<Why>
+解を弧の範囲として読むのは、三角不等式の答えが「途切れない角の区間」になるからだ。境界の角を先に求め、その間の弧が不等式を満たすかどうかを確かめれば、数直線に戻って場合分けをやり直す必要はない。
+</Why>
+
+合成を使う不等式も同じ手順で解ける。$0\le\theta<2\pi$ で $\sin\theta+\cos\theta\ge1$ を解こう。まず左辺を合成する。
+
+$$
+\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)
+$$
+
+$\phi=\theta+\dfrac{\pi}{4}$ とおくと、範囲は $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$。不等式は
+
+$$
+\sin\phi\ge\dfrac{1}{\sqrt{2}}
+$$
+
+となる。単位円で高さ $\dfrac{1}{\sqrt{2}}$ 以上の弧を読むと、1周期の中では $\dfrac{\pi}{4}\le\phi\le\dfrac{3\pi}{4}$。この範囲は $\phi$ の動く範囲に収まっているから、$\dfrac{\pi}{4}\le\theta+\dfrac{\pi}{4}\le\dfrac{3\pi}{4}$。各辺から $\dfrac{\pi}{4}$ を引いて
+
+$$
+0\le\theta\le\dfrac{\pi}{2}
+$$
+
+を得る。$\theta=0$ と $\theta=\dfrac{\pi}{2}$ では左辺がちょうど $1$ になるから、等号つきで含める。$\theta=\dfrac{\pi}{4}$ では最大値 $\sqrt{2}$ をとる。
+
+<Note type="warn">
+ずらした角 $\phi$ の範囲は、元の角の範囲にずれ $\alpha$ を足したものだ。解を $\phi$ の範囲から選んだあと、必ず $\alpha$ を引いて $\theta$ に戻すこと。$\phi$ のまま答えないこと。
+</Note>
+
+<Misconception>
+<Wrong>
+$\sin\theta=\dfrac{1}{2}$ の解は $\theta=\dfrac{\pi}{6}+2n\pi$ だけである。1つの解が見つかれば、あとは周期を足すだけでよい。
+</Wrong>
+<WhyWrong>
+単位円で高さ $\dfrac{1}{2}$ の水平線を引くと、円との交点は2つある。第1象限の $\dfrac{\pi}{6}$ だけでなく、第2象限の $\dfrac{5\pi}{6}$ も同じ高さをもつ。$\theta=\dfrac{\pi}{6}+2n\pi$ だけでは、$\theta=\dfrac{5\pi}{6}+2n\pi$ の系列が丸ごと抜け落ちる。
+</WhyWrong>
+<Right>
+$\sin\theta=k$ の一般解は、1周期内の2つの角 $\alpha$ と $\pi-\alpha$ から、$\theta=\alpha+2n\pi$ または $\theta=(\pi-\alpha)+2n\pi$。$\cos\theta=k$ なら $\theta=\pm\alpha+2n\pi$、$\tan\theta=k$ なら $\theta=\alpha+n\pi$。まず1周期内の解をすべて拾ってから周期を足す。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+（1）$\cos\theta=-\dfrac{1}{2}$ の一般解を求めよ。
+<Reveal label="答え">
+$\cos\theta=-\dfrac{1}{2}$ の1つの解は $\alpha=\dfrac{2\pi}{3}$。一般解は $\theta=\pm\dfrac{2\pi}{3}+2n\pi$（$n$ は整数）。
+</Reveal>
+
+（2）$2\sin^2\theta-\sin\theta-1=0$ を $0\le\theta<2\pi$ で解け。
+<Reveal label="答え">
+因数分解すると $(2\sin\theta+1)(\sin\theta-1)=0$。$\sin\theta=-\dfrac{1}{2}$ より $\theta=\dfrac{7\pi}{6},\ \dfrac{11\pi}{6}$。$\sin\theta=1$ より $\theta=\dfrac{\pi}{2}$。よって $\theta=\dfrac{\pi}{2},\ \dfrac{7\pi}{6},\ \dfrac{11\pi}{6}$。
+</Reveal>
+
+（3）$0\le\theta<2\pi$ のとき、$\sin\theta+\cos\theta\le0$ を解け。
+<Reveal label="答え">
+合成すると $\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)\le0$。$\phi=\theta+\dfrac{\pi}{4}$ とおくと $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$ で、$\sin\phi\le0$ となるのは $\pi\le\phi\le2\pi$。よって $\pi\le\theta+\dfrac{\pi}{4}\le2\pi$ より $\dfrac{3\pi}{4}\le\theta\le\dfrac{7\pi}{4}$。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="まとめの練習（一般解・2次式・不等式）">
+（1）$\tan\theta=\sqrt{3}$ の一般解を求めよ。
+<Reveal label="解答">
+$\tan\theta=\sqrt{3}$ の1つの解は $\alpha=\dfrac{\pi}{3}$。$\tan$ の周期は $\pi$ なので、一般解は $\theta=\dfrac{\pi}{3}+n\pi$（$n$ は整数）。
+</Reveal>
+
+（2）$0\le\theta<2\pi$ のとき、$2\sin^2\theta+3\cos\theta=0$ を解け。
+<Reveal label="解答">
+相互関係 $\sin^2\theta=1-\cos^2\theta$ を代入すると $2(1-\cos^2\theta)+3\cos\theta=0$、すなわち $2\cos^2\theta-3\cos\theta-2=0$。因数分解して $(2\cos\theta+1)(\cos\theta-2)=0$。$\cos\theta=-\dfrac{1}{2}$（$\cos\theta=2$ は不適）より、$\theta=\dfrac{2\pi}{3},\ \dfrac{4\pi}{3}$。
+</Reveal>
+
+（3）$0\le\theta<2\pi$ のとき、$\sqrt{3}\sin\theta+\cos\theta\ge1$ を解け。
+<Reveal label="解答">
+左辺を合成すると $2\sin\left(\theta+\dfrac{\pi}{6}\right)\ge1$、つまり $\sin\left(\theta+\dfrac{\pi}{6}\right)\ge\dfrac{1}{2}$。$\phi=\theta+\dfrac{\pi}{6}$ とおくと $\dfrac{\pi}{6}\le\phi<\dfrac{13\pi}{6}$ で、$\sin\phi\ge\dfrac{1}{2}$ となるのは $\dfrac{\pi}{6}\le\phi\le\dfrac{5\pi}{6}$。よって $0\le\theta\le\dfrac{2\pi}{3}$。
+</Reveal>
+
+（4）〔復習〕$0\le\theta<2\pi$ のとき、$\sin\theta+\cos\theta=\dfrac{\sqrt{2}}{2}$ を解け。
+<Reveal label="解答">
+左辺を合成すると $\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)=\dfrac{\sqrt{2}}{2}$、すなわち $\sin\left(\theta+\dfrac{\pi}{4}\right)=\dfrac{1}{2}$。$\phi=\theta+\dfrac{\pi}{4}$ とおくと $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$ で、$\sin\phi=\dfrac{1}{2}$ となるのは $\phi=\dfrac{5\pi}{6},\ \dfrac{13\pi}{6}$。よって $\theta=\dfrac{7\pi}{12},\ \dfrac{23\pi}{12}$。
+</Reveal>
+</Practice>

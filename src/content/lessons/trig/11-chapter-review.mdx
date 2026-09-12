@@ -1,0 +1,138 @@
+---
+title: "三角関数 章末まとめと発展"
+summary: "5つの道具の使い分けを整理し、合成と2倍角を組み合わせた融合問題に挑む。"
+unit: "ii-trigonometric"
+order: 11
+objectives:
+  - "還元公式・相互関係・加法定理・2倍角・半角・合成を、問題の形から選べる"
+  - "sinθ+cosθ と sinθcosθ を含む式を t の2次式に帰着できる"
+  - "合成した形から最大・最小を求め、方程式・不等式に応用できる"
+prerequisites: ["trig/10-trig-equations"]
+tags: ["章末", "まとめ", "発展"]
+reviewed: 2026-09-12
+---
+
+<Hook>
+公式は全部覚えた。加法定理も2倍角も合成も、式だけならすらすら書ける。それなのに、初見の問題を前にすると手が止まる。使える道具は5つ。問題を見てから最初の一手を選ぶ、その判断だけができない。公式を覚える山を越えた先に、もっと静かな山が残っていた。
+</Hook>
+
+<Prediction
+  question="角が1つで、sinθ と cosθ がたし算で並んだ式の最大値を求めたい。最初に選ぶ道具は？"
+  options={['還元公式', '合成', '半角の公式']}
+  answer="合成"
+  explanation="角がそろっていて関数が2種類あるときは、合成して1つのサインにまとめます。まとめると振幅がそのまま最大値になります。"
+/>
+
+この章で身につけた道具を並べます。新しい公式はもう出てきません。ここでやるのは、すでに手の中にある道具の使い分けです。
+
+- **還元公式**（周期性と対称性）：$\pi\pm\theta$ のような角を、第1象限の角に戻す。
+- **相互関係**：$\sin^2\theta+\cos^2\theta=1$ や $\tan\theta=\dfrac{\sin\theta}{\cos\theta}$ で、登場する関数を1種類に絞る。
+- **加法定理**：角の和・差を、知っている角の値に分解する。
+- **2倍角・半角の公式**：角を倍・半分にし、2乗を1次に下げる。
+- **合成**：同じ角の $\sin$ と $\cos$ の1次式を、1つの波 $R\sin(\theta+\alpha)$ にまとめる。
+
+## 章末ガイド — どの道具をいつ使うか
+
+問題を見たら、まず「角」の形に注目する。次に「関数」の種類、最後に「何を求めるか」の順で絞り込む。次の表が、この章の地図である。
+
+| 問題の見た目 | 手に取る道具 | そうすると |
+| --- | --- | --- |
+| 角が $\pi\pm\theta$、$\dfrac{\pi}{2}\pm\theta$、負角、$2n\pi$ のずれ | 還元公式 | 角が第1象限の有名角に戻る |
+| 同じ角で $\sin$ と $\cos$ の一方だけが分かっている／2乗が混在 | 相互関係 | 分かっている関数だけの式になる |
+| 角が $\alpha+\beta$、$\alpha-\beta$ の形や、有名角の和・差（例：$\dfrac{\pi}{12}$） | 加法定理 | 知っている角の値に分解できる |
+| 角が $2\theta$、$\dfrac{\theta}{2}$ の形、または $\sin^2$・$\cos^2$ が邪魔 | 2倍角・半角 | 角を倍・半分にし、2乗を1次に下げる |
+| 同じ角の $\sin$ と $\cos$ が1次で並んでいる | 合成 | $R\sin(\theta+\alpha)$ の1つの波になる |
+
+<KeyPoint>
+迷ったら「角 → 関数 → 求めるもの」の順に確認する。角の形で道具を絞り、関数の種類で解き方を決め、値・最大最小・方程式のどれを目指すかに合わせて最後の一手を選ぶ。1問で道具を2つ使うことも多い。
+</KeyPoint>
+
+<Why>
+なぜ「角」を最初に見るのか。5つの道具は、どれも角をそろえる・1つにまとめるために働くからだ。還元公式は角を第1象限に戻し、加法定理は知っている角に分解し、2倍角・半角は角の倍と半分を扱い、合成はずらした角 $\theta+\alpha$ に1本化する。角が1つに定まって初めて、問題は「1つの角の値を追う」数学Iの図形問題や、1文字の2次関数の問題に戻る。角をそろえずに関数の種類だけをいじると、式はかえって複雑になる。
+</Why>
+
+それでは、道具の持ち替えが必要な融合問題に挑もう。次の例題では、相互関係で $\sin\theta\cos\theta$ を $t$ の式に直し、合成で $t$ の範囲を求め、最後は2次関数と単位円で読み切る。
+
+<WorkedExample title="発展例題: 2倍角と合成を組み合わせる">
+$0\le\theta<2\pi$ のとき、次の問いに答えよ。
+
+$$
+y=\sin\theta+\cos\theta+\sin\theta\cos\theta
+$$
+
+(1) $t=\sin\theta+\cos\theta$ とおくとき、$y$ を $t$ で表し、$t$ のとりうる値の範囲を求めよ。
+
+(2) $y$ の最大値・最小値と、そのときの $\theta$ を求めよ。
+
+(3) $y\ge1$ となる $\theta$ の範囲を求めよ。
+
+<Steps>
+<Step reason="t を2乗すると sin²+cos² が現れます。相互関係で2乗の項が1つにまとまり、残るのは 2sinθcosθ だけです。">(1) $t^2=\sin^2\theta+2\sin\theta\cos\theta+\cos^2\theta=1+2\sin\theta\cos\theta$ より $\sin\theta\cos\theta=\dfrac{t^2-1}{2}$。</Step>
+<Step reason="y の sinθcosθ をこの式で置き換えれば、y は t だけの式になります。あわせて平方完成しておくと、後の最大・最小が読みやすくなります。">$y=t+\dfrac{t^2-1}{2}=\dfrac{t^2+2t-1}{2}=\dfrac{(t+1)^2}{2}-1$。</Step>
+<Step reason="t の値域は、合成して1つのサインにすると単位円1回で読めます。θ+π/4 は幅2πの範囲を動くので、sin は −1 から 1 のすべての値をとります。">$t=\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)$。$\theta+\dfrac{\pi}{4}$ は $\dfrac{\pi}{4}$ から $\dfrac{9\pi}{4}$ まで1周期分を動くので $-1\le\sin\left(\theta+\dfrac{\pi}{4}\right)\le1$。よって $-\sqrt{2}\le t\le\sqrt{2}$。</Step>
+<Step reason="t の2次式になったので、平方完成した形から放物線の頂点と端点を読みます。軸 t=−1 は範囲の内側にあり、ここが最小です。">(2) $y=\dfrac{(t+1)^2}{2}-1$ は $t=-1$ で最小となり、$y=-1$。</Step>
+<Step reason="最大は軸から最も遠い端点で起こります。t=√2 は t=−1 からの距離が √2+1、t=−√2 では √2−1 なので、t=√2 のほうが遠い端点です。">最大は $t=\sqrt{2}$ のときで $y=\dfrac{(\sqrt{2}+1)^2}{2}-1=\dfrac{3+2\sqrt{2}}{2}-1=\dfrac{1}{2}+\sqrt{2}$。</Step>
+<Step reason="t から θ に戻すには、t=√2sin(θ+π/4) を角の方程式として解き、ずれ π/4 を引いて元の角に戻します。">最大のとき $\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)=\sqrt{2}$ より $\theta+\dfrac{\pi}{4}=\dfrac{\pi}{2}$、すなわち $\theta=\dfrac{\pi}{4}$。最小のとき $\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)=-1$ より $\theta+\dfrac{\pi}{4}=\dfrac{5\pi}{4},\ \dfrac{7\pi}{4}$、すなわち $\theta=\pi,\ \dfrac{3\pi}{2}$。</Step>
+<Step reason="y≥1 は t の2次不等式に翻訳できます。t の範囲 −√2≤t≤√2 と合わせて、実現する条件だけを残します。">(3) $\dfrac{(t+1)^2}{2}-1\ge1$ より $(t+1)^2\ge4$、すなわち $t\ge1$ または $t\le-3$。$t\ge-\sqrt{2}>-3$ なので $t\le-3$ は起こらず、$t\ge1$ のみ。</Step>
+<Step reason="t≥1 を角の不等式に戻します。ずらした角 φ=θ+π/4 の範囲を先に確定させ、単位円で sinφ≥1/√2 を満たす弧を読みます。">$\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)\ge1$ より $\sin\left(\theta+\dfrac{\pi}{4}\right)\ge\dfrac{1}{\sqrt{2}}$。$\phi=\theta+\dfrac{\pi}{4}$ とおくと $\dfrac{\pi}{4}\le\phi<\dfrac{9\pi}{4}$ で、この範囲で $\sin\phi\ge\dfrac{1}{\sqrt{2}}$ となるのは $\dfrac{\pi}{4}\le\phi\le\dfrac{3\pi}{4}$。よって $0\le\theta\le\dfrac{\pi}{2}$。</Step>
+</Steps>
+
+<Answer>
+(1) $y=\dfrac{(t+1)^2}{2}-1$、$-\sqrt{2}\le t\le\sqrt{2}$。
+
+(2) 最大値 $\dfrac{1}{2}+\sqrt{2}$（$\theta=\dfrac{\pi}{4}$ のとき）、最小値 $-1$（$\theta=\pi,\ \dfrac{3\pi}{2}$ のとき）。
+
+(3) $0\le\theta\le\dfrac{\pi}{2}$。
+</Answer>
+</WorkedExample>
+
+<SelfExplanation
+  prompt="発展例題で sinθ+cosθ を t とおいたのはなぜ？"
+  options={['角が1つで関数が2種類あり、t に置き換えると2次関数の問題に変わるから', 'sinθ と cosθ の値が等しくなるから', 't の値域が −1 から 1 だから']}
+  model="sinθ+cosθ は合成で1つの波になり、sinθcosθ は t² と相互関係から t の式で書けます。2種類の関数が t 1つに置き換わり、最大・最小は数学Iの2次関数として解けます。t の値域は −√2 から √2 で、−1 から 1 ではありません。"
+/>
+
+<Misconception>
+<Wrong>
+$\sin\theta+\cos\theta$ の値の範囲は $-1\le\sin\theta+\cos\theta\le1$ である。$\sin\theta$ も $\cos\theta$ も $-1$ から $1$ の間にあるから。
+</Wrong>
+<WhyWrong>
+それぞれの値域をそのまま足し合わせることはできない。実際 $\theta=\dfrac{\pi}{4}$ では $\sin\theta=\cos\theta=\dfrac{\sqrt{2}}{2}$ で、和は $\sqrt{2}$ となり $1$ を超える。2つのサインとコサインが同時に大きくなる角があるため、和の範囲は各項の範囲より広くなる。
+</WhyWrong>
+<Right>
+合成すると $\sin\theta+\cos\theta=\sqrt{2}\sin\left(\theta+\dfrac{\pi}{4}\right)$。$\sin$ は $-1$ から $1$ まで動くので、和の範囲は $-\sqrt{2}\le\sin\theta+\cos\theta\le\sqrt{2}$。値域を調べるときは、項ごとに分けず、1つの波にまとめてから読む。
+</Right>
+</Misconception>
+
+<CheckUnderstanding>
+どの道具を選ぶかを意識しながら、次の3問を解いてください。
+
+（1）$\sin\dfrac{4\pi}{3}$ の値を求めよ。
+<Reveal label="答え">
+$\dfrac{4\pi}{3}=\pi+\dfrac{\pi}{3}$ とみる。原点対称の関係 $\sin(\theta+\pi)=-\sin\theta$ より $\sin\dfrac{4\pi}{3}=-\sin\dfrac{\pi}{3}=-\dfrac{\sqrt{3}}{2}$。
+</Reveal>
+
+（2）$\cos\theta=\dfrac{1}{4}$ で、$\theta$ が第4象限の角であるとき、$\sin 2\theta$ を求めよ。
+<Reveal label="答え">
+第4象限では $\sin\theta<0$。$\sin^2\theta=1-\dfrac{1}{16}=\dfrac{15}{16}$ より $\sin\theta=-\dfrac{\sqrt{15}}{4}$。よって $\sin 2\theta=2\sin\theta\cos\theta=2\cdot\left(-\dfrac{\sqrt{15}}{4}\right)\cdot\dfrac{1}{4}=-\dfrac{\sqrt{15}}{8}$。
+</Reveal>
+
+（3）$\sqrt{3}\sin\theta-\cos\theta$ を $R\sin(\theta+\alpha)$ の形に合成し、最大値と、それを与える $\theta$ を1つ求めよ。
+<Reveal label="答え">
+$R=\sqrt{(\sqrt{3})^2+(-1)^2}=2$。$\cos\alpha=\dfrac{\sqrt{3}}{2}$、$\sin\alpha=-\dfrac{1}{2}$ より $\alpha=-\dfrac{\pi}{6}$。よって $\sqrt{3}\sin\theta-\cos\theta=2\sin\left(\theta-\dfrac{\pi}{6}\right)$。最大値は $2$ で、$\theta-\dfrac{\pi}{6}=\dfrac{\pi}{2}+2n\pi$ すなわち $\theta=\dfrac{2\pi}{3}+2n\pi$（$n$ は整数）のとき。
+</Reveal>
+</CheckUnderstanding>
+
+<Practice title="章末の追加演習（道具の選択）">
+（1）$\cos\theta=-\dfrac{1}{3}$ で、$\theta$ が第2象限の角であるとき、$\cos 2\theta$ を求めよ。
+<Reveal label="解答">
+$\cos\theta$ が与えられているので、$\cos 2\theta=2\cos^2\theta-1$ を選ぶ。$\cos 2\theta=2\cdot\dfrac{1}{9}-1=-\dfrac{7}{9}$。
+</Reveal>
+
+（2）$0\le\theta<2\pi$ のとき、$\sin\theta-\sqrt{3}\cos\theta=1$ を解け。
+<Reveal label="解答">
+左辺を合成すると $2\sin\left(\theta-\dfrac{\pi}{3}\right)=1$、すなわち $\sin\left(\theta-\dfrac{\pi}{3}\right)=\dfrac{1}{2}$。$\phi=\theta-\dfrac{\pi}{3}$ とおくと $-\dfrac{\pi}{3}\le\phi<\dfrac{5\pi}{3}$ で、この範囲で $\sin\phi=\dfrac{1}{2}$ となるのは $\phi=\dfrac{\pi}{6},\ \dfrac{5\pi}{6}$。よって $\theta=\dfrac{\pi}{2},\ \dfrac{7\pi}{6}$。
+</Reveal>
+</Practice>
+
+この章の到達点は、公式を思い出せることではなく、問題の形から道具を選べることです。迷ったら「角をそろえる、関数を1種類にする」というゴールに戻ってください。
