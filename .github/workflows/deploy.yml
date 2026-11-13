@@ -1,4 +1,6 @@
-name: Deploy to GitHub Pages
+# GitHub Pages は s0u7a.f5.si への移転案内スタブ（redirect/）のみを配信する。
+# アプリのビルドは公開ジョブから外した（CI は ci.yml で継続）。
+name: Deploy redirect stub to Pages
 
 on:
   push:
@@ -15,59 +17,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Compute base path and site URL
-        id: pages
-        run: |
-          repo="${GITHUB_REPOSITORY#*/}"
-          owner="${GITHUB_REPOSITORY%/*}"
-          if [[ "$repo" == *.github.io ]]; then
-            echo "base=/" >> "$GITHUB_OUTPUT"
-          else
-            echo "base=/${repo}/" >> "$GITHUB_OUTPUT"
-          fi
-          echo "site=https://${owner}.github.io" >> "$GITHUB_OUTPUT"
-
-      - name: Typecheck
-        run: npm run check
-
-      - name: Unit and content tests
-        run: npm run test
-
-      - name: Build
-        run: npm run build
-        env:
-          BASE_PATH: ${{ steps.pages.outputs.base }}
-          SITE_URL: ${{ steps.pages.outputs.site }}
-
-      - name: Add .nojekyll
-        run: touch dist/.nojekyll
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: redirect
       - id: deployment
         uses: actions/deploy-pages@v4
