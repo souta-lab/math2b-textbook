@@ -46,7 +46,7 @@ export default defineConfig({
           {
             strict: 'warn',
             throwOnError: true,
-            output: 'htmlAndMathml',
+            output: 'mathml',
             macros: {
               '\\R': '\\mathbb{R}',
               '\\Z': '\\mathbb{Z}',

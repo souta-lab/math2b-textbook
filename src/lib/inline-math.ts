@@ -6,7 +6,7 @@
  * `<Prediction question="…">` therefore arrive as plain text. This helper
  * renders them to HTML at build time (server-side, no DOM access):
  *
- *   - every `$...$` segment (single-line, non-empty) becomes KaTeX inline HTML
+ *   - every `$...$` segment (single-line, non-empty) becomes KaTeX inline MathML
  *     via `katex.renderToString(…, { throwOnError: false, displayMode: false })`;
  *   - all other text is HTML-escaped, so `&`, `<`, `>`, `"` stay literal;
  *   - unmatched `$` is left as escaped text.
@@ -47,6 +47,7 @@ export function renderInlineMath(text: string): string {
     html += katex.renderToString(match[1], {
       throwOnError: false,
       displayMode: false,
+      output: 'mathml',
     });
     lastIndex = index + match[0].length;
   }
