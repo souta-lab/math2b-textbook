@@ -4,6 +4,16 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import CourseMap from '@/components/nav/CourseMap.astro';
 import ProgressBar from '@/components/progress/ProgressBar.astro';
 import { SUBJECT_META, SUBJECT_ORDER, unitsBySubject } from '@/data/curriculum';
+import { absUrl } from '@/lib/jsonld';
+
+const courseJsonLd = {
+  '@type': 'Course',
+  name: '高校数学 読解教材',
+  description: '読むだけで理解できる高校数学のWeb教材です。中学数学の復習から高校数学、大学数学の実用ツールまで、科目ごとに単元をたどる教材です。',
+  url: absUrl(import.meta.env.BASE_URL),
+  inLanguage: 'ja',
+  provider: { '@type': 'Person', name: 's0u7a', url: 'https://s0u7a.f5.si/' },
+};
 
 const lessons = await getCollection('lessons');
 const columns = (await getCollection('columns'))
@@ -32,7 +42,7 @@ const subjects = SUBJECT_ORDER.map((subject) => {
 });
 ---
 
-<BaseLayout title="ホーム">
+<BaseLayout title="ホーム" jsonLd={courseJsonLd}>
   <div class="home">
     <h1>学びの地図</h1>
     <p class="home__lead">
