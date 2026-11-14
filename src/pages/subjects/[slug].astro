@@ -46,7 +46,7 @@ const units = unitsBySubject(subject).map((unit, index) => {
     chapterNumber: index + 1,
     lessonIds,
     lessonCount: lessonIds.length,
-    href: `${import.meta.env.BASE_URL}chapters/${unit.id}`,
+    href: `${import.meta.env.BASE_URL}chapters/${unit.id}/`,
   };
 });
 

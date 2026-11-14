@@ -18,7 +18,7 @@ const columnsJsonLd = [
       '@type': 'ListItem',
       position: i + 1,
       name: column.data.title,
-      url: absUrl(`${import.meta.env.BASE_URL}columns/${column.id}`),
+      url: absUrl(`${import.meta.env.BASE_URL}columns/${column.id}/`),
     })),
   },
 ];
@@ -42,7 +42,7 @@ const columnsJsonLd = [
         <ol class="columns__list">
           {columns.map((column) => (
             <li class="columns__item">
-              <a class="columns__link" href={`${import.meta.env.BASE_URL}columns/${column.id}`}>
+              <a class="columns__link" href={`${import.meta.env.BASE_URL}columns/${column.id}/`}>
                 <span class="columns__category">{column.data.category}</span>
                 <span class="columns__title">{column.data.title}</span>
                 <span class="columns__summary">{column.data.summary}</span>

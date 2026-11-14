@@ -22,13 +22,13 @@ const hasBoth = Boolean(prev && next);
     <nav class="lesson-nav" aria-label="レッスンの移動">
       <div class:list={['lesson-nav__grid', !hasBoth && 'lesson-nav__grid--single']}>
         {prev && (
-          <a class="lesson-nav__link lesson-nav__link--prev" href={`${import.meta.env.BASE_URL}lessons/${prev.id}`} rel="prev">
+          <a class="lesson-nav__link lesson-nav__link--prev" href={`${import.meta.env.BASE_URL}lessons/${prev.id}/`} rel="prev">
             <span class="lesson-nav__dir">前のレッスン</span>
             <span class="lesson-nav__title">{prev.data.title}</span>
           </a>
         )}
         {next && (
-          <a class="lesson-nav__link lesson-nav__link--next" href={`${import.meta.env.BASE_URL}lessons/${next.id}`} rel="next">
+          <a class="lesson-nav__link lesson-nav__link--next" href={`${import.meta.env.BASE_URL}lessons/${next.id}/`} rel="next">
             <span class="lesson-nav__dir">次のレッスン</span>
             <span class="lesson-nav__title">{next.data.title}</span>
           </a>

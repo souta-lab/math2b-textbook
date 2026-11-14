@@ -35,7 +35,7 @@ const prerequisites = unit.prerequisites.map((id) => {
   return {
     id,
     label: prerequisiteLabel(id),
-    href: target ? `${import.meta.env.BASE_URL}chapters/${target.id}` : undefined,
+    href: target ? `${import.meta.env.BASE_URL}chapters/${target.id}/` : undefined,
   };
 });
 
@@ -106,7 +106,7 @@ const emptyMessage =
           <ol class="chapter__lessons">
             {lessons.map((lesson) => (
               <li class="chapter__lesson" data-progress-item data-lesson-id={lesson.id}>
-                <a class="chapter__lesson-link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
+                <a class="chapter__lesson-link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}/`}>
                   <span class="chapter__lesson-num">{lesson.data.order + 1}</span>
                   <span class="chapter__lesson-title">{lesson.data.title}</span>
                   <span class="chapter__lesson-summary"><Fragment set:html={renderInlineMath(lesson.data.summary)} /></span>

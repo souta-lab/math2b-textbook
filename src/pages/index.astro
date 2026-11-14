@@ -94,7 +94,7 @@ const subjects = SUBJECT_ORDER.map((subject) => {
           <ul class="home__columns-list">
             {columns.map((column) => (
               <li>
-                <a href={`${import.meta.env.BASE_URL}columns/${column.id}`}>{column.data.title}</a>
+                <a href={`${import.meta.env.BASE_URL}columns/${column.id}/`}>{column.data.title}</a>
                 <span class="home__columns-category">{column.data.category}</span>
               </li>
             ))}
@@ -102,7 +102,7 @@ const subjects = SUBJECT_ORDER.map((subject) => {
         )
       }
       <p class="home__columns-more">
-        <a href={`${import.meta.env.BASE_URL}columns`}>発展コラムをすべて読む</a>
+        <a href={`${import.meta.env.BASE_URL}columns/`}>発展コラムをすべて読む</a>
       </p>
     </section>
   </div>
