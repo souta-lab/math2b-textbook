@@ -7,6 +7,7 @@ import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import ProgressBar from '@/components/progress/ProgressBar.astro';
 import ProgressCheck from '@/components/progress/ProgressCheck.astro';
 import { renderInlineMath } from '@/lib/inline-math';
+import { breadcrumbJsonLd, learningResourceJsonLd } from '@/lib/jsonld';
 
 export function getStaticPaths() {
   return units.map((unit) => ({
@@ -34,9 +35,24 @@ const prerequisites = unit.prerequisites.map((id) => {
   return {
     id,
     label: prerequisiteLabel(id),
-    href: target ? `${import.meta.env.BASE_URL}chapters/${target.id}` : undefined,
+    href: target ? `${import.meta.env.BASE_URL}chapters/${target.id}/` : undefined,
   };
 });
+
+const selfUrl = new URL(Astro.url.pathname, 'https://s0u7a.f5.si').href;
+const chapterJsonLd = [
+  breadcrumbJsonLd(
+    [
+      {
+        label: SUBJECT_META[unit.subject].label,
+        href: `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[unit.subject].slug}/`,
+      },
+      { label: unit.title },
+    ],
+    selfUrl,
+  ),
+  learningResourceJsonLd(unit.title, unit.summary, selfUrl),
+];
 
 const emptyMessage =
   unit.status === 'published'
@@ -44,7 +60,7 @@ const emptyMessage =
     : `この章は${status}です。公開までしばらくお待ちください。`;
 ---
 
-<BaseLayout title={unit.title} description={unit.summary}>
+<BaseLayout title={unit.title} description={unit.summary} jsonLd={chapterJsonLd}>
   <div class="chapter">
     <Breadcrumbs
       crumbs={[
@@ -90,7 +106,7 @@ const emptyMessage =
           <ol class="chapter__lessons">
             {lessons.map((lesson) => (
               <li class="chapter__lesson" data-progress-item data-lesson-id={lesson.id}>
-                <a class="chapter__lesson-link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}`}>
+                <a class="chapter__lesson-link" href={`${import.meta.env.BASE_URL}lessons/${lesson.id}/`}>
                   <span class="chapter__lesson-num">{lesson.data.order + 1}</span>
                   <span class="chapter__lesson-title">{lesson.data.title}</span>
                   <span class="chapter__lesson-summary"><Fragment set:html={renderInlineMath(lesson.data.summary)} /></span>

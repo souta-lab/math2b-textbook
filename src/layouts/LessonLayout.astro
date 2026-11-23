@@ -13,6 +13,7 @@ import LessonNav from '@/components/nav/LessonNav.astro';
 import ProgressToggle from '@/components/progress/ProgressToggle.astro';
 import { getUnit, prerequisiteLabel, SUBJECT_META } from '@/data/curriculum';
 import { renderInlineMath, stripInlineMath } from '@/lib/inline-math';
+import { breadcrumbJsonLd, learningResourceJsonLd } from '@/lib/jsonld';
 // <components:imports>
 import Answer from '@/components/content/Answer.astro';
 import CheckUnderstanding from '@/components/content/CheckUnderstanding.astro';
@@ -143,11 +144,12 @@ const prerequisites = prerequisiteIds.map(
   (id) => lessonTitleById.get(id) ?? prerequisiteLabel(id),
 );
 
-const chapterHref = `${import.meta.env.BASE_URL}chapters/${lesson.data.unit}`;
+const chapterHref = `${import.meta.env.BASE_URL}chapters/${lesson.data.unit}/`;
 const subjectHref = unit
   ? `${import.meta.env.BASE_URL}subjects/${SUBJECT_META[unit.subject].slug}/`
   : undefined;
 const reviewed = lesson.data.reviewed?.toISOString().slice(0, 10);
+const selfUrl = new URL(Astro.url.pathname, 'https://s0u7a.f5.si').href;
 const crumbs = [
   ...(unit
     ? [{ label: SUBJECT_META[unit.subject].label, href: subjectHref }]
@@ -155,9 +157,13 @@ const crumbs = [
   { label: unit?.title ?? lesson.data.unit, href: unit ? chapterHref : undefined },
   { label: lesson.data.title },
 ];
+const lessonJsonLd = [
+  breadcrumbJsonLd(crumbs, selfUrl),
+  learningResourceJsonLd(lesson.data.title, stripInlineMath(lesson.data.summary), selfUrl),
+];
 ---
 
-<BaseLayout title={lesson.data.title} description={stripInlineMath(lesson.data.summary)}>
+<BaseLayout title={lesson.data.title} description={stripInlineMath(lesson.data.summary)} jsonLd={lessonJsonLd}>
   <div class="lesson-layout">
     <Breadcrumbs crumbs={crumbs} />
     <div class="lesson-layout__body">

@@ -5,18 +5,42 @@ import '@/styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  jsonLd?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
-const { title, description = '読むだけで理解できる高校数学のWeb教材' } = Astro.props;
-const pageTitle = title === 'ホーム' ? title : `${title} — 高校数学 読解教材`;
+const { title, description = '読むだけで理解できる高校数学のWeb教材', jsonLd } = Astro.props;
+const jsonLdList = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const pageTitle = title === 'ホーム' ? '高校数学 読解教材 | s0u7a' : `${title} — 高校数学 読解教材`;
 const base = import.meta.env.BASE_URL;
+const siteOrigin = 'https://s0u7a.f5.si';
+const canonical = new URL(Astro.url.pathname, siteOrigin).href;
+const ogImage = `${siteOrigin}/og/math2b-textbook.png`;
+const fullDescription =
+  description.length >= 50
+    ? description
+    : `${description.replace(/。?$/, '。')}高校数学 読解教材のページです。`;
 ---
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content={description} />
+    <meta name="description" content={fullDescription} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={fullDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="高校数学 読解教材" />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={fullDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="alternate" type="application/rss+xml" title="s0u7a ブログ" href="https://s0u7a.f5.si/blog/rss.xml" />
+    {jsonLdList.map((obj) => (
+      <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...obj })} />
+    ))}
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#1f4e79" />
     <title>{pageTitle}</title>

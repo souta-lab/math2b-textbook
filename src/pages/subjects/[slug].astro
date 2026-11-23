@@ -15,6 +15,7 @@ import {
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/nav/Breadcrumbs.astro';
 import ProgressBar from '@/components/progress/ProgressBar.astro';
+import { breadcrumbJsonLd, learningResourceJsonLd } from '@/lib/jsonld';
 
 export function getStaticPaths() {
   return SUBJECT_ORDER.map((subject) => ({
@@ -45,14 +46,26 @@ const units = unitsBySubject(subject).map((unit, index) => {
     chapterNumber: index + 1,
     lessonIds,
     lessonCount: lessonIds.length,
-    href: `${import.meta.env.BASE_URL}chapters/${unit.id}`,
+    href: `${import.meta.env.BASE_URL}chapters/${unit.id}/`,
   };
 });
 
 const subjectLessonIds = units.flatMap((entry) => entry.lessonIds);
+
+const selfUrl = new URL(Astro.url.pathname, 'https://s0u7a.f5.si').href;
+const subjectJsonLd = [
+  breadcrumbJsonLd(
+    [
+      { label: '科目一覧', href: `${import.meta.env.BASE_URL}subjects/` },
+      { label: meta.label },
+    ],
+    selfUrl,
+  ),
+  learningResourceJsonLd(meta.label, meta.description, selfUrl),
+];
 ---
 
-<BaseLayout title={meta.label} description={meta.description}>
+<BaseLayout title={meta.label} description={meta.description} jsonLd={subjectJsonLd}>
   <div class="subject">
     <Breadcrumbs
       crumbs={[

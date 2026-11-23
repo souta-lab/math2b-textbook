@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { breadcrumbJsonLd } from '@/lib/jsonld';
 
 export async function getStaticPaths() {
   const columns = await getCollection('columns');
@@ -20,11 +21,30 @@ interface Props {
 const { column } = Astro.props;
 const { Content } = await render(column);
 
-const columnsHref = `${import.meta.env.BASE_URL}columns`;
+const columnsHref = `${import.meta.env.BASE_URL}columns/`;
 const reviewed = column.data.reviewed?.toISOString().slice(0, 10);
+
+const selfUrl = new URL(Astro.url.pathname, 'https://s0u7a.f5.si').href;
+const columnJsonLd = [
+  breadcrumbJsonLd(
+    [
+      { label: '発展コラム', href: columnsHref },
+      { label: column.data.title },
+    ],
+    selfUrl,
+  ),
+  {
+    '@type': 'Article',
+    headline: column.data.title,
+    description: column.data.summary,
+    url: selfUrl,
+    inLanguage: 'ja',
+    ...(reviewed ? { dateModified: reviewed } : {}),
+  },
+];
 ---
 
-<BaseLayout title={column.data.title} description={column.data.summary}>
+<BaseLayout title={column.data.title} description={column.data.summary} jsonLd={columnJsonLd}>
   <article class="column">
     <p class="column__back"><a href={columnsHref}>← 発展コラム一覧</a></p>
 

@@ -1,15 +1,33 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { absUrl, breadcrumbJsonLd } from '@/lib/jsonld';
 
 const columns = (await getCollection('columns'))
   .filter((column) => !column.data.draft)
   .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
+const selfUrl = new URL(Astro.url.pathname, 'https://s0u7a.f5.si').href;
+const columnsJsonLd = [
+  breadcrumbJsonLd([{ label: '発展コラム' }], selfUrl),
+  {
+    '@type': 'ItemList',
+    name: '発展コラム',
+    url: selfUrl,
+    numberOfItems: columns.length,
+    itemListElement: columns.map((column, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: column.data.title,
+      url: absUrl(`${import.meta.env.BASE_URL}columns/${column.id}/`),
+    })),
+  },
+];
 ---
 
 <BaseLayout
   title="発展コラム"
   description="中学から大学までの数学を、歴史・実社会・他分野とのつながりから読むためのコラム集。"
+  jsonLd={columnsJsonLd}
 >
   <div class="columns">
     <header class="columns__header">
@@ -24,7 +42,7 @@ const columns = (await getCollection('columns'))
         <ol class="columns__list">
           {columns.map((column) => (
             <li class="columns__item">
-              <a class="columns__link" href={`${import.meta.env.BASE_URL}columns/${column.id}`}>
+              <a class="columns__link" href={`${import.meta.env.BASE_URL}columns/${column.id}/`}>
                 <span class="columns__category">{column.data.category}</span>
                 <span class="columns__title">{column.data.title}</span>
                 <span class="columns__summary">{column.data.summary}</span>
